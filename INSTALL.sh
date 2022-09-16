@@ -97,16 +97,15 @@ mysql -uroot -proot -e "FLUSH PRIVILEGES;"
 
 echo "Instalando Friga 2.0"
 cd /var/www/friga/
-php bin/console doctrine:schema:create
-php bin/console doctrine:schema:update --force
-php bin/console fos:user:create admin admin@admin admin
-php bin/console fos:user:promote admin ROLE_ADMIN
-php bin/console cache:clear --env=prod && chown www-data. /var/www/friga/var/ -R
+php7.4  bin/composer.phar install
+php7.4  bin/console doctrine:schema:create
+php7.4  bin/console doctrine:schema:update --force
+php7.4  bin/console fos:user:create admin admin@admin admin
+php7.4  bin/console fos:user:promote admin ROLE_ADMIN
+php7.4  bin/console cache:clear --env=prod && chown www-data. /var/www/friga/var/ -R
 
 echo "Inicializando serviços"
 /etc/init.d/nginx      restart
 /etc/init.d/php7.4-fpm restart
 /etc/init.d/mysql      restart
 
-#mkdir -p /var/www/friga && chown www-data. /var/www/
-#curl -sS https://nte.ufsm.br/friga/instalador |bash -
