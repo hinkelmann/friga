@@ -1,0 +1,32 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Faq  - Editar FAQ {% endblock %}
+{% block breadcumbsTitulo %} Editar FAQ{% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('nte_suporte_homepage') }}"> Suporte</a></span></li>
+    <li><span><a href="{{ path('nte_suporte_faq') }}"> FAQ</a></span></li>
+    <li><span><a href="#"> Editar</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="panel">
+        <div class="panel-body">
+            {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_widget(form.pergunta) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.resposta) }}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Salvar</button>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts2 %}
+    {{ parent() }}
+{% endblock %}

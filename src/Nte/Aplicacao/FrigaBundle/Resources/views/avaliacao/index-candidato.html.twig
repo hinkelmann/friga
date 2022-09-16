@@ -1,0 +1,109 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Avaliação/{{ etapa.idEdital.titulo }}/{{ etapa.descricao }} {% endblock %}
+{% block breadcumbsTitulo %}{{ etapa.descricao }}{% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('avaliacao_index') }}"> Avaliação </a></span></li>
+    <li><span><a href="#">{{ etapa.idEdital.uuid }} </a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="panel-body">
+            {% set lista = [] %}
+            {% if etapa.tipo == 7 %}
+                {% set lista = etapa.idEdital.inscricaoRecurso(etapa.idEtapa) %}
+            {% else %}
+                {% if is_granted('ROLE_ADMIN') %}
+
+                        {% set lista = etapa.idEdital.inscricaoValida %}
+                    {% else %}
+                        {% set lista = etapa.idEdital.inscricaoValida(app.user) %}
+                    {% endif %}
+            {% endif %}
+            {% if lista|length %}
+                <div class="form-bordered">
+                    {% for inscricao in lista %}
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <a title="Clique aqui, apenas se for visualizar a inscrição do candidato: {{ inscricao.nome }}"
+                                   target="_blank"
+                                   href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                                    {% if etapa.idEdital.modeloInscricao ==1  %}
+                                        <b class="text-uppercase">{{ inscricao.projetoTitulo }}</b>
+                                    {% else %}
+                                        <b class="text-uppercase">{{ inscricao.nome }}</b>
+                                    {% endif %}
+                                </a>
+                                <br>
+                                {% if inscricao.idCargo %}{{ inscricao.idCargo.descricao }}{% endif %}
+                                {% if inscricao.idCota != null %}/{{ inscricao.idCota.descricao }}{% endif %}<br>
+                                {% if etapa.pontuacaoRelativaUsuario %}
+                                    Pontuação informada pelo candidato: <b>{{ inscricao.pontuacaoSoma }}</b>
+                                    {% if inscricao.pontuacaoSoma(false,null,true) %}
+                                        <span data-toggle="tooltip" data-placement="top"
+                                              title="Pontuação que excedeu o máximo de pontos definido para o grupo de itens de avaliação">
+                                        - Excedente: <b>{{ inscricao.pontuacaoSoma(false,null,true) }}</b>
+                                </span>
+                                    {% endif %}
+
+                                    <br>
+                                {% endif %}
+                                Pontuação considerada pelo avaliador: <b>{{ inscricao.pontuacaoSoma(true) }}</b>
+                                {% if inscricao.pontuacaoSoma(true,null,true) %}
+                                    <span data-toggle="tooltip" data-placement="top"
+                                          title="Pontuação que excedeu o máximo de pontos definido para o grupo de itens de avaliação">
+                                    - Excedente: <b>{{ inscricao.pontuacaoSoma(true,null,true) }}</b>
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="btn-group pull-right hidden-xs">
+                                <div class="btn ">
+                                    Inscrição N° <strong>{{ inscricao.uuid ~ "-" ~ inscricao.id }}</strong>
+                                    <br>
+                                    <small class="{{ inscricao.objsituacao.css }}">
+                                        <i class="{{ inscricao.objsituacao.icone }}"></i>
+                                        {{ inscricao.objsituacao.descricao }}
+                                    </small>
+                                </div>
+                                <a href="{{ path('avaliacao_etapa_candidato', {'etapa': etapa.id, 'uuid': inscricao.uuid}) }}"
+                                   class="btn btn-default"><i class="fa fa-check-square-o"></i><br>
+                                    Avaliar
+                                </a>
+                            </div>
+                            <div class="visible-xs">
+                                <div class="btn btn-block text-right">
+                                    Inscrição N° <strong>{{ inscricao.uuid ~ "-" ~ inscricao.id }}</strong>
+                                    <br>
+                                    <small class="{{ inscricao.objsituacao.css }}">
+                                        <i class="{{ inscricao.objsituacao.icone }}"></i>
+                                        {{ inscricao.objsituacao.descricao }}
+                                    </small>
+                                </div>
+                                <a href="{{ path('avaliacao_etapa_candidato', {'etapa': etapa.id, 'uuid': inscricao.uuid}) }}"
+                                   class="btn btn-block btn-default">
+                                    <i class="fa fa-check-square-o"></i><br>
+                                    Avaliar
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <section class="body-error error-inside">
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">0 <i
+                                                class="fa fa-users text-primary"></i></h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br><b>Nenhum candidato </b> Inscrito até o momento.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

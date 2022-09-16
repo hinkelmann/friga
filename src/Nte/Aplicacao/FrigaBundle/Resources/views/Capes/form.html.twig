@@ -1,0 +1,20 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Editar area de conhecimento{% endblock %}
+{% block breadcumbsTitulo %}Editar{% endblock %}
+{% block conteudo %}
+    <section class="panel">
+        <header class="panel-heading">
+            <h2 class="panel-title">
+                <span class="va-middle">Edição de área do conhecimento</span>
+            </h2>
+        </header>
+        <div class="panel-body">
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary center-block"><i class="fa fa-save"></i> Salvar </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

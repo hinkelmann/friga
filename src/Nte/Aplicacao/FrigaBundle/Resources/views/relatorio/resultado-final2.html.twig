@@ -1,0 +1,45 @@
+{% extends 'base.admin.html.twig' %}
+
+{% block conteudo %}
+    <section>
+        <div class="panel-body">
+{% for key,frigaAvalicao in frigaAvaliacoes %}
+    <table class="table" width="100%">
+        <thead>
+
+        <tr>
+            <th colspan="4" class="text-primary"><i class="fa fa-map"></i> Polo {{ key }}</th>
+        </tr>
+
+        <tr class="hidden-xs">
+            <th>Nome</th>
+            <th class="text-center">Pontuação</th>
+            <th class="text-center">Posição</th>
+            <th>E-Mail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set classificados =0 %}
+        {% for frigaPessoa in frigaAvalicao %}
+            {% if frigaPessoa.idSituacao >= 1 %}
+                {% set classificados =1 %}
+                <tr class="hidden-xs">
+                    <td width="40%"><b>{{ frigaPessoa.nome }}</b></td>
+                    <td width="10" class="text-center">
+                        {{ frigaPessoa.pontuacaoTotal }}
+                    </td>
+                    {% if frigaPessoa.idSituacao >=1 %}
+                        <td width="10" class="text-center">{{ loop.index }}°</td>
+                    {% else %}
+                        <td width="10" class="text-center">--</td>
+                    {% endif %}
+                    <td width="50%"><b>{{ frigaPessoa.contatoEmail }}</b></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endfor %}
+        </div>
+        </section>
+{% endblock %}

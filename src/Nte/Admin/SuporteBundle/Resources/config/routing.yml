@@ -1,0 +1,38 @@
+nte_suporte_homepage:
+    path:     /
+    defaults: { _controller: NteSuporteBundle:Default:index }
+
+nte_suporte_manual:
+    path:     /manual
+    defaults: { _controller: NteSuporteBundle:Default:manual }
+
+nte_suporte_sobre:
+    path:     /sobre
+    defaults: { _controller: NteSuporteBundle:Default:sobre }
+
+nte_suporte_form:
+    path:     /abertura-chamado/{id}
+    defaults: { _controller: NteSuporteBundle:Default:form, id: null }
+    methods:  [GET, POST]
+
+nte_suporte_visualizar:
+    path:     /chamado/{id}
+    defaults: { _controller: NteSuporteBundle:Default:ver }
+
+nte_suporte_fechar_chamado:
+    path:     /chamado-fechar/{id}/
+    defaults: { _controller: NteSuporteBundle:Default:ver }
+
+nte_suporte_faq:
+    path:     /faq
+    defaults: { _controller: NteSuporteBundle:Faq:index }
+
+nte_suporte_faq_form:
+    path:     /faq/edicao/{id}
+    defaults: { _controller: NteSuporteBundle:Faq:form, id: null }
+    methods:  [GET, POST]
+
+nte_suporte_faq_delete:
+    path: /faq/remover/{id}
+    defaults: { _controller: NteSuporteBundle:Faq:delete }
+    methods:  [GET]

@@ -1,0 +1,55 @@
+<div id="userbox" class="userbox">
+    <a href="#" data-toggle="dropdown">
+        <figure class="profile-picture">
+            <img src="{{ path('arquivo_download', {id: app.user.img}) }}"
+                 alt="{{ app.user.username }}"
+                 class="img-circle"
+                 data-lock-picture="{{ path('arquivo_download', {id: app.user.img}) }}"/>
+        </figure>
+        <div class="profile-info" data-lock-name="{{ app.user.username }}" data-lock-email="{{ app.user.email }}">
+            <span class="name {% if outro %} text-danger{% endif %}">
+                    {% if outro %}
+                        ***
+                    {% endif %}{{ app.user.nome }}
+            </span>
+            <span class="role">{{ app.user.highestRoleName }}</span>
+
+        </div>
+        <i class="fa custom-caret"></i>
+    </a>
+    <div class="dropdown-menu">
+        <ul class="list-unstyled">
+            <li class="divider"></li>
+            {% if outro %}
+                <li>
+                    <a role="menuitem" tabindex="-1" href="{{ path('nte_admin_painel_homepage',{'_switch_user':'_exit'}) }}">
+                        <i class="fa fa-user"></i>
+                        Acessar como  {{ outro.username }}
+                    </a>
+                </li>
+
+                <li>
+                    <a role="menuitem" tabindex="-1" href="{{ path('nte_usuario_editar',{id:app.user.id}) }}">
+                        <i class="fa fa-user"></i> Perfil
+                    </a>
+                </li>
+                {% else %}
+                    <li>
+                        <a role="menuitem" tabindex="-1" href="{{ path('nte_usuario_editar',{id:app.user.id}) }}">
+                            <i class="fa fa-user"></i> Meu Perfil
+                        </a>
+                    </li>
+            {% endif %}
+            <li>
+                <a role="menuitem" tabindex="-1" href="{{ path('nte_usuario_candidato_homepage') }}">
+                    <i class="fa fa-user"></i> Painel do Candidato
+                </a>
+            </li>
+            <li>
+                <a role="menuitem" tabindex="-1" href="{{ path('fos_user_security_logout') }}">
+                    <i class="fa fa-power-off"></i> Sair
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

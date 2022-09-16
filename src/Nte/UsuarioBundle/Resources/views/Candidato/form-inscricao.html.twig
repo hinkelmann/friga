@@ -1,0 +1,1129 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-wizard/jquery.bootstrap.wizard.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/dropzone.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/basic.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/pnotify/pnotify.custom.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2/css/select2.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2-bootstrap-theme/select2-bootstrap.css") }}">
+{% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        {{ edital.titulo }}
+                        <span># Formulário de Inscrição</span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        <section class="form-wizard" id="w4">
+            <div class="">
+                <div class="wizard-progress wizard-progress-lg">
+                    <div class="steps-progress">
+                        <div class="progress-indicator"></div>
+                    </div>
+                    <ul class="wizard-steps">
+                        <li class="active">
+                            <a href="#tab-requisitos" data-toggle="tab"><span>1</span> Requisitos</a>
+                        </li>
+                        <li>
+                            <a href="#tab-identificacao" data-toggle="tab"><span>2</span>Identificação</a>
+                        </li>
+                        {% set nu =2 %}
+                        {% if edital.doc13 %}
+                            {% set nu =3 %}
+                            <li>
+                                <a href="#tab-endereco" data-toggle="tab"><span>3</span>Endereço</a>
+                            </li>
+                        {% endif %}
+                        {% if edital.modeloInscricao == 1 %}
+                            {% set nu = nu+1 %}
+                            <li>
+                                <a href="#tab-projeto" data-toggle="tab"><span>{{ nu }}</span>Projeto</a>
+                            </li>
+                        {% endif %}
+                        {% if edital.anexo3 %}
+                            {% set nu = nu+1 %}
+                            <li>
+                                <a href="#tab-anexos" data-toggle="tab"><span>{{ nu }}</span>Anexos</a>
+                            </li>
+                        {% endif %}
+                        {% if edital.pontuacaoInscricao.count > 0 %}
+                            {% set nu = nu+1 %}
+                            <li>
+                                <a href="#tab-pontuacao" data-toggle="tab"><span>{{ nu }}</span>Pontuação</a>
+                            </li>
+                        {% endif %}
+                        {% set nu = nu+1 %}
+                        <li>
+                            <a href="#tab-confirmacao" data-toggle="tab"><span>{{ nu }}</span>Confirmação</a>
+                        </li>
+                    </ul>
+                </div>
+                {{ form_start(form) }}
+                <div class="tab-content">
+                    <div id="tab-requisitos" class="tab-pane active">
+                        <h3>Declaração de Ciência dos Requisitos da Vaga</h3>
+                        <div class="col-md-12">
+                            <!--   Ler o <a title="Clique aqui para ler o edital de abertura" href="#">Edital de Abertura</a>-->
+                            <hr>
+                            {% for k,f in form.children %}
+                                {% if k matches "/^requisito_.*/" %}
+                                    {{ form_row(f) }}
+                                {% endif %}
+                            {% endfor %}
+                            <hr>
+                            {% if edital.cargo.count %}
+                                {{ form_row(form.idCargo) }}
+                            {% endif %}
+                            {% if edital.cota.count %}
+                                {{ form_row(form.idCota) }}
+                            {% endif %}
+                            {% if edital.info5 %}
+                                <div class="alert alert-info" role="alert"><strong>Observação: </strong><br>
+                                    {{ edital.info5|raw }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div id="tab-identificacao" class="tab-pane">
+                        <h3>Dados de Identificação</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.nome) }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {% if edital.doc9 %}
+                                    {{ form_row(form.sexo) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.dataNascimento) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.cpf) }}
+                            </div>
+                        </div>
+                        <fieldset>
+                            <legend class="w-auto">Carteira de Identidade</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.rgNro) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.rgDataExpedicao) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.rgOrgaoExpedidor) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.rgUF) }}
+                                </div>
+                            </div>
+                        </fieldset>
+                        {% if edital.doc0 %}
+                            <fieldset>
+                                <legend class="w-auto">Título de Eleitor</legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(form.teNro) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(form.teDataExpedicao) }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.doc1 %}
+                            <fieldset>
+                                <legend class="w-auto">Certificado de Reservista</legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(form.crNro) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(form.crDataExpedicao) }}
+                                    </div>
+                                </div>
+                                <div class="alert alert-info" role="alert">
+                                    <b>LEI Nº 4.375, DE 17 DE AGOSTO DE 1964.</b><br><br>
+                                    <b>Art 2º</b> Todos os brasileiros são obrigados ao Serviço Militar, na forma da
+                                    presente
+                                    Lei e sua regulamentação.<br>
+                                    <b>§ 1º</b> A obrigatoriedade do Serviço Militar dos brasileiros naturalizados ou
+                                    por opção
+                                    será definida na regulamentação da presente Lei.<br>
+                                    <b>§ 2º</b> As mulheres ficam isentas do Serviço Militar em tempo de paz e, de
+                                    acôrdo com
+                                    suas aptidões, sujeitas aos encargos do interêsse da mobilização.<br><br>
+                                    <b>Art 5º</b> A obrigação para com o Serviço Militar, em tempo de paz, começa no 1º
+                                    dia de
+                                    janeiro do ano em que o cidadão completar 18 (dezoito) anos de idade e subsistirá
+                                    até 31 de dezembro do ano em que completar 45 (quarenta e cinco) anos.<br>
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.permitirEstrangeiro %}
+                            <fieldset>
+                                <legend class="w-auto">Candidato Estrangeiro</legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(form.estrangeiro) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_row(form.nacionalidade) }}
+                                    </div>
+                                </div>
+                                {% if edital.doc2 %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.passaporteNro) }}
+                                        </div>
+                                        <div class="col-md-6">
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if edital.doc3 %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.rneNro) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.rneDataExpedicao) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.rneDataValidade) }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </fieldset>
+                        {% else %}
+                            {% if edital.doc2 %}
+                                <fieldset>
+                                    <legend class="w-auto">Passaporte</legend>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.passaporteNro) }}
+                                        </div>
+                                        <div class="col-md-6">
+
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            {% endif %}
+                            {% if edital.doc3 %}
+                                <fieldset>
+                                    <legend class="w-auto">Registro Nacional de Estrangeiro</legend>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.rneNro) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.rneDataExpedicao) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.rneDataValidade) }}
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if edital.doc4 or edital.doc8 or edital.doc14 or edital.doc15 %}
+                            <fieldset>
+                                <legend class="w-auto">Dados Acadêmicos</legend>
+                                <div class="row">
+                                    {% if edital.doc4 %}
+                                        <div class="col-md-6">
+                                            {{ form_row(form.matriculaNro) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if edital.doc8 %}
+                                    <div class="col-md-6">
+                                        {{ form_row(form.matriculaCurso) }}
+                                    </div>
+                                    {% endif %}
+                                    {% if edital.doc14 %}
+                                        <div class="col-md-6">
+                                            {{ form_row(form.matriculaIndiceDesempenho) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if edital.doc15 %}
+                                        <div class="col-md-6">
+                                            {{ form_row(form.matriculaBeneficio) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.doc5 %}
+                            <fieldset>
+                                <legend class="w-auto">Certidão de Nascimento</legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(form.certidaoNascimentoNro) }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.doc6 %}
+                            <fieldset>
+                                <legend class="w-auto">Currículo Lattes</legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{ form_row(form.url0) }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.doc10 %}
+                            <fieldset>
+                                <legend class="w-auto">Vídeo de apresentação</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 col-sm-12">
+                                            {{ form_label(form.url1) }}
+                                        </div>
+                                        <div class="col-md-8 col-sm-12">
+                                            {{ form_widget(form.url1) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="alert alert-warning" role="alert">
+                                    O <b>vídeo de apresentação </b> deverá estar disponível em alguma plataforma de
+                                    streaming ou
+                                    de compartilhamento de arquivos como por exemplo: YouTube, Vimeo, Google Drive,
+                                    Megaupload, Microsoft Onedrive, entre outros.
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.doc7 %}
+                            <fieldset>
+                                <legend class="w-auto">Resumo ou Texto de apresentação</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2 col-sm-12">
+                                            {{ form_label(form.apresentacao) }}
+                                        </div>
+                                        <div class="col-md-10 col-sm-12">
+                                            {{ form_widget(form.apresentacao) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <br>
+                        {% endif %}
+                        {% if edital.doc12 %}
+                            <fieldset>
+                                <legend class="w-auto">Recebimento de bolsa ou auxílio</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 col-sm-12">
+                                            {{ form_label(form.recebimentoBolsa) }}
+                                        </div>
+                                        <div class="col-md-8 col-sm-12">
+                                            {{ form_widget(form.recebimentoBolsa) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="alert alert-warning" role="alert">
+                                    Utilize o campo acima para informar se você recebe
+                                    alguma bolsa de estudo ou auxílio estudantil.
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        {% if edital.doc11 %}
+                            <fieldset>
+                                <legend class="w-auto">Dados Bancários</legend>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        {{ form_row(form.bancoInstituicao) }}
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        {{ form_row(form.bancoAgencia) }}
+                                        {{ form_row(form.bancoConta) }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        {% endif %}
+                        <fieldset>
+                            <legend class="w-auto">Contato</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.contatoEmail) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.contatoTelefone1) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.contatoTelefone2) }}
+                                </div>
+                            </div>
+                        </fieldset>
+                        {% if edital.info6 %}
+                            <div class="row">
+                                <div class="alert alert-info" role="alert"><strong>Observação: </strong><br>
+                                    {{ edital.info6|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if edital.anexo0 >0 %}
+                            <div>
+                                <div class="row">
+                                    <div id="dz0" class="dropzone"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" class='hidden validar checkbox-anexo'
+                                               id="chk0"
+                                               name="anexo0" {% if edital.anexo0 ==2 %} required="required" {% endif %}
+                                               value="1" aria-required="true"/>
+                                    </div>
+                                    <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                        Somente arquivos do tipo PDF e que não ultrapassem o tamanho de 10Mb
+                                        serão aceitos neste formulário de inscrição.
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if edital.doc13 %}
+                        <div id="tab-endereco" class="tab-pane">
+                            <h3>Endereço Residencial</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoCep) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoNumero) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoComplemento) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoLogradouro) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoBairro) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoMunicipio) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.enderecoUf) }}
+                                </div>
+                            </div>
+                            {% if edital.info7 %}
+                                <div class="row">
+                                    <div class="alert alert-info" role="alert"><strong>Observação: </strong><br>
+                                        {{ edital.info7|raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if edital.anexo1 >0 %}
+                                <div class="row">
+                                    <div id="dz1" class="dropzone"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" class='hidden validar checkbox-anexo'
+                                               id="chk1" name="anexo1"
+                                                {% if edital.anexo1 ==2 %} required="required" {% endif %}
+                                               value="1" aria-required="true"/>
+                                    </div>
+                                    <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                        Somente arquivos do tipo PDF e que não ultrapassem o tamanho de 10Mb serão
+                                        aceitos neste formulário de inscrição.
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if edital.anexo3 %}
+                    <div id="tab-anexos" class="tab-pane">
+                        {% if edital.anexo3 >0 %}
+                            <h3>Anexos e Comprovantes</h3>
+                            <div class="row">
+                                <div id="dz3" class="dropzone"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="checkbox" class='hidden validar checkbox-anexo'
+                                           id="chk3" name="anexo3"
+                                            {% if edital.anexo3 ==2 %} required="required" {% endif %}
+                                           value="1" aria-required="true"/>
+                                </div>
+                                <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                    Somente arquivos do tipo PDF e que não ultrapassem o tamanho de 10Mb serão
+                                    aceitos neste formulário de inscrição.
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% if edital.modeloInscricao ==1 %}
+                        <div id="tab-projeto" class="tab-pane">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3>Dados do projeto</h3>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.projetoTitulo) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.projetoResumo) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.projetoAreaConhecimento) }}
+                                    </div>
+                                </div>
+
+                            {% if edital.projetoParticipanteMax > 0 %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3>Participantes</h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {% for i in 1..edital.projetoParticipanteMax %}
+                                        <div class="col-md-6">
+                                            <fieldset>
+                                                <legend><small>Participante {{ i }} </small></legend>
+                                                {{ form_row(form['projetoParticipanteNome'~i]) }}
+                                                {{ form_row(form['projetoParticipanteEmail'~i]) }}
+                                            </fieldset>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if edital.anexo4 >0 %}
+                                <div class="row">
+                                    <h3>Anexos</h3>
+                                    <div id="dz4" class="dropzone"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="checkbox" class='hidden validar checkbox-anexo'
+                                               id="chk4" name="anexo4"
+                                                {% if edital.anexo4 ==2 %} required="required" {% endif %}
+                                               value="1" aria-required="true"/>
+                                    </div>
+                                    <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                        Somente arquivos do tipo PDF e que não ultrapassem o tamanho de 10Mb serão
+                                        aceitos neste formulário de inscrição.
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <div id="tab-pontuacao" class="tab-pane ">
+                        {% if edital.anexo2 >0 %}
+                            <h3>Memorial Descritivo</h3>
+                            <div class="row">
+                                <div id="dz2" class="dropzone"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="checkbox" class='hidden validar checkbox-anexo'
+                                           id="chk2" name="anexo2"
+                                            {% if edital.anexo2 ==2 %} required="required" {% endif %}
+                                           value="1" aria-required="true"/>
+                                </div>
+                                <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                    Somente arquivos do tipo PDF e que não ultrapassem o tamanho de 10Mb serão
+                                    aceitos neste formulário de inscrição.
+                                </div>
+                            </div>
+                        {% endif %}
+                        <h3>Pontuação</h3>
+                        {% if edital.info8 %}
+                            <div class="row">
+                                <div class="alert alert-info" role="alert"><strong>Observação: </strong><br>
+                                    {{ edital.info8|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            {{ form_widget(form) }}
+                        </div>
+                    </div>
+                    <div id="tab-confirmacao" class="tab-pane">
+                        <h3> Confirmação de dados</h3>
+                        {% if edital.info9 %}
+                            <div class="row">
+                                <div class="alert alert-info" role="alert"><strong>Observação: </strong><br>
+                                    {{ edital.info9|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div id="form-preview"></div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="">
+                                    <label for="confirmacao">
+                                        <input type="checkbox" name="confirmacao" id="confirmacao" value="1"
+                                               required="required"/>
+                                        Declaro, para os devidos fins, que as informações contidas na presente ficha
+                                        são verdadeiras e assumo o compromisso de apresentar, quando solicitado, os
+                                        comprovantes originais, bem como as penalidades por quaisquer informações
+                                        falsas.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <ul class="pager">
+                <li class="previous">
+                    <a class="btn btn-success"><i class="fa fa-angle-left"></i> Voltar</a>
+                </li>
+                <li class="finish hidden  pull-right success">
+                    <a><i class="icon icon-check"></i> Finalizar Inscrição </a>
+                </li>
+                <li class="next">
+                    <a class="btn btn-success">Próximo <i class="fa fa-angle-right"></i></a>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <template id="templateAreaUpload">
+        <div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="dropzone"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="7" name="nte_inscricao"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="checkbox" class='hidden validar checkbox-anexo' value="1" aria-required="true"/>
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    <strong>Observação: </strong>
+                    Somente arquivos do tipo PDF e que não ultrapassem o tamanho de 10Mb serão
+                    aceitos neste formulário de inscrição.
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="templateFormResumo">
+        <div>
+            <div class="row">
+                <div class='col-xs-12 col-md-6'><strong class="rotulo"></strong></div>
+                <div class='col-xs-12 col-md-6 campo'></div>
+            </div>
+        </div>
+    </template>
+{% endblock %}
+
+    {% block rodape %}
+        <footer class="short" id="footer">
+            <div class="container hidden-xs hidden-sm">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Dúvidas sobre este edital</h4>
+                        <p>
+                            {{ edital.info3|raw }}
+                        </p>
+                        <hr class="light">
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        <h5 class="mb-sm">Inscrições </h5>
+                        <i class="fa fa-calendar"> </i> &nbsp;
+                        <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                        <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        <h5 class="mb-sm">Resultado Final </h5>
+                        <i class="fa fa-calendar"> </i>
+                        &nbsp; {{ edital.resultadoFinal.dataDivulgacao is defined? edital.resultadoFinal.dataDivulgacao|date('d/m/Y'):"Não informado" }}
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright hidden-xs hidden-sm">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <a href="{{ path('nte_site_homepage') }}" class="logo">
+                                <img alt="" class="img-responsive"
+                                     src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                            </a>
+                        </div>
+                        <div class="col-md-11">
+                            <p>Núcleo de Tecnologia Educacional </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container hidden-md hidden-lg text-center">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Dúvidas sobre este edital</h4>
+                        <p>
+                            {{ edital.info3|raw }}
+                        </p>
+                        <hr class="light">
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        <h5 class="mb-sm">Inscrições </h5>
+                        <i class="fa fa-calendar"> </i> &nbsp;
+                        <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                        <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        <h5 class="mb-sm">Resultado Final </h5>
+                        <i class="fa fa-calendar"> </i>
+                        &nbsp; {{ edital.resultadoFinal.dataDivulgacao is defined? edital.resultadoFinal.dataDivulgacao|date('d/m/Y'):"Não informado" }}
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright hidden-md hidden-lg text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-1 text-center">
+                            <a href="{{ path('nte_site_homepage') }}">
+                                <img alt="" width="130"
+                                     src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                            </a>
+                        </div>
+                        <div class="col-md-12">
+                            <h5>
+                                UNIVERISDADE FEDERAL DE SANTA MARIA<br>
+                                NÚCLEO DE TECNOLOGIA EDUCACIONAL
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
+
+{% block jsOpcional %}
+    <style>
+        fieldset {
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+
+        .pager li > a, .pager li > span {
+            display: inline-block;
+            padding: 10px 10px;
+            background-color: #38ae8a;
+            border: 1px solid #277d70;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .pager li.previous > a, .pager li.previous > span {
+            background-color: #005387;
+        }
+        .pager li > a:focus, .pager li > a:hover {
+            text-decoration: none;
+            background-color: #005387;
+            border-color: #3f7da4;
+        }
+        .tab-content {
+            padding: 0;
+        }
+
+    </style>
+    <script src="{{ asset('assets/vendor/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/pnotify/pnotify.custom.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+{% endblock %}
+{% block  js %}
+    <script>
+
+        let cep = $('#nte_inscricao_enderecoCep'),
+            datas = $('input[data-plugin-datepicker="1"]'),
+            dataNascimento = $('#nte_inscricao_dataNascimento'),
+            sexo = $('#nte_inscricao_sexo'),
+
+            cr = document.getElementById('nte_inscricao_crNro'),
+            crData = document.getElementById('nte_inscricao_crDataExpedicao'),
+
+            estrangeiro = $('#nte_inscricao_estrangeiro'),
+            nacionalidade = document.getElementById('nte_inscricao_nacionalidade'),
+            passaporte = document.getElementById('nte_inscricao_passaporteNro'),
+            rne = document.getElementById('nte_inscricao_rneNro'),
+            rneValidade = document.getElementById('nte_inscricao_rneDataValidade'),
+            rneEmissao = document.getElementById('nte_inscricao_rneDataExpedicao'),
+
+
+            telefone1 = $('#nte_inscricao_contatoTelefone1'),
+            telefone2 = $('#nte_inscricao_contatoTelefone2'),
+            cpf = $('#nte_inscricao_cpf'),
+            rua = $('#nte_inscricao_enderecoLogradouro'),
+            bairro = $('#nte_inscricao_enderecoBairro'),
+            cidade = $('#nte_inscricao_enderecoMunicipio'),
+            uf = $('#nte_inscricao_enderecoUf'),
+            selectAnexo = $("[data-anexo]"),
+            checkboxAnexo = $('.checkbox-anexo'),
+            selects = $('select'),
+            forms = $('form'),
+            wizard = $("#w4"),
+            arquivosSubmetidos = [],
+            chkCampo = [],
+            dzAreaAtivo = [],
+            templateAreaUpload = document.getElementById('templateAreaUpload'),
+            templateFormResumo = document.getElementById('templateFormResumo'),
+            pf = document.getElementById('form-preview'),
+            telefoneOptions = {
+                onKeyPress: (nro) => {
+                    telefone1.mask(((nro.length < 14) ? '(00) 0000-0000' : '(00) 0000-0000'), telefoneOptions);
+                }
+            };
+        selects.select2({width: "100%"});
+        datas.mask('00/00/0000');
+        datas.datepicker({
+            language: "pt-BR",
+            format: "dd/mm/yyyy",
+        });
+        cep.mask('00000-000');
+        cpf.mask('000.000.000-00');
+        telefone1.mask('(00) 00000-0000');
+        telefone2.mask('(00) 0000-0000');
+        cep.change(() => {
+            let x = cep.val().replace("-", "");
+            $.get("{{ path('get_logistica_cep') }}?cep=" + x, cep => {
+                if (cep) {
+                    rua.val(cep.tipo + " " + cep.nome);
+                    bairro.val(cep.id_bairro_inicio.nome);
+                    cidade.val(cep.id_cidade.localidade_nome);
+                    uf.val(cep.id_cidade.estado_sigla).trigger('change');
+                }
+            });
+        });
+
+        estrangeiro.change((event, select) => {
+            nacionalidade.required = Boolean(parseInt(estrangeiro.val()));
+            nacionalidade.disabled = !Boolean(parseInt(estrangeiro.val()));
+            passaporte.required = Boolean(parseInt(estrangeiro.val()));
+            rne.required = Boolean(parseInt(estrangeiro.val()));
+            rneValidade.required = Boolean(parseInt(estrangeiro.val()));
+            rneEmissao.required = Boolean(parseInt(estrangeiro.val()));
+        });
+
+        sexo.change((event, select) => {
+            situacaoMilitar(Boolean(parseInt(sexo.val())), menor45());
+        });
+
+        dataNascimento.change(e => {
+            situacaoMilitar(Boolean(parseInt(sexo.val())), menor45());
+        });
+
+        function menor45() {
+            return (diferencaAnos(converterData("nte_inscricao_dataNascimento")) <= 45);
+        }
+
+        function situacaoMilitar(sexo, idade) {
+            cr.required = (sexo && idade);
+            cr.disabled = !(sexo && idade);
+            crData.required = (sexo && idade);
+            crData.disabled = !(sexo && idade);
+        }
+
+        function converterData(campo) {
+            let data = document.getElementById(campo).value.split("/");
+            return new Date(data[2], data[1], data[0]);
+        }
+
+        function diferencaAnos(dt0) {
+            return Math.abs((new Date(Date.now() - dt0.getTime())).getUTCFullYear() - 1970);
+        }
+
+        selectAnexo.change((event, select) => {
+            if (event.target.dataset.anexo) {
+                if (event.target.value > 0) {
+                    if (event.target.dataset.upload === undefined) {
+                        console.log(event.target.dataset);
+
+                        let template = document.getElementById('templateAreaUpload').cloneNode(true);
+                        event.target.dataset.upload = (new Date()).getTime();
+                        template.content.querySelectorAll('div')[0].id = event.target.dataset.upload;
+                        template.content.querySelectorAll('div')[3].id = "dz" + event.target.dataset.upload;
+                        template.content.querySelectorAll('input')[0].id = "chk" + event.target.dataset.upload;
+                        template.content.querySelectorAll('input')[0].name = "chk" + event.target.dataset.upload;
+
+                        switch (event.target.dataset.obrigatorio) {
+                            case "0":
+                                template.content.querySelectorAll('input')[0].required = false;
+                                template.content.querySelectorAll('textarea')[0].required = false;
+                                break;
+                            case "1":
+                                template.content.querySelectorAll('input')[0].required = true;
+                                template.content.querySelectorAll('textarea')[0].required = false;
+                                break;
+                            case "2":
+                                template.content.querySelectorAll('input')[0].required = false;
+                                template.content.querySelectorAll('textarea')[0].required = true;
+                                break;
+                            case "3":
+                                template.content.querySelectorAll('input')[0].required = true;
+                                template.content.querySelectorAll('textarea')[0].required = true;
+                                break;
+                        }
+
+
+                        template.content.querySelectorAll('textarea')[0].name += "[" + event.target.dataset.texto + "]";
+                        template.content.querySelectorAll('textarea')[0].placeholder = event.target.dataset.observacaotexto;
+                        event.target.parentNode.parentNode.parentNode
+                            .insertBefore(
+                                document.importNode(template.content, true),
+                                event.target.parentNode.parentNode.nextSibling
+                            );
+                        dzAreaAtivo[event.target.dataset.upload] = mkDropZone(event.target.dataset.upload, event.target.dataset.observacao, event.target.dataset.tipo, event.target.dataset.id);
+                        checkboxAnexo = $('.checkbox-anexo');
+                        console.log(checkboxAnexo.length);
+                    }
+                } else if (event.target.dataset.upload) {
+                    dzAreaAtivo[event.target.dataset.upload].destroy();
+                    document.getElementById(event.target.dataset.upload).remove();
+                    delete event.target.dataset.upload;
+                }
+            }
+        });
+
+        //Validar CPF
+        $.validator.addMethod("cpf", function (value, element) {
+            return this.optional(element) || CPF.validate(value);
+        }, "Por favor, Informe um CPF válido.");
+
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+
+        Dropzone.autoDiscover = false;
+
+        /**
+         * Cria uma nova instância do DropZone
+         *
+         * @param id
+         * @param observacao
+         * @param contexto
+         * @param idContexto
+         * @returns {Dropzone};
+         */
+        function mkDropZone(id, observacao, contexto, idContexto) {
+            return new Dropzone("#dz" + id, {
+                url: "{{ oneup_uploader_endpoint('frigadata') }}",
+                headers: {
+                    "x-contexto": contexto,
+                    'x-id': idContexto
+                },
+                dictDefaultMessage: "<i class='fa fa-2x fa-upload'></i><br>" + observacao,
+                acceptedFiles: "application/pdf",
+                maxFilesize: 10,
+                addRemoveLinks: true,
+                dictRemoveFile: "Remover Arquivo",
+                dictFileTooBig: "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente",
+                dictInvalidFileType: "O arquivo escolhido não está no formato PDF. Escolha outro arquivo e tente novamente."
+
+            }).on('sending', (arquivo, requisicao, dataset) => {
+                requisicao.timeout = 99999999999999999;
+            }).on('removedfile', (arquivo) => {
+                let a = arquivo,
+                    xhr = JSON.parse(a.xhr.response);
+                if (typeof xhr.error == 'undefined') {
+                    $.post('{{ path('arquivo_remover') }}', {id: xhr.id})
+                        .complete(e => {
+                            notificar(e.responseJSON);
+                            arquivosSubmetidos.splice(arquivosSubmetidos.indexOf(xhr.id), 1);
+                            chkCampo.splice(chkCampo.indexOf(id));
+                        });
+                    if (chkCampo.indexOf(id) !== -1) {
+                        $("#chk" + id).prop("checked", false);
+                    }
+                }
+            }).on('success', (arquivo, xhr) => {
+                console.log(id);
+                $("#chk" + id).prop("checked", true);
+                notificar(xhr);
+                arquivosSubmetidos.push(xhr.id);
+                if (chkCampo.indexOf(id) === -1) {
+                    chkCampo.push(id);
+                }
+            }).on('error', function (arquivo, xhr, requisicao) {
+                if (requisicao.status === 500) {
+                    notificar({msg: "Erro ao enviar arquivo!", tipo: "error"});
+                }
+                this.removeFile(arquivo);
+            });
+        }
+
+        /**
+         *  Notificação
+         * @param x
+         * @returns {PNotify}
+         */
+        function notificar(x) {
+            return new PNotify({
+                text: x.msg,
+                type: x.tipo,
+                icon: 'fa fa-2x fa-exclamation-triangle'
+            });
+        }
+
+        (function ($) {
+            'use strict';
+            let btnFinalizar = wizard.find('ul.pager li.finish'),
+                wizardValidador = forms.validate({
+                    highlight: function (element) {
+                        $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                    },
+                    success: function (element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                        $(element).remove();
+                    },
+                    errorPlacement: function (error, element) {
+                        element.parent().append(error);
+                    }
+                });
+
+            btnFinalizar.on('click', function (ev) {
+                ev.preventDefault();
+                let validated = forms.valid();
+                if (validated) {
+                    arquivosSubmetidos.forEach(function (v) {
+                        forms.append('<input type="hidden" name="arquivos[]" value="' + v + '" /> ');
+                    });
+                    forms.submit();
+                } else {
+                    notificar({msg: "Existem campos ou anexos obrigatórios não preenchidos!", tipo: "warning"});
+                }
+            });
+
+            wizard.bootstrapWizard({
+                tabClass: 'wizard-steps',
+                nextSelector: 'ul.pager li.next',
+                previousSelector: 'ul.pager li.previous',
+                firstSelector: null,
+                lastSelector: null,
+                onNext: function (tab, menu, index, novaAba) {
+                    checkboxAnexo.removeClass('hidden');
+                    let validated = forms.valid();
+                    checkboxAnexo.addClass('hidden');
+                    if (!validated) {
+                        notificar({msg: "Existem campos ou anexos obrigatórios não preenchidos!", tipo: "warning"});
+                        wizardValidador.focusInvalid();
+                        return false;
+                    }
+                },
+                onTabClick: function (tab, menu, index, novaAba) {
+                    if (novaAba === index + 1) {
+                        return this.onNext(tab, menu, index, novaAba);
+                    } else return novaAba <= index + 1;
+                },
+                onTabChange: function (tab, menu, index, novaAba) {
+                    let total = menu.find('li').length - 1;
+                    if (novaAba === total) {
+                        pf.innerHTML = "";
+                        Array.from(document.querySelectorAll('input,select,textarea')).forEach(input => {
+                            if (input.dataset.label) {
+                                let template = document.getElementById('templateFormResumo').cloneNode(true);
+                                if (input.type !== 'date') {
+                                    template.content.querySelectorAll('.rotulo')[0].textContent = input.dataset.label;
+                                }
+                                if (input.type === 'select-one') {
+                                    template.content.querySelectorAll('.campo')[0].textContent = input.options[input.options.selectedIndex].text;
+                                }
+                                if (input.type === 'text'
+                                    || input.type === 'textarea'
+                                    || input.type === 'url'
+                                    || input.type === 'email') {
+                                    template.content.querySelectorAll('.campo')[0].textContent = input.value;
+                                }
+                                if (input.type === 'date') {
+                                    //let ddd =input.value === ""? "" :new Date(input.value).getU.toLocaleString('pt-BR').split(' ')[0];
+                                    //template.content.querySelectorAll('.campo')[0].textContent = ddd;
+                                }
+                                pf.appendChild(document.importNode(template.content, true));
+                            }
+                        });
+                    }
+                    btnFinalizar[novaAba !== total ? 'addClass' : 'removeClass']('hidden');
+                    wizard.find(this.nextSelector)[novaAba === total ? 'addClass' : 'removeClass']('hidden');
+                },
+                onTabShow: function (tab, menu, index) {
+                    let total = menu.find('li').length - 1,
+                        atual = index,
+                        porcentagem = Math.floor((atual / total) * 100);
+                    wizard.find('.progress-indicator').css({'width': porcentagem + '%'});
+                    tab.prevAll().addClass('completed');
+                    tab.nextAll().removeClass('completed');
+                }
+            });
+
+            {% if edital.anexo0 %}
+            dzAreaAtivo[0] = mkDropZone(0, "Anexar cópia simples dos documentos de identificação", "DOCUMENTO", 0);
+            {% endif %}
+            {% if edital.anexo1 %}
+            dzAreaAtivo[1] = mkDropZone(1, "Anexar cópia do comprovante de residência", "DOCUMENTO", 1);
+            {% endif %}
+            {% if edital.anexo2 %}
+            dzAreaAtivo[2] = mkDropZone(2, "Anexar memorial descritivo", "DOCUMENTO", 2);
+            {% endif %}
+            {% if edital.anexo3 %}
+            dzAreaAtivo[3] = mkDropZone(3, "{{ edital.info10 }}", "DOCUMENTO", 3);
+            {% endif %}
+            {% if edital.anexo4 %}
+            dzAreaAtivo[4] = mkDropZone(4, "{{ edital.info12 }}", "DOCUMENTO", 4);
+            {% endif %}
+
+            {% if edital.doc1 %}
+                situacaoMilitar(Boolean(parseInt(sexo.val())), menor45());
+            {% endif %}
+
+        }).apply(this, [jQuery]);
+
+    </script>
+{% endblock %}

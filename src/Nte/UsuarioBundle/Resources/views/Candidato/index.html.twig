@@ -1,0 +1,107 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Painel principal </span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-md-9">
+            <div class="row">
+                <h3 class="mb-xl">
+                    Olá, <strong> {{ app.user.nome }}! </strong>
+                </h3>
+            </div>
+            <div class="featured-boxes featured-boxes-style-3">
+                <div class="row">
+                    <a href="{{ path('nte_usuario_candidato_inscricao_index') }}">
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="featured-box featured-box-primary featured-box-effect-4">
+                            <div class="box-content">
+                                <i class="icon-featured fa fa-user"></i>
+                                <h4>Inscrições</h4>
+                                <p>
+                                    {% if app.user.totalInscricaoValida|length >0 %}
+                                        Você possuí {{ app.user.totalInscricaoValida|length }}
+                                        {% if  app.user.totalInscricaoValida|length == 1 %}
+                                            inscrição
+                                        {% else %}
+                                             inscrições.
+                                        {% endif %}
+                                    {% else %}
+                                        Você não está inscrito em nenhum edital.
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="{{ path('nte_usuario_candidato_convocacao_index') }}">
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="featured-box featured-box-tertiary featured-box-effect-4">
+                            <div class="box-content">
+                                <i class="icon-featured fa fa-calendar-check-o"></i>
+                                <h4>Convocações</h4>
+                                <p>
+                                {% if app.user.convocacoes.count >0 %}
+                                    Você possuí {{ app.user.convocacoes.count }}
+                                    {% if  app.user.convocacoes.count == 1 %}
+                                        convocacão
+                                    {% else %}
+                                        convocações.
+                                    {% endif %}
+                                {% else %}
+                                    Você não possuí convocações
+                                {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                    <a href="{{ path('nte_usuario_candidato_recursos_index') }}">
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="featured-box featured-box-secondary featured-box-effect-4">
+                            <div class="box-content">
+                                <i class="icon-featured fa fa-th"></i>
+                                <h4>Recursos</h4>
+                                <p>
+                                    {% if app.user.recursoInscricao.count >0 %}
+                                        Você possuí {{ app.user.recursoInscricao.count }}
+                                        {% if  app.user.recursoInscricao.count == 1 %}
+                                            recurso entreposto
+                                        {% else %}
+                                            recursos entrepostos
+                                        {% endif %}
+                                    {% else %}
+                                        Você não possuí recursos entrepostos
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

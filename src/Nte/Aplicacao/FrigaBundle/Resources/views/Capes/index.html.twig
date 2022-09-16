@@ -1,0 +1,47 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} CAPES: Areas do Conhecimento{% endblock %}
+{% block breadcumbsTitulo %} CAPES: Areas do Conhecimento {% endblock %}
+{% block conteudo %}
+    <div class="row">
+    <div class="col-md-12 text-left">
+        <a class="btn btn-primary" href="{{ path('capes_area_conhecimento_criar') }}"> Novo </a>
+    </div>
+        <div class="col-md-12">
+            <section class="panel-body">
+                    <table class="table table-hover table-condesed ">
+                        <thead>
+                        <tr>
+                            <th>COD</th>
+                            <th>AREA</th>
+                            <th>AREA MESTRE</th>
+                            <th>Versão</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for a in areas %}
+                            <tr>
+                                <td>{{ a.id }}</td>
+                                <td>{{ a.area }}</td>
+                                <td>{{ a.areaMestre }}</td>
+                                <td>{{ a.versao }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm pull-right">
+                                        <a class="btn btn-default"
+                                           href="{{ path('capes_area_conhecimento_editar', {'id': a.id}) }}">
+                                            <i class="fa fa-edit"></i> Editar
+                                        </a>
+                                        <a class="btn btn-danger" href="{{ path('capes_area_conhecimento_remover', {'id': a.id}) }}">
+                                            <i class="fa fa-trash"></i> Remover
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+            </section>
+        </div>
+    </div>
+{% endblock %}

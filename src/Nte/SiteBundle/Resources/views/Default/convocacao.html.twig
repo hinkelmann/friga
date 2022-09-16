@@ -1,0 +1,129 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} {{ edital.titulo }}{% endblock %}
+{% block metaDescricao %} {{ edital.sobre }}{% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>{{ edital.titulo }}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        <div class="row mb-xl">
+            {% if convocacao.count %}
+                <h2 class="mb-xl">Lista de <strong>Candidatos</strong></h2>
+                <h4>{{ etapa.descricao }}</h4>
+                {{ etapa.observacao|raw }}
+                <table class="table table-responsive table-condensed table-bordered">
+                    <thead>
+                    <tr>                       
+                        <th class="text-center">Data</th>
+                        <th class="text-center">Hora</th>
+                        <th>Inscrição</th>
+                        <th class="text-center" width="450">Local e Informações </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c in convocacao %}
+                        <tr>                           
+                            <td class="text-center">
+                                {{ c.data|date('d/m/Y') }}
+                            </td>
+                            <td class="text-center">
+                                {{ c.data|date('H:i') }}
+                            </td>
+                            <td>
+                                <b class="text-uppercase">
+                                    <a href="{{ path('nte_site_edital_pontuacao_candidato', {'inscricao':  c.idInscricao.uuid, 'edital': edital.uuid}) }}">
+                                        {{ c.idInscricao.nome }}
+                                    </a>
+                                </b>
+                            </td>
+                            <td class="text-justify">
+                                {{ c.observacao|nl2br }}
+                            </td>
+
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="body-error error-inside">
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                        0 <i class="fa fa-trophy text-primary"></i></h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br><b>Nenhum candidato </b> convocado pelo sistema até o momento.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block rodape %}
+    <footer class="short" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Dúvidas sobre este edital</h4>
+                    <p class="text-weight-bold">
+                        {{ edital.info3|raw }}
+                    </p>
+                    <hr class="light">
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Inscrições </h5>
+                    <i class="fa fa-calendar"> </i> &nbsp;
+                    <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                    <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Resultado Final </h5>
+                    <i class="fa fa-calendar"> </i>
+                    &nbsp; {{ edital.resultadoFinal.dataDivulgacao is defined? edital.resultadoFinal.dataDivulgacao|date('d/m/Y'):"Não informado" }}
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1">
+                        <a href="{{ path('nte_site_homepage') }}" class="logo">
+                            <img alt="" class="img-responsive"
+                                 src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                        </a>
+                    </div>
+                    <div class="col-md-11">
+                        <p>Núcleo de Tecnologia Educacional </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+{% block jsOpcional %}
+    <script src="{{ asset('assets/vendor/jquery.rowspanizer/jquery.rowspanizer.min.js') }}"></script>
+{% endblock %}
+{% block js %}
+    <script>
+        $("table").rowspanizer({
+            vertical_align: 'middle',
+            columns: [0, 1, 3, 4]
+        });
+    </script>
+{% endblock %}

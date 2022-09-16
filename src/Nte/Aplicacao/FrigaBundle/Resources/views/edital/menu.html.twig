@@ -1,0 +1,85 @@
+<div class="col-md-2">
+    {{ entidade.id }} - {{ entidade.url }}
+    <div class="row">
+        <div class="list-group">
+            {% set classeX = app.request.attributes.get('_route') == 'edital_editar'? " active " : "  " %}
+            <a href="{{ path('edital_editar', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-star"></i> Configurações
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_arquivo'? " active " : "  " %}
+            <a href="{{ path('edital_arquivo', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-file-pdf-o"></i> Arquivos
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_editar_inscricoes'? " active " : "  " %}
+            <a href="{{ path('edital_editar_inscricoes', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-th-list"></i> Inscrição
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_avaliador' or
+                app.request.attributes.get('_route') == 'edital_avaliador_adicionar'
+                ? " active " : "  "
+            %}
+            <a href="{{ path('edital_avaliador', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-users"></i> Usuários
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_editar_termo' ? " active " : "  "
+            %}
+            <a href="{{ path('edital_editar_termo', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-gavel"></i> Termo
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_cargo'
+                or app.request.attributes.get('_route') == 'edital_cargo_criar'
+                or app.request.attributes.get('_route') == 'edital_cargo_editar'
+                ? " active " : "  "
+            %}
+            <a href="{{ path('edital_cargo', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-gift"></i> Vagas
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_cota'
+                or app.request.attributes.get('_route') == 'edital_cota_criar'
+                or app.request.attributes.get('_route') == 'edital_cota_editar'
+                ? " active " : "  "
+            %}
+            <a href="{{ path('edital_cota', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="icon icon-user"></i> Listas de Classificação
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_etapa'
+                or app.request.attributes.get('_route') == 'edital_etapa_criar'
+                or app.request.attributes.get('_route') == 'edital_etapa_editar'
+                ? " active " : "  "
+            %}
+            <a href="{{ path('edital_etapa', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-flag"></i> Etapas
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_pontuacao'
+                or app.request.attributes.get('_route') == 'edital_pontuacao_criar'
+                or app.request.attributes.get('_route') == 'edital_pontuacao_editar'
+                or app.request.attributes.get('_route') == 'edital_pontuacao_categoria_criar'
+                or app.request.attributes.get('_route') == 'edital_pontuacao_categoria_editar'
+                ? " active " : "  "
+            %}
+            <a href="{{ path('edital_pontuacao', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}" >
+                <i class="fa fa-calculator"></i> Pontuação
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_desempate' or
+                app.request.attributes.get('_route') == 'edital_desempate_criar' or
+                app.request.attributes.get('_route') == 'edital_desempate_editar'
+                ? " active " : "  "
+            %}
+            <a href="{{ path('edital_desempate', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="icon icon-refresh"></i> Desempate
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_resultados'? " active " : "  " %}
+            <a href="{{ path('edital_resultados', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-trophy"></i> Resultados
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_exportador' ? " active " : "  " %}
+            <a href="{{ path('edital_exportador', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-download"></i> Exportar
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_importador' ? " active " : "  " %}
+            <a href="{{ path('edital_importador', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-upload"></i> Importar
+            </a>
+        </div>
+    </div>
+</div>

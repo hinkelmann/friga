@@ -1,0 +1,355 @@
+{% set url = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+{% set classe1,classe2 = "","" %}
+<aside id="sidebar-left" class="sidebar-left hidden-print">
+    <div class="sidebar-header">
+        <div class="sidebar-title">
+            Navegação
+        </div>
+        <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html"
+             data-fire-event="sidebar-left-toggle">
+            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+    </div>
+    <div class="nano">
+        <div class="nano-content">
+            <nav id="menu" class="nav-main" role="navigation">
+                <ul class="nav nav-main">
+                    <li id="menu-lateral-personal" class="visible-xs">
+                        <a href="{{ path('nte_usuario_perfil', {'id': app.user.id}) }}">
+                            <i><img src="{{ path('arquivo_download', {id: app.user.img}) }}"
+                                    alt="{{ app.user.username }}"
+                                    class="img-circle "
+                                    data-lock-picture="{{ path('arquivo_download', {id: app.user.img}) }}" width="32"/></i>
+                            <span>
+                                {{ app.user.nome }} <small>({{ app.user.highestRoleName }})</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li id="menu-lateral-personal" class="visible-xs">
+                        <a href="{{ path('nte_usuario_candidato_homepage') }}">
+                            <i class="fa fa-adjust" aria-hidden="true"></i>
+                            <span>Painel do candidato</span>
+                        </a>
+                    </li>
+                    <li id="menu-lateral-dashboard"
+                        class="{% if path('nte_admin_painel_homepage')  == url %} nav-active{% endif %}">
+                        <a href="{{ path('nte_admin_painel_homepage') }}">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <span>Painel de Controle</span>
+                        </a>
+                    </li>
+
+                    {% if
+                        app.request.attributes.get('_route') == 'nte_aplicacao_friga_etapa_index'
+                        or app.request.attributes.get('_route') == 'nte_aplicacao_friga_etapa_index_proxima'
+                        or app.request.attributes.get('_route') == 'nte_aplicacao_friga_etapa_index_encerradas'
+                        or app.request.attributes.get('_route') == 'nte_aplicacao_friga_etapa_index_todas'
+                        or app.request.attributes.get('_route') == 'avaliacao_index_encerrado'
+                        or app.request.attributes.get('_route') == 'avaliacao_index_proxima'
+                        or app.request.attributes.get('_route') == 'avaliacao_etapa'
+                        or app.request.attributes.get('_route') == 'avaliacao_etapa_candidato'
+                        or app.request.attributes.get('_route') == 'avaliacao_comprovante'
+                        or app.request.attributes.get('_route') == 'avaliacao_index_edital'
+                        or app.request.attributes.get('_route') == 'convocacao_index_encerrado'
+                        or app.request.attributes.get('_route') == 'convocacao_index_proxima'
+                        or app.request.attributes.get('_route') == 'convocacao_etapa'
+                        or app.request.attributes.get('_route') == 'convocacao_etapa_candidato'
+                        or app.request.attributes.get('_route') == 'convocacao_comprovante'
+                        or app.request.attributes.get('_route') == 'convocacao_index_edital'
+                        or app.request.attributes.get('_route') == 'resultado_index_encerrado'
+                        or app.request.attributes.get('_route') == 'resultado_index_proxima'
+                        or app.request.attributes.get('_route') == 'resultado_parcial'
+                        or app.request.attributes.get('_route') == 'resultado_etapa'
+                    %}
+                        {% set classe1 = "nav-expanded nav-active" %}
+                    {% else %}
+                        {% set classe1 = "" %}
+                    {% endif %}
+
+                    <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                        <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
+                            <i class="icon icon-list" aria-hidden="true"></i>
+                            <span>Etapas</span>
+                        </a>
+                    </li>
+                    {#
+                    {% if is_granted('ROLE_AVALIADOR') %}
+                        {% if
+                            app.request.attributes.get('_route') == 'avaliacao_index'
+                            or app.request.attributes.get('_route') == 'avaliacao_index_encerrado'
+                            or app.request.attributes.get('_route') == 'avaliacao_index_proxima'
+                            or app.request.attributes.get('_route') == 'avaliacao_etapa'
+                            or app.request.attributes.get('_route') == 'avaliacao_etapa_candidato'
+                            or app.request.attributes.get('_route') == 'avaliacao_comprovante'
+                            or app.request.attributes.get('_route') == 'avaliacao_index_edital' %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('avaliacao_index') }}">
+                                <i class="icon icon-check" aria-hidden="true"></i>
+                                <span>Avaliação</span>
+                            </a>
+                        </li>
+                        {% if
+                            app.request.attributes.get('_route') == 'convocacao_index'
+                            or app.request.attributes.get('_route') == 'convocacao_index_encerrado'
+                            or app.request.attributes.get('_route') == 'convocacao_index_proxima'
+                            or app.request.attributes.get('_route') == 'convocacao_etapa'
+                            or app.request.attributes.get('_route') == 'convocacao_etapa_candidato'
+                            or app.request.attributes.get('_route') == 'convocacao_comprovante'
+                            or app.request.attributes.get('_route') == 'convocacao_index_edital' %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('convocacao_index') }}">
+                                <i class="icon icon-calendar" aria-hidden="true"></i>
+                                <span>Convocação</span>
+                            </a>
+                        </li>
+
+                        {% if
+                            app.request.attributes.get('_route') == 'resultado_index'
+                            or app.request.attributes.get('_route') == 'resultado_index_encerrado'
+                            or app.request.attributes.get('_route') == 'resultado_index_proxima'
+                            or app.request.attributes.get('_route') == 'resultado_parcial'
+                            or app.request.attributes.get('_route') == 'resultado_etapa'
+                             %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('resultado_index') }}">
+                                <i class="icon icon-trophy" aria-hidden="true"></i>
+                                <span> Resultados </span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    #}
+                    {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                        {% if
+                            app.request.attributes.get('_route') == 'edital_index'
+                            or app.request.attributes.get('_route') == 'edital_index_rascunho'
+                            or app.request.attributes.get('_route') == 'edital_index_encerrado'
+                            or app.request.attributes.get('_route') == 'edital_editar'
+                            or app.request.attributes.get('_route') == 'edital_editar_termo'
+                            or app.request.attributes.get('_route') == 'edital_categoria_index'
+                            or app.request.attributes.get('_route') == 'edital_categoria_editar'
+                            or app.request.attributes.get('_route') == 'edital_categoria_criar'
+                            or app.request.attributes.get('_route') == 'edital_arquivo'
+                            or app.request.attributes.get('_route') == 'edital_avaliador'
+                            or app.request.attributes.get('_route') == 'edital_avaliador_adicionar'
+                            or app.request.attributes.get('_route') == 'edital_cargo'
+                            or app.request.attributes.get('_route') == 'edital_cargo_criar'
+                            or app.request.attributes.get('_route') == 'edital_cargo_editar'
+                            or app.request.attributes.get('_route') == 'edital_etapa'
+                            or app.request.attributes.get('_route') == 'edital_etapa_criar'
+                            or app.request.attributes.get('_route') == 'edital_etapa_editar'
+                            or app.request.attributes.get('_route') == 'edital_resultados'
+                            or app.request.attributes.get('_route') == 'edital_desempate'
+                            or app.request.attributes.get('_route') == 'edital_desempate_criar'
+                            or app.request.attributes.get('_route') == 'edital_desempate_editar'
+                            or app.request.attributes.get('_route') == 'edital_pontuacao'
+                            or app.request.attributes.get('_route') == 'edital_pontuacao_criar'
+                            or app.request.attributes.get('_route') == 'edital_pontuacao_editar'
+                            or app.request.attributes.get('_route') == 'edital_pontuacao_categoria_criar'
+                            or app.request.attributes.get('_route') == 'edital_pontuacao_categoria_editar' %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('edital_index') }}">
+                                <i class="icon icon-book-open" aria-hidden="true"></i>
+                                <span>Editais</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_GERENCIAL') %}
+                        {% if
+                            app.request.attributes.get('_route') == 'relatorio_index'
+                            or app.request.attributes.get('_route') == 'relatorio_resumo'
+                            or app.request.attributes.get('_route') == 'relatorio_geral_resumo'
+                            or app.request.attributes.get('_route') == 'relatorio_anulados'
+                            or app.request.attributes.get('_route') == 'relatorio_inscritos'
+                            or app.request.attributes.get('_route') == 'relatorio_recurso'
+                            or app.request.attributes.get('_route') == 'relatorio_recurso_situacao'
+                            or app.request.attributes.get('_route') == 'relatorio_andamento'
+                            or app.request.attributes.get('_route') == 'relatorio_inscritos_situacao_polo'
+                            or app.request.attributes.get('_route') == 'relatorio_resultado_final'
+                            or app.request.attributes.get('_route') == 'relatorio_todos_anulados'
+                            or app.request.attributes.get('_route') == 'relatorio_todos_inscritos'
+                            or app.request.attributes.get('_route') == 'relatorio_resultado_final2'
+                            or app.request.attributes.get('_route') == 'relatorio_convocacoes'
+                            or app.request.attributes.get('_route') == 'relatorio_recurso' %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-ajuda" class="nav-parent {{ classe1 }}">
+                            <a>
+                                <i class="icon icon-bar-chart" aria-hidden="true"></i>
+                                <span> Relatórios </span>
+                            </a>
+                            <ul class="nav nav-children">
+                                {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                                    {% if
+                                        app.request.attributes.get('_route') == 'relatorio_geral_resumo' %}
+                                        {% set classe2 = "nav-expanded nav-active" %}
+                                    {% else %}
+                                        {% set classe2 = "" %}
+                                    {% endif %}
+                                    <li class="{{ classe2 }} ">
+                                        <a href="{{ path('relatorio_geral_resumo') }}">
+                                            <i class="fa fa-dashcube"></i>
+                                            Resumo Geral
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_GERENCIAL') %}
+                                    {% if
+                                        app.request.attributes.get('_route') == 'relatorio_index' or
+                                        app.request.attributes.get('_route') == 'relatorio_resumo' %}
+                                        {% set classe2 = "nav-expanded nav-active" %}
+                                    {% else %}
+                                        {% set classe2 = "" %}
+                                    {% endif %}
+                                    <li class="{{ classe2 }} ">
+                                        <a href="{{- path('relatorio_index') }}">
+                                            <i class="fa fa-dashboard"></i>
+                                            Resumo por edital
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                                    {% if
+                                        'relatorio_todos_inscritos' == app.request.attributes.get('_route') %}
+                                        {% set classe2 = "nav-expanded nav-active" %}
+                                    {% else %}
+                                        {% set classe2 = "" %}
+                                    {% endif %}
+                                    <li class="{{ classe2 }} ">
+                                        <a href="{{ path('relatorio_todos_inscritos') }}">
+                                            <i class="fa fa-user-plus"></i>
+                                            Inscrições válidas
+                                        </a>
+                                    </li>
+
+                                    {% if
+                                        'relatorio_todos_anulados' == app.request.attributes.get('_route') %}
+                                        {% set classe2 = "nav-expanded nav-active" %}
+                                    {% else %}
+                                        {% set classe2 = "" %}
+                                    {% endif %}
+                                    <li class="{{ classe2 }} ">
+                                        <a href="{{- path('relatorio_todos_anulados') }}">
+                                            <i class="fa fa-user-times"></i>
+                                            Inscrições anuladas
+                                        </a>
+                                    </li>
+                                    {% if
+                                        app.request.attributes.get('_route') == 'relatorio_recurso' %}
+                                        {% set classe2 = "nav-expanded nav-active" %}
+                                    {% else %}
+                                        {% set classe2 = "" %}
+                                    {% endif %}
+                                    <li class="{{ classe2 }} ">
+                                        <a href="{{ path('relatorio_recurso') }}">
+                                            <i class="fa fa-gavel"></i>
+                                            Recursos
+                                        </a>
+                                    </li>
+                                    {% if
+                                        app.request.attributes.get('_route') == 'relatorio_convocacoes' %}
+                                        {% set classe2 = "nav-expanded nav-active" %}
+                                    {% else %}
+                                        {% set classe2 = "" %}
+                                    {% endif %}
+                                    <li class="{{ classe2 }} ">
+                                        <a href="{{ path('relatorio_convocacoes') }}">
+                                            <i class="fa fa-calendar-check-o"></i>
+                                            Convocações
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                            </ul>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if
+                            'nte_usuario_index' == app.request.attributes.get('_route') or
+                            'nte_usuario_perfil' == app.request.attributes.get('_route') or
+                            'nte_usuario_editar' == app.request.attributes.get('_route') or
+                            'nte_usuario_novo' == app.request.attributes.get('_route') %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('nte_usuario_index') }}">
+                                <i class="icon icon-users" aria-hidden="true"></i>
+                                <span>Usuários</span>
+                            </a>
+                        </li>
+                        {% if
+                            'capes_area_conhecimento_index' == app.request.attributes.get('_route') or
+                            'capes_area_conhecimento_criar' == app.request.attributes.get('_route') or
+                            'capes_area_conhecimento_editar' == app.request.attributes.get('_route') or
+                            'capes_area_conhecimento_index' == app.request.attributes.get('_route') %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('capes_area_conhecimento_index') }}">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                <span>CAPES</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% set classe1 = "" %}
+                    {% if
+                        'nte_suporte_homepage' == app.request.attributes.get('_route') or
+                        'nte_suporte_faq' == app.request.attributes.get('_route') or
+                        'nte_suporte_manual' == app.request.attributes.get('_route') or
+                        'nte_suporte_form' == app.request.attributes.get('_route') or
+                        'nte_suporte_visualizar' == app.request.attributes.get('_route') or
+                        'nte_suporte_faq_form' == app.request.attributes.get('_route') or
+                        'nte_suporte_sobre' == app.request.attributes.get('_route') or
+                        'nte_suporte_homepage' == app.request.attributes.get('_route') %}
+                        {% set classe1 = "nav-expanded nav-active" %}
+                    {% else %}
+                        {% set classe1 = "" %}
+                    {% endif %}
+                    <li id="menu-lateral-ajuda" class="{{ classe1 }}">
+                        <a href="{{ path('nte_suporte_homepage') }}">
+                            <i class="icon icon-question" aria-hidden="true"></i>
+                            <span>Ajuda</span>
+                        </a>
+                    </li>
+                    <li id="menu-lateral-sair" class="visible-xs">
+                        <a href="{{ path('fos_user_security_logout') }}">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <span>Sair</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <hr class="separator"/>
+            <div id="exportacao-status" class="sidebar-widget widget-stats hidden">
+                <div class="widget-header">
+                    <h6>Exportações em andamento</h6>
+                    <div class="widget-toggle">+</div>
+                </div>
+                <div class="widget-content">
+                    <ul id="visualizacao-exportacao"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>

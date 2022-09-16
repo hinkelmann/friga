@@ -1,0 +1,36 @@
+nte_aplicacao_friga_homepage:
+    path:     /
+    defaults: { _controller: NteAplicacaoFrigaBundle:Default:index }
+
+nte_aplicacao_friga_edital:
+     resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/edital.yml"
+     prefix:   /edital
+
+nte_aplicacao_friga_relatorio:
+  resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/relatorio.yml"
+  prefix:   /relatorio
+
+nte_aplicacao_friga_etapa:
+  resource: "routing/etapa.yml"
+  prefix:   /etapa
+
+nte_aplicacao_friga_avaliacao:
+  resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/avalicao.yml"
+  prefix:   /avaliacao
+
+nte_aplicacao_friga_convocacao:
+  resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/convocacao.yml"
+  prefix:   /convocacao
+
+capes_area_conhecimento:
+  resource: "routing/capes.yml"
+  prefix:   /capes/area-conhecimento
+
+nte_aplicacao_friga_resultado:
+  resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/resultado.yml"
+  prefix:   /resultado
+
+nte_aplicacao_friga_arquivo:
+      resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/arquivo.yml"
+      prefix:   /arquivo
+

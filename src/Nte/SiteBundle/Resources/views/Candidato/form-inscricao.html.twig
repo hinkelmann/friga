@@ -1,0 +1,551 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-wizard/jquery.bootstrap.wizard.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/dropzone.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/basic.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/pnotify/pnotify.custom.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2/css/select2.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2-bootstrap-theme/select2-bootstrap.css") }}">
+{% endblock %}
+{#% form_theme form 'forms/form_row.html.twig' %#}
+
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Edital   {{ edital.titulo }}
+                        <span># Formulário de Inscrição</span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        <section class="form-wizard" id="w4">
+
+            <div class="panel-body">
+
+                <div class="wizard-progress wizard-progress-lg">
+                    <div class="steps-progress">
+                        <div class="progress-indicator"></div>
+                    </div>
+                    <ul class="wizard-steps">
+                        <li class="active">
+                            <a href="#tab-requisitos" data-toggle="tab"><span>1</span> Requisitos</a>
+                        </li>
+                        <li>
+                            <a href="#tab-identificacao" data-toggle="tab"><span>2</span>Identificação</a>
+                        </li>
+                        <li>
+                            <a href="#tab-endereco" data-toggle="tab"><span>3</span>Endereço</a>
+                        </li>
+                        <li>
+                            <a href="#tab-curso" data-toggle="tab"><span>4</span>Extra</a>
+                        </li>
+                        <li>
+                            <a href="#tab-minimo" data-toggle="tab"><span>5</span>Pontuação</a>
+                        </li>
+                        <li>
+                            <a href="#tab-confirmacao" data-toggle="tab"><span>6</span>Confirmação</a>
+                        </li>
+                    </ul>
+                </div>
+                {{ form_start(form) }}
+                <div class="tab-content">
+                    <div id="tab-requisitos" class="tab-pane active">
+                        <h3>Declaração de Ciência dos Requisitos da Vaga</h3>
+                        <div class="col-md-12">
+                            Ler o <a title="Clique aqui para ler o edital de abertura"
+                                     href="#">Edital de Abertura</a>
+                            <hr>
+
+                            <hr>
+                            {{ form_row(form.idCargo) }}
+                        </div>
+                    </div>
+                    <div id="tab-identificacao" class="tab-pane">
+                        <h3>Dados de Identificação</h3>
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{ form_row(form.nome) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(form.dataNascimento) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ form_row(form.cpf) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(form.rgNro) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(form.rgOrgaoExpedidor) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ form_row(form.contatoTelefone1) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(form.contatoTelefone2) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_row(form.contatoEmail) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="comprovante-identidade" class="dropzone"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="checkbox" class='hidden validar' id="envio_arquivo_identidade"
+                                       name="envio_arquivo_identidade" required="required" value="1"
+                                       aria-required="true"/>
+                            </div>
+                            <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                Somente arquivos do tipo PDF ou imagem e que não ultrapassem o tamanho de 10Mb serão
+                                aceitos neste formulário de inscrição.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="tab-endereco" class="tab-pane">
+                        <h3>Endereço Residencial</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoCep) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoLogradouro) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoNumero) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoComplemento) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoBairro) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoMunicipio) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_row(form.enderecoUf) }}
+                            </div>
+                        </div>
+                        <!--
+                        <div class="row">
+                            <div id="comprovante-endereco" class="dropzone"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="checkbox" class='hidden validar' id="envio_arquivo_endereco"
+                                       name="envio_arquivo_endereco" required="required" value="1"
+                                       aria-required="true">
+                            </div>
+                            <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                Somente arquivos do tipo PDF ou imagem e que não ultrapassem o tamanho de 10Mb serão
+                                aceitos neste formulário de inscrição.
+                            </div>
+                        </div>-->
+
+                    </div>
+
+                    <div id="tab-curso" class="tab-pane ">
+                        <h3>Dados acadêmicos</h3>
+                        <div class="row">
+
+
+                            <div class="col-md-8">
+                                <div class="alert alert-info" role="alert"><strong>Observação: </strong>
+                                    O Índice de Desempenho Acadêmico deve ser gerado no "Portal do Aluno"
+                                    no menu "Relatórios" > "Índice de Desempenho Acadêmico".
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-minimo" class="tab-pane">
+                        <h3> Documentos comprovatórios dos requisitos mínimos </h3>
+                        <div class="row">
+                            <div class="form-group">
+                                <div id="comprovante-xp-min" class="dropzone"></div>
+                                <input type="checkbox" class='hidden validar' id="envio_arquivo_xp_min"
+                                       name="envio_arquivo_xp_min" required="required" value="1"
+                                       aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <div id="comprovante-xp-ead" class="dropzone"></div>
+                                <input type="checkbox" class='hidden validar' id="envio_arquivo_xp_ead"
+                                       name="envio_arquivo_xp_ead" required="required" value="1"
+                                       aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <div id="comprovante-graduacao" class="dropzone"></div>
+                                <input type="checkbox" class='hidden validar' id="envio_arquivo_graduacao"
+                                       name="envio_arquivo_graduacao" required="required" value="1"
+                                       aria-required="true">
+                            </div>
+                            <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                                Somente arquivos do tipo PDF ou imagem e que não ultrapassem o tamanho de 10Mb serão
+                                aceitos neste formulário de inscrição.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="tab-confirmacao" class="tab-pane">
+                        {{ form_widget(form) }}
+                        <h3> Confirmação de dados</h3>
+                        <div class="row">
+                            <div id="form-preview"></div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="">
+                                    <label for="confirmacao">
+                                        <input type="checkbox" name="confirmacao" id="confirmacao" value="1"
+                                               required="required"/>
+                                        Declaro, para os devidos fins, que as informações contidas na presente ficha
+                                        são verdadeiras e assumo o compromisso de apresentar, quando solicitado, os
+                                        comprovantes originais, bem como as penalidades por quaisquer informações
+                                        falsas.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+
+            <ul class="pager">
+                <li class="previous">
+                    <a><i class="fa fa-angle-left"></i> Voltar</a>
+                </li>
+                <li class="finish hidden  pull-right success">
+                    <a>Finalizar cadastro <i class="fa fa-upload"></i></a>
+                </li>
+                <li class="next">
+                    <a>Próximo <i class="fa fa-angle-right"></i></a>
+                </li>
+            </ul>
+
+
+        </section>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/vendor/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/pnotify/pnotify.custom.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+var arquivosSubmetidos = [];
+
+var options = {
+    onKeyPress: function (nro, e, field, options) {
+        console.log(nro.length);
+        $('#{{ form.contatoTelefone1.vars.id }}').mask(((nro.length < 14) ? '(00) 0000-0000' : '(00) 0000-0000'), options);
+            }
+        };
+        jQuery.validator.addMethod("cpf", function(value, element) {
+            return this.optional(element) || CPF.validate(value);
+        }, "Por favor, Informe um CPF válido.");
+
+        $('#{{ form.enderecoCep.vars.id }}').mask('00000-000');
+        $('#{{ form.dataNascimento.vars.id }}').mask('00/00/0000');
+        $('#{{ form.contatoTelefone1.vars.id }}').mask('(00) 00000-0000');
+        $('#{{ form.contatoTelefone2.vars.id }}').mask('(00) 0000-0000');
+        $('#{{ form.cpf.vars.id }}').mask('000.000.000-00');
+        $('#{{ form.dataNascimento.vars.id }}').datepicker({language: 'pt-BR'});
+        $('select').select2({width: '100%'});
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+
+        Dropzone.autoDiscover = false;
+        Dropzone.prototype.defaultOptions.acceptedFiles = "image/*,application/pdf";
+        Dropzone.prototype.defaultOptions.maxFilesize = 10;
+        Dropzone.prototype.defaultOptions.headers = {  'X-CSRFToken': "{{ csrf_token('friga-upload-inscricao-cabecalho') }}"};
+        Dropzone.prototype.defaultOptions.dictFileTooBig = "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente";
+        Dropzone.prototype.defaultOptions.dictInvalidFileType = "O arquivo escolhido não é do tipo  imagem ou PDF. Escolha outro arquivo e tente novamente.";
+        Dropzone.prototype.defaultOptions.init = function () {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append("xtk", "{{ csrf_token('friga-upload-inscricao-form') }}");
+                 xhr.timeout = 99999999999999999;
+            });
+            this.on("addedfile", function (file) {
+                var removeButton = Dropzone.createElement("<button class='btn btn-danger btn-block'><i class='fa fa-remove'></i> Remover</button>");
+                var _this = this;
+                removeButton.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    res = jQuery.parseJSON(file.xhr.response);
+                    if (!res.error) {
+                        $.ajax({
+                            url: "{{ path('frigaarquivo_remove_upload') }}/" + res.fileId + "/" + res.hash,
+                            dataType: 'JSON',
+                            success: function (x) {
+                                if (!x.error)
+                                    arquivosSubmetidos.splice(arquivosSubmetidos.indexOf(res.fileId), 1);
+                                _this.removeFile(file);
+                                new PNotify({
+                                    text: x.message,
+                                    type: !x.error ? 'success' : 'error',
+                                    icon: 'fa fa-2x fa-exclamation-triangle'
+                                });
+                                if (res.tipo == 0) {
+                                    $('#envio_arquivo_identidade').prop("checked", false);
+                                }
+                                if (res.tipo == 2) {
+                                    $('#envio_arquivo_graduacao').prop("checked", false);
+                                }
+                                if (res.tipo == 10) {
+                                    $('#envio_arquivo_xp_min').prop("checked", false);
+                                }
+                                if (res.tipo == 11) {
+                                    $('#envio_arquivo_xp_ead').prop("checked", false);
+                                }
+
+                                $('#w4 form').valid();
+                            },
+                        });
+                    }
+                });
+                file.previewElement.appendChild(removeButton);
+            });
+            this.on("success", function (file, responseText) {
+                if (jQuery.parseJSON(file.xhr.response).error) {
+                    new PNotify({
+                        text: jQuery.parseJSON(file.xhr.response).message,
+                        type: 'error',
+                        addclass: 'notification-error',
+                        icon: 'fa fa-2x fa-exclamation-triangle'
+                    });
+                    this.removeFile(file);
+                } else {
+                    arquivosSubmetidos.push(jQuery.parseJSON(file.xhr.response).fileId);
+                    if (jQuery.parseJSON(file.xhr.response).tipo == 0) {
+                        $('#envio_arquivo_identidade').prop("checked", true);
+                    }
+                    if (jQuery.parseJSON(file.xhr.response).tipo == 2) {
+                        $('#envio_arquivo_graduacao').prop("checked", true);
+                    }
+                    if (jQuery.parseJSON(file.xhr.response).tipo == 10) {
+                        $('#envio_arquivo_xp_min').prop("checked", true);
+                    }
+                    if (jQuery.parseJSON(file.xhr.response).tipo == 11) {
+                        $('#envio_arquivo_xp_ead').prop("checked", true);
+                    }
+
+                }
+                $('#w4 form').valid();
+            });
+            this.on('error', function (file, errorMessage, XMLHttpRequest) {
+                console.log([file, errorMessage, XMLHttpRequest.status]);
+                new PNotify({
+                    text: (XMLHttpRequest.status == 500 ? "Arquivo não aceito" : errorMessage),
+                    type: 'error',
+                    addclass: 'notification-error',
+                    icon: 'fa fa-2x fa-exclamation-triangle'
+                });
+                this.removeFile(file);
+            })
+        };
+        iconeUpload = "<i class='fa fa-2x fa-upload'></i><br>";
+        new Dropzone("#comprovante-identidade", {
+            url: "{{ path('frigaarquivo_upload',{'tipo':0}) }}",
+            dictDefaultMessage: iconeUpload + "Anexar Cópia de Carteira de identidade (RG) e  Cadastro de Pessoa Física (CPF)",
+        });
+        new Dropzone("#comprovante-graduacao", {
+            url: "{{ path('frigaarquivo_upload',{'tipo':2}) }}",
+            dictDefaultMessage: iconeUpload + " Anexar Comprovante de Índice de Desempenho Acadêmico <br> PDF gerado no Portal do Aluno no menu Relatórios - Índice de Desempenho Acadêmico"
+        });
+        new Dropzone("#comprovante-xp-min", {
+            url: "{{ path('frigaarquivo_upload',{'tipo':10}) }}",
+            dictDefaultMessage: iconeUpload + "Anexar Comprovante de matrícula atualizado"
+        });
+        new Dropzone("#comprovante-xp-ead", {
+            url: "{{ path('frigaarquivo_upload',{'tipo':11}) }}",
+            dictDefaultMessage: iconeUpload + "Anexar Histórico Escolar"
+        });
+
+        $("[data-class='select-open-dropzone']").change(function () {
+            if (this.value == 0) {
+                $(this).parent().parent().parent().parent().parent().find('.dropzone').parent().attr('class', 'hidden');
+                $(this).parent().parent().parent().parent().attr('class', 'col-md-12');
+            } else {
+                $(this).parent().parent().parent().parent().attr('class', 'col-md-4');
+                $(this).parent().parent().parent().parent().parent().find('.dropzone').parent().attr('class', 'col-md-8');
+            }
+
+        });
+
+        (function ($) {
+            'use strict';
+            var $w4finish = $('#w4').find('ul.pager li.finish'),
+                $w4validator = $("#w4 form").validate({
+                    highlight: function (element) {
+                        $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                    },
+                    success: function (element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                        $(element).remove();
+                    },
+                    errorPlacement: function (error, element) {
+                        element.parent().append(error);
+                    }
+                });
+
+            function previewForm() {
+                var soma = 0;
+
+                function templatePadrao(campo, valor) {
+                    var conteudo = "<div class='row'>";
+                    conteudo += "<div class=' col-xs-12 col-md-6'><b>";
+                    conteudo += campo
+                    conteudo += "</b></div>";
+                    conteudo += "<div class='col-xs-12 col-md-6'>";
+                    conteudo += valor
+                    conteudo += "</div>";
+                    conteudo += "</div>";
+                    return conteudo;
+                }
+
+                function sigma(obj) {
+                    if (typeof obj.data('multiplicador') !== 'undefined') {
+                         console.log(obj.val());
+                        return parseInt(obj.val()) / 10;
+                    } else {
+                        return 0;
+                    }
+                }
+
+                $('#form-preview').html('');
+                $("#w4").find("input, select, textarea")
+                    .not(":submit, :reset, :image, :disabled")
+                    .not("input[type=hidden]")
+                    .not("input[type=search]")
+                    .not("#confirmacao")
+                    .each(function () {
+                        var conteudo;
+
+                        switch (this.type) {
+                            case 'text':
+                                conteudo = templatePadrao($(this).parent().parent().text(), $(this).val());
+                                break;
+                            case "select-multiple":
+                                    soma += sigma($(this));
+                                var tamanho = $("option:selected", this).length;
+                                var texto = "";
+                                $("option:selected", this).each(function (index) {
+                                    var $this = $(this);
+                                    texto += $this.text();
+                                    if (index !== tamanho - 1) {
+                                        texto += ", "
+                                    }
+                                });
+                                conteudo = templatePadrao($(this).parent().parent().find('label').text(), texto);
+                                break;
+                            case "select-one":
+                                soma += sigma($(this));
+                                conteudo = templatePadrao($(this).parent().parent().find('label').text(), $("option:selected", this).text());
+                                break;
+                            default:
+                                break;
+                        }
+                        $('#form-preview').append(conteudo);
+                    });
+
+            }
+
+            $w4finish.on('click', function (ev) {
+                ev.preventDefault();
+                var validated = $('#w4 form').valid();
+                if (validated) {
+                    $('#{{ form.dataNascimento.vars.id }}').val($('#{{ form.dataNascimento.vars.id }}').data('datepicker').getFormattedDate('yyyy-mm-dd'));
+                    arquivosSubmetidos.forEach(function (v) {
+                        $('#w4 form').append('<input type="hidden" name="arquivos[]" value="' + v + '" /> ');
+                    });
+                    $('#w4 form').submit();
+                }
+            });
+
+            $('#w4').bootstrapWizard({
+                tabClass: 'wizard-steps',
+                nextSelector: 'ul.pager li.next',
+                previousSelector: 'ul.pager li.previous',
+                firstSelector: null,
+                lastSelector: null,
+                onNext: function (tab, navigation, index, newindex) {
+
+                    $('#envio_arquivo_identidade').removeClass('hidden');
+                    $('#envio_arquivo_graduacao').removeClass('hidden');
+                    $('#envio_arquivo_xp_min').removeClass('hidden');
+                    $('#envio_arquivo_xp_ead').removeClass('hidden');
+                    var validated = $('#w4 form').valid();
+
+                    $('#envio_arquivo_identidade').addClass('hidden');
+                    $('#envio_arquivo_graduacao').addClass('hidden');
+
+                    $('#envio_arquivo_xp_min').addClass('hidden');
+                    $('#envio_arquivo_xp_ead').addClass('hidden');
+                    if (!validated) {
+                        $w4validator.focusInvalid();
+                        return false;
+                    }
+                },
+                onTabClick: function (tab, navigation, index, newindex) {
+                    if (newindex == index + 1) {
+                        return this.onNext(tab, navigation, index, newindex);
+                    } else if (newindex > index + 1) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
+                onTabChange: function (tab, navigation, index, newindex) {
+                    var $total = navigation.find('li').length - 1;
+
+                    if (newindex == $total) {
+                        previewForm();
+                    }
+                    $w4finish[newindex != $total ? 'addClass' : 'removeClass']('hidden');
+                    $('#w4').find(this.nextSelector)[newindex == $total ? 'addClass' : 'removeClass']('hidden');
+                },
+                onTabShow: function (tab, navigation, index) {
+                    var $total = navigation.find('li').length - 1;
+                    var $current = index;
+                    var $percent = Math.floor(( $current / $total ) * 100);
+                    $('#w4').find('.progress-indicator').css({'width': $percent + '%'});
+                    tab.prevAll().addClass('completed');
+                    tab.nextAll().removeClass('completed');
+                }
+            });
+        }).apply(this, [jQuery]);
+    </script>
+{% endblock %}

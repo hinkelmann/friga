@@ -1,0 +1,103 @@
+{% if tipo is not defined %}
+{% set tipo =1 %}
+{% endif %}
+
+(function ($) {
+    'use strict';
+    $("form[name='{{ form.vars['id'] }}']").validate({
+        submitHandler: function (form) {
+            var $form = $(form);
+            var $submitButton = $(this.submitButton);
+            console.log('teste')
+            $.ajax({
+                type: 'POST',
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                dataType: 'json',
+                complete: function (data) {
+                    if (typeof data.responseJSON === 'object') {
+                        if (data.responseJSON.response == 'success') {
+                            {% if tipo ==1 %}
+                            $.magnificPopup.close();
+                            {% else %}
+                            principal();
+                            {% endif %}
+                            $form.find('.form-control')
+                                .val('')
+                                .blur()
+                                .parent()
+                                .removeClass('has-success')
+                                .removeClass('has-error')
+                                .find('label.error')
+                                .remove();
+
+                        }
+                        new PNotify({
+                            title: data.responseJSON.title,
+                            text: data.responseJSON.text,
+                            type: data.responseJSON.response
+                        });
+                    }
+                    {% if tipo ==1 %}
+                    $.magnificPopup.close();
+                    if ($('#grid').length) {
+                        $('#grid').data('kendoGrid').dataSource.read();
+                    }
+                    {% else %}
+                    principal();
+                    {% endif %}
+                }
+            });
+            return false;
+        }
+    });
+
+    $("form[name='form']").validate({
+        submitHandler: function (form) {
+            var $form = $(form);
+            $.ajax({
+                type: 'POST',
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                dataType: 'json',
+                complete: function (data) {
+                    if (typeof data.responseJSON === 'object') {
+                        if (data.responseJSON.response == 'success') {
+                            {% if tipo ==1 %}
+                            $.magnificPopup.close();
+                            {% else %}
+                            principal();
+                            {% endif %}
+                            $form.find('.form-control')
+                                .val('')
+                                .blur()
+                                .parent()
+                                .removeClass('has-success')
+                                .removeClass('has-error')
+                                .find('label.error')
+                                .remove();
+                        }
+
+                        new PNotify({
+                            title: data.responseJSON.title,
+                            text: data.responseJSON.text,
+                            type: data.responseJSON.response
+                        });
+                        return;
+                    }
+                    {% if tipo ==1 %}
+                    $.magnificPopup.close();
+                    if ($('#grid').length) {
+                        $('#grid').data('kendoGrid').dataSource.read();
+                    }
+                    {% else %}
+                    principal();
+                    {% endif %}
+                }
+
+
+            });
+            return false;
+        }
+    });
+}).apply(this, [jQuery]);

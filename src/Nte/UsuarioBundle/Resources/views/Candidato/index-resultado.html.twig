@@ -1,0 +1,81 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} Resultado /{{ app.user.nome }} {% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Resultado </span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-md-9">
+            <div class="row">
+                <h3 class="mb-xl">
+                    Meus <strong>Resultados</strong>
+                </h3>
+                {% if app.user.classificacoes.count %}
+                    {% for o in app.user.classificacoes %}
+                        <div class="col-md-6">
+                            <div class="call-to-action with-borders  button-centered mb-5">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="call-to-action-content">
+                                                <h4>{{ o.idEtapa.descricao }}</h4>
+                                                <h5>{{ o.idInscricao.idEdital.titulo }}</h5>
+                                                <p class="{{ o.objSituacao.cssAlert }}">
+                                                    {{ o.idInscricao.uuid }} - {{ o.objSituacao.descricao }}
+                                                    <br>
+                                                </p>
+                                                {% if o.posicao != 999999 %}
+                                                <h3>
+                                                    <i class="icon icon-trophy"></i>&nbsp;Posição: {{ o.posicao }}°
+                                                </h3>
+                                                <p>
+                                                    <i class="icon icon-speedometer"></i>
+                                                    &nbsp;Pontuação: {{ o.valor +0 }}
+                                                </p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="call-to-action-btn">
+                                                <a class=" btn btn-default"
+                                                   href="{{ path('nte_usuario_candidato_inscricao_visualizacao', {'uuid': o.idInscricao.uuid}) }}">
+                                                    <i class="fa fa-th-list"></i> Individual
+                                                </a>
+                                                <a class="btn btn-default"
+                                                   href="{{ path('nte_site_edital_classificao', {'etapa': o.idEtapa.id, 'uuid': o.idEtapa.idEdital.uuid}) }}">
+                                                    <i class="fa fa-th-large"></i> Resultado
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="visible-xs visible-sm">
+                            <hr class="tall">
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Até o presente momento, nenhum resultado divulgado. <br>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

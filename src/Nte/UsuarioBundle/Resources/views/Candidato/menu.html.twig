@@ -1,0 +1,64 @@
+<div class="col-lg-3 order-2 order-lg-1 hidden-xs hidden-sm">
+    <aside class="sidebar">
+        <h4 class="heading-primary"><strong>Menu</strong> Principal</h4>
+        <ul class="nav nav-list flex-column mb-4 sort-source">
+            {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_homepage' %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link" href="{{ path('nte_usuario_candidato_homepage') }}">Painel</a></li>
+            {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_index' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_visualizacao'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_inscricao_index') }}">Inscrições</a></li>
+            {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_index' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_ver' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_form'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_recursos_index') }}">Recursos</a></li>
+            {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_convocacao_index' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_convocacao_ver'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_convocacao_index') }}">Convocações</a></li>
+            {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_resultado_index' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_resultado_index'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_resultado_index') }}">Resultados</a></li>
+
+            {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_editais_index') }}">Editais</a></li>
+            {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_perfil' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_editar'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_perfil') }}">Cadastro</a></li>
+        </ul>
+        <hr class="invisible mt-5 mb-2">
+    </aside>
+</div>

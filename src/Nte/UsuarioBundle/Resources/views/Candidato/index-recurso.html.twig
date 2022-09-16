@@ -1,0 +1,103 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} Resultado /{{ app.user.nome }} {% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Recursos </span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-md-9">
+            <div class="row">
+                <h3 class="mb-xl">
+                    Meus <strong>Recursos</strong>
+                </h3>
+                {% if app.user.inscicaoValida.count %}
+                    {% for inscricao in app.user.inscicaoValida|reverse  %}
+                        {% for o in inscricao.recursoEtapa %}
+                            {% if loop.index%2 ==0 %}
+                                <div class="row">
+                            {% endif %}
+                            <div class="col-md-6">
+                                <div class="call-to-action with-borders  button-centered mb-5">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="call-to-action-content">
+                                                    <h4>{{ o.descricao }}</h4>
+                                                    <h5>{{ inscricao.idEdital.titulo }}</h5>
+                                                    {% if inscricao.recursosEtapa(o.idEtapa) == null %}
+                                                        <p class="{{ inscricao.objSituacao.cssAlert }}">
+                                                            {{ inscricao.uuid }} - {{ inscricao.objSituacao.descricao }}
+                                                        </p>
+                                                    {% endif %}
+                                                    {% if inscricao.recursosEtapa(o.idEtapa).count %}
+                                                        {% for r in inscricao.recursosEtapa(o.idEtapa) %}
+                                                            <a class=""
+                                                               title="Clique aqui para acompanhar recurso"
+                                                               href="{{ path('nte_usuario_candidato_recursos_ver', {'uuid': r.uuid }) }}">
+                                                                Recurso - {{ r.uuid }} -
+                                                                {{ r.registroDataCriacao|date('d/m/Y') }}
+                                                            </a><br>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="call-to-action-btn">
+                                                    {% if o.periodoHabilitado %}
+                                                        <a class="btn btn-default"
+                                                           title="Clique aqui para encaminhar um recurso"
+                                                           href="{{ path('nte_usuario_candidato_recursos_form', {'etapa': o.id, 'uuid': inscricao.uuid }) }}">
+                                                            <i class="fa fa-gavel"></i>
+                                                            Encaminhar Recurso
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="visible-xs visible-sm">
+                                <hr class="tall">
+                            </div>
+                            {% if loop.index%2 ==0 %}
+                                </div>
+                                <div class="visible-md visible-lg">
+                                    <hr class="tall">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Até o presente momento nenhum recurso disponível<br>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

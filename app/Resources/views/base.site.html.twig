@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <title>:: Friga :: {% block titulo %} {% endblock %}</title>
+    <meta name="keywords" content="{% block metaPalavraChave %}{% endblock %}"/>
+    <meta name="description" content="{% block metaDescricao %} {% endblock %}">
+    <meta name="author" content="NTE - UFSM">
+    <meta property="og:url" content="http://processoseletivo.nte.ufsm.br"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content=":: Friga :: {{ block('titulo') }}"/>
+    <meta property="og:description" content="{{ block('metaDescricao') }}"/>
+    <meta property="og:image" content="http://processoseletivo.nte.ufsm.br{{ asset('assets/img/marca_principal_horizontal_fb.png') }}"/>
+    {% block supercabecalho %} {% endblock %}
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap/css/bootstrap.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/vendor/font-awesome/css/font-awesome.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/theme.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/theme-elements.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/custom.css") }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
+    {% endblock %}
+    <script src="{{ asset('assets/vendor/modernizr/modernizr.min.js') }}"></script>
+</head>
+<body>
+<a href="#principal" class="skip">Pular para o principal.</a>
+{% block cabecalho %}
+    <header id="header" class=" "
+            data-plugin-options='{"stickyEnabled": true, "stickyEnableOnBoxed": true, "stickyEnableOnMobile": true, "stickyStartAt": 57, "stickySetTop": "-57px", "stickyChangeLogo": true}'>
+        <div class="header-body">
+            <div class="header-container container ">
+                <div class="header-row">
+                    <div class="header-column" aria-hidden="true">
+                        <div class="header-logo">
+                            <a href="{{ path('nte_site_homepage') }}">
+                                <img alt="NteTube" width="225" height="61" data-sticky-width="146"
+                                     data-sticky-height="40"
+                                     data-sticky-top="33" src="{{ asset('assets/img/marca_apenas_sigla.svg') }}">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="header-column">
+                        <div class="header-nav header-nav-top-line">
+                            <button class="btn header-btn-collapse-nav" data-toggle="collapse"
+                                    data-target=".header-nav-main">
+                                <i class="fa fa-bars"></i>
+                            </button>
+
+                            <div class="header-nav-main  collapse">
+                                <nav role="menubar" aria-label="Navegação">
+                                    <ul class="nav nav-pills" id="mainNav" role="menu">
+                                        <li class="" role="menuitem" tabindex="0">
+                                            <a class="nav-fonte" href="{{ path('nte_site_homepage') }}">
+                                                <i class="icon-doc icons"></i> Edital
+                                            </a>
+                                        </li>
+                                        <li class="" role="menuitem" tabindex="1">
+                                            <a class="nav-fonte" href="{{ path('nte_site_homepage') }}">
+                                                <i class="icon-user-follow icons"></i> Inscrições
+                                            </a>
+                                        </li>
+                                        <li class="" role="menuitem" tabindex="2">
+                                            <a class="nav-fonte" href="{{ path('nte_site_homepage') }}">
+                                                <i class="icon-info icons"></i> Painel do Candidato
+                                            </a>
+                                        </li>
+                                        <li class="" role="menuitem" tabindex="4">
+                                            <a class="nav-fonte" href="{{ path('nte_admin_painel_homepage') }}">
+                                                <i class="icon-login icons"></i> Login
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+{% endblock %}
+<div role="main" class="main " id="principal">
+    {% block conteudo %}{% endblock %}
+</div>
+{# block rodape %}
+    <footer class="short" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Dúvidas sobre este edital</h4>
+                    <p>
+                        {{ edital.info3|raw }}
+                    </p>
+                    <hr class="light">
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Inscrições </h5>
+                    <i class="fa fa-calendar"> </i> &nbsp;
+                    <b>De</b> {{ edital.incricaoAbertura|date('d/m/Y') }}
+                    <b>Até</b> {{ edital.inscricaoEncerramento|date('d/m/Y') }}
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Resultado Final </h5>
+                    <i class="fa fa-calendar"> </i> &nbsp; {{ edital.resultadoFinal|date('d/m/Y') }}
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1">
+                        <a href="{{ path('frontend_index') }}" class="logo">
+                            <img alt="" class="img-responsive" src="{{ asset('assets/img/UFSM_marca-web.png') }}">
+                        </a>
+                    </div>
+                    <div class="col-md-11">
+                        <p>Núcleo de Tecnologia Educacional </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock #}
+<script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery.easing/jquery.easing.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/common/common.min.js') }}"></script>
+<script src="{{ asset('assets/js/theme.js') }}"></script>
+<script src="{{ asset('assets/vendor/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
+{% block jsOpcional %}{% endblock %}
+<script src="{{ asset('assets/js/theme.init.js') }}"></script>
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+{% block jsFuncional %}{% endblock %}
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77043326-7"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-77043326-7');
+</script>
+
+</body>
+</html>

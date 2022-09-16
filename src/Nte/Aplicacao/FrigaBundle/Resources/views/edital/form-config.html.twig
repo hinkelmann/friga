@@ -1,0 +1,136 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
+{% block breadcumbsTitulo %}Configuração de Edital {% endblock %}
+{% block conteudo %}
+    {{ form_start(config_form) }}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-10">
+            <div class="panel">
+                <div class="panel-body text-right">
+                    <a class="btn btn-default"
+                       title="Clique aqui para pré-Visualizar o site com as informações do edital"
+                       target="_blank"
+                       href="{{ path('nte_site_edital', { id: frigaedital.id, url: frigaedital.url}) }}">
+                        <i class="fa fa-globe"></i> Pré-Visualização
+                    </a>
+                </div>
+            </div>
+            <section class="panel-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-4 control-label">
+                            {{ form_label(config_form.titulo) }}
+                        </label>
+                        <div class="col-md-10">
+                            {{ form_widget(config_form.titulo) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-4 control-label">
+                            {{ form_label(config_form.subtitulo) }}
+                        </label>
+                        <div class="col-md-10">
+                            {{ form_widget(config_form.subtitulo) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-4 control-label">
+                            {{ form_label(config_form.url) }}
+                        </label>
+                        <div class="col-md-10">
+                            {{ form_widget(config_form.url) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.idCategoria) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.idCategoria) }}
+                                    <a title="Clique aqui para gerenciar as categorias de edital"
+                                       href="{{ path('edital_categoria_index') }}">Gerenciar Categorias
+                                    </a> |
+                                    <a title="Clique aqui para adicionar uma nova categoria de edtial"
+                                       href="{{ path('edital_categoria_criar',{'uuid': frigaedital.uuid}) }}">
+                                        Adicionar nova
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.dataPublicacaoOficial) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.dataPublicacaoOficial) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.sobre) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.sobre) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info1) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info1) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.publico) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.publico) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.situacao) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.situacao) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info2) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info2) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info3) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info3) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="col-md-12">
+                            <button class="btn btn-primary pull-right" type="submit">
+                                <i class="fa fa-save"></i> Salvar
+                            </button>
+                    </div>
+
+            </section>
+        </div>
+    </div>
+    {{ form_end(config_form) }}
+{% endblock %}

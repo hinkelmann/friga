@@ -1,0 +1,243 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Resultados {{ edital.uuid }}{% endblock %}
+{% block breadcumbsTitulo %} Resultados  {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('nte_aplicacao_friga_etapa_index',{edital: edital.id, tipo:4}) }}"> Resultados</a></span></li>
+    <li><span><a href="{{ path('nte_aplicacao_friga_etapa_index',{edital: edital.id}) }}"> {{ edital.uuid }}</a></span></li>
+    <li><span><a href="#"> Resultados </a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row text-right">
+        <div class="btn-group">
+            {% if etapa.classificacao.empty %}
+                {% if is_granted('ROLE_ADMIN') or
+                    ( is_granted('ROLE_AVALIADOR') and etapa.periodoHabilitado ) %}
+                    <a class="btn btn-success"
+                       title="Clique aqui para gerar a grade de resultados"
+                       href="{{ path('resultado_etapa_classificacao_gerar', {'etapa': etapa.id}) }}">
+                        <i class="fa fa-cog"></i> Gerar Resultados
+                    </a>
+                {% endif %}
+                <a class="btn btn-default"
+                   title="Clique aqui para ver a prévia dos resultados"
+                   href="{{ path('resultado_parcial', {'edital': edital.id}) }}">
+                    <i class="icon icon-eye"></i> Prévia
+                </a>
+            {% else %}
+                <a class="btn btn-default"
+                   title="Clique aqui para exportar os resultados em arquivo de planilha eletrônica no formato CSV"
+                   href="{{ path('resultado_etapa_exportar_csv', {'etapa': etapa.id}) }}">
+                    <i class="fa fa-file-excel-o"></i> Exportar
+                </a>
+                <a class="btn btn-default"
+                   title="Clique aqui para imprimir a grade de resultados"
+                   href="{{ path('resultado_etapa_impressao', {'etapa': etapa.id}) }}">
+                    <i class="icon icon-printer"></i> Imprimir
+                </a>
+                {% if is_granted('ROLE_AVALIADOR') and etapa.periodoHabilitado %}
+                    <a class="btn btn-danger"
+                       title="Clique aqui para remover os resultados da etapa"
+                       href="{{ path('resultado_etapa_classificacao_remover', {'etapa': etapa.id}) }}">
+                        <i class="fa fa-trash"></i> Remover
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel-body text-primary" >
+            <h5><strong>{{ etapa.descricao|upper }}</strong></h5>
+            {% if etapa.periodoHabilitado %}
+            <p>
+                <strong>OBSERVAÇÃO: </strong><br>
+                Os resultados desta etapa, estarão públicos a partir de
+                <b>  {{ etapa.dataDivulgacao|date('d/m/Y \\á\\s H:i:s') }}</b>
+            </p>
+            {% else %}
+                    <small title="Período em que o avaliador poderá gerar os resultados da etapa.">
+                        <i class="fa fa-calendar"></i>
+                        &nbsp;&nbsp; De: {{ etapa.dataInicial|date('d/m/Y')}} até {{ etapa.dataFinal|date('d/m/Y \\á\\s H:i:s')}}
+                    </small>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="row">
+        {% for chave, lista in classificacao %}
+            <div class="panel-body">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th {% if edital.modeloInscricao == 1 %}colspan="3" {% else%} colspan="2"{% endif%} class="text-primary">
+                            <i class="icon icon-trophy"></i> &nbsp;
+                            {{ lista.nome }}
+                        </th>
+                        <th></th>
+                        <th></th>
+
+                    </tr>
+                    <tr>
+                        <th width="10">Inscrição</th>
+                        {% if edital.modeloInscricao == 1 %}
+                            <th>Projeto</th>
+                            <th>Participantes</th>
+                        {% else %}
+                            <th>Nome</th>
+                        {% endif %}
+                        <th width="10" class="text-center">Situação</th>
+                        <th width="70" class="b1 b2 b3 text-center c">
+                            Pontuação
+                        </th>
+                        <th width="200" class="text-center">Classificação</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cc in lista.classificacao %}
+                        <tr class="{% if cc.empate %}b2{% endif %}">
+                            <td>{{ cc.idInscricao.uuid }}</td>
+                            {% if edital.modeloInscricao == 1 %}
+                                <td>
+                                    <a title=""
+                                       href="{{ path('relatorio_perfil', {'uuid': cc.idInscricao.uuid}) }}">
+                                        <b class="text-uppercase">{{ cc.idInscricao.projetoTitulo }}</b>
+                                    </a>
+                                    {% if cc.observacao %}
+                                        <br>
+                                        <small>{{ cc.observacao }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% for p in cc.idInscricao.idProjetoParticipante %}
+                                        {{ p.nome }}<br>
+                                    {% endfor %}
+                                </td>
+                            {% else %}
+                            <td>
+                                <a title=""
+                                   href="{{ path('relatorio_perfil', {'uuid': cc.idInscricao.uuid}) }}">
+                                    <b class="text-uppercase">{{ cc.idInscricao.nome }}</b> </a>
+                                {% if cc.observacao %}
+                                    <br>
+                                    <small>{{ cc.observacao }}</small>
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            <td class="text-right">
+                                <div class="{{ cc.objsituacao.css }}">
+                                    <i class="{{ cc.objsituacao.icone }}"></i>
+                                    {{ cc.objsituacao.descricao }}
+                                </div>
+                            </td>
+                            <td class="b1 b2 b3 text-center">{{ cc.valor+0 }}</td>
+                            <td class="text-center">
+                                {% if cc.idSituacao == 0
+                                    or cc.idSituacao == 1
+                                    or cc.idSituacao == 3
+                                    or cc.idSituacao == 5 %}
+                                    -
+                                {% else %}
+                                    {% if cc.empate and etapa.periodoHabilitado %}
+                                        <form action="{{ path('resultado_etapa_candidato_posicao_confirmar', {'etapa': etapa.id}) }}"
+                                              method="post">
+                                            <div class="btn-group btn-group-sm">
+                                                <input type="hidden" name="c" value="{{ cc.id }}">
+                                                <input type="hidden" name="o" value="">
+                                                <button type="submit" class="btn btn-default"
+                                                        title="Clique aqui para confirmar a posição do candidato e remover a situação de empate">
+                                                    Confirmar {{ cc.posicao }}° posição
+                                                </button>
+                                                <a class="btn btn-success"
+                                                   title="Clique aqui para subir a posição do candidato na lista de classificação"
+                                                   href="{{ path('resultado_etapa_candidato_posicao', {'etapa': etapa.id, 'uuid': cc.uuid}) }}">
+                                                    <i class="fa fa-chevron-up"></i>
+                                                </a>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        {{ cc.posicao }}°
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% if lista.classificacao.count<1 %}
+                        <tr>
+                            <td colspan="5">Nenhum candidato classificado.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+                <div class="col-md-8 text-left">
+                    <b>
+                        Cálculo da pontuação:
+                        {% for p in edital.pontuacaoCategoriaPeso %}
+                            ({{ p.descricao }}) x {{ p.valorMaximo+0 }}  {% if loop.last == 0 %} + {% endif %}
+                        {% endfor %}
+                        = (Pontuação Total)
+                    </b>
+                </div>
+            </div>
+            <br><br>
+        {% endfor %}
+    </div>
+    <style>
+        .table > thead > tr > .b {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .table > thead > tr > .c {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .b {
+            border-top: 1px solid #c7d5de;
+        }
+
+        .table > tfoot > tr > .d {
+            border-bottom: 1px solid #c7d5de;
+        }
+
+        .b1 {
+            border-left: 1px solid #c7d5de;
+        }
+
+        .b3 {
+            border-right: 1px solid #c7d5de;
+        }
+
+        .b1, .b2, .b3 {
+            background-color: #E3F2FD;
+            border-bottom: 0px;
+        }
+    </style>
+{% endblock %}
+{% block javascripts2 %}
+    <link href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}" type="text/css"/>
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $('form').submit(e => {
+            let i1 = e.target[1], form = e.target;
+            Swal.fire({
+                title: "Confirmar classificação",
+                allowOutsideClick: false,
+                showCancelButton: true,
+                html:
+                    '<textarea required="true"  id="obs" class="swal2-input form-control" placeholder="Observações sobre o critério de desempate"></textarea>',
+                confirmButtonText: "confirmar!",
+                cancelButtonText: "Cancelar",
+            }).then((value) => {
+                if (value.value) {
+                    i1.value = document.getElementById('obs').value;
+                    if (i1.value.length) {
+                        form.submit();
+                    }
+                }
+            });
+            return false;
+        })
+    </script>
+{% endblock %}

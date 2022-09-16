@@ -1,0 +1,46 @@
+<table class="table table-responsive table-condensed table-bordered">
+    <thead>
+    <tr>
+        <th class="text-center" width="300">Local</th>
+        <th class="text-center">Data</th>
+        <th class="text-center">Hora</th>
+        <th>Inscrição</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for c in convocacao %}
+        <tr>
+            <td class="text-center">
+                {{ c.observacao }}
+            </td>
+            <td class="text-center">
+                {{ c.data|date('d/m/Y') }}
+            </td>
+            <td class="text-center">
+                {{ c.data|date('H:i') }}
+            </td>
+            <td>
+                <b class="text-uppercase">
+                    {{ c.idInscricao.nome }}
+                </b>
+            </td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap/css/bootstrap.min.css") }}">
+<link rel="stylesheet" href="{{ asset( "assets/vendor/font-awesome/css/font-awesome.min.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/theme.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/theme-elements.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/custom.css") }}">
+<link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
+<script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery.rowspanizer/jquery.rowspanizer.min.js') }}"></script>
+<script>
+    $("table").rowspanizer({
+        vertical_align: 'middle',
+        columns: [0, 1, 3, 4]
+    });
+    print();
+</script>

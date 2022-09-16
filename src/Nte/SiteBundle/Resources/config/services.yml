@@ -1,0 +1,4 @@
+services:
+#    nte_tube_site.example:
+#        class: NteTube\SiteBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

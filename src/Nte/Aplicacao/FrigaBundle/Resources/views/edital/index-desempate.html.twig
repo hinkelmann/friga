@@ -1,0 +1,162 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
+{% block breadcumbsTitulo %} Configuração de Edital {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-10">
+            <section class="panel-body">
+                <div class="btn-group">
+                    <button type="button"
+                            class="mb-xs mt-xs mr-xs btn btn-default dropdown-toggle"
+                            title="Clique aqui para adicionar uma nova etapa ao edital"
+                            data-toggle="dropdown">
+                        <i class="fa fa-plus-circle"></i>
+                        Adicionar
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ path('edital_desempate_criar', {'tipo': 3, 'uuid': frigaedital.uuid}) }}">
+                                <i class="fa fa-th-list"></i>
+                                <b>Formulário de Inscrição</b> - <small>Data de Nascimento</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('edital_desempate_criar', {'tipo': 2, 'uuid': frigaedital.uuid}) }}">
+                                <i class="fa fa-tree"></i>
+                                <b>Categoria</b> - <small>Categoria de pontos com a maior ou menor nota</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('edital_desempate_criar', {'tipo': 1, 'uuid': frigaedital.uuid}) }}">
+                                <i class="fa fa-calculator"></i>
+                                <b>Pontuação</b> - <small>Pontuação com a maior ou menor nota</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% if frigaedital.desempate.count %}
+                    <ul class="list-unstyled">
+                        {% for o in frigaedital.desempate %}
+                            <li id="criterio-{{ o.id }}">
+                                <h5>
+                                    <a href="{{ path('edital_desempate_ordem', {'uuid': frigaedital.uuid, 'criterio': o.id, 'tipo': 0}) }}"
+                                       title="Clique aqui para subir o item" class=" ordem acima"
+                                       data-id="criterio-{{ o.id }}">
+                                        <i class="fa  fa fa-chevron-up "></i>
+                                    </a>
+                                    <a href="{{ path('edital_desempate_ordem', {'uuid': frigaedital.uuid, 'criterio': o.id, 'tipo': 1}) }}"
+                                       title="Clique aqui para descer o item" class=" ordem abaixo"
+                                       data-id="criterio-{{ o.id }}">
+                                        <i class="fa  fa fa-chevron-down"></i>
+                                    </a>
+                                    <a href="{{ path('edital_desempate_editar', {'uuid': frigaedital.uuid, 'criterio': o.id}) }}">
+                                        {{ o.obj.descricao }} ({{ o.obj.regra }})
+                                    </a>
+                                    <a class="remover-item" data-id="criterio-{{ o.id }}"
+                                       title="Clique aqui para remover o item"
+                                       href="{{ path('edital_desempate_remover', {'uuid': frigaedital.uuid, 'criterio': o.id}) }}">
+                                        <i class=" fa fa-trash"></i>
+                                    </a>
+                                </h5>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                            <i class="icon icon-refresh text-primary"></i>
+                                        </h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br>Nenhum <b>critério</b> definido.<br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                        <div class="btn-group">
+                                            <button type="button"
+                                                    class="mb-xs mt-xs mr-xs btn btn-primary dropdown-toggle"
+                                                    title="Clique aqui para adicionar uma nova etapa ao edital"
+                                                    data-toggle="dropdown">
+                                                <i class="fa fa-plus-circle"></i>
+                                                Criar o primeiro critério de desempate
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="{{ path('edital_desempate_criar', {'tipo': 3, 'uuid': frigaedital.uuid}) }}">
+                                                        <i class="fa fa-th-list"></i>
+                                                        <b>Formulário de Inscrição</b> - <small>Data de Nascimento</small>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('edital_desempate_criar', {'tipo': 2, 'uuid': frigaedital.uuid}) }}">
+                                                        <i class="fa fa-tree"></i>
+                                                        <b>Categoria</b> - <small>Categoria de pontos com a maior ou menor nota</small>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('edital_desempate_criar', {'tipo': 1, 'uuid': frigaedital.uuid}) }}">
+                                                        <i class="fa fa-calculator"></i>
+                                                        <b>Pontuação</b> - <small>Pontuação com a maior ou menor nota</small>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $('.ordem').click(function (e) {
+            e.preventDefault();
+            item = $(this);
+            elemento = $("#" + $(this).data('id'));
+            elemento.fadeOut(200, function () {
+                if (item.hasClass('acima') && elemento.prev().index() !== -1) {
+                    elemento.insertBefore(elemento.prev());
+                } else if (item.hasClass('abaixo') && elemento.next().index() !== -1) {
+                    elemento.insertAfter(elemento.next());
+                }
+            });
+            elemento.fadeIn();
+            $.ajax({url: this.href});
+        });
+        $('.remover-item').click(function (e) {
+            e.preventDefault();
+            let el = this,
+                elemento = $("#" + $(this).data('id'));
+            Swal.fire({
+                title: 'Remover Item',
+                text: "Você deseja remover este item?!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, remover item',
+                cancelButtonText: "Cancelar"
+            }).then(function (result) {
+                if (result.value) {
+                    $.ajax({url: el.href});
+                    elemento.fadeOut(800, (e) => {
+
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

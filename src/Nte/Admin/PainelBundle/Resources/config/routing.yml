@@ -1,0 +1,7 @@
+nte_admin_painel_homepage:
+    path:     /
+    defaults: { _controller: NteAdminPainelBundle:Default:index }
+
+nte_admin_mensagem:
+    path:     /mensagem
+    defaults: { _controller: NteAdminPainelBundle:Default:enviarMensagem }

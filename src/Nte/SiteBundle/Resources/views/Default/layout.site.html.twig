@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <title>:: Friga :: {% block titulo %} {% endblock %}</title>
+    <meta name="keywords" content="{% block metaPalavraChave %}{% endblock %}"/>
+    <meta name="description" content="{% block metaDescricao %} {% endblock %}">
+    <meta name="author" content="NTE - UFSM">
+    <meta property="og:url" content="https://processoseletivo.nte.ufsm.br"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="{{ block('titulo') }}"/>
+    <meta property="og:description" content="{{ block('metaDescricao') }}"/>
+    <meta property="og:image"  content="https://processoseletivo.nte.ufsm.br{{ asset('assets/img/marca_principal_horizontal_fb.png') }}"/>
+    {% block supercabecalho %} {% endblock %}
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800%7CShadows+Into+Light%7CPlayfair+Display:400&display=swap" rel="stylesheet" type="text/css">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap/css/bootstrap.min.css") }}">
+        <link rel="stylesheet" href="{{ asset( "assets/vendor/font-awesome/css/font-awesome.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/theme.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/theme-elements.css") }}">
+        <link rel="stylesheet" href="{{ asset("assets/css/custom.css") }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
+    {% endblock %}
+    <script src="{{ asset('assets/vendor/modernizr/modernizr.min.js') }}"></script>
+</head>
+<body>
+<div class="wrapper">
+    <a href="#principal" class="skip">Pular para o principal.</a>
+    {% block cabecalho %}
+        <header id="header" class=" "
+                data-plugin-options='{"stickyEnabled": true, "stickyEnableOnBoxed": true, "stickyEnableOnMobile": true, "stickyStartAt": 57, "stickySetTop": "-57px", "stickyChangeLogo": true}'>
+            <div class="header-body">
+                <div class="header-container container ">
+                    <div class="header-row">
+                        <div class="header-column" aria-hidden="true">
+                            <div class="header-logo">
+                                <a href="{{ path('nte_site_homepage') }}">
+                                    <img alt="Núcleo de Tecnologia Educacional" width="225" height="61"
+                                         data-sticky-width="146"
+                                         data-sticky-height="40"
+                                         data-sticky-top="33" src="{{ asset('assets/img/monograma.ufsm.svg') }}">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="header-column">
+                            <div class="header-nav header-nav-top-line">
+                                <button class="btn header-btn-collapse-nav" data-toggle="collapse"
+                                        data-target=".header-nav-main">
+                                    <i class="fa fa-bars"></i>
+                                </button>
+                                <div class="header-nav-main  collapse">
+                                    <nav role="menubar" aria-label="Navegação">
+                                        <ul class="nav nav-pills" id="" role="menu">
+                                            {% block menuPrincipal %}
+                                                {% if is_granted('ROLE_USER') %}
+                                                    <li class="" role="menuitem" tabindex="0">
+                                                        <a class="nav-fonte" href="{{ path('nte_site_homepage') }}">
+                                                            <i class="icon-home icons"></i> Início
+                                                        </a>
+                                                    </li>
+                                                    <li class="" role="menuitem" tabindex="0">
+                                                        <a class="nav-fonte"
+                                                           href="{{ path('nte_usuario_candidato_homepage') }}">
+                                                            <i class="icon-briefcase icons"></i> Painel do Candidato
+                                                        </a>
+                                                    </li>
+                                                    {% if is_granted('ROLE_COLABORADOR') %}
+                                                        <li class="" role="menuitem" tabindex="0">
+                                                            <a class="nav-fonte"
+                                                               href="{{ path('nte_admin_painel_homepage') }}">
+                                                                <i class="icon-wrench icons"></i> Configurações
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_index' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_visualizacao' %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-link "
+                                                           href="{{ path('nte_usuario_candidato_inscricao_index') }}">Inscrições</a>
+                                                    </li>
+                                                    {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_index' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_ver' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_form' %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-link "
+                                                           href="{{ path('nte_usuario_candidato_recursos_index') }}">Recursos</a>
+                                                    </li>
+                                                    {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_convocacao_index' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_convocacao_ver' %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-link "
+                                                           href="{{ path('nte_usuario_candidato_convocacao_index') }}">Convocações</a>
+                                                    </li>
+                                                    {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_resultado_index' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_resultado_index' %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-link "
+                                                           href="{{ path('nte_usuario_candidato_resultado_index') }}">Resultados</a>
+                                                    </li>
+                                                    {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index' %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-link "
+                                                           href="{{ path('nte_usuario_candidato_editais_index') }}">Editais</a>
+                                                    </li>
+
+                                                    {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_perfil' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_editar' %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-link "
+                                                           href="{{ path('nte_usuario_candidato_perfil') }}">Cadastro</a>
+                                                    </li>
+                                                    <li class="" role="menuitem" tabindex="1">
+                                                        <a class="nav-fonte"
+                                                           href="{{ path('fos_user_security_logout') }}">
+                                                            <i class="fa-1.5x icon-logout icons"></i> Sair
+                                                        </a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="" role="menuitem" tabindex="0">
+                                                        <a class="nav-fonte" href="{{ path('nte_site_homepage') }}">
+                                                            <i class="icon-home icons"></i> Início
+                                                        </a>
+                                                    </li>
+                                                    <li class="" role="menuitem" tabindex="1">
+                                                        <a class="nav-fonte"
+                                                           href="{{ path('nte_admin_painel_homepage') }}">
+                                                            <i class="fa-1.5x icon-login icons"></i> Login
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endblock %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    {% endblock %}
+    {% block chamada %}
+    {% endblock %}
+    <div role="main" class="main " id="principal">
+        <div class="container">
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% block conteudo %}
+                {{ render(controller('NteSiteBundle:Default:parteEditais',{situacao:1})) }}
+                <br>
+                <br>
+                {{ render(controller('NteSiteBundle:Default:parteEditais',{situacao:2})) }}
+                <br><br>
+            {% endblock %}
+        </div>
+    </div>
+    {% block rodape %}
+        {{ render(controller('NteSiteBundle:Default:parteRodape')) }}
+    {% endblock %}
+</div>
+{% block javascripts %}
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery.easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/common/common.min.js') }}"></script>
+    <script src="{{ asset('assets/js/theme.js') }}"></script>
+    <script src="{{ asset('assets/vendor/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
+    {% block jsOpcional %}
+    {% endblock %}
+    <script src="{{ asset('assets/js/theme.init.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+    {% block js %}{% endblock %}
+
+{% endblock %}
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77043326-7"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-77043326-7');
+</script>
+
+</body>
+</html>

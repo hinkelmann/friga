@@ -1,0 +1,163 @@
+<!doctype html>
+{% trans_default_domain 'FOSUserBundle' %}
+<html class="fixed {% if app.request.cookies.get('sidebar-state') == 'true' %} sidebar-left-collapsed{% endif %}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>FRIGA ADMIN - {% block titulo %}{% endblock %}</title>
+
+    <meta name="keywords" content=""/>
+    <meta name="description" content="">
+    <meta name="author" content="NTE - UFSM">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    {#% stylesheets filter="scssphp" output="css/app.css"
+        "admin/assets/vendor/bootstrap/css/bootstrap.css"
+        "admin/assets/vendor/font-awesome/css/font-awesome.css"
+        "admin/assets/vendor/magnific-popup/magnific-popup.css"
+        "admin/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css"
+        "admin/assets/vendor/jquery-ui/jquery-ui.css"
+        "admin/assets/vendor/jquery-ui/jquery-ui.theme.css"
+        "admin/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css"
+        "admin/assets/vendor/morris.js/morris.css"
+        "admin/assets/stylesheets/theme.css"
+        "admin/assets/vendor/select2/css/select2.css"
+        "admin/assets/vendor/select2-bootstrap-theme/select2-bootstrap.css"
+        "admin/assets/stylesheets/theme-custom.css"
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %#}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/magnific-popup/magnific-popup.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-ui/jquery-ui.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-ui/jquery-ui.theme.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/morris.js/morris.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/select2-bootstrap-theme/select2-bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/pnotify/pnotify.custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/select2-bootstrap-theme/select2-bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/theme.admin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.admin.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/themes/default/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/dropzone/basic.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/dropzone/dropzone.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/elusive-icons/css/elusive-icons.css') }}">
+    {% endblock %}
+    <script src="{{ asset('assets/vendor/modernizr/modernizr.js') }}"></script>
+</head>
+<body>
+{% block superCorpo %}
+    <section class="body">
+        {% block cabecalho %}
+            {% include '::topo.admin.html.twig' %}
+        {% endblock %}
+        <div class="inner-wrapper">
+            {% block menu1 %}
+                {% include '::menu.admin.html.twig' %}
+            {% endblock %}
+            <section role="main" class="content-body">
+                {% block breadcumbs %}
+                    <header class="page-header hidden-print">
+                        <h2>{% block breadcumbsTitulo %}Inicio{% endblock %}</h2>
+                        <div class="right-wrapper pull-right">
+                            <ol class="breadcrumbs">
+                                <li><a href="{{ path('nte_admin_painel_homepage') }}"
+                                       title="Clique aqui para ir para o painel de controle"><i class="fa fa-home"></i></a>
+                                </li>
+                                {% block breadcumbsItens %}
+                                    <li><span></span></li>{% endblock %}
+                            </ol>
+                            <a class="sidebar-right-toggle" data-open="sidebar-right"
+                               title="Clique aqui para visualizar os usuários do sistema"><i
+                                        class="fa fa-chevron-left"></i></a>
+                        </div>
+                    </header>
+                {% endblock %}
+
+                {% if app.request.hasPreviousSession %}
+                    {% for type, messages in app.session.flashbag.all() %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ type }} fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong><i class="fa fa-info-circle"></i></strong>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                {% block conteudo %}
+
+
+                {% endblock %}
+            </section>
+            {% block menu2 %}
+                {% include '::menu.admin2.html.twig' %}
+            {% endblock %}
+        </div>
+        {% block rodape %}
+
+        {% endblock %}
+    </section>
+{% block javascripts %}
+    <script src="{{ asset('assets/vendor/jquery/jquery.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-cookie/jquery-cookie.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-confirmation/bootstrap-confirmation.js') }}"></script>
+    <script src="{{ asset('assets/vendor/nanoscroller/nanoscroller.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/magnific-popup/jquery.magnific-popup.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jqueryui-touch-punch/jqueryui-touch-punch.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
+    <script src="{{ asset('assets/vendor/raphael/raphael.js') }}"></script>
+    <script src="{{ asset('assets/vendor/morris.js/morris.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/pnotify/pnotify.custom.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery.validation/jquery.validation.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jstree/jstree.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jqueryui-touch-punch/jqueryui-touch-punch.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-match-height/jquery.matchHeight-min.js') }}"></script>
+{% endblock %}
+    <script src="{{ asset('assets/js/themeadmin.js') }}"></script>
+    <script src="{{ asset('assets/js/themeaadmin.init.js') }}"></script>
+
+    {% block javascripts2 %}
+    {% endblock %}
+{% block javascripts3 %}
+    <script src="{{ asset('assets/js/themeadmin.custom.js') }}"></script>
+
+{% endblock %}
+{% endblock %}
+<a class="scroll-to-top hidden-mobile visible" href="#"><i class="fa fa-chevron-up"></i></a>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77043326-7"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-77043326-7');
+</script>
+<script>
+    $(function() {
+        $('.item').matchHeight();
+    });
+</script>
+</body>
+</html>

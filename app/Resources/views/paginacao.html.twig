@@ -1,0 +1,46 @@
+{% if dataset.paginaTotal >0 %}
+    <div class="">
+        <ul class="pagination">
+            {% if dataset.paginaTotal >1  and dataset.paginaAtual != 1 %}
+                <li>
+                    <a class="back page-numbers" href="{{ path(app.request.attributes.get('_route'),app.request.query.all|merge({p: 1})) }}">
+                        <i class="fa fa-chevron-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+            {% if dataset.paginaTotal <=6 %}
+                {% if dataset.paginaTotal >1 %}
+                    {% for i in 1..dataset.paginaTotal %}
+                        <li>
+                            {% if dataset.paginaAtual == i %}
+                                <a class="active">{{ i }}</a>
+                            {% else %}
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({p: i})) }}">
+                                    {{ i }}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                {% for i in (dataset.paginaAtual >2? dataset.paginaAtual == dataset.paginaTotal?dataset.paginaTotal-5:dataset.paginaAtual -2 :1)..(dataset.paginaAtual >2?dataset.paginaAtual+3 <dataset.paginaTotal?dataset.paginaAtual+3:dataset.paginaTotal:5) %}
+                    <li>
+                        {% if dataset.paginaAtual == i %}
+                            <a aria-current="page" class="active">{{ i }}</a>
+                        {% else %}
+                            <a  href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({p: i})) }}">{{ i }}</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                {% if dataset.paginaTotal >1  and dataset.paginaAtual != dataset.paginaTotal %}
+                    <li>
+                        <a class="next"
+                           href="{{ path(app.request.attributes.get('_route'),app.request.query.all|merge({p: dataset.paginaTotal})) }}">
+                            <i class="fa fa-chevron-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}

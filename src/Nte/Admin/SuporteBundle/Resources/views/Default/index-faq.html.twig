@@ -1,0 +1,60 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} FAQ{% endblock %}
+ {% block breadcumbsTitulo %}FAQ{% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="{{ path('nte_suporte_homepage') }}"> Suporte </a></span></li>
+     <li><span><a href="{{ path('nte_suporte_faq') }}"> FAQ </a></span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="panel">
+        <div class="panel-body">
+            {% if suporte|length %}
+                <div class="toggle" data-plugin-toggle>
+                    {% for s in suporte %}
+                        <section class="toggle">
+                            <label>{{  s.pergunta }}</label>
+                            <p style="height: 0px;">{{ s.resposta }}
+                            <br>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('nte_suporte_faq_form', {'id': s.id}) }}" class=""><i
+                                                class="fa fa-edit"></i>Editar </a>
+                                    <a href="{{ path('nte_suporte_faq_delete', {'id': s.id}) }}" class=""><i
+                                                class="fa fa-times"></i>Remover </a>
+                                {% endif %}
+                            </p>
+                        </section>
+                    {% endfor %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="text-center">
+                            <a href="{{ path('nte_suporte_faq_form') }}" class="btn btn-primary">
+                                <i class="fa fa-plus-circle"></i> Adicionar FAQ
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <section class="body-error error-inside">
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none"><i
+                                                class="fa fa-question-circle text-primary"></i></h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br><b>Nenhum FAQ disponível </b> até o momento.<br>
+                                        <br>
+                                        <br>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <a href="{{ path('nte_suporte_faq_form') }}" class="btn btn-primary"><i
+                                                        class="fa fa-plus-circle"></i> Adicionar o primeiro FAQ</a>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock -%}

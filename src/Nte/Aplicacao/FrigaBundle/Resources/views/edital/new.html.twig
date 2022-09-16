@@ -1,0 +1,130 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Nova Configuração{% endblock %}
+{% block breadcumbsTitulo %}Nova Configuração{% endblock %}
+{% block conteudo %}
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <h2 class="panel-title">
+                    <span class="va-middle">Novo Edital</span>
+                </h2>
+            </header>
+            <div class="panel-body">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+
+                <div class="row">
+                    <div id="comprovante-endereco" class="dropzone"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-success center-block" value="Criar " />
+                    </div>
+
+                </div>
+                {{ form_end(form) }}
+                <div class="row">
+                    <div class="alert alert-warning" role="alert"><strong>Observação: </strong>
+                        Somente arquivos do tipo PDF ou imagem e que não ultrapassem o tamanho de 10Mb serão
+                        aceitos neste formulário de inscrição.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/dropzone.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/basic.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/pnotify/pnotify.custom.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2/css/select2.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2-bootstrap-theme/select2-bootstrap.css") }}">
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+{% endblock %}
+{% block javascripts2 %}
+<script>
+    Dropzone.autoDiscover = false;
+    Dropzone.prototype.defaultOptions.acceptedFiles = "image/*,application/pdf";
+    Dropzone.prototype.defaultOptions.maxFilesize = 10;
+    Dropzone.prototype.defaultOptions.dictFileTooBig = "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente";
+    Dropzone.prototype.defaultOptions.dictInvalidFileType = "O arquivo escolhido não é do tipo  imagem ou PDF. Escolha outro arquivo e tente novamente.";
+    Dropzone.prototype.defaultOptions.init = function () {
+        this.on("addedfile", function (file) {
+            var removeButton = Dropzone.createElement("<button class='btn btn-danger btn-block'><i class='fa fa-remove'></i> Remover</button>");
+            var _this = this;
+            removeButton.addEventListener("click", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                res = jQuery.parseJSON(file.xhr.response);
+                if (!res.error) {
+                    $.ajax({
+                        url: "{{ path('frigaarquivo_remove_upload') }}/" + res.fileId + "/" + res.hash,
+                        dataType: 'JSON',
+                        success: function (x) {
+                            if (!x.error)
+                                arquivosSubmetidos.splice(arquivosSubmetidos.indexOf(res.fileId), 1);
+                            _this.removeFile(file);
+                            new PNotify({
+                                text: x.message,
+                                type: !x.error ? 'success' : 'error',
+                                icon: 'fa fa-2x fa-exclamation-triangle'
+                            });
+                            if (res.tipo == 1) {
+                                $('#envio_arquivo_endereco').prop("checked", false);
+                            }
+                            if (res.tipo == 2) {
+                                $('#envio_arquivo_graduacao').prop("checked", false);
+                            }
+                            $('#w4 form').valid();
+                        }
+                    });
+                }
+            });
+            file.previewElement.appendChild(removeButton);
+        });
+        this.on("success", function (file, responseText) {
+            if (jQuery.parseJSON(file.xhr.response).error) {
+                new PNotify({
+                    text: jQuery.parseJSON(file.xhr.response).message,
+                    type: 'error',
+                    addclass: 'notification-error',
+                    icon: 'fa fa-2x fa-exclamation-triangle'
+                });
+                this.removeFile(file);
+            } else {
+                arquivosSubmetidos.push(jQuery.parseJSON(file.xhr.response).fileId);
+                if (jQuery.parseJSON(file.xhr.response).tipo == 1) {
+                    $('#envio_arquivo_endereco').prop("checked", true);
+                }
+                if (jQuery.parseJSON(file.xhr.response).tipo == 2) {
+                    $('#envio_arquivo_graduacao').prop("checked", true);
+                }
+            }
+            $('#w4 form').valid();
+        });
+        this.on('error', function (file, errorMessage) {
+            console.log([file, errorMessage]);
+            new PNotify({
+                text: errorMessage,
+                type: 'error',
+                addclass: 'notification-error',
+                icon: 'fa fa-2x fa-exclamation-triangle'
+            });
+            this.removeFile(file);
+        })
+    };
+    iconeUpload = "<i class='fa fa-2x fa-upload'></i><br>";
+    new Dropzone("#comprovante-endereco", {
+        url: "{{ path('frigaarquivo_upload',{'tipo':1}) }}",
+        dictDefaultMessage: iconeUpload + "Anexar Cópia de Comprovante de Endereço",
+    });
+</script>
+{% endblock %}

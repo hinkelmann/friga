@@ -1,0 +1,28 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edição de Cargo{% endblock %}
+{% block breadcumbsTitulo %}Edição de Cargo{% endblock %}
+{% block conteudo %}
+    <section class="panel">
+        <header class="panel-heading">
+            <h2 class="panel-title">
+                <span class="va-middle">Edição de Cargo</span>
+            </h2>
+        </header>
+        <div class="panel-body">
+            {{ form_start(form) }}
+            <div class="form-group">
+                <label class="col-md-4 col-sm-4 control-label">
+                    {{ form_label(form.descricao) }}
+                </label>
+                <div class="col-md-8">
+                    {{ form_widget(form.descricao) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary center-block"><i class="fa fa-save"></i> Salvar </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

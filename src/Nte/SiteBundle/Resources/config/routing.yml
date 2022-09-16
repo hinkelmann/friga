@@ -1,0 +1,57 @@
+#Rota padrão
+nte_site_homepage:
+    path:     /
+    defaults: { _controller: NteSiteBundle:Default:index }
+
+nte_site_homepage_teste:
+    path:     /tokken
+    defaults: { _controller: NteSiteBundle:Default:indexToken }
+
+nte_site_candidato:
+    prefix:     /candidato
+    resource: "@NteUsuarioBundle/Resources/config/candidato.yml"
+
+#Rota edital
+nte_site_edital:
+    path:     /edital/{id}-{url}
+    defaults: { _controller: NteSiteBundle:Default:edital, url: null }
+
+#Rota classificacao
+nte_site_edital_classificao:
+    path:     /edital/{uuid}/resultado/{etapa}
+    defaults: { _controller: NteSiteBundle:Default:resultado}
+
+nte_site_edital_lista:
+    path:     /edital/{uuid}/lista/{etapa}
+    defaults: { _controller: NteSiteBundle:Default:lista}
+
+nte_site_edital_convocacao:
+    path:     /edital/{uuid}/convocacao/{etapa}
+    defaults: { _controller: NteSiteBundle:Default:convocacao }
+
+nte_site_edital_recurso:
+    path:     /edital/{uuid}/recurso/{etapa}
+    defaults: { _controller: NteSiteBundle:Default:recurso }
+
+
+nte_site_edital_pontuacao_candidato:
+    path:     /edital/{edital}/inscricao/{inscricao}
+    defaults: { _controller: NteSiteBundle:Default:resultadoIndividual }
+
+
+nte_site_arquivo_download:
+    path:     /download/{id}
+    defaults: { _controller: NteAplicacaoFrigaBundle:Arquivo:downloadSite }
+#    methods:  [GET]
+
+
+nte_site_rota_a_moda_miguelao:
+    path:     /3-professor-formador-2019
+    defaults: { _controller: NteSiteBundle:Default:indexRedirect }
+    methods:  [GET]
+
+
+nte_site_rota_a_moda_miguelao_teste:
+    path:     /ead12-teste
+    defaults: { _controller: NteSiteBundle:Default:teste }
+    methods:  [GET]

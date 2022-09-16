@@ -1,0 +1,215 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends 'base.admin.html.twig' %}
+{% if entity.id ==null %}
+    {% set titulo = "Novo" %}
+{% else %}
+    {% set titulo = "Edição de " %}
+{% endif %}
+
+ {% block titulo %}{{ titulo }} Usuário {% endblock %}
+ {% block breadcumbsTitulo %}{{ titulo }} Usuário {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="{{ path('nte_usuario_index') }}"> Usuários </a></span></li>
+     <li><span>{{ titulo }} Usuários</span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-4 col-lg-3">
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="kv-avatar">
+                        <div class="file-loading">
+                            <input id="file" name="file" type="file" required>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-8 col-lg-9">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><i class="fa fa-user-plus"></i> {{ titulo }} Usuário</h2>
+                </div>
+                <div id="formulario" class="panel-body">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            {{ form_row(form.nome) }}
+                            {{ form_row(form.cpf) }}
+
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.username) }}
+                            {{ form_row(form.email) }}
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="reset" class="btn btn-default pull-left">
+                            <i class="fa fa-trash-o"></i> Resetar
+                        </button>
+                        <button type="submit" class="btn btn-primary pull-right">
+                            <i class="fa fa-save"> </i> Salvar
+                        </button>
+                    </div>
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-fileinput/css/fileinput.min.css') }}">
+    <style>
+        .kv-avatar .krajee-default.file-preview-frame, .kv-avatar .krajee-default.file-preview-frame:hover {
+            margin: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            text-align: center;
+        }
+
+        .kv-avatar {
+            display: inline-block;
+        }
+
+        .kv-avatar .file-input {
+            display: table-cell;
+            width: 213px;
+        }
+
+        .kv-reqd {
+            color: red;
+            font-family: monospace;
+            font-weight: normal;
+        }
+        .file-drop-zone.clickable:hover {
+            border: 1px dashed #999;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-cookie/jquery-cookie.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-fileinput/js/fileinput.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-fileinput/js/locales/pt-BR.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/select2/js/select2.js') }}"></script>
+<script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+<script>
+    let cep = $('#nte_usuario_enderecoCep'),
+        //dataNascimento = $('#nte_usuario_dataNascimento'),
+        telefone1 = $('#nte_usuario_contatoTelefone1'),
+        telefone2 = $('#nte_usuario_contatoTelefone2'),
+        cpf = $('#nte_usuario_cpf'),
+        rua = $('#nte_usuario_enderecoLogradouro'),
+        bairro = $('#nte_usuario_enderecoBairro'),
+        cidade = $('#nte_usuario_enderecoMunicipio'),
+        uf = $('#nte_usuario_enderecoUf'),
+        arquivo = $("#file"),
+        foto = $("#foto"),
+        selects = $('select'),
+        forms = $('form'),
+        telefoneOptions = {
+            onKeyPress: (nro) => {
+                telefone1.mask(((nro.length < 14) ? '(00) 0000-0000' : '(00) 0000-0000'), telefoneOptions);
+            }
+        };
+    forms.validate();
+    cep.mask('00000-000');
+    cpf.mask('000.000.000-00');
+
+    // dataNascimento.mask('00/00/0000');
+    telefone1.mask('(00) 00000-0000');
+    telefone2.mask('(00) 0000-0000');
+
+    cep.change(() => {
+        let x = cep.val().replace("-", "");
+        $.get("{{ path('get_logistica_cep') }}?cep=" + x, cep => {
+            if (cep) {
+                rua.val(cep.tipo +" " +cep.nome);
+                bairro.val(cep.id_bairro_inicio.nome);
+                cidade.val(cep.id_cidade.localidade_nome);
+                uf.val(cep.id_cidade.estado_sigla).trigger('change');
+            }
+        });
+    });
+
+    selects.select2({width: '100%'});
+
+    $.validator.addMethod("cpf", function(value, element) {
+        return this.optional(element) || CPF.validate(value);
+    }, "Por favor, Informe um CPF válido.");
+
+
+    $.extend($.validator.messages, {
+        required: "Este campo é obrigatório",
+        email: "Por favor, preencha com o endereço de e-mail válido",
+    });
+
+    forms.submit(function (e) {
+        e.preventDefault();
+        console.log(e);
+        foto.removeClass('hidden');
+        if (forms.valid()) {
+            forms.unbind('submit').submit();
+        }
+        setTimeout(function () {
+            foto.addClass('hidden');
+        }, 1);
+    });
+
+
+    $.ajaxSetup({
+        timeout: 99999999999,
+        headers: {'x-contexto': "PERFIL", 'X-CSRFToken': "{{ csrf_token('friga-upload-header') }}"}
+    });
+
+    arquivo.fileinput({
+        language: "pt-BR",
+        uploadUrl: "{{ oneup_uploader_endpoint('frigadata') }}",
+        deleteUrl: "{{ path('arquivo_remover') }}",
+        uploadAsync: false,
+        minFileCount: 1,
+        maxFileCount: 1,
+        overwriteInitial: true,
+        maxFileSize: 15000,
+        showUpload: false,
+        showClose: false,
+        showCaption: false,
+        showBrowse: false,
+        showRemove: false,
+        removeFromPreviewOnError: true,
+        browseOnZoneClick: true,
+        removeLabel: '',
+        elErrorContainer: '#kv-avatar-errors-2',
+        msgErrorClass: 'alert alert-block alert-danger',
+        defaultPreviewContent: '<img src="{{ path('arquivo_download',{id: entity.img}) }}" class="img-rounded img-responsive" ><h6 class="text-muted">Clique aqui para inserir a sua imagem de perfil</h6>',
+        layoutTemplates: {},
+        uploadExtraData: {
+            xtk: "{{ csrf_token('friga-upload-usuario-imagem-form') }}"
+        },
+        allowedFileExtensions: ["jpg", "JPG","jpeg","JPEG", "png","PNG","gif","GIF"]
+        //allowedFileTypes: ["image"]
+    }).on("filepredelete", function (event, files) {
+
+    })
+        .on("filebatchselected", function (event, files) {
+            arquivo.fileinput("upload");
+        })
+        .on('filebatchuploadsuccess', function (event, data) {
+            foto.prop("checked", true);
+            forms.valid();
+        });
+    </script>
+{% endblock %}
+
+

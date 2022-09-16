@@ -1,0 +1,91 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Convocação {% endblock %}
+{% block breadcumbsTitulo %} Etapas de Convocação {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group">
+                {% set classe1 = 'convocacao_index_proxima' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('convocacao_index_proxima') }}"
+                   title="Próximas etapas de resultados">
+                    <i class="icon icon-bulb"></i> Próximas
+                </a>
+                {% set classe1 = 'convocacao_index' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('convocacao_index') }}"
+                   title="Etapas de resultado abertas para alteração">
+                    <i class="icon icon-anchor"></i> Abertas
+                </a>
+                {% set classe1 = 'convocacao_index_encerrado' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('convocacao_index_encerrado') }}"
+                   title="etapas de resultado encerradas">
+                    <i class="icon icon-close"></i> Encerradas
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% if editais.count %}
+            {% for etapa in editais %}
+            <div class="col-md-6 col-lg-6 col-xl-3 item">
+                <div class="panel">
+                    <header class="panel-heading bg-white">
+                        <div class="panel-heading-icon bg-success mt-sm">
+                            <i class="icon icon-calendar"></i>
+                        </div>
+                    </header>
+                    <div class="panel-body">
+                        <h4 class="text-weight-semibold mt-none text-center">{{ etapa.descricao }}</h4>
+                        <h5 class="text-center">
+                            <br> {{ etapa.idEdital.titulo }}
+                        </h5>
+                        {% if etapa.andamentoPrazo %}
+                            <div class="progress" data-toggle="tooltip" data-placement="top" title=""
+                                 data-original-title="Prazo para finalizar a etapa. Quando este prazo chegar em 100% não será possível realizar a avaliação dos candidatos">
+                                <div class="progress-bar progress-bar-success progress-bar-striped"
+                                     style="width: {{ etapa.andamentoPrazo }}%">
+                                    {{ etapa.andamentoPrazo }}%
+                                </div>
+                            </div>
+                        {% endif %}
+                        <p class="text-center">
+                            De {{ etapa.dataInicial|date('d/m/Y') }} Até {{ etapa.dataFinal|date('d/m/Y') }}
+                        </p>
+                        <p class="text-center">
+                        <div class="btn-group btn-group-justified">
+                            {% if etapa.periodoHabilitado or  is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-success" title="Clique aqui para realizar a convocação dos candidatos"
+                               href="{{ path('convocacao_etapa',{etapa: etapa.id} ) }}">
+                                <i class="icon-pencil"></i> Ver Candidatos
+                            </a>
+                            {% endif %}
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="body-error error-inside">
+                <div class="center-error">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="main-error mb-xlg">
+                                <h2 class="error-code text-dark text-center text-weight-semibold m-none"><i
+                                            class="icon icon-calendar text-primary"></i></h2>
+                                <p class="error-explanation text-center text-primary">
+                                    <br>Nenhuma <b> etapa de convocação</b> disponível.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/jquery-match-height/jquery.matchHeight-min.js') }}"></script>
+    <script>
+        $.fn.matchHeight._rows($('.item'));
+    </script>
+{% endblock %}

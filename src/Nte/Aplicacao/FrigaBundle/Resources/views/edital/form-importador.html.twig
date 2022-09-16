@@ -1,0 +1,23 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edital N° {{ frigaedital.titulo }}/Importador {% endblock %}
+{% block breadcumbsTitulo %}Importador  {% endblock %}
+{% block conteudo %}
+    {{ form_start(config_form) }}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-10">
+            <section class="panel-body">
+                <div class="row">
+                    {{ form_rest(config_form) }}
+                </div>
+                <div class="col-md-12 text-center">
+                    <br>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i> Salvar
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+    {{ form_end(config_form) }}
+{% endblock %}

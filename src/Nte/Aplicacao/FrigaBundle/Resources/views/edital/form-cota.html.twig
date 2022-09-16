@@ -1,0 +1,26 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edição de Lista {% endblock %}
+{% block breadcumbsTitulo %} Edição de Lista{% endblock %}
+{% block conteudo %}
+<div class="row">
+    {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+    <div class="col-md-10">
+        <section class="panel-body">
+            {{ form_start(form) }}
+            <div class="form-group">
+                <label class="col-md-4 col-sm-4 control-label">
+                    {{ form_label(form.descricao) }}
+                </label>
+                <div class="col-md-8">
+                    {{ form_widget(form.descricao) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary center-block"><i class="fa fa-save"></i> Salvar </button>
+            </div>
+            {{ form_end(form) }}
+    </section>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+services:
+
+    #vincular entidade
+    nte_aplicacao_friga.upload_listener:
+        class: Nte\Aplicacao\FrigaBundle\EventListener\UploadListener
+        arguments: ["@doctrine.orm.entity_manager", '@security.token_storage', "@request_stack"]
+        tags:
+            - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }
+            - { name: kernel.event_listener, event: oneup_uploader.validation, method: onValidate }
+
+
+    #renomeador de arquivos
+    nte_aplicacao_friga.custom_namer:
+            class: Nte\Aplicacao\FrigaBundle\EventListener\UploadNamer
+            arguments: ["@security.token_storage","@request_stack"]

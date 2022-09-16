@@ -1,0 +1,162 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} {{ edital.titulo }}{% endblock %}
+{% block metaDescricao %} {{ edital.sobre }}{% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>{{ edital.titulo }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        {% if edital.modeloInscricao == 1 %}
+            <h2 class="mb-xl">Pontuação do <strong>Projeto</strong></h2>
+            <h5 class="text-center">   {{ inscricao.uuid }} -  {{ inscricao.idCargo.descricao }}{% if inscricao.idCota %}/{{ inscricao.idCota.descricao }}{% endif %}
+                <br><br> {{ inscricao.projetoTitulo }}
+            </h5>
+            <br>
+            <h6 class="text-center">{% for p in inscricao.idProjetoParticipante %}
+                    <b>{{ p.nome }}</b> {% if  loop.last ==0 %}, {% endif %}
+                {% endfor %}</h6>
+            <p class="text-justify">
+                {{ inscricao.projetoResumo }}
+                <br>
+                <br>
+                <b>Áreas do conhecimento: </b> {{ inscricao.projetoAreaConhecimento }}
+            </p>
+        {% else %}
+        <h2 class="mb-xl">Pontuação do <strong>Candidato</strong></h2>
+        <h5>   {{ inscricao.uuid }} - {{ inscricao.nome }}</h5>
+            <p>
+                {{ inscricao.idCargo.descricao }}{% if inscricao.idCota %}/{{ inscricao.idCota.descricao }}{% endif %}
+            </p>
+        {% endif %}
+
+
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr class="text-center">
+                <th class="text-center">Peso</th>
+                <th colspan="2" class="text-center">Pontuação</th>
+                <th class="text-center">Valor informado pelo candidato</th>
+                <th class="text-center">Valor considerado pelo avaliador</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for peso in inscricao.idEdital.pontuacaoCategoriaPeso %}
+                {% for categoria in peso.filhos %}
+                    {% for p in categoria.pontuacao %}
+                        <tr>
+                            <td class="text-center">
+                                {{ peso.descricao }}<br><br>
+                                ({{ peso.valorMaximo +0 }})
+                            </td>
+                            <td class="text-center">
+                                {{ categoria.descricao }}<br><br>
+                                ({{ categoria.valorMaximo +0 }}
+                                {{ categoria.valorTexto }})
+
+                            </td>
+                            <td class="text-center">
+                                {{ p.titulo }}<br><br>
+                                ({{ p.valorMaximo+0 }}
+                                {{ p.valorTexto }})
+                            </td>
+
+                            <td class="text-center">
+                                {% if inscricao.pontuacaoAvaliacaoItem(p).count %}
+                                    {% if inscricao.pontuacaoAvaliacaoItem(p).first.idEtapa.periodoDivulgacao %}
+                                        {% if inscricao.pontuacaoItem(p.id) %}
+                                            {{ inscricao.pontuacaoItem(p.id).valorInformado +0 }}
+                                            {{ p.valorTexto }}
+                                        {% else %}
+                                            Não Informado/Não Divulgado
+                                        {% endif %}
+                                    {% else %}
+                                        Não Informado/Não Divulgado
+                                    {% endif %}
+                                {% else %}
+                                    Não Informado/Não Divulgado
+                                {% endif %}
+                            </td>
+                            <td class="text-center" style="color: #0a6aa1;">
+                                {% if inscricao.pontuacaoAvaliacaoItem(p).count %}
+                                    {% if inscricao.pontuacaoAvaliacaoItem(p).first.idEtapa.periodoDivulgacao %}
+                                        {% if (p.pontuacaoAuto==0 or inscricao.pontuacaoAvaliacaoItem(p).first.considerado) and inscricao.idSituacao != 1 and inscricao.idSituacao != 3 %}
+                                            {{ inscricao.pontuacaoAvaliacaoItemValor(p) }}
+                                            {{ p.valorTexto }}
+                                        {% else %}
+                                            0 {{ p.valorTexto }}.
+                                        {% endif %}
+                                    {% else %}
+                                        Não Informado/Não Divulgado
+                                    {% endif %}
+                                {% else %}
+                                    Não Informado/Não Divulgado
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block rodape %}
+    <footer class="short" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Dúvidas sobre este edital</h4>
+                    <p class="text-weight-bold">
+                        {{ edital.info3|raw }}
+                    </p>
+                    <hr class="light">
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Inscrições </h5>
+                    <i class="fa fa-calendar"> </i> &nbsp;
+                    <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                    <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Resultado Final </h5>
+                    <i class="fa fa-calendar"> </i>
+                    &nbsp; {{ edital.resultadoFinal.dataDivulgacao is defined? edital.resultadoFinal.dataDivulgacao|date('d/m/Y'):"Não informado" }}
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1">
+                        <a href="{{ path('nte_site_homepage') }}" class="logo">
+                            <img alt="" class="img-responsive"
+                                 src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                        </a>
+                    </div>
+                    <div class="col-md-11">
+                        <p>Núcleo de Tecnologia Educacional </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+{% block jsOpcional %}
+    <script src="{{ asset('assets/vendor/jquery.rowspanizer/jquery.rowspanizer.min.js') }}"></script>
+{% endblock %}
+{% block js %}
+    <script>
+        $("table").rowspanizer({
+            vertical_align: 'middle',
+            columns: [0, 1]
+        });
+    </script>
+{% endblock %}

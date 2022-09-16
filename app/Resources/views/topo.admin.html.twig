@@ -1,0 +1,19 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<header class="header hidden-print">
+    <div class="logo-container">
+        <!--<a href="{{ path('nte_admin_painel_homepage') }}" class="logo">
+            <img src="{{ asset('assets/img/marca_apenas_sigla.svg') }}" height="40">
+        </a>-->
+        <a href="{{ path('nte_admin_painel_homepage') }}" class="logo">
+            <img src="{{ asset('assets/img/logo_friga.svg') }}" height="40">
+        </a>
+        <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html"
+             data-fire-event="sidebar-left-opened">
+            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+        </div>
+    </div>
+    <div class="header-right hidden-xs">
+        <span class="separator"></span>
+        {{ render(controller('NteAdminPainelBundle:Menu:topoItemUsuario'))}}
+    </div>
+</header>

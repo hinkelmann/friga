@@ -1,0 +1,272 @@
+edital_index:
+  path:     /
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:index" }
+  methods:  GET
+
+edital_index_rascunho:
+  path:     /rascunho
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexRascunho" }
+  methods:  GET
+
+edital_index_encerrado:
+  path:     /encerrado
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexEncerrado" }
+  methods:  GET
+
+#categoria
+edital_categoria_index:
+  path:     /categoria/
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexCategoria" }
+  methods:  GET
+
+edital_categoria_editar:
+  path:     /catagoria/editar/{id}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formCategoria" }
+  methods:  [GET, POST]
+
+edital_categoria_criar:
+  path:     /catagoria/criar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formCategoria" }
+  methods:  [GET, POST]
+
+edital_categoria_remover:
+  path:     /categoria/remover/{id}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerCategoria"}
+
+
+#edital
+edital_criar:
+  path:     /criar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criar" }
+  methods:  [GET, POST]
+
+edital_clone:
+  path:     /clone/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:clonarEdital"}
+
+edital_clone_etapa:
+  path:     /clone-etapa/{destino}/{origem}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:clonarEtapa", origem: null}
+
+edital_clone_pontuacao:
+  path:     /clone-pontuacao/{destino}/{origem}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:clonarPontuacao", origem: null}
+
+
+edital_remover:
+  path:     /remover/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerEdital"}
+
+
+edital_exportador:
+  path:     /{uuid}/exportador
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:exportar"}
+
+edital_importador:
+  path:     /{uuid}/importar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:importar"}
+
+
+
+edital_editar:
+  path:     /{uuid}/config
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:editar" }
+  methods:  [GET, POST]
+
+edital_editar_termo:
+  path:     /{uuid}/termo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:editarTermo" }
+  methods:  [GET, POST]
+
+edital_editar_inscricoes:
+  path:     /{uuid}/inscricoes
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:editarInscricoes" }
+  methods:  [GET, POST]
+
+edital_resultados:
+  path:     /{uuid}/resultados
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:editarResultado" }
+  methods:  [GET, POST]
+
+#arquivo
+
+edital_arquivo:
+  path:     /{uuid}/arquivo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexArquivo" }
+  methods:  [GET, POST]
+
+#Avaliador
+edital_avaliador:
+  path:     /{uuid}/avaliador
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexAvaliador" }
+  methods:  [GET, POST]
+
+
+edital_avaliador_adicionar:
+  path:     /{uuid}/avaliador/criar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarAvaliador" }
+  methods:  [GET, POST]
+
+edital_avaliador_editar:
+  path:     /{uuid}/avaliador/editar/{avaliador}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarAvaliador", avaliador: null }
+  methods:  [GET, POST]
+
+edital_avaliador_remover:
+  path:     /{uuid}/avaliador/remover/{avaliador}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerAvaliador", avaliador: null }
+  methods:  [GET, POST]
+
+edital_avaliador_adicionar_cargo:
+  path:     /{uuid}/avaliador/adicionar/{usuario}/cargo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:adicionarAvaliadorCargo" }
+  methods:  [GET, POST]
+
+
+
+#etapa
+edital_etapa:
+  path:     /{uuid}/etapa
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexEtapa" }
+  methods:  [GET, POST]
+
+edital_etapa_criar:
+  path:     /{uuid}/etapa/novo/{tipo}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarEtapa" }
+  methods:  [GET, POST]
+
+edital_etapa_editar:
+  path:     /{uuid}/etapa/{etapa}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formEtapa", etapa: null }
+  methods:  [GET, POST]
+
+edital_etapa_remover:
+  path:     /{uuid}/etapa/{etapa}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerEtapa" }
+  methods:  [GET, POST]
+
+#Pontuacao
+edital_pontuacao:
+  path:     /{uuid}/pontuacao
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexPontuacao" }
+  methods:  [GET, POST]
+
+edital_pontuacao_criar:
+  path:     /{uuid}/pontuacao/novo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formPontuacao" }
+  methods:  [GET, POST]
+
+edital_pontuacao_editar:
+  path:     /{uuid}/pontuacao/{pontuacao}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formPontuacao" }
+  methods:  [GET, POST]
+
+edital_pontuacao_remover:
+  path:     /{uuid}/pontuacao/{pontuacao}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerPontuacao" }
+  methods:  [GET, POST]
+
+
+edital_pontuacao_categoria_criar:
+  path:     /{uuid}/pontuacao-categoria/novo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formPontuacaoCategoria" }
+  methods:  [GET, POST]
+
+edital_pontuacao_categoria_editar:
+  path:     /{uuid}/pontuacao-categoria/{pontuacaoCategoria}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formPontuacaoCategoria" }
+  methods:  [GET, POST]
+
+edital_pontuacao_categoria_remover:
+  path:     /{uuid}/pontuacao-categoria/{pontuacaoCategoria}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerPontuacaoCategoria" }
+  methods:  [GET, POST]
+
+edital_pontuacao_categoria_peso_criar:
+  path:     /{uuid}/pontuacao-categoria-peso/novo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formPontuacaoCategoriaPeso" }
+  methods:  [GET, POST]
+
+edital_pontuacao_categoria_peso_editar:
+  path:     /{uuid}/pontuacao-categoria-peso/{pontuacaoCategoria}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formPontuacaoCategoriaPeso" }
+  methods:  [GET, POST]
+
+#cargo
+edital_cargo:
+  path:     /{uuid}/cargo/
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexCargo" }
+  methods:  GET
+
+edital_cargo_criar:
+  path:     /{uuid}/cargo/novo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formCargo" }
+  methods:  [GET, POST]
+
+edital_cargo_editar:
+  path:     /{uuid}/cargo/{cargo}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formCargo" }
+  methods:  [GET, POST]
+
+edital_cargo_remover:
+  path:     /{uuid}/cargo/{cargo}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerCargo" }
+  methods:  [GET, POST]
+
+#Cota
+edital_cota:
+  path:     /{uuid}/cota/
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexCota" }
+  methods:  GET
+
+edital_cota_criar:
+  path:     /{uuid}/cota/novo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formCota" }
+  methods:  [GET, POST]
+
+edital_cota_editar:
+  path:     /{uuid}/cota/{cota}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formCota" }
+  methods:  [GET, POST]
+
+edital_cota_remover:
+  path:     /{uuid}/cota/{cota}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerCota" }
+  methods:  [GET, POST]
+
+#Critério de desempate
+edital_desempate:
+  path:     /{uuid}/desempate/
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexDesempate" }
+  methods:  GET
+
+edital_desempate_ordem:
+  path:     /{uuid}/desempate/ordem/{criterio}/{tipo}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:ordemDesempate" }
+  methods:  [GET, POST]
+
+edital_desempate_criar:
+  path:     /{uuid}/desempate/novo/{tipo}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarDesempate" }
+  methods:  [GET, POST]
+
+edital_desempate_editar:
+  path:     /{uuid}/desempate/{criterio}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formDesempate" }
+  methods:  [GET, POST]
+
+edital_desempate_remover:
+  path:     /{uuid}/desempate/{criterio}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerDesempate" }
+  methods:  [GET, POST]
+
+#teste
+teste_api_arquivo:
+  path:     /teste/api/arquivo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiTesteArquivo" }
+  methods:  [DELETE]
+
+#teste
+teste_api_2este:
+  path:     /teste/pdf
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:pdfTeste" }

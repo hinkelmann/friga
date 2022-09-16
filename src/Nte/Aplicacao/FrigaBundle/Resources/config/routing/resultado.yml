@@ -1,0 +1,65 @@
+resultado_index:
+  path:     /
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:index", situacao: 50 }
+  methods:  GET
+
+resultado_index_encerrado:
+  path:     /etapas/encerradas
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:index", situacao: 100 }
+  methods:  GET
+
+resultado_index_proxima:
+    path:     /etapas/proximas
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:index", situacao: 0 }
+    methods:  GET
+
+resultado_parcial:
+  path:     /parcial/{edital}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:parcial", edital: null }
+  methods:  [GET,POST]
+
+resultado_etapa:
+  path:     /etapa/{etapa}/
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:indexEtapa" }
+  methods:  GET
+
+
+
+resultado_etapa_candidato_posicao:
+  path:     /etapa/{etapa}/posicao/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:subirPosicao" }
+
+resultado_etapa_candidato_posicao_confirmar:
+  path:     /etapa/{etapa}/confirmar-posicao
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:confirmarPosicao" }
+  methods:  [POST]
+
+resultado_etapa_classificacao_remover:
+  path:     /etapa/{etapa}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:removerResultado" }
+
+resultado_etapa_classificacao_gerar:
+  path:     /etapa/{etapa}/gerar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:gerarResultado" }
+
+resultado_form:
+  path:     /etapa/{etapa}/form
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:formComprovante" }
+  methods:  GET
+
+resultado_etapa_impressao:
+  path:     /etapa/{etapa}/impressao
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:impresao" }
+  methods:  GET
+
+
+resultado_etapa_exportar_csv:
+  path:     /etapa/{etapa}/exportar/csv
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:exportarCsv" }
+  methods:  GET
+
+
+resultado_index_edital:
+  path:     /{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:index" }
+  methods:  GET

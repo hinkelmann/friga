@@ -1,0 +1,17 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Moodle Prova {% endblock %}
+{% block breadcumbsTitulo %}Moodle Provas {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-12">
+            <section class="panel-body">
+                {{ form_start(form) }}
+                {{ form_rest(form) }}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary center-block">  <i class="fa fa-certificate"></i> Gerar CSV MOODLE </button>
+                </div>
+                {{ form_end(form) }}
+            </section>
+        </div>
+    </div>
+{% endblock %}

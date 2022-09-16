@@ -1,0 +1,19 @@
+#categoria
+capes_area_conhecimento_index:
+  path:     /
+  defaults: { _controller: "NteAplicacaoFrigaBundle:CAPESAreaConhecimento:index" }
+  methods:  GET
+
+capes_area_conhecimento_editar:
+  path:     /editar/{id}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:CAPESAreaConhecimento:criar", id: null }
+  methods:  [GET, POST]
+
+capes_area_conhecimento_criar:
+  path:     /criar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:CAPESAreaConhecimento:criar" }
+  methods:  [GET, POST]
+
+capes_area_conhecimento_remover:
+  path:     /remover/{id}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:CAPESAreaConhecimento:remover"}

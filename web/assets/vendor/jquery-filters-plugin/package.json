@@ -1,0 +1,38 @@
+{
+  "name": "backoffice-filters",
+  "version": "0.2.5",
+  "description": "Easy Setup - filters rending out of the box for backoffice use.",
+  "main": "jquery.filters.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ohadpartuck/jquery-filters-plugin.git"
+  },
+  "keywords": [
+    "jquery",
+    "plugin",
+    "filters",
+    "search",
+    "backoffice",
+    "quick",
+    "setup",
+    "management",
+    "tool",
+    "developer",
+    "jQuery"
+  ],
+  "author": "ohad perry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ohadpartuck/jquery-filters-plugin/issues"
+  },
+  "homepage": "https://github.com/ohadpartuck/jquery-filters-plugin#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "daterangepicker": "0.0.3",
+    "jquery": "^2.1.4",
+    "moment": "^2.10.6"
+  }
+}

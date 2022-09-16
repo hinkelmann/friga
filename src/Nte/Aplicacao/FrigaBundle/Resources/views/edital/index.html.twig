@@ -1,0 +1,181 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Editais {% endblock %}
+{% block breadcumbsTitulo %}Editais {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="btn-group">
+            {% set classe1 = 'edital_index_rascunho' == app.request.attributes.get('_route')?"active":"" %}
+            <a class="btn btn-default {{ classe1 }}" href="{{ path('edital_index_rascunho') }}">
+                <i class="icon icon-pencil"></i> Rascunho
+            </a>
+            {% set classe1 = 'edital_index' == app.request.attributes.get('_route')?"active":"" %}
+            <a class="btn btn-default {{ classe1 }}" href="{{ path('edital_index') }}">
+                <i class="icon icon-star"></i> Aberto
+            </a>
+            {% set classe1 = 'edital_index_encerrado' == app.request.attributes.get('_route')?"active":"" %}
+            <a class="btn btn-default {{ classe1 }}" href="{{ path('edital_index_encerrado') }}">
+                <i class="icon icon-close"></i> Encerrados
+            </a>
+        </div>
+        <a href="{{ path('edital_criar') }}" class="btn btn-primary pull-right">
+            <i class="fa fa-plus"></i> Criar Edital
+        </a>
+    </div>
+    {% for edital in editais %}
+        <div class="row">
+            <section class="panel panel-horizontal">
+                <header class="panel-heading bg-white">
+                    <div class="panel-heading-icon bg-primary mt-sm">
+                        <i class="fa fa-exchange"></i>
+                    </div>
+                </header>
+                <div class="panel-body p-lg">
+                    <h4 class="text-weight-semibold mt-sm">
+                        <a href="{{ path('edital_editar', { 'uuid': edital.uuid }) }}">
+                            {{ edital.titulo }}
+                        </a>
+                        <i class="fa fa-{% if edital.publico >0 %}eye{% else %}eye-slash{% endif %} pull-right"></i>
+                    </h4>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 text-justify">
+                            <p>{{ edital.sobre }}</p>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 ">
+                                    <section class="panel panel-featured-bottom panel-featured-primary">
+                                        <div class="panel-body">
+                                            <div class="widget-summary widget-summary-sm ">
+                                                <div class="widget-summary-col widget-summary-col-icon">
+                                                    <div class="summary-icon  bg-primary">
+                                                        <i class="fa fa-user-secret"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-summary-col">
+                                                    <div class="summary">
+                                                        <a href="{{ path('relatorio_inscritos', {'uuid': edital.uuid}) }}"
+                                                           class="text-muted text-uppercase">
+                                                            <h4 class="title">INSCRITOS</h4>
+                                                        </a>
+                                                        <div class="info">
+                                                            <strong class="amount">{{ edital.inscricaoValida|length }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="col-sm-6 col-md-6 ">
+                                    <section class="panel panel-featured-bottom panel-featured-tertiary">
+                                        <div class="panel-body">
+                                            <div class="widget-summary widget-summary-sm ">
+                                                <div class="widget-summary-col widget-summary-col-icon">
+                                                    <div class="summary-icon  bg-tertiary">
+                                                        <i class="fa fa-money"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-summary-col">
+                                                    <div class="summary">
+                                                        <a href="{{ path('edital_cargo', {'uuid': edital.uuid}) }}"
+                                                           class="text-muted text-uppercase">
+                                                            <h4 class="title">VAGAS</h4>
+                                                        </a>
+                                                        <div class="info">
+                                                            <strong class="amount">{{ edital.cargo|length }} </strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 ">
+                                    <section class="panel panel-featured-bottom panel-featured-secondary">
+                                        <div class="panel-body">
+                                            <div class="widget-summary widget-summary-sm ">
+                                                <div class="widget-summary-col widget-summary-col-icon">
+                                                    <div class="summary-icon  bg-secondary">
+                                                        <i class="fa fa-user-md"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-summary-col">
+                                                    <div class="summary">
+                                                        <a href="{{ path('edital_etapa', {'uuid': edital.uuid}) }}"
+                                                           class="text-muted text-uppercase">
+                                                            <h4 class="title">ETAPAS</h4>
+                                                        </a>
+                                                        <div class="info">
+                                                            <strong class="amount">{{ edital.etapa|length }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="col-sm-6 col-md-6 ">
+                                    <section class="panel panel-featured-bottom panel-featured-quartenary">
+                                        <div class="panel-body">
+                                            <div class="widget-summary widget-summary-sm ">
+                                                <div class="widget-summary-col widget-summary-col-icon">
+                                                    <div class="summary-icon  bg-quartenary">
+                                                        <i class="fa fa-asterisk"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-summary-col">
+                                                    <div class="summary">
+                                                        <a href="{{ path('edital_avaliador', {'uuid': edital.uuid}) }}"
+                                                           class="text-muted text-uppercase">
+                                                            <h4 class="title">AVALIADORES</h4>
+                                                        </a>
+                                                        <div class="info">
+                                                            <strong class="amount">{{ edital.idEditalUsuario|length }} </strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <i class="fa fa-clock-o"></i>
+                            <strong>Publicação Oficial:</strong> {{ edital.dataPublicacaoOficial|date('d/m/Y') }} &nbsp;&nbsp;
+                            <i class="fa fa-calendar"></i> <strong>Inscrições:</strong>
+                            {% if edital.periodoInscricao %}
+                                De {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                                A {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                            {% else %}
+                                <a href="{{ path('edital_etapa_criar', {tipo: 1 ,'uuid': edital.uuid}) }}">Definir
+                                    período</a>
+                            {% endif %}
+                            &nbsp;&nbsp;
+                            <i class="fa fa-trophy"></i> <strong>Resultado Final:</strong>
+                            {% if edital.resultadoFinal %}
+                                {{ edital.resultadoFinal.dataDivulgacao|date('d/m/Y') }}
+                            {% else %}
+                                <a href="{{ path('edital_etapa_criar', {tipo: 4, 'uuid': edital.uuid}) }}">Definir
+                                    período</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a href="{{ path('edital_clone', {'uuid': edital.uuid}) }}"><i class="fa fa-copy"></i>
+                                Clonar Edital</a>
+                            &nbsp;&nbsp;
+                            <!--<a href="{{ path('edital_remover', {'uuid': edital.uuid}) }}"><i class="fa fa-remove"></i> Remover Edital</a>-->
+                            <a href="#"><i class="fa fa-remove"></i> Remover Edital</a>
+                            &nbsp;&nbsp;
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endfor %}
+{% endblock %}

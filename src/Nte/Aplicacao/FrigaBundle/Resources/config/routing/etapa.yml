@@ -1,0 +1,15 @@
+nte_aplicacao_friga_etapa_index:
+  path:     /
+  defaults: { _controller: NteAplicacaoFrigaBundle:Etapa:index, situacao: 1 }
+
+nte_aplicacao_friga_etapa_index_proxima:
+  path:     /proxima
+  defaults: { _controller: NteAplicacaoFrigaBundle:Etapa:index, situacao: 2 }
+
+nte_aplicacao_friga_etapa_index_ecenrrada:
+  path:     /encerrada
+  defaults: { _controller: NteAplicacaoFrigaBundle:Etapa:index, situacao: 3 }
+
+nte_aplicacao_friga_etapa_index_todas:
+  path:     /todas
+  defaults: { _controller: NteAplicacaoFrigaBundle:Etapa:index, situacao: 0 }

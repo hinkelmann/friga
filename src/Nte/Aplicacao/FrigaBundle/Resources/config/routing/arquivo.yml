@@ -1,0 +1,45 @@
+#API
+edital_api_get_arquivo:
+    path:     /api/arquivo/{uuid}
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiGetEditalArquivo" }
+    methods:  [GET]
+
+edital_api_update_arquivo:
+    path:     /api/arquivo
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiUpdate" }
+    methods:  [POST]
+
+edital_api_delete_arquivo:
+    path:     /api/arquivo
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiDelete" }
+
+
+
+
+#arquivo_renomear:
+#    path:     /renomear
+#    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaArquivo:renomear" }
+#    methods:  [GET, POST]
+
+arquivo_download:
+    path:     /download/{id}
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:download", id: null }
+    methods:  [GET]
+
+arquivo_ver:
+    path:     /visualizar/{id}
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:visualizar", id: null }
+    methods:  [GET]
+
+arquivo_remover:
+    path:     /remover/
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiDelete" }
+
+arquivo_assinaturadigital:
+    path:     /assinaturadigital
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:assinaturaDigital" }
+
+arquivo_moodleprova:
+    path:     /moodleprova
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:moodleProva" }
+

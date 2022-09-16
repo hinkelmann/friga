@@ -1,0 +1,46 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Relatório Inscrições Anuladas{% endblock %}
+{% block breadcumbsTitulo %} Relatório Inscrições Anuladas{% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('relatorio_index') }}"> Relatórios</a></span></li>
+    <li><span><a href="#"> {{ edital.uuid }}</a></span></li>
+    <li><span><a href="#"> Inscrições Anuladas</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <section class="panel">
+            <div class="panel-body">
+                <table class="table table-hovered">
+                    <tr class="visible-md visible-lg">
+                        <th width="140">N° de Inscrição</th>
+                        <th>Nome</th>
+                        <th>Vaga</th>
+                        <th>Data</th>
+                    </tr>
+                    <tbody>
+                    {% for inscricao in edital.inscricaoSituacao(-999) %}
+                        <tr class="visible-lg visible-md">
+                            <td>{{ inscricao.uuid ~ "-" ~ inscricao.id }}
+                            </td>
+                            <td class="text-uppercase">
+                                <a href="{{ path('nte_usuario_candidato_perfil', {'id': inscricao.id}) }}">
+                                    <b>{{ inscricao.nome }}</b>
+                                </a>
+                            </td>
+                            <td>{{ inscricao.idCargo.descricao }}</td>
+                            <td>{{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                        <tr class="visible-xs visible-sm">
+                            <td>
+                            {{ inscricao.uuid ~ "-" ~ inscricao.id }} / <b>{{ inscricao.nome }}</b><br>
+                            <i class="fa fa-clock-o"></i>  {{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}<br>
+                            <i class="fa fa-plus"></i>  {{ inscricao.idCargo.descricao }}<br>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+{% endblock %}

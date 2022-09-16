@@ -1,0 +1,36 @@
+avaliacao_index:
+  path:     /
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:index", situacao: 50 }
+  methods:  GET
+
+avaliacao_index_encerrado:
+  path:     /etapas/encerradas
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:index", situacao: 100 }
+  methods:  GET
+
+avaliacao_index_proxima:
+  path:     /etapas/proximas
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:index", situacao: 0 }
+  methods:  GET
+
+
+avaliacao_etapa:
+  path:     /etapa/{etapa}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:indexCandidato" }
+  methods:  GET
+
+avaliacao_etapa_candidato:
+  path:     /etapa/{etapa}/inscricao/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:form" }
+  methods:  [GET|POST]
+
+avaliacao_comprovante:
+  path:     /etapa/{etapa}/comprovante/{arquivo}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:formComprovante" }
+  methods:  GET
+
+
+avaliacao_index_edital:
+  path:     /{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:index" }
+  methods:  GET

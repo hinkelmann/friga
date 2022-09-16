@@ -1,0 +1,116 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} Perfil /{{ app.user.nome }} {% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Dados cadastrais </span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-md-9">
+            <div class="row">
+                <h3 class="mb-xl">
+                    <strong> dados </strong> cadastrais
+                </h3>
+                <div class="col-md-4">
+                    <img src="{{ path('arquivo_download',{id: app.user.img}) }}" class="img-rounded img-responsive">
+                    <br>
+                    <a href="{{ path('nte_usuario_redefinir') }}"
+                       title="Clique aqui para alterar os seus dados cadastrais"
+                       class="btn btn-block btn-primary">
+                        <i class="fa fa-get-pocket"></i>
+                        Alterar dados cadastrais
+                    </a>
+                </div>
+                <div class="col-md-8">
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Nome</strong><br>
+                            {{ app.user.nome }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Data de Nascimento</strong><br>
+                            {{ app.user.dataNascimento|date('d/m/Y') }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>CPF</strong><br>
+                            {{ app.user.cpf }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Carteira de Identidade</strong><br>
+                            {{ app.user.rgNro }}/{{ app.user.rgOrgaoExpedidor }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>e-Mail</strong><br>
+                            {{ app.user.email }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Celular</strong><br>
+                            {{ app.user.contatoTelefone1 }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Telefone</strong><br>
+                            {{ app.user.contatoTelefone2 }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>CEP</strong><br>
+                            {{ app.user.enderecoCep }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Número</strong><br>
+                            {{ app.user.enderecoNumero }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Complemento</strong><br>
+                            {{ app.user.enderecoComplemento }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Bairro</strong><br>
+                            {{ app.user.enderecoBairro }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Cidade</strong><br>
+                            {{ app.user.enderecoMunicipio }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Estado</strong><br>
+                            {{ app.user.enderecoUf }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Suporte  - Abertura de chamado {% endblock %}
+{% block breadcumbsTitulo %} Abertura de Chamado {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('nte_suporte_homepage') }}"> Suporte</a></span></li>
+    <li><span><a href="#"> Abertura de Chamado</a></span></li>
+{% endblock %}
+{% block conteudo %}
+
+    <section class="panel-group mb-xlg">
+        <div class="widget-twitter-profile">
+            <div class="top-image">
+            </div>
+            <div class="profile-info">
+                <div class="profile-picture">
+                    <img src="{{ path('arquivo_download', {id: app.user.img}) }}" alt="">
+                </div>
+                <div class="profile-account">
+                    <h3 class="name text-weight-semibold">{{ app.user.nome }}</h3>
+                    <a href="#" class="account">{{ app.user.email }}</a>
+                </div>
+                <ul class="profile-stats">
+                    <li>
+                        <h5 class="stat text-uppercase">Situação</h5>
+                        <h4 class="count">
+                            {% if suporte.idSituacao == null %}
+                                Novo Chamado
+                            {% elseif suporte.idSituacao == 0 %}
+                                Aberto
+                            {% elseif suporte.idSituacao == 1 %}
+                                Em Analise
+                            {% elseif suporte.idSituacao == 99 %}
+                                Fechado
+                            {% endif %}
+                        </h4>
+                    </li>
+                </ul>
+            </div>
+            {{ form_start(form) }}
+            <div class="profile-quote">
+                <div class="form-group">
+                    {{ form_widget(form.assunto) }}
+                </div>
+                <div class="form-group">
+                    {{ form_widget(form.descricao) }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Abrir Chamado
+                    </button>
+                </div>
+
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .widget-twitter-profile .profile-quote {
+            background-color: #fdfdfd;
+            color: #333;
+        }
+
+        .widget-twitter-profile .profile-quote .quote-footer {
+            border-top-color: #005d7c;
+            color: #333;
+        }
+
+    </style>
+{% endblock %}
+{% block javascripts2 %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Suporte{% endblock %}
+ {% block breadcumbsTitulo %}Suporte{% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="{{ path('nte_usuario_index') }}"> Suporte </a></span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="panel-body text-center">
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <a href="{{ path('nte_suporte_form', {'id': 'x'}) }}">
+                    <div class="featured-box featured-box-primary featured-box-effect-3">
+                        <div class="box-content">
+                            <i class="icon-featured fa fa-plus-circle fa-5x"></i>
+                            <h4>Abrir Chamado</h4>
+                            <p>Abre uma solicitação no sistema</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <a href="{{ path('nte_suporte_faq') }}">
+                    <div class="featured-box featured-box-primary featured-box-effect-3">
+                        <div class="box-content">
+                            <i class="icon-featured fa fa-question-circle fa-5x"></i>
+                            <h4>FAQ</h4>
+                            <p> Perguntas Frequentes</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <a href="{{ path('nte_suporte_manual') }}">
+                    <div class="featured-box featured-box-primary featured-box-effect-3">
+                        <div class="box-content">
+                            <i class="icon-featured fa fa-circle-o-notch fa-5x"></i>
+                            <h4>Manual</h4>
+                            <p> Manual do Usuário</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6">
+                <a href="{{ path('nte_suporte_sobre') }}">
+                    <div class="featured-box featured-box-primary featured-box-effect-3">
+                        <div class="box-content">
+                            <i class="icon-featured fa fa-info-circle fa-5x"></i>
+                            <h4>Sobre</h4>
+                            <p> Informações Sobre o Sistema</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel">
+            <div class="panel-body">
+                {% if suporte|length %}
+                <div class="list-group">
+                    {% for s in suporte|reverse %}
+                        <a href="{{ path('nte_suporte_visualizar', {'id': s.id}) }}" class="list-group-item ">
+                            <h4 class="list-group-item-heading">
+                                {% if s.idSituacao ==0 or s.idSituacao == null %}
+                                <i class="fa fa-envelope"> </i>
+                                {% else %}
+                                    <i class="fa fa-envelope-o"> </i>
+                                {% endif %}
+                                {{ s.idUsuarioSolicitante.nome }} - {{ s.assunto }}
+                            </h4>
+                            <div class="list-group-item-text">
+                                {{ s.descricao }}
+                                <div class="pull-right">
+                                    {{ s.registroDataCriacao|date('d/m/Y   H:i') }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+                <section class="body-error error-inside">
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">0 <i
+                                                class="fa fa-envelope text-primary"></i></h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br><b>Nenhuma Solicitação de Chamado </b> até o momento.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock -%}

@@ -1,0 +1,23 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block conteudo %}
+    <div class="container">
+        <section class="call-to-action call-to-action-secondary button-centered  mb-xl">
+            <div class="call-to-action-content">
+                <h3><i class="fa fa-user-plus"></i> <strong>INSCRIÇÃO</strong> REALIZADA COM <strong>SUCESSO!</strong>
+                </h3><br>
+                <p>Prezado(a) <b>{{ inscricao.nome }}</b>, informamos que sua inscrição foi realizada com
+                    sucesso e dentro de alguns instantes, você receberá em seu e-mail o comprovante de inscrição.
+                </p>
+            </div>
+            <div class="call-to-action-btn">
+                <h3>
+                    <strong>Número de Inscrição: </strong><br>
+                    {{ inscricao.uuid }}
+                </h3>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+{% endblock %}

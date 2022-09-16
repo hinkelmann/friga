@@ -1,0 +1,142 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} {{ etapa.descricao }}{% endblock %}
+{% block breadcumbsTitulo %} {{ etapa.descricao }} {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('convocacao_index') }}"> Convocação</a></span></li>
+    <li><span><a href="#"> {{ edital.uuid }}</a></span></li>
+    <li><span><a href="#"> {{ etapa.tipoDescricao }}</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row text-right">
+        <div class="btn-group">
+            <a class="btn btn-default" href="{{ path('convocacao_etapa_exportar_csv', {'etapa': etapa.id}) }}">
+                <i class="fa fa-file-excel-o"></i> Baixar CSV
+            </a>
+            <a class="btn btn-default" href="{{ path('convocacao_etapa_impressao_relacao', {'etapa': etapa.id}) }}">
+                <i class="icon icon-printer"></i> Imprimir Relação
+            </a>
+            <a class="btn btn-default" href="{{ path('convocacao_etapa_impressao_presenca', {'etapa': etapa.id}) }}">
+                <i class="icon icon-printer"></i> Imprimir Presença
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        {% for chave, lista in classificao %}
+            <div class="panel-body">
+                <div class="form-bordered">
+                    <div class="form-group">
+                        <h5 class="text-uppercase text-weight-bold">
+                            <i class="icon icon-calendar"></i>&nbsp;
+                            {{ lista.nome }}
+                        </h5>
+                    </div>
+                    {% set posicao =1 %}
+                    {% for inscricao in lista.classificacao %}
+                        {% if inscricao.idSituacao != -10 and inscricao.idSituacao != 1 %}
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <a href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                                        <b class="text-uppercase">{{ inscricao.nome }}</b> <br>
+                                    </a>
+                                    <span data-toggle="tooltip" data-placement="top" title="Posição do candidato">
+                                        <i class="icon icon-trophy"></i>&nbsp; {{ posicao }}°
+                                    </span>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <span data-toggle="tooltip" data-placement="top" title="Pontuação do candidato">
+                                        <i class="icon icon-speedometer"></i>&nbsp; {{ inscricao.pontuacaoSoma(true) }}
+                                    </span>
+                                </div>
+                                <div class="btn-group pull-right hidden-xs">
+                                    <div class="btn">
+                                        Inscrição N° <strong>{{ inscricao.uuid ~ "-" ~ inscricao.id }}</strong>
+                                        <br>
+                                        <small class="{{ inscricao.objsituacao.css }}">
+                                            <i class="{{ inscricao.objsituacao.icone }}"></i>
+                                            {{ inscricao.objsituacao.descricao }}
+                                        </small>
+                                    </div>
+                                    {% if inscricao.convocacaoEtapa(etapa).count %}
+                                        <div class="btn btn-warning ">
+                                            Agendado para:<br>
+                                            {{ inscricao.convocacaoEtapa(etapa).first.data|date('d/m/Y \\à\\s H:i:s') }}
+                                        </div>
+                                    {% else %}
+                                        <div class="btn">
+                                            Sem<br>Agendamento
+                                        </div>
+                                    {% endif %}
+                                    <a href="{{ path('convocacao_etapa_candidato', {'etapa': etapa.id, 'uuid': inscricao.uuid}) }}"
+                                       class="btn btn-default"><i class="icon icon-calendar"></i><br>
+                                        Agendar
+                                    </a>
+                                </div>
+                                <div class="visible-xs">
+                                    <div class="btn btn-block text-right">
+                                        Inscrição N° <strong>{{ inscricao.uuid ~ "-" ~ inscricao.id }}</strong>
+                                        <br>
+                                        <small class="{{ inscricao.objsituacao.css }}">
+                                            <i class="{{ inscricao.objsituacao.icone }}"></i>
+                                            {{ inscricao.objsituacao.descricao }}
+                                        </small>
+                                    </div>
+                                    <a href="{{ path('convocacao_etapa_candidato', {'etapa': etapa.id, 'uuid': inscricao.uuid}) }}"
+                                       class="btn btn-block btn-default">
+                                        <i class="fa fa-check-square-o"></i><br>
+                                        Avaliar
+                                    </a>
+                                </div>
+                            </div>
+                            {% set posicao=posicao+1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if lista.classificacao.count<1 %}
+                        <tr>
+                            <td colspan="5">Nenhum candidato classificado.</td>
+                        </tr>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+    <style>
+        .table > thead > tr > .b {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .table > thead > tr > .c {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .b {
+            border-top: 1px solid #c7d5de;
+        }
+
+        .table > tfoot > tr > .d {
+            border-bottom: 1px solid #c7d5de;
+        }
+
+        .b1 {
+            border-left: 1px solid #c7d5de;
+        }
+
+        .b3 {
+            border-right: 1px solid #c7d5de;
+        }
+
+        .b1, .b2, .b3 {
+            background-color: #E3F2FD;
+            border-bottom: 0px;
+        }
+    </style>
+{% endblock %}
+{% block javascripts2 %}
+    <script>
+        $('select').select2({
+            width: '100%',
+        });
+
+    </script>
+{% endblock %}

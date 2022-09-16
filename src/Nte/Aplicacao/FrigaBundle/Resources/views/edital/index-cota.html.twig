@@ -1,0 +1,74 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
+{% block breadcumbsTitulo %} Configuração de Edital {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-10">
+            <section class="panel-body">
+                {% if frigaedital.cota|length %}
+                    <table class="table table-hover table-condesed ">
+                        <thead>
+                        <tr>
+                            <th>Situação </th>
+                            <th>Inscritos</th>
+                            <th>
+                                <a href="{{ path('edital_cota_criar',{uuid: frigaedital.uuid}) }}"
+                                   class="btn btn-primary pull-right">
+                                    <i class="fa fa-plus-circle"></i> Adicionar
+                                </a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cota in frigaedital.cota %}
+                            <tr>
+                                <td>{{ cota.descricao }}</td>
+                                <td>
+                                    {%  if cota.idEditalUsuarioInscrito|length > 0 %}
+                                        {{ cota.idEditalUsuarioInscrito|length }}
+                                    {% else %}
+                                        Nenhum
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm pull-right">
+                                    <a class="btn btn-default"
+                                       href="{{ path('edital_cota_editar',{uuid: frigaedital.uuid, cota: cota.id}) }}">
+                                        <i class="fa fa-edit"></i> Editar
+                                    </a><a class="btn btn-default" href="{{ path('edital_cota_remover',{uuid: frigaedital.uuid, cota: cota.id}) }}">
+                                        <i class="fa fa-edit"></i> Remover
+                                    </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                            <i class="icon icon-user text-primary"></i>
+                                        </h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br><b>Nenhuma situação foi criada </b> até o momento.<br>
+                                            <br>
+                                            <br>
+                                            <a href="{{ path('edital_cota_criar',{uuid: frigaedital.uuid}) }}" class="btn btn-primary">
+                                                <i class="fa fa-plus-circle"></i> Criar a primeira situação do edital
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+{% endblock %}

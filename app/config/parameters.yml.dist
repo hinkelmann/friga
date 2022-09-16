@@ -1,0 +1,18 @@
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: friga
+    database_user: friga
+    database_password: friga
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    fos_mailer_mail: friga@nte.ufsm.br
+    fos_mailer_username: Não Responder
+    mailer_password: null
+    secret: ff988b00db304143d374a04e4d1afbb0a
+    curl_user_agent: NTE-CROWLER-FROM-HELL
+    upload_dir: /var/www/friga_dados
+    upload_dir_usuario: /var/www/friga/web/
+    upload_mime_allow: [ "image/jpeg", "image/gif", "image/png", "image/bmp", "application/pdf", "text/plain"]
+

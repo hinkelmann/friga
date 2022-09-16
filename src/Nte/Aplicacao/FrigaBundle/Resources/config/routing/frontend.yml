@@ -1,0 +1,64 @@
+frontend_index:
+    path:     /
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:Default:index" }
+    methods:  GET
+
+frontend_inscricao_form:
+    path:     /inscricao
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:Default:inscricao" }
+    methods:  [GET, POST]
+
+#Arquivos
+frigaarquivo_upload:
+    path:     /inscricao/upload/{tipo}
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaArquivo:upload" }
+    methods:  [POST]
+
+frigaarquivo_remove_upload:
+    path:     /inscricao/remove/{id}/{hash}
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaArquivo:removeFile", id: null, hash: null }
+    methods:  [GET, POST]
+
+#Painel candidato
+frontend_inscricao_situacao:
+    path:     /candidato
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:Default:situacao" }
+    methods:  [GET, POST]
+
+#recurso do candidato
+frontend_inscricao_recurso:
+    path:     /candidato/recurso/{inscricao}
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaRecurso:recursoInterpor" }
+    methods:  [GET, POST]
+
+#recurso do candidato
+frontend_inscricao_recurso_recebido:
+    path:     /candidato/recurso-recebido
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaRecurso:recursoRecebido" }
+    methods:  [GET, POST]
+
+#download de arquivos
+frontend_arquivo_download:
+    path:     /download/{hash}/{id}
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaArquivo:downloadArquivoHash" }
+    methods:  [GET]
+    
+frontend_arquivo_remover:
+    path:     /remover/
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiDelete" }
+
+
+frontend_lista_fase1:
+    path:     /resultado-preliminar
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaClassificacao:resultadoFase", tipo: 0 }
+    methods:  [GET, POST]
+
+#frontend_selecionados_para_entrevista:
+#    path:     /selecionados-entrevista
+#    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaClassificacao:selecaoEntrevista" }
+#    methods:  [GET, POST]
+
+frontend_lista_fase2:
+    path:     /resultado-final
+    defaults: { _controller: "NteAplicacaoCadastrosBundle:FrigaClassificacao:resultadoFase", tipo: 1 }
+    methods:  [GET, POST]

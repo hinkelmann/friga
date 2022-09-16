@@ -1,0 +1,119 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends 'base.admin.html.twig' %}
+ {% block breadcumbsTitulo %}Perfil{% endblock %}
+ {% block breadcumbsItens %}
+     <li><span>Usuários</span></li>
+     <li><span>{{ usuario.nome }}</span></li>
+ {% endblock %}
+{% block conteudo %}
+    {% set roles = usuario.roles2 %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel-body">
+                <div class="thumb-info mb-md">
+                    <img src="{{ path('arquivo_download',{id: usuario.img}) }}"
+                         class="rounded img-responsive"
+                         alt="{{ usuario.nome }}">
+                </div>
+                <hr class="dotted short">
+                <ul class="list-unstyled">
+                    <li><i class="fa fa-user"></i> &nbsp; {{ usuario.nome }}</li>
+                    <li><i class="fa fa-envelope"></i> {{ usuario.email }} </li>
+                    <li>
+                        {% if usuario.contatoTelefone2 == null %}
+                            <i class="fa fa-phone"></i>      Não informado
+                        {% else %}
+                            <i class="fa fa-phone"></i>  {{ usuario.contatoTelefone2 }}
+                        {% endif %}
+                    </li>
+                    <li><i class="fa fa-whatsapp"></i>
+                        {% if usuario.contatoTelefone1 == null %}
+                            Não informado
+                        {% else %}
+                            {{ usuario.contatoTelefone1 }}
+                        {% endif %}</li>
+                    <li><i class="fa fa-lock"></i> Permissões
+                        <p>
+                        <ul>
+                            {% for e in usuario.roles %}
+                                <li>{{ roles[e] }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li></li>
+                    <li></li>
+                </ul>
+                {% if is_granted('ROLE_ADMIN_USER') %}
+                    <a class="btn btn-block btn-default"
+                       href="{{ path('nte_usuario_editar', {'id': usuario.id}) }}">
+                        <i class="fa fa-edit"></i> Editar
+                    </a>
+                {% endif %}
+                <hr class="dotted short">
+                <h6 class="text-muted"><i class="fa fa-clock-o"></i> Último Acesso</h6>
+                <p>
+                    {% if usuario.lastLogin == null %}
+                        Nunca acessou o sistema
+                    {% else %}
+                        {{ usuario.lastLogin|date('d/m/Y H:i') }}
+                    {% endif %}
+                </p>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('nte_admin_painel_homepage',{'_switch_user': usuario.username}) }}">Acessar Como</a>
+                {% endif %}
+                <hr class="dotted short">
+                <div class="social-icons-list">
+                    <a rel="tooltip" data-placement="bottom" href="http://{{ usuario.contatoTelefone1 }}"
+                       data-original-title="WhatsApp "><i class="fa fa-whatsapp"></i><span>WhatsApp</span></a>
+                    <a rel="tooltip" data-placement="bottom" href="mailto://{{ usuario.email }}"
+                       data-original-title="E-Mail"><i class="fa fa-envelope"></i><span>E-Mail</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            {% if  usuario.inscricao|length %}
+                {% set x=1 %}
+                {% for inscricao in usuario.inscricao|reverse %}
+                    {% if x==2 %}
+                        <div class="row">
+                    {% endif %}
+                    <a href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                        <div class="col-md-6">
+                            <div class="text-center {{ inscricao.objSituacao.cssAlert }}">
+                                <h5>{{ inscricao.idEdital.titulo }}</h5>
+                                {{ inscricao.uuid }} - {{ inscricao.objSituacao.descricao }}<br>
+                                {{ inscricao.registroDataCriacao|date('d/m/Y') }}
+                            </div>
+                        </div>
+                    </a>
+                    {% if x==2 %}
+                        </div>
+                        {% set x=1 %}
+                    {% else %}
+                        {% set x=x+1 %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="panel-body">
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none text-primary">
+                                            0
+                                            <i class="fa fa-user-plus text-primary"></i>
+                                        </h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br>Nenhuma <b> Inscrição</b> Realizada.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

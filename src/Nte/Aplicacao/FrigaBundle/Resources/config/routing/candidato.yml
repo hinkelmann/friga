@@ -1,0 +1,16 @@
+nte_usuario_candidato_homepage:
+  path:     /candidato/
+  defaults: { _controller: NteUsuarioBundle:Candidato:index }
+
+nte_usuario_candidato_inscricao:
+  path:     /candidato/inscricacao/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricao }
+
+nte_usuario_candidato_inscricao_projeto:
+  path:     /candidato/inscricao-projeto/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricaoProjeto }
+
+
+nte_usuario_candidato_inscricao_concluida:
+  path:     /candidato/inscricacao-concluida/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricaoConcluida }

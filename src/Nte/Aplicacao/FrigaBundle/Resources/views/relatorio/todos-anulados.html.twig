@@ -1,0 +1,48 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Relatório Inscrições Anuladas{% endblock %}
+{% block breadcumbsTitulo %} Relatório Inscrições Anuladas{% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('relatorio_index') }}"> Relatórios </a></span></li>
+    <li><span><a href="{{ path('relatorio_index') }}"> Editais </a></span></li>
+    <li><span><a href="#"> Inscrições Anuladas</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <section class="panel">
+            <div class="panel-body">
+                <table class="table table-hovered">
+                    <tr>
+                        <th width="140">N° de Inscrição</th>
+                        <th>Nome</th>
+                        <th class="hidden-xs">Vaga</th>
+                        <th class="hidden-xs">Edital</th>
+                        <th class="hidden-xs">Data</th>
+                    </tr>
+                    <tbody>
+                    {% for inscricao in inscricoes %}
+                        <tr>
+                            <td>{{ inscricao.uuid ~ "-" ~ inscricao.id }}
+                                <small class="visible-xs"><i class="fa fa-clock-o"></i>  {{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}</small>
+                            </td>
+                            <td class="text-uppercase">
+                                <a title="Clique aqui para visualizar as informações de contato do candidato"
+                                   href="{{ path('nte_usuario_perfil', {'id': inscricao.idUsuario.id}) }}">
+                                    <b class="text-uppercase">{{ inscricao.nome }}</b>
+                                </a>
+                                <small class="visible-xs"><i class="fa fa-map"></i> {{ inscricao.idCargo.descricao }}</small>
+                            </td>
+                            <td class="hidden-xs">{{ inscricao.idCargo.descricao }}</td>
+                            <td>
+                                <a href="{{ path('relatorio_anulados', {'uuid': inscricao.idEdital.uuid}) }}">
+                                    {{ inscricao.idEdital.titulo }}
+                                </a>
+                            </td>
+                            <td class="hidden-xs">{{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Resultado Final {% endblock %}
+{% block breadcumbsTitulo %} Resultado Parcial  {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('nte_aplicacao_friga_etapa_index',{edital: edital.id, tipo:4}) }}"> Resultados</a></span></li>
+    <li><span><a href="{{ path('nte_aplicacao_friga_etapa_index',{edital: edital.id}) }}"> {{ edital.uuid }}</a></span></li>
+    <li><span><a href="#"> Prévia </a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="panel-body">
+            <strong>Prévia dos resultados </strong><br>
+            Na prévia de resultados, os critérios de desempate definidos em edital,
+            não serão  aplicados no ranqueamento da listagem de  classificação.
+        </div>
+        <br><br>
+        {% for chave, lista in classificao %}
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th {% if edital.modeloInscricao == 1 %}colspan="3" {% else%} colspan="2"{% endif%} class="text-primary">
+                            <i class="icon icon-trophy"></i> &nbsp;
+                            {{ lista.nome }}
+                        </th>
+                        <th class="text-center b b1 b3" colspan="{{ edital.pontuacaoCategoriaPeso.count + 1 }}">
+                            Pontuação
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th width="10">Inscrição</th>
+                        {% if edital.modeloInscricao == 1 %}
+                            <th>Projeto</th>
+                            <th>Participantes</th>
+                        {% else %}
+                        <th>Nome</th>
+                        {% endif %}
+                        {% for p in edital.pontuacaoCategoriaPeso %}
+                            <th width="70"
+                                    class="{% if loop.first %}b1{% else %}b2{% endif %} text-center c">
+                                {{ p.descricao }}
+                            </th>
+                        {% endfor %}
+                        <th width="70" class="b3 text-center c">
+                            Total
+                        </th>
+                        <th width="10" class="text-center">Posição</th>
+                        <th width="70" class="text-center">Situação</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set posicao =1 %}
+                    {% for inscricao in lista.classificacao %}
+                        {% if inscricao.idSituacao != 3 and inscricao.idSituacao != 1 %}
+                            <tr>
+                                <td width="10">{{ inscricao.uuid }}</td>
+
+                                {% if edital.modeloInscricao == 1 %}
+                                    <td>
+
+                                        <a title="{{ inscricao.idCargo.descricao }}{% if inscricao.idCota %}/{{ inscricao.idCota.descricao }}{% endif %}"
+                                           href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                                            <b class="text-uppercase">{{ inscricao.projetoTitulo }}</b> </a>
+                                    </td>
+                                    <td>
+                                        {% for p in inscricao.idProjetoParticipante %}
+                                            {{ p.nome }}<br>
+                                        {% endfor %}
+                                    </td>
+                                {% else %}
+                                    <td>
+
+                                        <a title="{{ inscricao.idCargo.descricao }}{% if inscricao.idCota %}/{{ inscricao.idCota.descricao }}{% endif %}"
+                                           href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                                            <b class="text-uppercase">{{ inscricao.nome }}</b> </a>
+                                    </td>
+                                {% endif %}
+                                {% for p in edital.pontuacaoCategoriaPeso %}
+                                    <td width="70"
+                                        class="{% if loop.first %}b1{% else %}b2{% endif %} text-center ">
+                                        {{ inscricao.pontuacaoSoma(true,p) }}
+
+                                    </td>
+                                {% endfor %}
+                                <td width="70" class="b3 text-center">{{ inscricao.pontuacaoSoma(true) }}</td>
+                                <td width="10" class="text-center">{{ posicao }}°</td>
+                                <td width="10" class="text-right">
+                                    <div class="{{ inscricao.objsituacao.css }}">
+
+                                        <i class="{{ inscricao.objsituacao.icone }}"></i>
+                                        {{ inscricao.objsituacao.descricao }}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set posicao=posicao+1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for inscricao in lista.classificacao %}
+                        {% if inscricao.idSituacao == 3 or inscricao.idSituacao == 1 %}
+                            <tr>
+                                <td width="10">{{ inscricao.uuid }}</td>
+                                <td>
+                                    <a title="Clique aqui para visualizar as informações de contato do candidato"
+                                       href="{{ path('relatorio_perfil', {'id': inscricao.id}) }}">
+                                        <b class="text-uppercase">{{ inscricao.nome }}</b> </a>
+                                </td>
+                                {% for p in edital.pontuacaoCategoriaPeso %}
+                                    <td width="70"
+                                        class="{% if loop.first %}b1{% else %}b2{% endif %} text-center ">
+                                        {{ inscricao.pontuacaoSoma(true,p) }}
+                                    </td>
+                                {% endfor %}
+                                <td width="70" class="b3 text-center">{{ inscricao.pontuacaoSoma(true) }}</td>
+                                <td width="10" class="text-center">--</td>
+                                <td width="10" class="text-right">
+                                    <div class="{{ inscricao.objsituacao.css }}">
+                                        <i class="{{ inscricao.objsituacao.icone }}"></i>
+                                        {{ inscricao.objsituacao.descricao }}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+                    {% if lista.classificacao.count<1 %}
+                        <tr>
+                            <td colspan="5">Nenhum candidato classificado.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+
+                <div class="col-md-8 text-left">
+                    <b>
+                        Cálculo da pontuação:
+                        {% for p in edital.pontuacaoCategoriaPeso %}
+                            ({{ p.descricao }}) x {{ p.valorMaximo+0 }}  {% if loop.last == 0 %} + {% endif %}
+                        {% endfor %}
+                        = (Pontuação Total)
+                    </b>
+                </div>
+                {#<a href="{{ path('frigaclassificacao_lista_polos_impressao',{id: frigaPolo.id}) }}" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Imprimir</a>#}
+            </div>
+            <br><br>
+        {% endfor %}
+    </div>
+    <style>
+        .table > thead > tr > .b {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .table > thead > tr > .c {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .b {
+            border-top: 1px solid #c7d5de;
+        }
+
+        .table > tfoot > tr > .d {
+            border-bottom: 1px solid #c7d5de;
+        }
+
+        .b1 {
+            border-left: 1px solid #c7d5de;
+        }
+
+        .b3 {
+            border-right: 1px solid #c7d5de;
+        }
+
+        .b1, .b2, .b3 {
+            background-color: #E3F2FD;
+            border-bottom: 0px;
+        }
+    </style>
+{% endblock %}
+{% block javascripts2 %}
+    <script>
+        $('select').select2({
+            width: '100%',
+        });
+    </script>
+{% endblock %}

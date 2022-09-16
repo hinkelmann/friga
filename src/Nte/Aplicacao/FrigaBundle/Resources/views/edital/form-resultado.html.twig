@@ -1,0 +1,35 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edital N° {{ frigaedital.titulo }}/Configuração de Resultados{% endblock %}
+{% block breadcumbsTitulo %}Configuração de Edital/Resultados {% endblock %}
+{% block conteudo %}
+    {{ form_start(config_form) }}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-10">
+            <section class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    Resultados
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-primary pull-right" type="submit">
+                        <i class="fa fa-save"></i> Salvar
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+    {{ form_end(config_form) }}
+{% endblock %}

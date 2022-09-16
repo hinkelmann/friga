@@ -1,0 +1,130 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Resultado Final {% endblock %}
+{% block breadcumbsTitulo %} Resultado Final {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('frigacrelatorio_index') }}"> Relatórios</a></span></li>
+    <li><span><a href="{{ path('frigacrelatorio_resultado_final') }}"> Resultado Final</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <section class="panel">
+            <div class="panel-body">
+                {% for key,frigaAvalicao in frigaAvaliacoes %}
+                    <section id="{{ key }}">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th colspan="4" class="text-primary"><i class="fa fa-map"></i> Polo {{ key }}</th>
+                            </tr>
+                            <tr class="hidden-xs">
+                                <th>N° Inscrição</th>
+                                <th>Nome</th>
+                                <th class="text-center">Situação</th>
+                                <th class="text-center">Pontuação</th>
+                                <th class="text-center" >Posição</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% set classificados =0 %}
+                            {% for frigaPessoa in frigaAvalicao %}
+                                {% if frigaPessoa.idSituacao >= 1%}
+                                    {% set classificados =1 %}
+                                <tr class="visible-xs">
+                                    {% if frigaPessoa.idSituacao >=1 %}
+                                    <td width="10" class="text-center">{{ loop.index }}°</td>
+                                    {% else %}
+                                    <td width="10" class="text-center">--</td>
+                                    {% endif %}
+                                    <td class="text-uppercase"><a><b>{{ frigaPessoa.nome }}</b></a><br>
+                                        {% if frigaPessoa.idSituacao == -10 %}
+                                            <small class=""><i class="fa fa-user-times"></i>
+                                                Desclassificado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == -1 %}
+                                            <small class="">
+                                                <i class="fa fa-minus-circle"></i>
+                                                Não Homologado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 0 %}
+                                            <small class="">
+                                                <i class="fa fa-times"></i>
+                                                Não avaliado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 1 %}
+                                            <small class="">
+                                                <i class="fa fa-user-plus"></i>
+                                                Homologado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 2 %}
+                                            <small class="">
+                                                <i class="fa fa-user-plus"></i>
+                                                Não Entrevistado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 3 %}
+                                            <small class="">
+                                                <i class="fa fa-user-plus"></i>
+                                                Classificado
+                                            </small>
+                                        {% endif %}
+                                        <small><i class="fa fa-trophy"></i> {{ frigaPessoa.pontuacaoTotal }} Pontos</small>
+                                    </td>
+                                </tr>
+                                <tr class="hidden-xs">
+                                    <td width="10">{{ frigaPessoa.uuid }}</td>
+                                    <td><b>{{ frigaPessoa.nome }}</b></td>
+                                    <td width="10" class="text-center">
+                                        {% if frigaPessoa.idSituacao == -10 %}
+                                            <small class="label label-danger"><i class="fa fa-user-times"></i>
+                                                Desclassificado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == -1 %}
+                                            <small class="label label-danger">
+                                                <i class="fa fa-minus-circle"></i>
+                                                Não Homologado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 0 %}
+                                            <small class="badge">
+                                                <i class="fa fa-times"></i>
+                                                Não avaliado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 1 %}
+                                            <small class="label label-primary">
+                                                <i class="fa fa-user-plus"></i>
+                                                Homologado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 2 %}
+                                            <small class="label label-primary">
+                                                <i class="fa fa-user-plus"></i>
+                                                Não Entrevistado
+                                            </small>
+                                        {% elseif frigaPessoa.idSituacao == 3 %}
+                                            <small class="label label-success">
+                                                <i class="fa fa-user-plus"></i>
+                                                Classificado
+                                            </small>
+                                        {% endif %}
+                                    </td>
+                                    <td width="10" class="text-center">
+                                        {{ frigaPessoa.pontuacaoTotal }}
+                                    </td>
+                                    {% if frigaPessoa.idSituacao >=1 %}
+                                        <td width="10" class="text-center">{{ loop.index }}°</td>
+                                    {% else %}
+                                        <td width="10" class="text-center">--</td>
+                                    {% endif %}
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                            {% if classificados == 0 %}
+                                <tr>
+                                    <td colspan="5">Nenhum candidato classificado nesta cidade.</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </section>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

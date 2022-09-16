@@ -1,0 +1,363 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
+{% block breadcumbsTitulo %}Configuração de Edital {% endblock %}
+{% block conteudo %}
+    {{ form_start(config_form) }}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-10">
+            <div class="panel">
+                <div class="panel-body text-right">
+                    <a class="btn btn-default"
+                       title="Clique aqui para ver o fomulário de inscrição"
+                       target="_blank"
+                       href="{{ path('nte_usuario_candidato_inscricao',{'uuid': frigaedital.uuid}) }}">
+                        <i class="fa fa-list-ol"></i> Pré-Visualização
+                    </a>
+                </div>
+            </div>
+            <section class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info4) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info4) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info5) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info5) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info6) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info6) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info7) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info7) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info8) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info8) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info9) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info9) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info13) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info13) }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo3) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo3) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info10) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info10) }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                <h4>Configurações do projeto</h4>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.projetoParticipanteMin) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.projetoParticipanteMin) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.projetoParticipanteMax) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.projetoParticipanteMax) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo4) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo4) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info11) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info11) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info12) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info12) }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.tipoInscricao) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.tipoInscricao) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.tipoInscricaoLimite) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.tipoInscricaoLimite) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.modeloInscricao) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.modeloInscricao) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.permitirEstrangeiro) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.permitirEstrangeiro) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo0) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo0) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc13) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc13) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo1) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo1) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo2) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo2) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc0) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc0) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc1) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc1) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc2) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc2) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc3) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc3) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc14) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc14) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc15) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc15) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc4) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc4) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc8) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc8) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc5) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc5) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc9) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc9) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc6) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc6) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc7) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc7) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc10) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc10) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc11) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc11) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.doc12) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.doc12) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.campoCargoTitulo) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.campoCargoTitulo) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.campoListaTitulo) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.campoListaTitulo) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 text-right">
+                    <br>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i> Salvar
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+    {{ form_end(config_form) }}
+{% endblock %}

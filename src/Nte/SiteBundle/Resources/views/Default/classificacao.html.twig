@@ -1,0 +1,228 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} {{ edital.titulo }}{% endblock %}
+{% block metaDescricao %} {{ edital.sobre }}{% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>{{ edital.titulo }}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        <div class="row mb-xl">
+            {% if classificacao.count %}
+                {% if edital.resultado3 == 0 and (edital.resultado2 ==1 or edital.resultado1 ==1 or edital.resultado0 == 1) %}
+                <div class="col-md-3">
+                    <h2 class="mb-xl">Lista de <strong> vagas </strong></h2>
+                    <ul class="list list-icons list-primary list-borders" id="mainNav">
+                        {% for chave, lista in classificacao %}
+                            <li>
+                                <a href="#{{ chave }}" data-hash data-hash-offset="70">
+                                    <h4><i class="fa fa-map-marker"></i></h4> {{ lista.nome }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                    {% endif %}
+                <div class="{% if edital.resultado3 == 0 and (edital.resultado2 ==1 or edital.resultado1 ==1 or edital.resultado0 == 1) %} col-md-9 {% else %} col-md-12 {% endif %}">
+                    <h2 class="mb-xl">Lista de <strong>Candidatos</strong></h2>
+                    <h4>{{ etapa.descricao }}</h4>
+                    {{ etapa.observacao|raw }}
+                    {% for chave, lista in classificacao %}
+                        <div class="panel-body" id="{{ chave }}">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="5" class="text-primary">
+                                        <i class="icon icon-trophy"></i> &nbsp;
+                                        {{ lista.nome }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th width="10" class="text-center">Classificação</th>
+                                    <th width="10">Inscrição</th>
+                                    {% if edital.modeloInscricao == 1 %}
+                                        <th>Projeto</th>
+                                        <th>Participantes</th>
+                                    {% else %}
+                                        <th>Nome</th>
+                                    {% endif %}
+                                    <th width="10" class="text-center">Situação</th>
+                                    <th width="70" class="b1 b2 b3 text-center c">
+                                        Pontuação
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for cc in lista.classificacao %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {% if cc.posicao == 999999 %}
+                                                -
+                                            {% else %}
+                                                {{ cc.posicao }}°
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('nte_site_edital_pontuacao_candidato', {'inscricao':  cc.idInscricao.uuid, 'edital': edital.uuid}) }}">
+                                                {{ cc.idInscricao.uuid }}
+                                            </a>
+                                        </td>
+                                        {% if edital.modeloInscricao == 1 %}
+                                            <td>
+                                                <a href="{{ path('nte_site_edital_pontuacao_candidato', {'inscricao':  cc.idInscricao.uuid, 'edital': edital.uuid}) }}">
+                                                    <b class="text-uppercase">{{ cc.idInscricao.projetoTitulo }}</b>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {% for p in cc.idInscricao.idProjetoParticipante %}
+                                                    {{ p.nome }}<br>
+                                                {% endfor %}
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                <b class="text-uppercase">
+                                                    <a href="{{ path('nte_site_edital_pontuacao_candidato', {'inscricao':  cc.idInscricao.uuid, 'edital': edital.uuid}) }}">
+                                                        {{ cc.idInscricao.nome }}
+                                                    </a>
+                                                </b>
+                                            </td>
+                                        {% endif %}
+                                        <td class="text-right">
+                                            <div class="{{ cc.objsituacao.css }}">
+                                                <i class="{{ cc.objsituacao.icone }}"></i>
+                                                {{ cc.objsituacao.descricao }}
+                                            </div>
+                                        </td>
+
+                                        <td class="b1 b2 b3 text-center">
+                                            {% if cc.posicao == 999999 %}
+                                                -
+                                            {% else %}
+                                                {{ cc.valor+0 }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                {% if lista.classificacao.count<1 %}
+                                    <tr>
+                                        <td colspan="5">Nenhum candidato classificado.</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        Cálculo da pontuação:<br>
+                                        {% for p in edital.pontuacaoCategoriaPeso %}
+                                            ({{ p.descricao }}) x {{ p.valorMaximo+0 }}  {% if loop.last == 0 %} + {% endif %}
+                                        {% endfor %}
+                                        = (Pontuação Total)
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <br><br>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <section class="body-error error-inside">
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                        0 <i class="fa fa-trophy text-primary"></i></h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br><b>Nenhum candidato </b> classificado até o momento.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block rodape %}
+    <footer class="short" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Dúvidas sobre este edital</h4>
+                    <p class="text-weight-bold">
+                        {{ edital.info3|raw }}
+                    </p>
+                    <hr class="light">
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Inscrições </h5>
+                    <i class="fa fa-calendar"> </i> &nbsp;
+                    <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                    <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <h5 class="mb-sm">Resultado Final </h5>
+                    <i class="fa fa-calendar"> </i>
+                    &nbsp; {{ edital.resultadoFinal.dataDivulgacao is defined? edital.resultadoFinal.dataDivulgacao|date('d/m/Y'):"Não informado" }}
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1">
+                        <a href="{{ path('nte_site_homepage') }}" class="logo">
+                            <img alt="" class="img-responsive"
+                                 src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                        </a>
+                    </div>
+                    <div class="col-md-11">
+                        <p>Núcleo de Tecnologia Educacional </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <style>
+        .table > thead > tr > .b {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .table > thead > tr > .c {
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+
+        .b {
+            border-top: 1px solid #c7d5de;
+        }
+
+        .table > tfoot > tr > .d {
+            border-bottom: 1px solid #c7d5de;
+        }
+
+        .b1 {
+            border-left: 1px solid #c7d5de;
+        }
+
+        .b3 {
+            border-right: 1px solid #c7d5de;
+        }
+
+        .b1, .b2, .b3 {
+            background-color: #E3F2FD;
+            border-bottom: 0px;
+        }
+    </style>
+{% endblock %}

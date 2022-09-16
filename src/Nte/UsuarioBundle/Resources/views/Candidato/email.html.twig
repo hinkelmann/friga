@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Inscrição Realizada com sucesso</title>
+</head>
+<body>
+<div style="padding:10px">
+    <h1>Sua inscrição foi realizada com sucesso!</h1>
+    <p>
+        Prezado(a) {{ inscricao.nome }}<br>
+        Informamos que a sua inscrição foi realizada com sucesso.<br><br>
+        Número de Inscrição: <b style="color:#08c; font-size: large;">{{ inscricao.uuid }}</b><br>
+    </p>
+    <p>O candidato deverá acompanhar, no sistema de inscrição
+        <a href="https://processoseletivo.nte.ufsm.br">https://processoseletivo.nte.ufsm.br</a>,
+        a relação de candidatos homologados, conforme cronograma estabelecido em edital.</p>
+    <table class="spacer">
+        <tbody>
+        <tr>
+            <td height="16px" style="font-size:16px;line-height:16px;">
+                &#xA0;
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div style=" background: #E1F5FE;border: 1px solid #c6d7df;color: #000000de; width: 96%; display: block; float:left; padding: 10px;">
+        <div style="width: 48%; display: block;float: left;">
+            <p><strong>Nome completo</strong><br>{{ inscricao.nome }}</p>
+            <p><strong>Data de Nascimento </strong><br>{{ inscricao.dataNascimento|date('d/m/Y') }}</p>
+            <p><strong> CPF</strong><br>{{ inscricao.cpf }}</p>
+            <p><strong> RG</strong><br>{{ inscricao.rgNro }}- {{ inscricao.rgOrgaoExpedidor }}</p>
+            <p><strong>Celular </strong><br>{{ inscricao.contatoTelefone1 }}</p>
+            <p><strong>Telefone</strong><br>{{ inscricao.contatoTelefone2 }}</p>
+            <p><strong> E-Mail</strong><br>{{ inscricao.contatoEmail }}</p>
+        </div>
+        <div style="width: 48%; display: block;float: left;">
+            <p>
+                <strong>Endereço</strong><br>
+                Logradouro:{{ inscricao.enderecoLogradouro }}, N° {{ inscricao.enderecoNumero }}
+                <br>{{ inscricao.enderecoComplemento }}<br>
+                Bairro: {{ inscricao.enderecoBairro }}<br>
+                Cidade: {{ inscricao.enderecoMunicipio }}<br>
+                Estado: {{ inscricao.enderecoUf }}<br>
+                CEP: {{ inscricao.enderecoCep }}
+            </p>
+            <p>
+                <strong> {{ inscricao.idEdital.campoCargoTitulo??"Em qual cargo você está interessado??" }}</strong><br>
+                {{ inscricao.idCargo?inscricao.idCargo.descricao:"--" }}
+            </p>
+            <p>
+                <strong> {{ inscricao.idEdital.campoListaTitulo??"Em qual situação você se encaixa??" }}</strong><br>
+                {{ inscricao.idCota?inscricao.idCota.descricao: "--" }}
+            </p>
+            <p>
+                <strong>
+                    <b style="font-size: large;">{{ inscricao.idEdital.titulo }}</b>
+                </strong>
+            </p>
+        </div>
+    </div>
+    <table class="spacer">
+        <tbody>
+        <tr>
+            <td height="16px" style="font-size:16px;line-height:16px;">
+                &#xA0;
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    {% if inscricao.idEdital.pontuacaoCategoria|length %}
+        <table width="100%" cellpadding="4" style="border-bottom: 10px;">
+            <thead>
+            <tr>
+                <th >Pontuação</th>
+                <th style="text-align: left">Valor Máximo</th>
+                <th style="text-align: left">Valor Informado</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for categoria in inscricao.idEdital.pontuacaoCategoria %}
+                {% if categoria.pontuacaoInscricao|length %}
+                    {% for p in categoria.pontuacaoInscricao %}
+                        <tr>
+                            <td>
+                                {{ p.titulo }}
+                            </td>
+                            <td>
+                                {{ p.valorMaximo+0 }}
+                                {{ p.valorTexto }}
+                            </td>
+                            <td class="text-right" style="color: #0a6aa1;">
+                                {{ inscricao.pontuacaoItem(p.id)?inscricao.pontuacaoItem(p.id).valorInformado + 0:0 }}
+                                {{ p.valorTexto }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <hr>
+    <h4>
+        {{ inscricao.idEdital.titulo }}
+    </h4>
+    <p style="text-align: justify;">
+        {{ inscricao.idEdital.sobre }}
+    </p>
+    <table width="100%">
+        <tr>
+            <td class="small-12 large-3 columns first">
+                <img src="https://nte.ufsm.br/images/marca_apenas_siglas.png" alt="Marca NTE" width="200">
+            </td>
+            <td width="50%" style="text-align: right;">
+                <p>
+                    {{ inscricao.idEdital.info3|raw }}
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

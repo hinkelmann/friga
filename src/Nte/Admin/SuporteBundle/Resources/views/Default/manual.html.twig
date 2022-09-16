@@ -1,0 +1,519 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Manual do Sistema{% endblock %}
+ {% block breadcumbsTitulo %}Manual do Sistema{% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="{{ path('nte_suporte_homepage') }}"> Manual </a></span></li>
+     <li><span><a href="{{ path('nte_suporte_sobre') }}"> Manual</a></span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="container-fluid">
+        <div class=row>
+            <div class="panel">
+                <div class="panel-body">
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                            <i class="fa fa-circle-o-notch text-primary"></i></h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br><b>Manual da FRIGA 1.0</b> <br>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul class="list-unstyled">
+                                        <li class="">
+                                            <i class="fa fa-chevron-right"></i>
+                                            <a href=#visao-geral> Visão geral</a>
+                                        </li>
+                                        <li class="">
+                                            <i class="fa fa-chevron-right"></i>
+                                            <a href=#processo-homologacao> Processo de Homologação </a>
+                                        </li>
+                                        <li class="">
+                                            <i class="fa fa-chevron-right"></i>
+                                            <a href=#processo-entrevista> Processo de Entrevista</a>
+                                        </li>
+                                        <li class="">
+                                            <i class="fa fa-chevron-right"></i>
+                                            <a href=#processo-recursos> Processo de Avaliação de Recursos</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="" role=main>
+                <div id="manual"></div>
+                <div id="visao-geral">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/001.png') }}" class="img-responsive">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Visão Geral do Sistema</h3>
+                                <p>Esta é a tela principal sistema. Esta tela é segmentada em três blocos onde
+                                    são visualizadas as principais ações que o usuário pode executar no sistema bem como
+                                    as datas importantes do edital vigente. </p>
+                                <ul>
+                                    <li>Aplicativos</li>
+                                    <li>Contadores</li>
+                                    <li>Datas Importantes</li>
+                                    <li>Menus</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/011.png') }}" class="img-responsive center-block">
+                                    <p>Menu Lateral Retraído</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/010.png') }}" class="img-responsive center-block">
+                                    <p>Menu Lateral Expandido</p>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <h3>Menus do Sistema</h3>
+                                <p>
+                                    Este sistema é composto por dois menus. Um menu a esqueda, que pode ser expandido ou
+                                    retraido, afim de proporcionar maior conforto visual e um
+                                    menu lateral oculto a direita.
+                                </p>
+                                <ul>
+                                    <li><b>Menu  lateral da esquerda</b> - Este menu contém os módulos principais que o usuário
+                                        tem acesso.
+                                    </li>
+                                    <li><b>Menu lateral oculto da Direita</b> - Este menu contém a relação de todos os usuários do
+                                        cadastrados.
+                                    </li>
+                                </ul>
+                                <br>
+                                <ul>
+                                    <li>
+                                        <a class="btn btn-dark"><i class="fa fa-bars"></i></a>  Este botão, ao ser clicado, faz com que
+                                        o menu lateral a esquerda se reatraia ou se expanda.<br><br>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-dark"><i class="fa fa-chevron-left"></i></a>  Este botão, ao
+                                        ser clicado, mostra ou oculta o menu lateral da direita com os usuários do sistema.<br>
+                                    </li>
+                                </ul>
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <img src="{{ asset('manual/012.png') }}" class="img-responsive center-block">
+                                        <p>Menu Oculto</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <img src="{{ asset('manual/013.png') }}" class="img-responsive center-block">
+                                        <p>Menu Visível</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-md-6">
+                                <h3>Bloco de Aplicativos</h3>
+                                <p>Esta bloco contém os principais aplicativos que você possui acesso.</p>
+                                <ul>
+                                    <li><b>Homologação</b> - Módulo responsável pela homologação de inscrições de cada
+                                        candidato inscrito.
+                                    </li>
+                                    <li><b>Entrevista</b> - Módulo responsável por registrar a nota da entrevista do
+                                        candidato.
+                                    </li>
+                                    <li><b>Recursos</b> - Módulo responsável pela avaliação de recursos interpostos
+                                        pelos
+                                        candidatos.
+                                    </li>
+                                    <li><b>Classificação</b> - Módulo responsável pelo relatório com os candidatos
+                                        classificados
+                                        no processo seletivo.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/002.png') }}" class="img-responsive">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/008.png') }}" class="img-responsive">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Bloco de Contadores</h3>
+                                <p>Esta bloco contém os principais contadores do sistema.</p>
+                                <ul>
+                                    <li><b>Candidatos</b> - Mostra a quantidade total de candidatos inscritos no
+                                        processo seletivo.
+                                    </li>
+                                    <li><b>Avaliados</b> - Mostra a quantidade total e a quantidade de homologações
+                                        realizadas no sistema.
+                                    </li>
+                                    <li><b>Entrevistados</b> - Mostra a quantidade total de candidatos que foram
+                                        entrevistados e classificados.
+                                    </li>
+                                    <li><b>Recursos</b> - Mostra a quantidade total de recursos interpostos disponíveis
+                                        para o avaliador.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-md-6">
+                                <h3>Bloco de Datas Importantes</h3>
+                                <p>Esta bloco contém as datas importantes para o sistema, com base no edital vigente.
+                                    Estas datas definem os períodos que avalidor deverá realizar suas ações dentro do
+                                    sistema.
+                                </p>
+
+                                <ul>
+                                    <li><b>Homologação</b> - Período que o avaliador deve homologar as inscrições.</li>
+                                    <li><b>1° avaliação de recursos</b> - Período que o avaliador deve analisar os
+                                        recursos da fase de homologação.
+                                    </li>
+                                    <li><b>Entrevista</b> - Período que o avaliador deve registrar entrevistas.</li>
+                                    <li><b>2° avaliação de recursos</b> - Período que o avaliador deve analisar os
+                                        recursos da fase final do processo.
+                                    </li>
+                                    <li><b>Resultado Final</b> - Data que o resultado final ficará disponível para os
+                                        candidatos.
+                                    </li>
+                                </ul>
+                                <p class=""><br>Lembre-se - Nenhum avaliador conseguirá registrar suas ações fora do
+                                    período
+                                    estipulado, ou seja, se o avaliador deixar de realizar a homologação ou deixar de
+                                    registrar entrevista,
+                                    no prazo estipulado em edital, sistema não deixará registrar em outra data.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/009.png') }}" class="img-responsive">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/003.png') }}" class="img-responsive">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Homologação </h3>
+                                <p>Esta é a tela principal do módulo de homologação de inscrições. É através desta tela
+                                    que é possível homologar a inscrição de cada candidato, bem como, validar seus
+                                    respectivos pontos informados no ato da inscrição.
+                                </p>
+                                <p>As principais funcionalidades deste módulo são</p>
+                                <ul>
+                                    <li>Conferência dos documentos submetidos no ato de inscrição</li>
+                                    <li>Validação da pontuação informada pelo candidato no ato da inscrição</li>
+                                    <li>Alterar a situação da inscrição do candidato</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel" id="processo-homologacao">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <h3>Processo de Homologação de Inscrições</h3>
+                                <p>Este processo consiste em validar a documentação enviada pelo candidato no ato de
+                                    inscrição bem como validar sua respectiva pontuação.</p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/003.png') }}" class="img-responsive center-block">
+                                    <p>Tela Principal do módulo de homologação.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <br>
+                                <h4><b>Para homologar uma inscrição siga os seguintes passos:</b></h4>
+
+                                <ol>
+                                    <li>Na tela principal do modulo de homologação, localize o botão
+                                        <a class="btn btn-sm btn-default"><i class="fa fa-check-square-o"></i><br>Homologar</a>
+                                        ao lado direito ao nome do candidato e em seguida clique neste botão.
+                                    </li>
+                                    <li>
+                                        Ao clicar no botão <a class="btn btn-sm btn-default"><i
+                                                    class="fa fa-check-square-o"></i><br>Homologar</a>
+                                        você será redirecionado para uma tela que é divida em três etapas.
+                                        A cada etapa o avaliador deverá analisar informações prestadas pelo candidato.
+                                        <br><br>
+                                    </li>
+                                    <li>Na <a href="#etapa1-homologacao">etapa 1</a>, onde constam as informações do
+                                        candidato,
+                                        deverão ser analisados as cópias em anexo da <b>carteira de
+                                            identidade</b>,<b>CPF</b>
+                                        e <b>comprovante de residência </b>, com intuíto de identificar a identidade do
+                                        usuário e validar residência do candidato. Após isso, o avaliador deverá clicar
+                                        no
+                                        botão
+                                        <a href="#etapa2-homologacao" class="btn btn-default btn-small"> Próximo <i
+                                                    class="fa fa-angle-right"></i></a>,
+                                        localizado no canto inferior direito da tela, para ir para a próxima etapa do
+                                        processo de
+                                        homologação.<br><br><br>
+                                    </li>
+                                    <li>Na <a href="#etapa2-homologacao">etapa 2</a>, onde constam os anexos da
+                                        documentação obrigatória e dos documentos comprobatórios da pontuação informada
+                                        pelo candidato submetidos no ato da inscrição, o avaliador deverá efetuar
+                                        download de cada documento disposto nesta etapa e em seguida, avaliar cada
+                                        documento. <br>
+                                        O padrão do sistema é não aceitar nenhum documento e não considerar a nota
+                                        informada pelo candidato.
+                                        A cada documento analisado pelo avaliador e que seja válido, o avaliador deverá
+                                        alterar no sistema a situação do documento para que a pontuação seja
+                                        considerada.
+                                        (A pontuação do candidato é automáticamente calculada pelo sistema).
+                                        <br>
+                                        Para alterar a situação do documento, o avaliador deverá clicar em
+                                        <a href="#etapa2-homologacao" class="btn btn-danger">Não Aceito</a> para alterar
+                                        a situação para
+                                        <a href="#etapa2-homologacao-b" class="btn btn-success">Aceito</a>.
+                                        <br>
+                                        <h4>Lembre-se: A pontuação do candidato só será considerada se o avaliador der o
+                                            <B>ACEITO</B> no documento comprobatório, caso contrário, a pontução do
+                                            candidato permanecerá em <b>0</b> Ponto no item em questão.
+                                        </h4>
+                                        Após avaliar cada documento anexo pelo candidato, o avaliador deverá clicar no
+                                        botão
+                                        <a href="#etapa3-homologacao" class="btn btn-default btn-small"> Próximo
+                                            <i class="fa fa-angle-right"></i></a>, localizado no canto inferior direito
+                                        da tela, para ir para a última etapa do processo de
+                                        homologação da inscrição do candidato.<br><br><br><br>
+                                    </li>
+                                    <li>Na <a href="#etapa3-homologacao">etapa 3</a>, última etapa do processo de
+                                        homologação,
+                                        o avaliador deverá definir a situação da inscrição do candidato e se necessário,
+                                        lançar um feedback para o candidato.
+                                        <br>
+                                        O avaliador poderá definir as seguintes situações:<br>
+                                        <ul>
+                                            <li><b>Homologado </b> - Quando o candidato atende a todos os requisistos do
+                                                edital vigente e a documentação obrigatória em anexo está de acordo.
+                                            </li>
+                                            <li><b>Não Homologado </b> - Quando algum documento comprobatório da
+                                                pontuação do candidato está ilegível.
+                                            </li>
+                                            <li><b>Desclassificado </b> - Quando o candidato não atende os requisitos
+                                                mínimos do edital vigente.
+                                            </li>
+                                        </ul>
+                                        <br>
+                                        Após ter definido a situação do candidato, o avalidor deverá clicar no botão
+                                        <a href="#etapa2-homologacao" class="btn btn-default btn-small">
+                                            <i class="fa fa-save"></i> Salvar Avaliação</a>,
+                                        localizado no canto inferior direito, para que processo de
+                                        homologação seja finalizado.<br>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="col-md-12" id="etapa1-homologacao">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/004.png') }}" class="img-responsive  center-block">
+                                    <p>Etapa 1 - Processo de homologação de candidato</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="etapa2-homologacao">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/005.png') }}" class="img-responsive  center-block">
+                                    <p>Etapa 2 - Avaliação dos documentos comprobatórios - Esta tela demonstra que
+                                        nenhum
+                                        documento foi aceito pelo avaliador</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="etapa2-homologacao-b">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/006.png') }}" class="img-responsive center-block">
+                                    <p>Etapa 2 - Avaliação dos documentos comprobatórios - Esta tela demonstra que
+                                        apenas um
+                                        documento foi aceito pelo avaliador</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="etapa3-homologacao">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/007.png') }}" class="img-responsive center-block">
+                                    <p>Etapa 3 - Situação da inscrição e feedback para o candidato</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel" id="processo-entrevista">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <h3>Processo de Entrevista</h3>
+                                <p>
+                                    Este processo é realizado em duas etapas. Na primeira etapa, o avalidor deverá
+                                    agendar um horário e um local para que o candidato seja entrevistado. Na etapa seguinte,
+                                    o avaliador confere se a documentação submetida no ato de inscrição do candidato confere
+                                    com a original e registra a pontuação relativa a entrevista com o candidato.
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/014.png') }}" class="img-responsive center-block">
+                                    <p>Tela Principal do módulo de entrevista.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <br>
+                                <h4><b>Para agendar uma entrevista siga os seguintes passos:</b></h4>
+                                <ol>
+                                    <li>Na tela principal do modulo de entrevista, localize o botão
+                                        <a class="btn btn-sm btn-default"><i class="fa fa-check-square-o"></i><br>Homologar</a>
+                                        ao lado direito ao nome do candidato e em seguida clique neste botão.
+                                    </li>
+                                    <li>
+                                        Ao clicar no botão <a class="btn btn-sm btn-default"><i
+                                                    class="fa fa-check-square-o"></i><br>Homologar</a>
+                                        você será redirecionado para uma tela que é divida em três etapas.
+                                        A cada etapa o avaliador deverá analisar informações prestadas pelo candidato.
+                                        <br><br>
+                                    </li>
+                                    <li>Na <a href="#etapa1-homologacao">etapa 1</a>, onde constam as informações do
+                                        candidato,
+                                        deverão ser analisados as cópias em anexo da <b>carteira de
+                                            identidade</b>,<b>CPF</b>
+                                        e <b>comprovante de residência </b>, com intuíto de identificar a identidade do
+                                        usuário e validar residência do candidato. Após isso, o avaliador deverá clicar
+                                        no
+                                        botão
+                                        <a href="#etapa2-homologacao" class="btn btn-default btn-small"> Próximo <i
+                                                    class="fa fa-angle-right"></i></a>,
+                                        localizado no canto inferior direito da tela, para ir para a próxima etapa do
+                                        processo de
+                                        homologação.<br><br><br>
+                                    </li>
+                                    <li>Na <a href="#etapa2-homologacao">etapa 2</a>, onde constam os anexos da
+                                        documentação obrigatória e dos documentos comprobatórios da pontuação informada
+                                        pelo candidato submetidos no ato da inscrição, o avaliador deverá efetuar
+                                        download de cada documento disposto nesta etapa e em seguida, avaliar cada
+                                        documento. <br>
+                                        O padrão do sistema é não aceitar nenhum documento e não considerar a nota
+                                        informada pelo candidato.
+                                        A cada documento analisado pelo avaliador e que seja válido, o avaliador deverá
+                                        alterar no sistema a situação do documento para que a pontuação seja
+                                        considerada.
+                                        (A pontuação do candidato é automáticamente calculada pelo sistema).
+                                        <br>
+                                        Para alterar a situação do documento, o avaliador deverá clicar em
+                                        <a href="#etapa2-homologacao" class="btn btn-danger">Não Aceito</a> para alterar
+                                        a situação para
+                                        <a href="#etapa2-homologacao-b" class="btn btn-success">Aceito</a>.
+                                        <br>
+                                        <h4>Lembre-se: A pontuação do candidato só será considerada se o avaliador der o
+                                            <B>ACEITO</B> no documento comprobatório, caso contrário, a pontução do
+                                            candidato permanecerá em <b>0</b> Ponto no item em questão.
+                                        </h4>
+                                        Após avaliar cada documento anexo pelo candidato, o avaliador deverá clicar no
+                                        botão
+                                        <a href="#etapa3-homologacao" class="btn btn-default btn-small"> Próximo
+                                            <i class="fa fa-angle-right"></i></a>, localizado no canto inferior direito
+                                        da tela, para ir para a última etapa do processo de
+                                        homologação da inscrição do candidato.<br><br><br><br>
+                                    </li>
+                                    <li>Na <a href="#etapa3-homologacao">etapa 3</a>, última etapa do processo de
+                                        homologação,
+                                        o avaliador deverá definir a situação da inscrição do candidato e se necessário,
+                                        lançar um feedback para o candidato.
+                                        <br>
+                                        O avaliador poderá definir as seguintes situações:<br>
+                                        <ul>
+                                            <li><b>Homologado </b> - Quando o candidato atende a todos os requisistos do
+                                                edital vigente e a documentação obrigatória em anexo está de acordo.
+                                            </li>
+                                            <li><b>Não Homologado </b> - Quando algum documento comprobatório da
+                                                pontuação do candidato está ilegível.
+                                            </li>
+                                            <li><b>Desclassificado </b> - Quando o candidato não atende os requisitos
+                                                mínimos do edital vigente.
+                                            </li>
+                                        </ul>
+                                        <br>
+                                        Após ter definido a situação do candidato, o avalidor deverá clicar no botão
+                                        <a href="#etapa2-homologacao" class="btn btn-default btn-small">
+                                            <i class="fa fa-save"></i> Salvar Avaliação</a>,
+                                        localizado no canto inferior direito, para que processo de
+                                        homologação seja finalizado.<br>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="col-md-12" id="etapa1-homologacao">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/004.png') }}" class="img-responsive  center-block">
+                                    <p>Etapa 1 - Processo de homologação de candidato</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="etapa2-homologacao">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/005.png') }}" class="img-responsive  center-block">
+                                    <p>Etapa 2 - Avaliação dos documentos comprobatórios - Esta tela demonstra que
+                                        nenhum
+                                        documento foi aceito pelo avaliador</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="etapa2-homologacao-b">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/006.png') }}" class="img-responsive center-block">
+                                    <p>Etapa 2 - Avaliação dos documentos comprobatórios - Esta tela demonstra que
+                                        apenas um
+                                        documento foi aceito pelo avaliador</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="etapa3-homologacao">
+                                <br><br>
+                                <div class="text-center">
+                                    <img src="{{ asset('manual/007.png') }}" class="img-responsive center-block">
+                                    <p>Etapa 3 - Situação da inscrição e feedback para o candidato</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id=""></div>
+                    <div id="entrevistado"></div>
+                    <div id="classificados"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock -%}

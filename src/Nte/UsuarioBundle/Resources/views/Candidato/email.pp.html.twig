@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Inscrição Realizada em projeto com sucesso</title>
+</head>
+<body>
+<div style="padding:10px">
+    <h1>Inscrição realizada </h1>
+    <p>
+        Prezado(a) {{ inscricao.nome }}<br>
+        Informamos que a sua inscrição foi realizada no seguinte projeto:<br>
+        Projeto: {{ inscricao.idInscricao.projetoTitulo }}<br>
+        Responsável: {{ inscricao.idInscricao.nome }}<br><br>
+        Número de Inscrição: <b style="color:#08c; font-size: large;">{{ inscricao.uuid }}</b><br>
+    </p>
+    <p>Você deverá confirmar sua inscrição, através do seguinte endereço:
+        <a href="https://processoseletivo.nte.ufsm.br/candidato/inscricao-projeto/{{ inscricao.uuid }}">
+            https://processoseletivo.nte.ufsm.br/candidato/inscricao-projeto/{{ inscricao.uuid }}
+        </a>
+    </p>
+    <table class="spacer">
+        <tbody>
+        <tr>
+            <td height="16px" style="font-size:16px;line-height:16px;">
+                &#xA0;
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr>
+    <h4>
+        {{ inscricao.idInscricao.idEdital.titulo }}
+    </h4>
+    <p style="text-align: justify;">
+        {{ inscricao.idInscricao.idEdital.sobre }}
+    </p>
+    <table width="100%">
+        <tr>
+            <td class="small-12 large-3 columns first">
+                <img src="https://nte.ufsm.br/images/marca_apenas_siglas.png" alt="Marca NTE" width="200">
+            </td>
+            <td width="50%" style="text-align: right;">
+                <p>
+                    {{ inscricao.idInscricao.idEdital.info3|raw }}
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

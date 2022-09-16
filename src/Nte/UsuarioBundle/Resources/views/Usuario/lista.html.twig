@@ -1,0 +1,23 @@
+<ul>
+    {% for u in usuarios %}
+        {% if u.id != app.user.id %}
+            <li onclick="window.location='{{ path('nte_usuario_perfil', {'id': u.id}) }}'">
+                <figure class="profile-picture">
+                    <img src="{{ path('arquivo_download',{id: u.img})}}"
+                         alt="{{ u.nome }}"
+                         class="img-circle">
+                </figure>
+                <div class="profile-info">
+                    <span class="name">{{ u.nome|split(' ')[0] }}</span>
+                    <span class="title">
+                        {% if u.lastLogin is null %}
+                            Nunca acessou o sistema
+                        {% else %}
+                        {{ u.lastLogin|date('d/m/Y H:i:s') }}
+                        {% endif %}
+                    </span>
+                </div>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

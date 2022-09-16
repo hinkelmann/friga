@@ -1,0 +1,64 @@
+{% if situacao ==1 %}
+    {% if editaisComInscricao.count %}
+        <h3 class="mb-xl">
+            <strong>Editais</strong> com Inscrições abertas
+        </h3>
+        <ul class="list list-icons list-primary list-borders">
+            {% for e in editaisComInscricao %}
+                <li class="text-justify">
+                    <a href="{{ path('nte_site_edital', { id: e.id, url: e.url}) }}" class="">
+                        <h4><i class="fa fa-globe"></i></h4>
+                        <strong> {{ e.dataPublicacaoOficial|date('d/m/Y') }}</strong> -
+                        {{ e.titulo }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <br><br>
+    {% endif %}
+    {% if editaisSemInscricao.count %}
+        <h3 class="mb-xl">
+            <strong>Editais</strong> Em andamento
+        </h3>
+        <ul class="list list-icons list-primary list-borders">
+            {% for e in editaisSemInscricao %}
+                <li class="text-justify">
+                    <a href="{{ path('nte_site_edital', { id: e.id, url: e.url}) }}" class="">
+                        <h4><i class="fa fa-globe"></i></h4>
+                        <strong> {{ e.dataPublicacaoOficial|date('d/m/Y') }}</strong> -
+                        {{ e.titulo }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if  editaisSemInscricao.count ==0 and  editaisComInscricao.count ==0%}
+        <h3 class="mb-xl">
+            <strong>Editais</strong> Em andamento
+        </h3>
+        <div class="alert alert-info">
+            Nenhum edital disponível
+        </div> 
+    {% endif %}
+{% elseif situacao == 2 %}
+    <h3 class="mb-xl">
+        <strong>Editais</strong> Finalizados
+    </h3>
+    {% if editais|length %}
+        <ul class="list list-icons list-primary list-borders">
+            {% for e in editais %}
+                <li class="text-justify">
+                    <a href="{{ path('nte_site_edital', { id: e.id, url: e.url}) }}" class="">
+                        <h4><i class="fa fa-globe"></i></h4>
+                        <strong> {{ e.dataPublicacaoOficial|date('d/m/Y') }}</strong> -
+                        {{ e.titulo }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-info">
+            Nenhum edital disponível
+        </div>
+    {% endif %}
+{% endif %}

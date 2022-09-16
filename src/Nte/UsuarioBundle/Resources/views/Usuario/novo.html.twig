@@ -1,0 +1,103 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends 'base.admin.html.twig' %}
+ {% block breadcumbsTitulo %}Usuário {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span>Novo Usuários</span></li>
+ {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/vendor/summernote/summernote.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.js') }}"></script>
+    <script>
+        Dropzone.options.uploadFoto = {
+            dictDefaultMessage: "Arraste a imagem aqui, para upload",
+            init: function () {
+                console.log('inicializando...');
+                this.on("success", function (file, responseText) {
+                    $("#usuario-imagem").attr('src', responseText);
+                    $("#{{ form.img.vars.id }}").val(responseText);
+                    this.removeAllFiles();
+                });
+            }
+        };
+        $("#form-user").validate({
+            rules: {
+                password: "required",
+                password_again: {
+                    equalTo: "#password"
+                }
+            }
+        });
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/dropzone/basic.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/summernote/summernote.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/summernote/summernote-bs3.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css') }}">
+{% endblock %}
+{% form_theme form ':forms:form_row.html.twig' %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-4 col-lg-3">
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="thumb-info mb-md">
+                        <form action="{{ path('nte_usuario_uploadimagem') }}" method="POST"
+                              class="dropzone dz-square" id="upload-foto">
+                            <img src="{{ asset(form.img.vars.value) }}" class="rounded img-responsive"
+                                 id='usuario-imagem' alt="Imagem do novo usuário">
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-8 col-lg-6">
+            <div class="tabs">
+                <ul class="nav nav-tabs tabs-primary">
+                    <li class="active">
+                        <a href="#formulario" data-toggle="tab">Novo usuário</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="formulario" class="tab-pane active">
+                        {{ form_start(form) }}
+                        <h4 class="mb-xlg">Infomrações pessoais</h4>
+                        <fieldset>
+                            {{ form_row(form.nome) }}
+                            {{ form_row(form.username) }}
+                            {{ form_row(form.email) }}
+                            <div class="form-group">
+                                {{ form_label(form.cor) }}
+                                <div class="col-md-8">
+                                    <div class="input-group color" data-plugin-colorpicker>
+                                        <span class="input-group-addon"><i></i></span>
+                                        {{ form_widget(form.cor) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <hr class="dotted tall">
+                        <h4 class="mb-xlg">Senha</h4>
+                        <fieldset class="mb-xl"> {{ form_rest(form) }}</fieldset>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-9 col-md-offset-3">
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                    <button type="reset" class="btn btn-default">Resetar</button>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,73 @@
+relatorio_index:
+  path:     /
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:index" }
+  methods:  GET
+
+relatorio_geral_resumo:
+  path:     /resumo
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:indexResumo" }
+  methods:  GET
+
+relatorio_resumo:
+  path:     /resumo/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:resumo" }
+  methods:  GET
+
+relatorio_perfil:
+  path:     /inscricao-perfil/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:perfil", uuid: null }
+  methods:  GET
+
+
+relatorio_todos_inscritos:
+  path:     /todos/inscritos
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:todosInscritos" }
+  methods:  GET
+
+relatorio_todos_anulados:
+  path:     /todos/anulados
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:todosAnulados" }
+  methods:  GET
+
+
+relatorio_andamento:
+  path:     /andamento/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:andamento" }
+  methods:  GET
+
+relatorio_convocacoes:
+  path:     /convocacao/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:convocaco", uuid: null }
+  methods:  GET
+
+relatorio_recurso:
+  path:     /recurso/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:recurso", uuid: null }
+  methods:  GET
+
+relatorio_recurso_situacao:
+  path:     /recurso/s/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:recursoSituacao" }
+  methods:  GET
+
+relatorio_inscritos:
+  path:     /inscritos/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:incritos" }
+  methods:  GET
+
+relatorio_inscritos_situacao:
+  path:     /inscritos/{edital}/{id}/{situacao}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:incritosPorSituacaoPolo", id: null, situacao: null }
+  methods:  GET
+
+relatorio_inscritos_situacao_geral:
+  path:     /inscritos-geral/{situacao}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:incritosPorSituacao", situacao: null }
+  methods:  GET
+
+
+relatorio_anulados:
+  path:     /anulados/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Relatorio:anulados" }
+  methods:  GET
+

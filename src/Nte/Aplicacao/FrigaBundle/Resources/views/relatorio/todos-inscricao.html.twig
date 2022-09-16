@@ -1,0 +1,110 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Relatório Inscrições realizadas{% endblock %}
+{% block breadcumbsTitulo %} Listagem de Candidatos Inscritos {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('relatorio_index') }}"> Relatórios</a></span></li>
+    <li><span><a href="{{ path('relatorio_index') }}"> Editais </a></span></li>
+    <li><span><a href="#">Inscrições</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <section class="panel">
+            <div class="panel-body">
+                {% if inscricoes|length > 0 %}
+                <table class="table table-hovered">
+                    <thead>
+                    <tr>
+                        <th>Inscrição</th>
+                        <th>Nome</th>
+                        <th>Vaga</th>
+                        <th>Edital</th>
+                        <th class="text-center" title="Situação atual do candidato no processo seletivo">Situação</th>
+                        <th class="text-center" title="Data e hora que o candidato se inscreveu">Data</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for inscricao in inscricoes %}
+                        <tr>
+                            <td width="10">
+                                <a title="Clique aqui para visualizar os dados da inscrição"
+                                   href="{{ path('relatorio_perfil', {'uuid':  inscricao.uuid}) }}">
+                                {{ inscricao.uuid}}
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Clique aqui para visualizar as informações de contato do candidato"
+                                   href="{{ path('nte_usuario_perfil', {'id': inscricao.idUsuario.id}) }}">
+                                    <b class="text-uppercase">{{ inscricao.nome }}</b>
+                                </a>
+                            </td>
+                            <td  class="">
+                                {{ inscricao.idCargo.descricao }}
+                            </td>
+                            <td>
+                                <a href="{{ path('relatorio_inscritos', {'uuid': inscricao.idEdital.uuid}) }}">
+                                {{ inscricao.idEdital.titulo }}
+                                </a>
+                            </td>
+                            <td  class="">
+                                {{ inscricao.objSituacao.descricao }}
+                            </td>
+                            <td width="170" class="text-center"><i class="fa fa-clock-o"></i>  {{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none">0 <i class="fa fa-users text-primary"></i></h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br><b>Nenhum candidato  </b> disponível.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+            </div>
+        </section>
+        {% if inscricoes|length > 0 %}
+            {#
+        <div class="panel">
+            <div class="panel-body">
+                <b class="pull-left">Cálculo da pontuação: (Pontuação 1° Etapa) x 0.6 + (Pontuação 2° Etapa) x 0.4 = (Pontuação Total)</b>
+            </div>
+        </div>
+            #}
+        {% endif %}
+    </div>
+    <style>
+        .table > thead > tr > .b{
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+        .table > thead > tr > .c{
+            border-top: 1px solid #c7d5de !important;
+            border-bottom: 0 !important;
+        }
+        .b{
+            border-top: 1px solid #c7d5de;
+        }
+        .table > tfoot > tr > .d {
+            border-bottom: 1px solid #c7d5de;
+        }
+        .b1{
+            border-left:  1px solid #c7d5de;
+        }
+        .b3{
+            border-right: 1px solid #c7d5de;
+        }
+        .b1,.b2,.b3{
+            background-color: #E3F2FD;
+            border-bottom: 0px ;
+        }
+    </style>
+{% endblock %}

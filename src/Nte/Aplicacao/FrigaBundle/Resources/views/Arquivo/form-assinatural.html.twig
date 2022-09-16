@@ -1,0 +1,31 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Assinatura Digital {% endblock %}
+{% block breadcumbsTitulo %}Assinatura Digital {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-12">
+            <section class="panel-body">
+                <div class="alert alert-info">
+                    <strong>Atenção!</strong> Se o você não possui um certificado digital, você poderá emitir através da
+                    <a href="https://pessoal.icpedu.rnp.br/home">ICP-Edu</a>.
+
+                </div>
+                {{ form_start(form) }}
+                {{ form_rest(form) }}
+                <p>
+                    A assinatura digital do documento, poderá ser verificada  através do
+                    <a href="https://assina.ufsc.br/verificador/" target="_blank">
+                        Verificador de Conformidade do Padrão de Assinatura Digital ICP-Edu
+                    </a>.
+                </p>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary center-block">  <i class="fa fa-certificate"></i> Assinar Documento </button>
+                </div>
+                {{ form_end(form) }}
+
+
+            </section>
+        </div>
+    </div>
+{% endblock %}

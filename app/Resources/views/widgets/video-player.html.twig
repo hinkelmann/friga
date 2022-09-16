@@ -1,0 +1,23 @@
+<div class="embed-responsive embed-responsive-16by9">
+    <img itemprop="image"  class="hidden"  src="/repositorio/{{ poster }}/capa.png"/>
+    <video id="player" controls preload="auto" width="100%" height="100%"
+           style="width:100%;height:100%;" poster="/repositorio/{{ poster }}/capa.png"  data-setup='{"example_option":true}'>
+        <source src="/repositorio/{{ recurso }}/video.mp4" type='video/mp4'  data-plugin-type="native" data-quality="HD"/>
+        <source src="/repositorio/{{ recurso }}/720p.mp4"  type='video/mp4'  data-plugin-type="native" data-quality="720p"/>
+        <source src="/repositorio/{{ recurso }}/480p.mp4"  type='video/mp4'  data-plugin-type="native" data-quality="480p"/>
+        <source src="/repositorio/{{ recurso }}/360p.mp4"  type='video/mp4'  data-plugin-type="native" data-quality="360p"/>
+        {% if legendas is defined %}
+            {% for l in legendas %}
+                {% if l.publicado ==1  %}
+                    <track kind="subtitles" src="{{ path('legenda_visualizar_str',{id:l.id}) }}" srclang="{{ l.idioma }}"/>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <track kind="metadata" class="time-rail-thumbnails" src="{{ path('video_gerar_vtt', {id: catalogoVideo.dataCriacao|date('U')}) }}" srclang="None" />
+        <object width="320" height="240" type="application/x-shockwave-flash" data="/{{ asset('assets/vendor/mediaelement/build/flashmediaelement.swf') }}">
+            <param name="movie" value="/{{ asset('assets/vendor/mediaelement/build/flashmediaelement.swf') }}" />
+            <param name="flashvars" value="controls=true&file=/repositorio/{{ recurso }}/video.mp4" />
+            <img src="/repositorio/{{ poster }}/capa.png" width="320" height="240" title="Recurso não suportado" />
+        </object>
+    </video>
+</div>

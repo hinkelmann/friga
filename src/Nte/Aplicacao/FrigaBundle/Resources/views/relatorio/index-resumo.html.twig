@@ -1,0 +1,533 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Relatório Geral {% endblock %}
+{% block breadcumbsTitulo %} Relatório Geral {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('relatorio_index') }}"> Relatório</a></span></li>
+    <li><span><a href="#"> Resumo</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="panel-body">
+            <h5 class="text-weight-bold">RESUMO DE TODOS EDITAIS ATIVOS</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left panel-featured-secondary">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon bg-secondary">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Inscrições</h4>
+                                    <div class="info">
+                                        <strong class="amount">{{
+                                            editalQuantitativo.inscricao
+                                            + editalQuantitativo.homologacaoNegativa
+                                            + editalQuantitativo.homologacao
+                                            + editalQuantitativo.desclassificacao
+                                            + editalQuantitativo.avaliacao
+                                            + editalQuantitativo.classificacao
+                                            + editalQuantitativo.recurso
+                                            + editalQuantitativo.convocacao
+                                            }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left panel-featured-quartenary">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon bg-quartenary">
+                                    <i class="fa fa-check"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Vagas</h4>
+                                    <div class="info">
+                                        <strong class="amount">{{ editalQuantitativo.cargo }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left panel-featured-tertiary">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon bg-tertiary">
+                                    <i class="fa fa-map"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Candidatos por vaga</h4>
+                                    <div class="info">
+                                        <strong class="amount">{{ (editalQuantitativo.inscricao / editalQuantitativo.cargo)|number_format(2,".") }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left panel-featured-primary">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon bg-primary">
+                                    <i class="fa fa-balance-scale"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Editais</h4>
+                                    <div class="info">
+                                        <strong class="amount">
+                                            {{ editalQuantitativo.edital }}
+                                            {#
+                                            {% set media = 0 %}
+                                            {% for frigaPessoa in frigaPessoas %}
+                                                {% set media = media + frigaPessoa.pontuacaoInformada %}
+                                            {% endfor %}
+                                            {{ (media/frigaPessoas|length)|number_format(2) }}
+                                            #}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <section class="panel">
+                    <div class="panel-body">
+                        <div id="grafico0"
+                             style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon " style="background: #4FC3F7">
+                                    <i class="fa fa-check-square"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Homologados</h4>
+                                    <div class="info">
+                                        <strong class="amount">{{
+                                             editalQuantitativo.homologacao
+                                            + editalQuantitativo.avaliacao
+                                            + editalQuantitativo.classificacao
+                                            + editalQuantitativo.recurso
+                                            + editalQuantitativo.convocacao
+                                            }} </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left" style="border-left-color: #FFB74D">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon" style="background: #FFB74D">
+                                    <i class="fa fa-user-times"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Desclassificados</h4>
+                                    <div class="info">
+                                        <strong class="amount">{{
+                                            editalQuantitativo.desclassificacao  + editalQuantitativo.homologacaoNegativa
+                                            }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left" style="border-left-color: #6aa84f">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon" style="background: #6aa84f">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Etapas de Avaliação</h4>
+                                    <div class="info">
+                                        <strong class="amount">{{ editalQuantitativo.avaliacao }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <section class="panel panel-featured-left" style="border-left-color:#734ba9">
+                    <div class="panel-body">
+                        <div class="widget-summary widget-summary-md">
+                            <div class="widget-summary-col widget-summary-col-icon">
+                                <div class="summary-icon" style="background: #734ba9">
+                                    <i class="fa fa-trophy"></i>
+                                </div>
+                            </div>
+                            <div class="widget-summary-col">
+                                <div class="summary">
+                                    <h4 class="title">Etapas de Classificação</h4>
+                                    <div class="info">
+                                        <strong class="amount">
+                                            {{ editalQuantitativo.classificacao }}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <section class="panel">
+                    <div class="panel-body">
+                        <div id="grafico1"
+                             style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-6">
+                <section class="panel">
+                    <div class="panel-body">
+                        <div id="grafico2"
+                             style="min-width: 300px; height: 400px; margin: 0 auto">
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!--
+         <div class="col-md-12">
+             <div class="row">
+                 <section class="panel">
+                     <div class="panel-body">
+                         <div id="graficoAltaracaoSie0" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                     </div>
+                 </section>
+             </div>
+         </div>
+         -->
+        {% if editalCargoPilhaSeparada is defined %}
+            {% if editalCargoPilhaSeparada[1]|length %}
+                <div class="row">
+                    <div class="col-md-8">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <div id="grafico3"
+                                     style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-4">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <b> Vagas sem Candidatos</b>
+                                <hr>
+                                <ol>
+                                    {% if editalCargoPilhaSeparada[1] is defined %}
+                                        {% for a in editalCargoPilhaSeparada[1] %}
+                                            <li>
+                                                <b>{{ a.edital }}</b>
+                                                <ul>
+                                                {% for c in a.cargo %}
+                                                    <li>{{ c }}</li>
+                                                {% endfor %}
+                                                </ul>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ol>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <div id="grafico3"
+                                     style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="row">
+
+    </div>
+{% endblock %}
+{% block javascripts3 %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('assets/vendor/highcharts/modules/data.js') }}"></script>
+    <script src="{{ asset('assets/vendor/highcharts/modules/drilldown.js') }}"></script>
+    <script>
+
+        cores = ['#E57373', '#4FC3F7', '#FFB74D', '#6aa84f', '#734ba9', '#388E3C'];
+
+        Highcharts.chart('grafico0', {
+            chart: {type: 'column',},
+            title: {text: 'Inscritos por cargo'},
+            subtitle: {text: '<a href="">Relatório com a situação das inscrições em cada cargo do edital</a>'},
+            accessibility: {announceNewData: {enabled: true}},
+            xAxis: {type: 'category'},
+            yAxis: {title: {text: 'Total de Inscrições'}},
+            legend: {enabled: false},
+            plotOptions: {series: {borderWidth: 0, dataLabels: {enabled: true,}}},
+            credits: {enabled: false},
+            tooltip: {pointFormat: 'Inscrições realizadas: <b>{point.y}</b>'},
+            series: {{ editalCargo|json_encode|raw }},
+            drilldown: {series: {{ editalCargoPilha|json_encode|raw }}}
+        });
+
+        Highcharts.chart('grafico1', {
+            chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, type: 'pie'},
+            title: {text: 'Situação Geral das Inscrições'},
+            subtitle: {text: '<a href="">Relatório com o somátorio de todas as situação de inscrições</a>'},
+            credits: {enabled: false},
+            tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f}% ({point.y} Inscrições)</b>'},
+            colors: cores,
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} % ({point.y} Inscrições)',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: {{ editalQuantitativoSerie[0]|json_encode|raw }}
+            }]
+        });
+
+        Highcharts.chart('grafico2', {
+            chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, type: 'pie'},
+            title: {text: 'Situação Geral dos Recursos Interpostos'},
+            subtitle: {text: '<a href="">Relatório com o somátorio de todos os recursos por situação</a>'},
+            credits: {enabled: false},
+            tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f}%  ({point.y} Recursos) </b>'},
+            colors: cores,
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} ({point.y} Recursos) %',
+                        style: {color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'}
+                    }
+                }
+            },
+            series: [{
+                name: 'Brands',
+                colorByPoint: true,
+                data: {{ editalQuantitativoSerie[1]|json_encode|raw }}
+            }]
+        });
+
+
+        Highcharts.chart('grafico3', {
+            chart: {type: 'column'},
+            title: {text: 'Candidatos por Edital'},
+            subtitle: {text: '<a href="">Relatório de candidatos por edital em ordem pelo quantitativo de inscrições</a>'},
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {min: 0, title: {text: 'Inscrições (Total)'}},
+            legend: {enabled: false},
+            credits: {enabled: false},
+            tooltip: {pointFormat: 'Inscrições realizadas: <b>{point.y}</b>'},
+            series: [{
+                name: 'Population',
+                data: {{ editalCargoPilhaSeparada[0]|json_encode|raw }},
+                dataLabels: {
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    format: '{point.y}', // one decimal
+                    y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            }]
+        });
+
+
+        /*
+                Highcharts.chart('graficoAltaracaoSie0', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Candidatos por Edital'
+                    },
+                    subtitle: {
+                        text: '<a href="">Relatório de candidatos por Edital em ordem alfabética</a>'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        labels: {
+                            rotation: -45,
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Inscrições (Total)'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        pointFormat: 'Inscrições realizadas: <b>{point.y}</b>'
+                    },
+                    series: [{
+                        name: 'Population',
+                        data: {{ editalCargo|json_encode|raw }},
+                dataLabels: {
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    format: '{point.y}', // one decimal
+                    y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            }]
+        });
+        Highcharts.chart('grafico1', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Candidatos por Edital'
+            },
+            subtitle: {
+                text: '<a href="">Relatório de candidatos por edital em ordem pelo quantitativo de inscrições</a>'
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Inscrições (Total)'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: 'Inscrições realizadas: <b>{point.y}</b>'
+            },
+            series: [{
+                name: 'Population',
+                data: {{ editalCargo|json_encode|raw }},
+                dataLabels: {
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    format: '{point.y}', // one decimal
+                    y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            }]
+        });
+
+
+
+
+*/
+
+    </script>
+{% endblock %}

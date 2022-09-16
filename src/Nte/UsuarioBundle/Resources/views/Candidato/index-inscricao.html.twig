@@ -1,0 +1,136 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} Inscrições /{{ app.user.nome }} {% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Inscrições</span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-md-9">
+            <div class="row">
+                <h3 class="mb-xl">
+                    Minhas <strong>Inscrições</strong>
+                </h3>
+
+                {% if app.user.inscricao|length %}
+                    {% for inscricao in app.user.inscricao|reverse %}
+                        {% if loop.index%2 ==0 %}
+                            <div class="row">
+                        {% endif %}
+                        <div class="col-md-6">
+                            <div class="call-to-action with-borders  button-centered mb-5">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="call-to-action-content">
+                                                {% if inscricao.idSituacao == -999 %}
+                                                    <a href="{{ path('nte_site_edital', { id: inscricao.idEdital.id, url: inscricao.idEdital.url}) }}">
+                                                        <h4>{{ inscricao.idEdital.titulo }}</h4>
+                                                    </a>
+                                                    <p class="{{ inscricao.objSituacao.cssAlert }}">
+                                                        {{ inscricao.uuid }} - {{ inscricao.objSituacao.descricao }}<br>
+                                                        {{ inscricao.registroDataCriacao|date('d/m/Y') }}
+                                                    </p>
+                                                {% else %}
+                                                    <a href="{{ path('nte_site_edital', { id: inscricao.idEdital.id, url: inscricao.idEdital.url}) }}">
+                                                        <h4>{{ inscricao.idEdital.titulo }}</h4>
+                                                    </a>
+                                                    <p class="alert alert-success">
+                                                        {{ inscricao.uuid }} - Inscrição Realizada<br>
+                                                        {{ inscricao.registroDataCriacao|date('d/m/Y') }}
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="call-to-action-btn">
+                                                {% if inscricao.idSituacao == 0 %}
+                                                    <a href="{{ path('nte_usuario_candidato_inscricao_cancelar', {'uuid': inscricao.uuid}) }}"
+                                                       class="btn btn-dark remover "
+                                                       title="Clique aqui somente se você desejar cancelar a sua inscrição">
+                                                        Cancelar Inscrição
+                                                    </a>
+                                                {% endif %}
+                                                {% if inscricao.idSituacao != -999 %}
+                                                    <a href="{{ path('nte_usuario_candidato_inscricao_visualizacao', {'uuid': inscricao.uuid}) }}"
+                                                       class="btn btn-primary-scale-2">
+                                                        Acompanhar Inscrição
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="visible-xs visible-sm">
+                            <hr class="tall">
+                        </div>
+                        {% if loop.index%2 ==0 %}
+                            </div>
+                            <div class="visible-md visible-lg">
+                                <hr class="tall">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Até o presente momento você ainda não realizou nenhuma inscrição.<br>
+                        Verifique os editais que estão abertos e inscreva-se.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
+
+{% endblock %}
+{% block jsOpcional %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $(".remover").click(e => {
+            e.preventDefault();
+            let url = e.target.href;
+            Swal.fire({
+                title: 'Cancelar inscrição',
+                text: "Você deseja cancelar sua inscrição neste edital?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'SIM',
+                cancelButtonText: 'Não',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = url;
+                }
+            })
+        })
+    </script>
+{% endblock %}

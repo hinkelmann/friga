@@ -1,0 +1,79 @@
+Url: URL
+
+Titulo: Título
+Sobre:  Sobre o Edital
+Info1: Cargos
+Info2: Remuneração
+Info3: Dúvidas
+Info4: Requisitos obrigatórios
+Info5: Explicação sobre os Requisitos
+Info6: Explicação sobre a identificação
+Info7: Explicação sobre o endereço
+Info8: Explicação sobre a pontuação
+Info9: Explicação sobre a confirmação
+Info10: Explicação sobre outros anexeos
+
+Info11: Explicação sobre resumo
+Info12: Explicação sobre o anexo
+Info13: Explicação sobre a apresentacao individual
+
+Doc0: Requerer Título de Eleitor
+Doc1: Requerer Certificado de Reservista
+Doc2: Requerer Número do Passaporte
+Doc3: Requerer Registro Nacional de Estrangeiro
+Doc4: Requerer Matricula
+Doc5: Requerer Número da Certidão de Nascimento
+Doc6: Requerer Url do currículo lattes
+Doc7: Requerer apresentação indivídual
+Doc8: Requerer Curso
+Doc9: Requerer Sexo
+Doc10: Requerer URL de Vídeo
+Doc11: Requerer Dados Bancarios
+Doc12: Requerer Recebimento de Bolsa
+
+Doc13: Requerer endereço
+Doc14: Requerer índice de desempenho acadêmico
+Doc15: Requerer  Benefício Socioeconômico (BSE)
+
+Tipo inscricao: Tipo de Inscrição
+tipoInscricaoLimite: Limite de inscrições
+
+Publico: Público
+publico:
+  op0: Oculto
+  op1: Oculto até inicio do período de inscrição
+  op2: Visível até fim do período de inscrição
+  op3: Visível
+  op4:
+
+ti:
+   op0: Inscrição única
+   op1: Inscrição múltipla/Cargo único
+   op2: Inscrição múltipla/Lista única
+   op3: Inscrição múltipla
+   op4: Inscrição múltipla/Cargo limitado
+   op5: Inscrição múltipla/Lista limitado
+
+Anexo0: Comprovante de identificação
+Anexo1: Comprovante de endereço
+Anexo2: Memorial Descritivo
+Anexo3: Requerer Outros Anexos
+Anexo4: Documento do projeto
+anexo:
+  op0: Sem Anexo
+  op1: Com anexo e campo opcional
+  op2: Com anexo e campo obrigatório
+
+
+campoDocumento:
+  op0: Não
+  op1: sim - Campo opcional
+  op2: Sim - Campo obrigatório
+
+permitir:
+  op0: Não Permitir
+  op1: Permitir
+
+Data publicacao oficial:  Data Publicação
+Campo cargo titulo: Descrição do campo cargo
+Campo lista titulo: Descrição do campo lista

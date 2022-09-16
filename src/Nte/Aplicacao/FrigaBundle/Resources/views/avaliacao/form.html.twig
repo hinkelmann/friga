@@ -1,0 +1,798 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Etapa: {{ etapa.descricao }}/ Avaliação  do Candidato:{{ inscricao.nome }} {% endblock %}
+{% block breadcumbsTitulo %}Avaliação do Candidato{% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="{{ path('relatorio_index') }}">Avaliação</a></span></li>
+    <li>
+        <span><a href="{{ path('relatorio_inscritos',{'uuid':inscricao.idEdital.uuid}) }}">{{ inscricao.idEdital.uuid }}</a></span>
+    </li>
+    <li>
+        <span><a href="{{ path('nte_usuario_perfil',{id: inscricao.idUsuario.id}) }}"> {{ inscricao.nome }}</a></span>
+    </li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-accordion">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle " data-toggle="collapse" data-parent="#accordion"
+                               href="#identificacao">
+                                <i class="icon icon-users"></i> Dados de Identificação
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="identificacao" class="accordion-body">
+                        <div class="panel-body">
+                            <table class="table  table-responsive table-condesed">
+                                <tr>
+                                    <td class="text-right"><b>Nome</b></td>
+                                    <td>{{ inscricao.nome }}</td>
+                                </tr>
+                                {% if inscricao.idEdital.doc9 %}
+                                    <tr>
+                                        <td class="text-right"><b>Sexo</b></td>
+                                        <td>{{ inscricao.sexo?"Masculino":"Feminino" }}</td>
+                                    </tr>
+                                {% endif %}
+                                <tr>
+                                    <td class="text-right"><b>Data de Nascimento</b></td>
+                                    <td>{{ inscricao.dataNascimento|date('d/m/Y') }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>CPF</b></td>
+                                    <td>{{ inscricao.cpf }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>Número do RG</b></td>
+                                    <td>{{ inscricao.rgNro }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>Data de Expedição do RG</b></td>
+                                    <td>{{ inscricao.rgDataExpedicao?inscricao.rgDataExpedicao|date('d/m/Y'): "-" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>Órgão Expedidor do RG</b></td>
+                                    <td>{{ inscricao.rgOrgaoExpedidor }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>UF do Órgão Expedidor do RG</b></td>
+                                    <td>{{ inscricao.rgUF }}</td>
+                                </tr>
+                                {% if inscricao.idEdital.doc0 %}
+                                    <tr>
+                                        <td class="text-right"><b>Titulo de Eleitor</b></td>
+                                        <td>{{ inscricao.teNro }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Data de Expedição do Titulo de Eleitor</b></td>
+                                        <td>{{ inscricao.teDataExpedicao?inscricao.teDataExpedicao|date('d/m/Y'):"-" }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc1 %}
+                                    <tr>
+                                        <td class="text-right"><b>Certificado de Reservista</b></td>
+                                        <td>{{ inscricao.crNro }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Data de Expedição do Certificado de Reservista</b>
+                                        </td>
+                                        <td>{{ inscricao.crDataExpedicao?inscricao.crDataExpedicao|date('d/m/Y'):"-" }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.permitirEstrangeiro %}
+                                    <tr>
+                                        <td class="text-right"><b>Estrangeiro</b></td>
+                                        <td>{{ inscricao.estrangeiro?"SIM":"Não" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Nacionalidade</b></td>
+                                        <td>{{ inscricao.nacionalidade }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc2 %}
+                                    <tr>
+                                        <td class="text-right"><b>Passaporte</b></td>
+                                        <td>{{ inscricao.passaporteNro }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc3 %}
+                                    <tr>
+                                        <td class="text-right"><b>Registro Nacional de Estrangeiro</b></td>
+                                        <td>{{ inscricao.rneNro }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Data de Expedição do Registro Nacional de
+                                                Estrangeiro</b>
+                                        </td>
+                                        <td>{{ inscricao.rneDataExpedicao?inscricao.rneDataExpedicao|date('d/m/Y'):"-" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Validade do Registro Nacional de Estrangeiro</b></td>
+                                        <td>{{ inscricao.rneDataValidade?inscricao.rneDataValidade|date('d/m/Y'):"-" }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc4 %}
+                                    <tr>
+                                        <td class="text-right"><b>Matricula</b></td>
+                                        <td>{{ inscricao.matriculaNro }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc8 %}
+                                    <tr>
+                                        <td class="text-right"><b>Curso</b></td>
+                                        <td>{{ inscricao.matriculaCurso }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc14 %}
+                                    <tr>
+                                        <td class="text-right"><b>Índíce de Desempenho acadêmico</b></td>
+                                        <td>{{ inscricao.matriculaIndiceDesempenho }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc15 %}
+                                    <tr>
+                                        <td class="text-right"><b> Benefício Socioeconômico (BSE)</b></td>
+                                        <td>{{ inscricao.matriculaBeneficio?"SIM":"Não" }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc5 %}
+                                    <tr>
+                                        <td class="text-right"><b>Certidão de Nascimento</b></td>
+                                        <td>{{ inscricao.certidaoNascimentoNro }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc6 %}
+                                    <tr>
+                                        <td class="text-right"><b>Currículo Lattes</b></td>
+                                        <td>{{ inscricao.url0 }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc11 %}
+                                    <tr>
+                                        <td class="text-right"><b>Banco</b></td>
+                                        <td>{{ inscricao.bancoInstituicao }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Agência</b></td>
+                                        <td>{{ inscricao.bancoAgencia }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Conta</b></td>
+                                        <td>{{ inscricao.bancoConta }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc12 %}
+                                    <tr>
+                                        <td class="text-right"><b>Recebimento de Bolsa</b></td>
+                                        <td>{{ inscricao.recebimentoBolsa }}</td>
+                                    </tr>
+                                {% endif %}
+                                <tr>
+                                    <td class="text-right"><b>Celular</b></td>
+                                    <td>{{ inscricao.contatoTelefone1 }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>Telefone</b></td>
+                                    <td>
+                                        {% if  inscricao.contatoTelefone2 != null %}
+                                            {{ inscricao.contatoTelefone2 }}
+                                        {% else %}
+                                            --
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>E-Mail</b></td>
+                                    <td>{{ inscricao.contatoEmail }}</td>
+                                </tr>
+                                <tr class="visible-md visible-lg">
+                                    <td class="text-right"><b>Comprovantes</b></td>
+                                    <td>
+                                        [{% if inscricao.idArquivo|length %}
+                                        {% for a in inscricao.idArquivo if (a.idContexto is null or a.idContexto ==0) and a.contexto == "DOCUMENTO" %}
+                                        <a title="Clique Aqui para baixar o comprovante"
+                                           href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                           data-titulo="{{ a.nome }}"
+                                           class="abrir-arquivo">
+                                                <i class="fa fa-2x fa-file-o"></i>
+                                            </a>{% endfor %}
+                                    {% else %}Nenhum Anexo
+                                        {% endif %}]
+                                    </td>
+                                </tr>
+                                <tr class="visible-xs visible-sm">
+                                    <td class="text-right"><b>Comprovantes</b></td>
+                                    <td>
+                                        [{% if inscricao.idArquivo|length %}
+                                        {% for a in inscricao.idArquivo if (a.idContexto is null or a.idContexto ==0) and a.contexto == "DOCUMENTO" %}
+                                        <a title="Clique Aqui para baixar o comprovante"
+                                           href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                           data-titulo="{{ a.nome }}"
+                                           class="">
+                                                <i class="fa fa-2x fa-file-o"></i>
+                                            </a>{% endfor %}
+                                    {% else %}Nenhum Anexo{% endif %}]
+                                    </td>
+                                </tr>
+                                {% if inscricao.idEdital.cargo.count %}
+                                    <tr>
+                                        <td class="text-right">
+                                            <b>{{ etapa.idEdital.campoCargoTitulo }}</b>
+                                        </td>
+                                        <td>
+                                            {% if inscricao.idCargo %}
+                                                {{ inscricao.idCargo.descricao }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if inscricao.idEdital.cota.count %}
+                                    <tr>
+                                        <td class="text-right">
+                                            <b>{{ etapa.idEdital.campoListaTitulo }}</b>
+                                        </td>
+                                        <td>
+                                            {% if  inscricao.idCota %}
+                                                {{ inscricao.idCota.descricao }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </table>
+                        </div>
+                    </div>
+                    {% if inscricao.idEdital.doc13 %}
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle " data-toggle="collapse" data-parent="#accordion"
+                                   href="#endereco">
+                                    <i class="icon icon-map"></i> Endereço
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="endereco" class="accordion-body ">
+                            <div class="panel-body">
+                                <table class="table  table-responsive table-condesed">
+                                    <tr>
+                                        <td width="50%" class="text-right"><b>CEP</b></td>
+                                        <td>{{ inscricao.enderecoCep }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Endereço residencial</b></td>
+                                        <td>{{ inscricao.enderecoLogradouro }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Número</b></td>
+                                        <td>{{ inscricao.enderecoNumero }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right"><b>Complemento</b></td>
+                                        <td> {% if  inscricao.enderecoComplemento != null %}
+                                                {{ inscricao.enderecoComplemento }}
+                                            {% else %}
+                                                --
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right"><b>Bairro</b></td>
+                                        <td>{{ inscricao.enderecoBairro }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>Municipio</b></td>
+                                        <td>{{ inscricao.enderecoMunicipio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>UF</b></td>
+                                        <td>{{ inscricao.enderecoUf }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right"><b>País</b></td>
+                                        <td>Brasil</td>
+                                    </tr>
+                                    <tr class="visible-md visible-lg">
+                                        <td class="text-right"><b>Comprovantes</b></td>
+                                        <td>
+                                            [{% if inscricao.idArquivo|length %}
+                                            {% for a in inscricao.idArquivo if a.idContexto ==1 and a.contexto == "DOCUMENTO" %}
+                                            <a title="Clique Aqui para baixar o comprovante"
+                                               href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                               data-titulo="{{ a.nome }}"
+                                               class="abrir-arquivo">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>{% endfor %}
+                                        {% else %} Nenhum Anexo {% endif %}]
+                                        </td>
+                                    </tr>
+                                    <tr class="visible-xs visible-sm">
+                                        <td class="text-right"><b>Comprovantes</b></td>
+                                        <td>
+                                            [{% if inscricao.idArquivo|length %}
+                                            {% for a in inscricao.idArquivo if a.idContexto ==1 and a.contexto == "DOCUMENTO" %}
+                                            <a title="Clique Aqui para baixar o comprovante"
+                                               href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                               data-titulo="{{ a.nome }}"
+                                               class="">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>{% endfor %}
+                                        {% else %}Nenhum Anexo
+                                            {% endif %}]
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+
+            <div class="panel-group" id="accordion2">
+                <div class="panel panel-accordion">
+                    {{ form_start(form) }}
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle " data-toggle="collapse" data-parent="#accordion2"
+                               href="#pontuacao">
+                                <i class="icon icon-magic-wand"></i> Avaliação
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="pontuacao" class="accordion-body  ">
+                        <div class="panel-body">
+                            <div class="form-bordered">
+                                {% if inscricao.idEdital.modeloInscricao == 1 %}
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Título do Projeto
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                           {{ inscricao.projetoTitulo }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Resumo
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            {{ inscricao.projetoResumo }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Áreas do conhecimento
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            {{ inscricao.projetoAreaConhecimento }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Anexos
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            [{% if inscricao.idArquivo|length %}
+                                            {% for a in inscricao.idArquivo if a.idContexto ==4 and a.contexto == "DOCUMENTO" %}
+                                                <a title="Clique aqui para ver o comprovante"
+                                                   href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                                   data-titulo="{{ a.nome }}"
+                                                   class="abrir-arquivo hidden-xs hidden-sm">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>
+                                            <a title="Clique aqui para ver o comprovante"
+                                               href="{{ path('arquivo_ver',{id: a.id}) }}"
+
+                                               class="visible-xs visible-sm">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>{% endfor %}
+                                        {% else %}Nenhum Anexo
+                                            {% endif %}]
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Participantes
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            <ol class="list-unstyled">
+                                            {% for p in inscricao.idProjetoParticipante %}
+                                                <li>
+                                                    <b>{{ p.nome }}</b><br>
+                                                    [  {% if p.idArquivo.count %}
+                                                    {% for a in p.idArquivo %}
+                                                        <a title="Clique aqui para ver o comprovante"
+                                                           href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                                           data-titulo="{{ a.nome }}"
+                                                           class="abrir-arquivo hidden-xs hidden-sm">
+                                                            <i class="fa fa-2x fa-file-o"></i>
+                                                        </a>
+                                                        <a title="Clique aqui para ver o comprovante"
+                                                           href="{{ path('arquivo_ver',{id: a.id}) }}"
+
+                                                           class="visible-xs visible-sm">
+                                                            <i class="fa fa-2x fa-file-o"></i>
+                                                        </a>
+                                                    {% endfor %}
+                                                    {% else %}
+                                                        Nenhum anexo
+                                                    {% endif %} ]
+                                                    <br>
+                                                    <br>
+                                                </li>
+                                            {% endfor %}
+                                            </ol>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if inscricao.idEdital.doc6 %}
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Currículo Lattes
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            {% if inscricao.url0 %}
+                                                <a href="{{ inscricao.url0 }}" target="_blank">
+                                                    {{ inscricao.url0 }}
+                                                </a>
+                                            {% else %}
+                                                Nenhuma URL
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc7 %}
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Apresentação Individual
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            {% if inscricao.apresentacao %}
+                                                {{ inscricao.apresentacao|nl2br }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if inscricao.idEdital.doc10 %}
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            URL de vídeo de apresentação
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            {% if inscricao.url1 %}
+                                                <a href="{{ inscricao.url1 }}" target="_blank">
+                                                    {{ inscricao.url1 }}
+                                                </a>
+                                            {% else %}
+                                                Nenhuma URL
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if inscricao.idEdital.anexo2 %}
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Memorial Descritivo
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            [{% if inscricao.idArquivo|length %}
+                                            {% for a in inscricao.idArquivo if a.idContexto ==2 and a.contexto == "DOCUMENTO" %}
+                                                <a title="Clique aqui para ver o comprovante"
+                                                   href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                                   data-titulo="{{ a.nome }}"
+                                                   class="abrir-arquivo hidden-xs hidden-sm">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>
+                                                <a title="Clique aqui para ver o comprovante"
+                                                   href="{{ path('arquivo_ver',{id: a.id}) }}"
+
+                                                   class="visible-xs visible-sm">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>
+                                            {% endfor %}
+                                        {% else %}Nenhum Anexo
+                                            {% endif %}]
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if inscricao.idEdital.anexo3 %}
+                                    <div class="form-group ">
+                                        <label class="col-md-4 col-sm-12 control-label">
+                                            Anexos e Comprovantes
+                                        </label>
+                                        <div class="col-md-8 col-sm-12">
+                                            [{% if inscricao.idArquivo|length %}
+                                            {% for a in inscricao.idArquivo if a.idContexto ==  3 and a.contexto == "DOCUMENTO" %}
+                                                <a title="Clique aqui para ver o comprovante"
+                                                   href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                                   data-titulo="{{ a.nome }}"
+                                                   class="abrir-arquivo hidden-xs hidden-sm">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>
+                                                <a title="Clique aqui para ver o comprovante"
+                                                   href="{{ path('arquivo_ver',{id: a.id}) }}"
+
+                                                   class="visible-xs visible-sm">
+                                                    <i class="fa fa-2x fa-file-o"></i>
+                                                </a>
+                                            {% endfor %}
+                                        {% else %}Nenhum Anexo
+                                            {% endif %}]
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% for c, f in form %}
+                                    {% if("pt__" in c or "cat__" in c) %}
+
+                                        {% if "pt__" in c %}
+                                            {% set pt = inscricao.pontuacaoItem(f.vars.attr['data-id']) %}
+                                        {% elseif "cat__" in c %}
+                                            {% set pt = inscricao.pontuacaoCategoriaItem(f.vars.attr['data-id']) %}
+                                        {% else %}
+                                            {% set pt = null %}
+                                        {% endif %}
+
+                                        <div class="form-group ">
+                                            <label class="col-md-4 col-sm-12 control-label">
+                                                {{ f.vars.attr['data-id'] }} - {{ f.vars.label }}
+                                            </label>
+                                            <div class="col-md-8 col-sm-12">
+                                                {% if pt is not null %}
+                                                    <blockquote>
+                                                        {% if pt.idEditalPontuacao.pontuacaoTipo ==2 or pt.idEditalPontuacao.pontuacaoTipo ==3 %}
+
+                                                            <b>Observações do candidato:</b> <br>
+                                                            {% if pt.valorTexto|length %}
+                                                                {{ pt.valorTexto }}
+                                                            {% else %}
+                                                                Nenhuma observação do candidato para este item.
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if pt.idEditalPontuacao.pontuacaoTipo ==1 or pt.idEditalPontuacao.pontuacaoTipo ==3 %}
+                                                            <br><br>Anexos: [
+                                                            {% if pt.idArquivo.count %}
+                                                                {% for a in pt.idArquivo %}
+                                                                    <a title="Clique aqui para ver o comprovante"
+                                                                       href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                                                       data-titulo="{{ a.nome }}"
+                                                                       class="abrir-arquivo hidden-xs hidden-sm">
+                                                                        <i class="fa fa-2x fa-file-o"></i>
+                                                                    </a>
+                                                                    <a title="Clique aqui para ver o comprovante"
+                                                                       href="{{ path('arquivo_ver',{id: a.id}) }}"
+
+                                                                       class="visible-xs visible-sm">
+                                                                        <i class="fa fa-2x fa-file-o"></i>
+                                                                    </a>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                Nenhum Anexo
+                                                            {% endif %}]
+                                                        {% endif %}
+                                                    </blockquote>
+                                                {% endif %}
+                                                {% if etapa.pontuacaoRelativaUsuario and f.vars.attr['data-pontuacaoauto'] %}
+                                                    {% if pt != null %}
+                                                        {% if pt.valorInformado != '0.00000' %}
+                                                            <i> Pontuação informada pelo candidato:
+                                                                {{ pt.valorInformado + 0 }}
+                                                                {{ pt.idEditalPontuacao.valorTexto }}
+                                                            </i>
+                                                        {% else %}
+                                                            <i>Pontuação não informada</i>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <i>Pontuação não informada</i>
+                                                    {% endif %}
+                                                    <br>
+                                                {% endif %}
+                                                {{ form_widget(f) }}
+
+                                                {% if("pt__" in c or "cat__" in c) %}
+                                                    {% if form[c|replace({'pt__':'ptanexo__', 'cat__':'catanexo__'})] is defined %}
+                                                        <br>
+                                                        <br>
+                                                        {{ form_widget(form[c|replace({'pt__':'ptanexo__', 'cat__':'catanexo__'})]) }}
+                                                    {% endif %}
+                                                    <br>
+                                                {% endif %}
+                                                <!--
+                                                <textarea width="100%" class="form-control"
+                                                          placeholder="Observações do avaliador"></textarea>
+                                                <br>
+                                                -->
+                                                {% if pt is not null %}
+                                                    <ul class="list-unstyled">
+                                                        <li>
+                                                            <i class="icon icon-check"></i>
+                                                            <b>Requisitos</b>:
+                                                            {{ pt.idEditalPontuacao.objRequisito.descricao }}
+                                                        </li>
+                                                    </ul>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if recurso.count %}
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapse" data-toggle="collapse" data-parent="#accordion2"
+                                   href="#recurso">
+                                    <i class="fa fa-gavel"></i> Recursos
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="recurso" class="accordion-body collapse in">
+                            <div class="panel-body">
+                                {% for f in form %}
+                                    <div class="row">
+                                        {% if  f.vars.attr['data-id-recurso'] is defined and f.vars.attr['data-tipo'] == "RECURSO" %}
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <b class="text-primary">Recurso: {{ inscricao.recurso(f.vars.attr['data-id-recurso']).uuid }}</b>:
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-4 control-label">
+                                                        <label for="">Razões do candidato</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="text-justify">{{ f.vars.attr['data-observacao']|nl2br }}</p>
+                                                        <br>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                {{ form_row(f) }}
+                                                <br>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="col-md-4 col-sm-4 control-label">
+                                                        <label for="">Anexos</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        [{% if inscricao.recursoArquivo(f.vars.attr['data-id-recurso']).count() %}
+                                                        {% for a in inscricao.recursoArquivo(f.vars.attr['data-id-recurso']) %}
+                                                        <a title="Clique Aqui para baixar o arquivo do recurso"
+                                                           href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                                           data-titulo="{{ a.nome }}"
+                                                           class="abrir-arquivo">
+                                                                <i class="fa fa-2x fa-file-o"></i>
+                                                            </a>{% endfor %}
+                                                    {% else %}
+                                                        Nenhum Anexo
+                                                        {% endif %}]
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if  f.vars.attr['data-id-recurso'] is defined and f.vars.attr['data-tipo'] == "RECURSOSITUACAO" %}
+                                            <div class="col-md-12"
+                                                 style="border-bottom: 1px solid #dadada; padding-bottom: 15px">
+                                                <br>
+                                                {{ form_row(f) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="accordion-toggle collapse" data-toggle="collapse" data-parent="#accordion2"
+                               href="#parecer">
+                                <i class="icon icon-users"></i> Parecer
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="parecer" class="accordion-body collapse in">
+                        <div class="panel-body">
+                            {% if recurso.count %}
+                                <b class="text-primary">Parecer dos avaliadores</b>:
+                                <br>
+                                {% for a in inscricao.feedbackEtapa(etapa) %}
+                                    <blockquote>
+                                        {{ a.feedback }}
+                                        <br>
+                                        Avaliado por: {{ a.idAvaliador.nome }}
+                                    </blockquote>
+                                {% endfor %}
+                            {% endif %}
+                            {% for f in form %}
+                                {{ form_widget(form) }}
+                            {% endfor %}
+                            <div class="form-group text-center">
+                                <br>
+                                <button class="btn btn-success" type="submit">
+                                    Salvar avaliação
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
+    <style>
+        .swal-height {
+            height: 90vh;
+        }
+
+        .swal2-close:focus {
+            outline: none !important;
+        }
+
+        .swal2-close {
+            color: #f27474;
+        }
+    </style>
+{% endblock %}
+    {% block javascripts2 %}
+        <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+        <script>
+            $('.abrir-arquivo').click(function (e) {
+                e.preventDefault();
+                let arquivo = this.dataset.titulo,
+                    iframe = document.createElement('iframe');
+                iframe.src = this.href;
+                iframe.height = "90vh";
+                iframe.width = "100%";
+                iframe.style = "overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:90vh;width:100%;";
+                Swal.fire({
+                    title: "friga://" + arquivo,
+                    html: iframe.outerHTML,
+                    width: "90%",
+                    height: "90vh",
+                    focusCancel: false,
+                    showCloseButton: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                });
+            });
+            let offsetFn = function () {
+                return $('#sec-vinsualizador').position().top;
+            };
+            $('#sec-vinsualizador').affix({
+                offset: {top: offsetFn}
+            });
+            $('select').select2({
+                'width': '300px',
+            });
+        </script>
+    {% endblock %}
+    {% block javascripts33 %}
+        <link href="{{ asset('assets/vendor/bootstrap-toggle/bootstrap-toogle.min.css') }}" rel="stylesheet">
+        <script src="{{ asset('assets/vendor/bootstrap-toggle/bootstrap-toggle.min.js') }}"></script>
+        <script>
+            $('select').select2({
+                'width': '100%',
+            });
+            $("input[data-tipo='ANEXO']").change(e => {
+                //$(e.target).bootstrapToggle('destroy');
+                $(e.target).bootstrapToggle({
+                    offstyle: "danger",
+                    off: "Não Aceito",
+                });
+            });
+        </script>
+    {% endblock %}

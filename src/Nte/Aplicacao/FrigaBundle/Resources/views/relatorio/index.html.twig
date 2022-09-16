@@ -1,0 +1,57 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Relatório por Edital {% endblock %}
+{% block breadcumbsTitulo %}Relatório por Edital {% endblock %}
+{% block conteudo %}
+    {% for edital in editais %}
+        <div class="col-md-3 col-sm-6 item">
+            <div class="panel">
+                <div class="panel-body">
+
+                    <h5 class="text-weight-semibold mt-none text-center">{{ edital.titulo }}</h5>
+
+                    <div class="row text-center text-weight-bold text-primary">
+                        <a{% if is_granted('ROLE_GERENCIAL') %} href="{{ path('relatorio_inscritos', {'uuid': edital.uuid}) }}" {% endif %}>
+                            <div class="col-md-4">
+                                <h4><i class="icon icon-users"></i> {{ edital.inscricaoValida.count }}</h4>
+                                INSCRIÇÕES
+                            </div>
+                        </a>
+                        <a{% if is_granted('ROLE_GERENCIAL') %} href="{{ path('relatorio_anulados', {'uuid': edital.uuid}) }}" {% endif %}>
+                            <div class="col-md-4">
+                                <h4><i class="icon icon-trash"></i> {{ edital.inscricaoInvalida.count }}</h4>
+                                ANULADAS
+                            </div>
+                        </a>
+                        <div class="col-md-4">
+                            <h4><i class="icon icon-briefcase"></i> {{ edital.cargo.count }} </h4>
+                            VAGAS
+                        </div>
+                    </div>
+                    <br>
+                    {% if edital.andamentoPrazo >0 and edital.andamentoPrazo <100 %}
+                        <div class="progress" data-toggle="tooltip" data-placement="top" title=""
+                             data-original-title="Prazo decorrido do edital. Quando este prazo chegar em 100% o edital será finalizado.">
+                            <div class="progress-bar progress-bar-primary progress-bar-striped"
+                                 style="width: {{ edital.andamentoPrazo }}%">
+                                {{ edital.andamentoPrazo }}%
+                            </div>
+                        </div>
+                        {% else %}
+                    {% endif %}
+
+                    <a class="btn btn-default btn-block"
+                       href="{{ path('relatorio_resumo', {'uuid': edital.uuid}) }}">
+                        <i class="icon icon-bar-chart"></i>
+                        Relatório Geral
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/jquery-match-height/jquery.matchHeight-min.js') }}"></script>
+    <script>
+        $.fn.matchHeight._rows($('.item'));
+    </script>
+{% endblock %}

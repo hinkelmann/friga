@@ -1,0 +1,215 @@
+{% extends 'base.admin.html.twig' %}
+{% set qp = app.request.query.all %}
+{% block titulo %} Etapas  {% endblock %}
+{% block breadcumbsTitulo %} Etapas {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="btn-group">
+                {% set classe1 = 'nte_aplicacao_friga_etapa_index_proxima' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('nte_aplicacao_friga_etapa_index_proxima') }}"
+                   title="Clique aqui para ver as próximas etapas ">
+                    <i class="fa fa-calendar"></i> Próximas
+                </a>
+                {% set classe1 = 'nte_aplicacao_friga_etapa_index' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('nte_aplicacao_friga_etapa_index') }}"
+                   title="Clique aqui para ver as etapas abertas para alteração">
+                    <i class="fa fa-calendar-o"></i> Abertas
+                </a>
+                {% set classe1 = 'nte_aplicacao_friga_etapa_index_ecenrrada' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('nte_aplicacao_friga_etapa_index_ecenrrada') }}"
+                   title="Clique aqui para ver as etapas encerradas">
+                    <i class="fa fa-calendar-check-o"></i> Encerradas
+                </a>
+                {% set classe1 = 'nte_aplicacao_friga_etapa_index_todas' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('nte_aplicacao_friga_etapa_index_todas') }}"
+                   title="Clique aqui para ver todas as etapas">
+                    <i class="icon icon-list"></i> Todos
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="pull-right">
+                <div class="input-group">
+                    <div class="btn-group">
+                        {% set classe1 = qp['o'] is defined and qp['o'] == 1 ? "active":"" %}
+                        <a class="btn btn-default {{ classe1 }}"
+                           href="{{ path(app.request.attributes.get('_route'), qp|merge({o:1})) }}"
+                           title="Clique aqui para ordernar as etapas em ordem crescente ">
+                            <i class="fa fa-sort-amount-asc"></i>
+                        </a>
+                        {% set classe1 = qp['o'] is defined and qp['o'] == -1 ? "active":"" %}
+                        <a class="btn btn-default {{ classe1 }}"
+                           href="{{ path(app.request.attributes.get('_route'), qp|merge({o:-1})) }}"
+                           title="Clique aqui para ordernar as etapas em ordem decrescente">
+                            <i class="fa fa-sort-amount-desc"></i>
+                        </a>
+                    </div>
+                    <select id="tipo">
+                        <option value="0" {% if tipo ==0 %} selected="selected" {% endif %}> -- todas etapas --</option>
+                        <option value="3" {% if tipo ==3 %} selected="selected" {% endif %}> Avaliação</option>
+                        <option value="7" {% if tipo ==7 %} selected="selected" {% endif %}> Recurso</option>
+                        <option value="4" {% if tipo ==4 %} selected="selected" {% endif %}> Resultado</option>
+                        <option value="5" {% if tipo ==5 %} selected="selected" {% endif %}> Convocação</option>
+                    </select>
+                    <select id="edital">
+                        <option value="0" {% if edital ==0 %} selected="selected" {% endif %}> -- todos editais --
+                        </option>
+                        {% for e in editais %}
+                            <option value="{{ e.id }}" {% if edital ==e.id %} selected="selected" {% endif %}>{{ e['titulo'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% if etapas.count %}
+            {% for etapa in etapas %}
+                <div class="col-md-6 col-lg-6 col-xl-3 item">
+                    <div class="panel">
+                        <header class="panel-heading bg-white">
+                            {% if etapa.tipo == 3 or etapa.tipo==7 %}
+                                <div class="panel-heading-icon bg-success mt-sm">
+                                    <i class="icon icon-calculator"></i>
+                                </div>
+                            {% endif %}
+                            {% if etapa.tipo == 4 %}
+                                <div class="panel-heading-icon bg-primary mt-sm">
+                                    <i class="icon icon-trophy"></i>
+                                </div>
+                            {% endif %}
+                            {% if etapa.tipo == 5 %}
+                                <div class="panel-heading-icon bg-danger mt-sm">
+                                    <i class="icon icon-calendar"></i>
+                                </div>
+                            {% endif %}
+                        </header>
+                        <div class="panel-body">
+                            <h4 class="text-weight-semibold mt-none text-center">{{ etapa.descricao }}</h4>
+                            <h5 class="text-center">
+                                <br> {{ etapa.idEdital.titulo }}
+                            </h5>
+                            {% if etapa.andamentoPrazo >=0  and app.request.attributes.get('_route') == 'nte_aplicacao_friga_etapa_index' %}
+                                <div class="progress" data-toggle="tooltip" data-placement="top" title=""
+                                     data-original-title="Prazo para finalizar a etapa. Quando este prazo chegar em 100% não será possível realizar a avaliação dos candidatos">
+                                    {% if etapa.tipo == 3 or etapa.tipo==7 %}
+                                    <div class="progress-bar progress-bar-success progress-bar-striped"
+                                         style="width: {{ etapa.andamentoPrazo }}%">
+                                        {{ etapa.andamentoPrazo }}%
+                                    </div>
+                                    {% endif %}
+                                    {% if etapa.tipo == 4 %}
+                                        <div class="progress-bar progress-bar-primary progress-bar-striped"
+                                             style="width: {{ etapa.andamentoPrazo }}%">
+                                            {{ etapa.andamentoPrazo }}%
+                                        </div>
+                                    {% endif %}
+                                    {% if etapa.tipo == 5 %}
+                                        <div class="progress-bar progress-bar-danger progress-bar-striped "
+                                             style="width: {{ etapa.andamentoPrazo }}%">
+                                            {{ etapa.andamentoPrazo }}%
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            <p class="text-center">
+                                De {{ etapa.dataInicial|date('d/m/Y') }} Até {{ etapa.dataFinal|date('d/m/Y') }}
+                            </p>
+                            <p class="text-center">
+                            <div class="btn-group btn-group-justified">
+                                {% if etapa.tipo == 3 or etapa.tipo== 7 %}
+                                    <!--<a class="btn btn-default"
+                                       title="Clique aqui para visualizar a classificação parcial dos candidatos"
+                                       href="{{ path('resultado_parcial',{edital: etapa.idEdital.id} ) }}">
+                                        <i class="icon icon-refresh"></i> Resultados
+                                    </a> -->
+                                    {% if etapa.periodoHabilitado or is_granted('ROLE_ADMIN') %}
+                                        <a class="btn btn-success"
+                                           title="Clique aqui para realizar a avaliação dos candidatos"
+                                           href="{{ path('avaliacao_etapa',{etapa: etapa.id} ) }}">
+                                            <i class="icon-pencil"></i> Avaliação
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if etapa.tipo == 4 %}
+                                    <a class="btn btn-primary"
+                                       href="{{ path('resultado_etapa', {'etapa': etapa.id}) }}">
+                                        <i class="icon icon-trophy"></i>
+                                        Resultados
+                                    </a>
+                                {% endif %}
+                                {% if etapa.tipo == 5 %}
+                                    {% if etapa.periodoHabilitado or  is_granted('ROLE_ADMIN') %}
+                                        <a class="btn btn-danger"
+                                           title="Clique aqui para realizar a convocação dos candidatos"
+                                           href="{{ path('convocacao_etapa',{etapa: etapa.id} ) }}">
+                                            <i class="icon-pencil"></i> Ver Candidatos
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="body-error error-inside">
+                <div class="center-error">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="main-error mb-xlg">
+                                <h2 class="error-code text-dark text-center text-weight-semibold m-none"><i
+                                            class="icon icon-calculator fa-icon-check-circle text-primary"></i></h2>
+                                <p class="error-explanation text-center text-primary">
+                                    <br>Nenhuma <b> etapa </b> disponível.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    <script>
+        let filtroEdtial = $('#edital'),
+            filtroTipo = $('#tipo')
+        ;
+        filtroEdtial.select2({
+            width: '300px',
+            placeholder: '-- Selecione um edital --',
+        });
+
+        filtroTipo.select2({
+            width: '150px',
+            placeholder: '-- Selecione um tipo de etapa--',
+        });
+
+
+        filtroEdtial.change(e => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (filtroEdtial.val() == null) {
+                urlParams.delete('edital');
+            } else {
+                urlParams.set('edital', filtroEdtial.val());
+            }
+            window.location.search = urlParams;
+        });
+        filtroTipo.change(e => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (filtroTipo.val() == null) {
+                urlParams.delete('tipo');
+            } else {
+                urlParams.set('tipo', filtroTipo.val());
+            }
+            window.location.search = urlParams;
+        });
+    </script>
+    <script src="{{ asset('assets/vendor/jquery-match-height/jquery.matchHeight-min.js') }}"></script>
+    <script>
+        $.fn.matchHeight._rows($('.item'));
+    </script>
+{% endblock %}

@@ -1,0 +1,252 @@
+{% set arquivoImagemPerfil = asset('assets/img/default_user.png') %}
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% form_theme form 'forms-site.html.twig' %}
+{% block marca %}{% endblock %}
+{% block titulo %} Redefinição de Senha {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ form_start(form) }}
+        <div class="col-md-3">
+            <div class="form-group text-center">
+                <div class="">
+                    <!--
+                    <input type="checkbox" class='hidden validar' id="foto" name="foto"
+                           data-validate=""
+                           {% if entity.img %}checked="checked"{% endif %}
+                           data-msg="Por favor, atualize sua foto."
+                           required="required" value="1"
+                           aria-required="true">
+                    -->
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="kv-avatar">
+                    <div class="file-loading">
+                        <input id="file" name="file" type="file">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="alert alert-info">
+                <strong>Olá, seja bem-vindo! </strong><br><br>
+                Você está acessando este site pela primeira vez.<br>
+                Para acessar os formulários de inscrições dos editais em aberto,
+                é necessário que você preencha o cadastro abaixo.
+                <br><br>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    {{ form_row(form.nome) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.dataNascimento) }}
+                </div>
+                {#
+                <div class="col-md-8">
+                    {{ form_row(form.nomeSocial) }}
+                </div>
+                #}
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.cpf) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.rgNro) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.rgOrgaoExpedidor) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.contatoTelefone1) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.contatoTelefone2) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.email) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.enderecoCep) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.enderecoNumero) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.enderecoComplemento) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    {{ form_row(form.enderecoLogradouro) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.enderecoBairro) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_row(form.enderecoMunicipio) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.enderecoUf) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="submit" class="btn btn-primary ">
+                        <i class="fa fa-chevron-right"> </i> Próximo
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+            <div class="row">
+                {{ form_rest(form) }}
+            </div>
+<br><br>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/pnotify/pnotify.custom.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2/css/select2.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2-bootstrap-theme/select2-bootstrap.css") }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-fileinput/css/fileinput.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-fileinput/css/fileinput-profile.min.css') }}">
+{% endblock %}
+{% block js %}
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-cookie/jquery-cookie.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-fileinput/js/fileinput.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-fileinput/js/locales/pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+    <script>
+        let cep = $('#nte_usuario_enderecoCep'),
+            //dataNascimento = $('#nte_usuario_dataNascimento'),
+            datas = $('input[data-plugin-datepicker="1"]'),
+            telefone1 = $('#nte_usuario_contatoTelefone1'),
+            telefone2 = $('#nte_usuario_contatoTelefone2'),
+            cpf = $('#nte_usuario_cpf'),
+            rua = $('#nte_usuario_enderecoLogradouro'),
+            bairro = $('#nte_usuario_enderecoBairro'),
+            cidade = $('#nte_usuario_enderecoMunicipio'),
+            uf = $('#nte_usuario_enderecoUf'),
+            arquivo = $("#file"),
+            foto = $("#foto"),
+            selects = $('select'),
+            forms = $('form'),
+            telefoneOptions = {
+                onKeyPress: (nro) => {
+                    telefone1.mask(((nro.length < 14) ? '(00) 0000-0000' : '(00) 0000-0000'), telefoneOptions);
+                }
+            };
+        forms.validate();
+        cep.mask('00000-000');
+        cpf.mask('000.000.000-00');
+
+       // dataNascimento.mask('00/00/0000');
+        telefone1.mask('(00) 00000-0000');
+        telefone2.mask('(00) 0000-0000');
+
+        cep.change(() => {
+            let x = cep.val().replace("-", "");
+            $.get("{{ path('get_logistica_cep') }}?cep=" + x, cep => {
+                if (cep) {
+                    rua.val(cep.tipo +" " +cep.nome);
+                    bairro.val(cep.id_bairro_inicio.nome);
+                    cidade.val(cep.id_cidade.localidade_nome);
+                    uf.val(cep.id_cidade.estado_sigla).trigger('change');
+                }
+            });
+        });
+
+        selects.select2({width: '100%'});
+        datas.mask('00/00/0000');
+        datas.datepicker({
+            language: "pt-BR",
+            format: "dd/mm/yyyy",
+        });
+        $.validator.addMethod("cpf", function(value, element) {
+            return this.optional(element) || CPF.validate(value);
+        }, "Por favor, Informe um CPF válido.");
+
+
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+
+        forms.submit(function (e) {
+            e.preventDefault();
+            console.log(e);
+            foto.removeClass('hidden');
+            if (forms.valid()) {
+                forms.unbind('submit').submit();
+            }
+            setTimeout(function () {
+                foto.addClass('hidden');
+            }, 1);
+        });
+
+
+        $.ajaxSetup({
+            timeout: 99999999999,
+            headers: {'x-contexto': "PERFIL", 'X-CSRFToken': "{{ csrf_token('friga-upload-header') }}"}
+        });
+
+        arquivo.fileinput({
+            language: "pt-BR",
+            uploadUrl: "{{ oneup_uploader_endpoint('frigadata') }}",
+            deleteUrl: "{{ path('arquivo_remover') }}",
+            uploadAsync: false,
+            minFileCount: 1,
+            maxFileCount: 1,
+            overwriteInitial: true,
+            maxFileSize: 15000,
+            showUpload: false,
+            showClose: false,
+            showCaption: false,
+            showBrowse: false,
+            showRemove: false,
+            removeFromPreviewOnError: true,
+            browseOnZoneClick: true,
+            removeLabel: '',
+            elErrorContainer: '#kv-avatar-errors-2',
+            msgErrorClass: 'alert alert-block alert-danger',
+            defaultPreviewContent: '<img src="{{ path('arquivo_download',{id: entity.img}) }}" class="img-rounded img-responsive" ><h6 class="text-muted">Clique aqui para inserir a sua imagem de perfil</h6>',
+            layoutTemplates: {},
+            uploadExtraData: {
+                xtk: "{{ csrf_token('friga-upload-usuario-imagem-form') }}"
+            },
+            allowedFileExtensions: ["jpg", "JPG","jpeg","JPEG", "png","PNG","gif","GIF"]
+            //allowedFileTypes: ["image"]
+        }).on("filepredelete", function (event, files) {
+
+        })
+            .on("filebatchselected", function (event, files) {
+                arquivo.fileinput("upload");
+            })
+            .on('filebatchuploadsuccess', function (event, data) {
+                foto.prop("checked", true);
+                forms.valid();
+            });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,60 @@
+nte_usuario_candidato_homepage:
+  path:     /
+  defaults: { _controller: NteUsuarioBundle:Candidato:index }
+
+nte_usuario_candidato_inscricao:
+  path:     /inscricacao/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricao }
+
+nte_usuario_candidato_inscricao_cancelar:
+  path:     /cancelar/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:cancelarInscricao }
+
+nte_usuario_candidato_inscricao_concluida:
+  path:     /inscricacao-concluida/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricaoConcluida }
+
+nte_usuario_candidato_inscricao_visualizacao:
+  path:     /inscricacao-realizada/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricaoRealizada }
+
+nte_usuario_candidato_inscricao_projeto:
+  path:     /inscricao-projeto/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:inscricaoProjeto }
+
+nte_usuario_candidato_inscricao_index:
+  path:     /inscricoes
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexInscricoes }
+
+nte_usuario_candidato_editais_index:
+  path:     /editais
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexEditais }
+
+nte_usuario_candidato_recursos_index:
+  path:     /recursos
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexRecursos }
+
+nte_usuario_candidato_recursos_form:
+  path:     /recursos/{etapa}/formulario/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:formRecurso }
+
+nte_usuario_candidato_recursos_ver:
+  path:     /recursos/{uuid}/ver/
+  defaults: { _controller: NteUsuarioBundle:Candidato:verRecurso }
+
+
+nte_usuario_candidato_convocacao_index:
+  path:     /convocacoes
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexConvocacao }
+
+nte_usuario_candidato_resultado_index:
+  path:     /resultados
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexResultado }
+
+nte_usuario_candidato_perfil:
+  path:     /perfil
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexPerfil }
+
+nte_usuario_candidato_download_arquivo_pessoal:
+  path:     /download/arquivo/{uuid}/{arquivo}
+  defaults: { _controller: NteUsuarioBundle:Candidato:downloadArquivo }

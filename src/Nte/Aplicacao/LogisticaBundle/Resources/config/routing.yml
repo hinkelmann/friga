@@ -1,0 +1,14 @@
+nte_aplicacao_logistica_logradouro_cep:
+    path: /logradouro/cep/{cep}
+    defaults: {_controller: "NteAplicacaoLogisticaBundle:Default:buscarLogradouroCep", cep: null}
+    methods: GET
+
+nte_aplicacao_logistica_logradouro_termo:
+    path: /logradouro/termo/{termo}
+    defaults: {_controller: "NteAplicacaoLogisticaBundle:Default:buscarLogradouroTermo", termo: null}
+    methods: GET
+
+nte_aplicacao_logistica_localidade_termo:
+    path: /localidade/termo/{termo}
+    defaults: {_controller: "NteAplicacaoLogisticaBundle:Default:buscarLocalidadeTermo", termo: null}
+    methods: GET

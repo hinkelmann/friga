@@ -1,0 +1,67 @@
+nte_aplicacao_site:
+    resource: "@NteSiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#
+#nte_formulario_padrao:
+#    resource: "@NteAplicacaoCadastrosBundle/Resources/config/routing/frontend.yml"
+#    prefix: /
+
+
+#Pacote principal
+nte_admin_painel:
+    resource: "@NteAdminPainelBundle/Resources/config/routing.yml"
+    prefix:   /app/
+
+nte_admin_suporte:
+    resource: "@NteSuporteBundle/Resources/config/routing.yml"
+    prefix:   /app/suporte
+
+nte_admin_cadastros:
+    resource: "@NteAplicacaoFrigaBundle/Resources/config/routing.yml"
+    prefix: /app/
+
+nte_site_api:
+  prefix:     /candidato/api/
+  type: rest
+  resource: "@NteAplicacaoLogisticaBundle/Controller/ApiController.php"
+
+#Rotas do pacote de usuario
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+#    resource: Fos
+
+
+#Rotas do pacote de usuario
+fos_user_login:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /app/recuperar-senha/
+
+fos_user_profile_a:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /app/profile/
+
+nte_user:
+  resource: "@NteUsuarioBundle/Resources/config/routing.yml"
+  prefix: /app/usuario/
+
+nte_usuario_redefinir:
+    path:  /app/primeiro-acesso/
+    defaults: { _controller: NteUsuarioBundle:Usuario:editarPrimeiroAcesso }
+
+NelmioApiDocBundle:
+  resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+  prefix:   /api/doc
+
+fos_oauth_server_token:
+  resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+
+
+oneup_uploader:
+    resource: .
+    type: uploader

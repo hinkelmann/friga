@@ -1,0 +1,91 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Resultados {% endblock %}
+{% block breadcumbsTitulo %} Resultados {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group">
+                {% set classe1 = 'resultado_index_proxima' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('resultado_index_proxima') }}"
+                   title="Próximas etapas de resultados">
+                    <i class="icon icon-bulb"></i> Próximas
+                </a>
+                {% set classe1 = 'resultado_index' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('resultado_index') }}"
+                   title="Etapas de resultado abertas para alteração">
+                    <i class="icon icon-anchor"></i> Abertas
+                </a>
+                {% set classe1 = 'resultado_index_encerrado' == app.request.attributes.get('_route')?"active":"" %}
+                <a class="btn btn-default {{ classe1 }}" href="{{ path('resultado_index_encerrado') }}"
+                   title="etapas de resultado encerradas">
+                    <i class="icon icon-close"></i> Encerradas
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% if editais.count %}
+            {% for etapa in editais %}
+                <div class=" col-xl-3 col-sm-6 col-md-3 item" style="">
+                    <div class="panel">
+                        <header class="panel-heading bg-white">
+                            <div class="panel-heading-icon bg-success mt-sm">
+                                <i class="icon icon-trophy"></i>
+                            </div>
+                        </header>
+                        <div class="panel-body">
+                            <h4 class="text-weight-semibold mt-none text-center">{{ etapa.idEdital.titulo }}</h4>
+                            <p class="text-center">
+                                <a href="{{ path('avaliacao_etapa',{etapa: etapa.id} ) }}">
+                                    <br> {{ etapa.descricao }}
+                                </a>
+                            </p>
+                            <p class="text-center">
+                                De {{ etapa.dataInicial|date('d/m/Y') }} Até {{ etapa.dataFinal|date('d/m/Y') }}
+                            </p>
+                            <div class="btn-group btn-group-justified">
+                                {% if app.request.attributes.get('_route') == 'resultado_index_proxima'
+                                    or app.request.attributes.get('_route') == 'resultado_index' %}
+                                <a class="btn btn-default"
+                                   href="{{ path('resultado_parcial', {'edital': etapa.idEdital.id}) }}">
+                                    <i class="icon icon-refresh"> </i>
+                                    Parcial
+                                </a>
+                                {% endif %}
+                                {% if app.request.attributes.get('_route') == 'resultado_index_encerrado'
+                                    or app.request.attributes.get('_route') == 'resultado_index' %}
+                                <a class="btn btn-success" href="{{ path('resultado_etapa', {'etapa': etapa.id}) }}">
+                                    <i class="icon icon-anchor"></i>
+                                    Publicado
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="body-error error-inside">
+                <div class="center-error">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="main-error mb-xlg">
+                                <h2 class="error-code text-dark text-center text-weight-semibold m-none"><i
+                                            class="icon icon-trophy text-primary"></i></h2>
+                                <p class="error-explanation text-center text-primary">
+                                    <br>Nenhuma <b> etapa de classificação</b> disponível.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/jquery-match-height/jquery.matchHeight-min.js') }}"></script>
+    <script>
+        $.fn.matchHeight._rows($('.item'));
+    </script>
+{% endblock %}

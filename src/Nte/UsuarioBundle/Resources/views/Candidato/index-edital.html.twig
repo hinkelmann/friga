@@ -1,0 +1,27 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} Editais /{{ app.user.nome }} {% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Editais com inscrições  abertas </span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-md-9">
+            <div class="row">
+                {{ render(controller('NteSiteBundle:Default:parteEditais',{situacao:1})) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

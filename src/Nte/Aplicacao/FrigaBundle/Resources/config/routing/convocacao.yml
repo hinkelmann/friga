@@ -1,0 +1,51 @@
+convocacao_index:
+  path:     /
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:index", situacao: 50 }
+  methods:  GET
+
+convocacao_index_encerrado:
+  path:     /etapas/encerradas
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:index", situacao: 100 }
+  methods:  GET
+
+convocacao_index_proxima:
+  path:     /etapas/proximas
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:index", situacao: 0 }
+  methods:  GET
+
+convocacao_etapa:
+  path:     /etapa/{etapa}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:indexCandidato" }
+  methods:  GET
+
+convocacao_etapa_impressao_relacao:
+  path:     /etapa/{etapa}/impressao/relacao
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:impresaoRelacao" }
+  methods:  GET
+
+convocacao_etapa_impressao_presenca:
+  path:     /etapa/{etapa}/impressao/presenca
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:impresaoPresenca" }
+  methods:  GET
+
+
+convocacao_etapa_exportar_csv:
+  path:     /etapa/{etapa}/exportar/csv
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:exportarCsv" }
+  methods:  GET
+
+convocacao_etapa_candidato:
+  path:     /etapa/{etapa}/inscricao/{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:form" }
+  methods:  [GET|POST]
+
+convocacao_comprovante:
+  path:     /etapa/{etapa}/comprovante/{arquivo}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:formComprovante" }
+  methods:  GET
+
+
+convocacao_index_edital:
+  path:     /{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:index" }
+  methods:  GET

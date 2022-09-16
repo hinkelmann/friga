@@ -1,0 +1,67 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Mensagem{% endblock %}
+ {% block breadcumbsTitulo %}Mensagem{% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="{{ path('nte_usuario_index') }}"> Mensagem </a></span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel-body">
+                <div class="text-center">
+                    <h3><i class="fa fa-envelope"></i> Envio de Mensagem</h3>
+                    <br>
+                    <br>
+                </div>
+                <form method="post" action="{{ path('nte_admin_mensagem') }}">
+                    <div class="form-group">
+                        <label for="destinatario">Destinatários</label>
+                        <select class="form-control" id="destinatario" name="destinatario">
+                            {% for chave, valor in app.user.roles2 %}
+                                <option value="{{ chave }}">{{ valor }}</option>
+                            {% endfor %}
+                            <option value="SEM_REGRA">Candidatos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assunto">Assunto</label>
+                        <input type="text" id="assunto" name="assunto" class="form-control" placeholder="Assunto da Mensagem">
+                    </div>
+                    <div class="form-group">
+                        <label for="msg">Mensagem</label>
+                        <textarea  data-plugin-summernote data-plugin-options='{ "height": 180, "codemirror": { "theme": "ambiance" } }' id="msg" name="msg" class="summernote" rows="5" placeholder="Escreva uma mensagem"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-plane"></i> Enviar</button>
+                    </div>
+                    <input type="hidden" id="token" name="token" value="{{ csrf_token('mensagem-para-todos') }}">
+                </form>
+            </div>
+        </div>
+        {% if lista is defined %}
+        <div class="col-md-6">
+        <div class="panel-body">
+            <div class="text-center">
+                <h3><i class="fa fa-envelope"></i> {{ msgTotal }}</h3>
+                <span>Mensagens enviadas</span><br>
+                <br>
+            </div>
+            <p>Destinatários da mensagem</p>
+            <ul class="list-group">
+                {% for nome, email in lista %}
+                <li class="list-group-item">{{ nome }} - {{ email }} </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+        {% endif %}
+    </div>
+{% endblock -%}
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('assets/vendor/summernote/summernote.css') }}">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/summernote/summernote.js') }}"></script>
+{% endblock %}

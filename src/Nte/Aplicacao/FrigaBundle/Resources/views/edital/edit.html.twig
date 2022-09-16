@@ -1,0 +1,931 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Configuração{% endblock %}
+{% block breadcumbsTitulo %}Configurações do Edital{% endblock %}
+{% block conteudo %}
+    <div class="tabs">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#config" data-toggle="tab" class="text-center">
+                    <i class="fa fa-star"></i> Configurações
+                </a>
+            </li>
+            <li>
+                <a href="#arquivo" data-toggle="tab" class="text-center">
+                    <i class="fa fa-file-pdf-o"></i> Arquivos
+                </a>
+            </li>
+            <li>
+                <a href="#cargo" data-toggle="tab" class="text-center">
+                    <i class="fa fa-gift"></i> Cargos
+                </a>
+            </li>
+            <li>
+                <a href="#avaliador" data-toggle="tab" class="text-center">
+                    <i class="fa fa-users"></i> Avaliadores
+                </a>
+            </li>
+            <li>
+                <a href="#etapa" data-toggle="tab" class="text-center">
+                    <i class="fa fa-flag"></i> Etapas
+                </a>
+            </li>
+            <li>
+                <a href="#pontuacao" data-toggle="tab" class="text-center">
+                    <i class="fa fa-calculator"></i> Pontuação
+                </a>
+            </li>
+            <li>
+                <a href="#desempate" data-toggle="tab" class="text-center"><i class="fa fa-balance-scale"></i> Desempate
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="config" class="tab-pane active">
+                {{ form_start(config_form) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.url) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.url) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.titulo) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.titulo) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.dataPublicacaoOficial) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.dataPublicacaoOficial) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.sobre) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.sobre) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info1) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info1) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info2) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info2) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.info3) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.info3) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.tipoInscricao) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.tipoInscricao) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.publico) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.publico) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo0) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo0) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.anexo1) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.anexo1) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <section class="panel-body">
+                        <a href="{{ path('edital_index') }}" class="btn btn-default pull-left">
+                            <i class="fa fa-arrow-left"></i> Voltar
+                        </a>
+                        <button class="btn btn-primary pull-right" type="submit">
+                            <i class="fa fa-save"></i> Salvar Edital
+                        </button>
+                    </section>
+                </div>
+
+                {{ form_end(config_form) }}
+            </div>
+            <div id="arquivo" class="tab-pane">
+<div class="row">
+<div class="col-md-6">
+<div id="jsGrid"></div>
+<div id="arquivo-edital" class="dropzone"></div>
+</div>
+<div class="col-md-6">
+<div>
+<span>Pagina: <span id="page_num"></span> / <span id="page_count"></span></span>
+<div class="btn-group pull-right">
+<button id="prev" class="btn btn-default"><i class="fa fa-angle-up"></i></button>
+<button id="next" class="btn btn-default"><i class="fa fa-angle-down"></i></button>
+</div>
+</div>
+<canvas id="the-canvas"></canvas>
+<!--<iframe src="{{ path('pdf-teste') }}" width="100%" height="700"></iframe>-->
+</div>
+</div>
+            </div>
+            <div id="cargo" class="tab-pane">
+                <div class="col-md-12">
+                    <div class="row">
+
+                        <a class="btn btn-primary pull-right"
+                           href="{{ path('edital_cargo_criar',{uuid: frigaedital.uuid}) }}">
+                            <i class="fa fa-gift"></i> Adicionar Cargo
+                        </a>
+                    </div>
+                    <br>
+                </div>
+                {% if frigaedital.cargo|length %}
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <table class="table table-hover table-condesed ">
+                            <tr>
+                                <th>Cargo</th>
+                                <th>Inscritos</th>
+                                <th>Ações</th>
+                            </tr>
+                            {% for cargo in frigaedital.cargo %}
+                                <tr>
+                                    <td>{{ cargo.descricao }}</td>
+                                    <td>{{ cargo.idUsuario|length }}</td>
+                                    <td>
+                                        <a class="btn btn-default pull-right"
+                                           href="{{ path('edital_cargo_editar',{uuid: frigaedital.uuid, id: cargo.id}) }}">
+                                            <i class="fa fa-edit"></i> Editar
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        {% else %}
+                            <section class="body-error error-inside">
+                                <div class="center-error">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="main-error mb-xlg">
+                                                <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                                    <i class="fa fa-gift text-primary"></i>
+                                                </h2>
+                                                <p class="error-explanation text-center text-primary">
+                                                    <br><b>Nenhum cargo foi criado </b> até o momento.<br>
+                                                    <br>
+                                                    <br>
+                                                    <a href="{{ path('edital_cargo_criar',{uuid: frigaedital.uuid}) }}"
+                                                       class="btn btn-primary">
+                                                        <i class="fa fa-plus-circle"></i> Criar o primeiro cargo
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div id="avaliador" class="tab-pane">
+                <div class="col-md-12">
+                    <div class="row">
+                        <a class="btn btn-default pull-right" href="{{ path('nte_usuario_novo') }}">
+                            <i class="fa fa-user-plus"></i> Adicionar Usuário
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-icons">
+                            {% for u in usuarios %}
+                                <li class="list-group-item">{{ u.username }}
+                                    {% for r in u.roles %}
+                                        <i class="">{{ r }}</i>
+                                    {% endfor %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Filtrar usuários">
+                        </div>
+                        <hr>
+                        <ul class="list-unstyled">
+                            {% for u in usuarios %}
+                                <li><i class="fa fa-arrow-circle-left"></i> {{ u.username }} </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="etapa" class="tab-pane">
+                <div class="main-container">
+                    <div id="container"></div>
+                    <div id="buttonGroup" class="button-row">
+                        <button id="btnShowDialog">
+                            <i class="fa fa-plus"></i>
+                            Add task
+                        </button>
+                        <button id="btnRemoveSelected" disabled="disabled">
+                            <i class="fa fa-remove"></i>
+                            Remove selected
+                        </button>
+                    </div>
+
+                    <div id="addTaskDialog" class="hidden overlay">
+                        <div class="popup">
+                            <h3>Add task</h3>
+
+                            <label>Task name <input id="inputName" type="text" /></label>
+
+                            <label>Department
+                                <select id="selectDepartment">
+                                    <option value="0">Tech</option>
+                                    <option value="1">Marketing</option>
+                                    <option value="2">Sales</option>
+                                </select>
+                            </label>
+
+                            <label>Dependency
+                                <select id="selectDependency">
+                                    <!-- Filled in by Javascript -->
+                                </select>
+                            </label>
+
+                            <label>
+                                Milestone
+                                <input id="chkMilestone" type="checkbox" />
+                            </label>
+
+                            <div class="button-row">
+                                <button id="btnAddTask">Add</button>
+                                <button id="btnCancelAddTask">Cancel</button>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div id="pontuacao" class="tab-pane">
+                {% if frigaedital.pontuacao|length %}
+
+                {% else %}
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                            <i class="fa fa-calculator text-primary"></i>
+                                        </h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br><b>Nenhum critério para pontuação foi criado</b> até o momento.<br>
+                                            <br>
+                                            <br>
+                                            <a href="{{ path('nte_suporte_faq_form') }}" class="btn btn-primary">
+                                                <i class="fa fa-plus-circle"></i> Criar o primeiro critério de pontuação
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+            </div>
+            <div id="desempate" class="tab-pane">
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/moment/locales.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/pt-br.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/jsgrid/jsgrid.min.css') }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/jsgrid/jsgrid-theme.min.css') }}"/>
+
+    <script type="text/javascript" src="{{ asset('assets/vendor/jsgrid/jsgrid.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/pdfjs/pdf.worker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/pdfjs/pdf.js') }}"></script>
+
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script>
+    <script src="https://code.highcharts.com/gantt/modules/draggable-points.js"></script>
+    <script>
+
+        //DropZone
+        Dropzone.autoDiscover = false;
+        Dropzone.prototype.defaultOptions.acceptedFiles = "image/*,application/pdf";
+        Dropzone.prototype.defaultOptions.maxFilesize = 10;
+        Dropzone.prototype.defaultOptions.headers = {'x-contexto': "EDITAL", "x-id": {{ frigaedital.id }} };
+        Dropzone.prototype.defaultOptions.dictFileTooBig = "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente";
+        Dropzone.prototype.defaultOptions.dictInvalidFileType = "O arquivo escolhido não é do tipo  imagem ou PDF. Escolha outro arquivo e tente novamente.";
+        Dropzone.prototype.defaultOptions.init = function () {
+            this.on("sending", function (file, xhr, formData) {
+                //      formData.append("xtk", "{{ csrf_token('friga-upload-edital-form') }}");
+            });
+            this.on("success", function (file) {
+                if (jQuery.parseJSON(file.xhr.response).error) {
+                    new PNotify({
+                        text: jQuery.parseJSON(file.xhr.response).message,
+                        type: 'error',
+                        addclass: 'notification-error',
+                        icon: 'fa fa-2x fa-exclamation-triangle'
+                    });
+                    this.removeFile(file);
+                } else {
+                    new PNotify({
+                        title: "Envio de arquivo",
+                        text: "Arquivo enviado com sucesso!",
+                        type: 'success',
+                        addclass: 'notification-success',
+                        icon: 'fa fa-2x fa-exclamation-triangle'
+                    });
+                    this.removeFile(file);
+                }
+                $("#jsGrid").jsGrid("loadData");
+            });
+            this.on('error', function (file, errorMessage, XMLHttpRequest) {
+                new PNotify({
+                    text: (XMLHttpRequest.status == 500 ? "Arquivo não aceito" : errorMessage),
+                    type: 'error',
+                    addclass: 'notification-error',
+                    icon: 'fa fa-2x fa-exclamation-triangle'
+                });
+                this.removeFile(file);
+            })
+        };
+        new Dropzone("#arquivo-edital", {
+            url: "{{ oneup_uploader_endpoint('frigadata') }}",
+            dictDefaultMessage: "<i class='fa fa-2x fa-upload'></i><br> Anexar arquivo relativo ao edital",
+        });
+
+
+        // Loaded via <script> tag, create shortcut to access PDF.js exports.
+        var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+        var pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 1.5,
+            canvas = document.getElementById('the-canvas'),
+            ctx = canvas.getContext('2d');
+
+        /**
+         * Get page info from document, resize canvas accordingly, and render page.
+         * @param num Page number.
+         */
+        function renderPage(num) {
+            pageRendering = true;
+            // Using promise to fetch the page
+            pdfDoc.getPage(num).then(function(page) {
+                var viewport = page.getViewport({scale: scale});
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+
+                // Wait for rendering to finish
+                renderTask.promise.then(function() {
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        // New page rendering is pending
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+
+            // Update page counters
+            document.getElementById('page_num').textContent = num;
+        }
+
+        /**
+         * If another page rendering in progress, waits until the rendering is
+         * finised. Otherwise, executes rendering immediately.
+         */
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        /**
+         * Displays previous page.
+         */
+        function onPrevPage() {
+            if (pageNum <= 1) {
+                return;
+            }
+            pageNum--;
+            queueRenderPage(pageNum);
+        }
+        document.getElementById('prev').addEventListener('click', onPrevPage);
+
+        /**
+         * Displays next page.
+         */
+        function onNextPage() {
+            if (pageNum >= pdfDoc.numPages) {
+                return;
+            }
+            pageNum++;
+            queueRenderPage(pageNum);
+        }
+        document.getElementById('next').addEventListener('click', onNextPage);
+
+
+
+        function renderPdf(url, op) {
+            pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+                pdfDoc = pdfDoc_;
+                document.getElementById('page_count').textContent = pdfDoc.numPages;
+                renderPage(pageNum);
+            });
+        }
+
+
+
+        //jsGrid
+
+        $(function () {
+
+            /**
+             var jsGridCustomDateTimeField = function (config) {
+             console.log('on init field');
+             jsGrid.Field.call(this, config);
+             };
+
+             jsGridCustomDateTimeField.prototype = new jsGrid.Field({
+             sorter: function (date1, date2) {
+             console.log('on sorting fild ' + date1 + ' ' + date2);
+             return new Date(date1) - new Date(date2);
+             },
+
+             itemTemplate: function (value) {
+             console.log('on init item template');
+             if (value === null) {
+             return '';
+             } else {
+             return moment(value).format('L LTS');
+             }
+             },
+             // Insert Template
+             insertTemplate: function (value) {
+             console.log('on init insert template ' + moment());
+             this._insertPicker = $('<input>').datetimepicker({
+             locale: 'pt-BR', format: 'L LTS',
+             defaultDate: moment(),
+             widgetPositioning: {
+             horizontal: 'auto',
+             vertical: 'bottom'
+             }
+             });
+             console.log('insert template created')
+             this._insertPicker.data('DateTimePicker').date(moment());
+             return this._insertPicker;
+             },
+
+             // Template
+             editTemplate: function (value) {
+             console.log('on init edit template');
+             this._editPicker = $('<input>').datetimepicker({
+             locale: 'pt-BR', format: 'L LTS',
+             widgetPositioning: {
+             horizontal: 'auto',
+             vertical: 'bottom'
+             }
+             });
+
+             if (value !== null) {
+             this._editPicker.data('DateTimePicker').defaultDate(moment(value));
+             this._editPicker.data('DateTimePicker').date(moment(value));
+             }
+             return this._editPicker;
+             },
+             // Insere
+             insertValue: function () {
+             console.log('on get insert value');
+             var insertValue = this._insertPicker.data('DateTimePicker').date();
+             console.log('value: ' + insertValue);
+             if (typeof insertDate !== 'undefined' && insertDate !== null) {
+             return insertDate.format('L LTS');
+             } else {
+             return null;
+             }
+             },
+
+             // Edita
+             editValue: function () {
+             console.log('on get edit value');
+             var editValue = this._editPicker.data('DateTimePicker').date();
+             if (typeof editValue !== 'undefined' && editValue !== null) {
+             return editValue.format('L LTS');
+             } else {
+             return null;
+             }
+             }
+             });
+
+             jsGrid.fields.customDateTimeField = jsGridCustomDateTimeField;
+             */
+            var isdeletingItem = false;
+
+            /**
+             * Grid
+             */
+           var $grid =  $("#jsGrid").jsGrid({
+                height: '600',
+                width: "100%",
+                //  filtering: true,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                confirmDeleting: false,
+                pageSize: 10,
+                pageButtonCount: 3,
+                noDataContent: 'Sem dados',
+                pagerFormat: 'Páginas: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount}',
+                pageNextText: 'Próxima',
+                pagePrevText: 'Anterior',
+                pageFirstText: 'Primeira',
+                pageLastText: 'Última',
+                loadMessage: 'A carregar dados ...',
+
+                onItemDeleted: function(args) {
+                    isdeletingItem = false;
+                },
+                rowClick: function(args) {
+                    return ;
+                },
+                onItemDeleting: function(args) {
+                    if (isdeletingItem === false) {
+                        args.cancel = true;
+                        isdeletingItem = true;
+                        swal.fire({
+                            title: "Você tem certeza que deseja remover este arquivo?",
+                            text: "",
+                            type: "question",
+                            showCloseButton:   true,
+                            showCancelButton:  true,
+                            focusConfirm:      false,
+                            allowOutsideClick: false,
+                            cancelButtonText:  '<i class="fa fa-thumbs-down"></i>  Cancelar',
+                            confirmButtonText: '<i class="fa fa-thumbs-up"></i>    Remover arquivo',
+                        }).then(function (x) {
+                            if(x.value){
+                                $("#jsGrid").jsGrid("deleteItem", args.item);
+                                $("#jsGrid").jsGrid("refresh");
+                            }else{
+                                isdeletingItem = false;
+                                return;
+                            }
+                        });
+                    }
+                },
+                controller: {
+                    loadData: function (x) {
+                        var d = $.Deferred();
+                        $.ajax({
+                            url: "{{ path('edital_api_get_arquivo', {uuid: frigaedital.uuid}) }}",
+                            dataType: "json"
+                        }).done(function (response) {
+                            d.resolve(response);
+                        });
+                        return d.promise();
+                    },
+                    updateItem: function (x) {
+                        var d = $.Deferred();
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ path('edital_api_update_arquivo') }}",
+                            data: x,
+                            dataType: "json"
+                        }).done(function (response) {
+                            d.resolve(response);
+                        });
+                    },
+                    deleteItem: function (x) {
+                        var d = $.Deferred();
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ path('edital_api_delete_arquivo') }}",
+                            data: x,
+                            dataType: "json"
+                        }).done(function (response) {
+                            d.resolve(response);
+                        });
+                    },
+                },
+                fields: [
+                    {name: "titulo", title: "Título do Arquivo", type: "text", editing: true},
+                    {name: "dataPublicacao", title: "Data de Publicação", type: "text", editing: true},
+                    {type: "control", editButton: true, deleteButton: true,
+                        itemTemplate: function(value, item) {
+                            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            var $customButton = $("<i>").attr({class: "fa fa-file fa-1.5x text-primary"})
+                                .click(function(e) {
+                                        renderPdf('{{ path('arquivo_download')}}/'+ item.id);
+                                    e.stopPropagation();
+                                });
+                            return $result.add($customButton);
+                        }
+                    }
+                ]
+            });
+        });
+
+
+
+
+        /*
+         Simple demo showing some interactivity options of Highcharts Gantt. More
+         custom behavior can be added using event handlers and API calls. See
+         http://api.highcharts.com/gantt.
+         */
+
+        var today = new Date(),
+            day = 1000 * 60 * 60 * 24,
+            each = Highcharts.each,
+            reduce = Highcharts.reduce,
+            btnShowDialog = document.getElementById('btnShowDialog'),
+            btnRemoveTask = document.getElementById('btnRemoveSelected'),
+            btnAddTask = document.getElementById('btnAddTask'),
+            btnCancelAddTask = document.getElementById('btnCancelAddTask'),
+            addTaskDialog = document.getElementById('addTaskDialog'),
+            inputName = document.getElementById('inputName'),
+            selectDepartment = document.getElementById('selectDepartment'),
+            selectDependency = document.getElementById('selectDependency'),
+            chkMilestone = document.getElementById('chkMilestone'),
+            isAddingTask = false;
+
+        // Set to 00:00:00:000 today
+        today.setUTCHours(0);
+        today.setUTCMinutes(0);
+        today.setUTCSeconds(0);
+        today.setUTCMilliseconds(0);
+        today = today.getTime();
+
+
+        // Update disabled status of the remove button, depending on whether or not we
+        // have any selected points.
+        function updateRemoveButtonStatus() {
+            var chart = this.series.chart;
+            // Run in a timeout to allow the select to update
+            setTimeout(function () {
+                btnRemoveTask.disabled = !chart.getSelectedPoints().length ||
+                    isAddingTask;
+            }, 10);
+        }
+
+
+        // Create the chart
+        var chart = Highcharts.ganttChart('container', {
+
+            chart: {
+                spacingLeft: 1
+            },
+
+            title: {
+                text: 'Cronograma de etapas'
+            },
+
+            subtitle: {
+                text: 'Drag and drop points to edit'
+            },
+
+            plotOptions: {
+                series: {
+                    animation: false, // Do not animate dependency connectors
+                    dragDrop: {
+                        draggableX: true,
+                        draggableY: true,
+                        dragMinY: 0,
+                        dragMaxY: 2,
+                        dragPrecisionX: day / 3 // Snap to eight hours
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}',
+                        style: {
+                            cursor: 'default',
+                            pointerEvents: 'none'
+                        }
+                    },
+                    allowPointSelect: true,
+                    point: {
+                        events: {
+                            select: updateRemoveButtonStatus,
+                            unselect: updateRemoveButtonStatus,
+                            remove: updateRemoveButtonStatus
+                        }
+                    }
+                }
+            },
+
+            yAxis: {
+                type: 'Inscrição',
+                categories: ['Inscrição', 'Avaliação', 'Outra coisa'],
+                min: 0,
+                max: 2
+            },
+
+            xAxis: {
+                currentDateIndicator: true
+            },
+
+            tooltip: {
+                xDateFormat: '%a %b %d, %H:%M'
+            },
+
+            series: [{
+                name: 'Processo Seletivo X',
+                data: [{
+                    start: today + 2 * day,
+                    end: today + day * 5,
+                    name: 'Inscrição',
+                    id: '10',
+                    y: 0
+                },  {
+                    start: today + day * 6,
+                    name: 'XXX ',
+                    milestone: true,
+                    dependency: '10',
+                    id: '11',
+                    y: 0
+                }, {
+                    start: today + day * 7,
+                    end: today + day * 11,
+                    name: ' Outra inscrição',
+                    dependency: '11',
+                    y: 0
+                }, {
+                    start: today + day * 5,
+                    end: today + day * 8,
+                    name: 'Product pages',
+                    y: 1
+                }, {
+                    start: today + day * 9,
+                    end: today + day * 10,
+                    name: 'Newsletter',
+                    y: 1
+                }, {
+                    start: today + day * 9,
+                    end: today + day * 11,
+                    name: 'Licensing',
+                    id: 'testing',
+                    y: 2
+                }, {
+                    start: today + day * 11.5,
+                    end: today + day * 12.5,
+                    name: 'Publish',
+                    dependency: 'testing',
+                    y: 2
+                }]
+            }]
+        });
+
+
+        /* Add button handlers for add/remove tasks */
+
+        btnRemoveTask.onclick = function () {
+            var points = chart.getSelectedPoints();
+            each(points, function (point) {
+                point.remove();
+            });
+        };
+
+        btnShowDialog.onclick = function () {
+            // Update dependency list
+            var depInnerHTML = '<option value=""></option>';
+            each(chart.series[0].points, function (point) {
+                depInnerHTML += '<option value="' + point.id + '">' + point.name +
+                    ' </option>';
+            });
+            selectDependency.innerHTML = depInnerHTML;
+
+            // Show dialog by removing "hidden" class
+            addTaskDialog.className = 'overlay';
+            isAddingTask = true;
+
+            // Focus name field
+            inputName.value = '';
+            inputName.focus();
+        };
+
+        btnAddTask.onclick = function () {
+            // Get values from dialog
+            var series = chart.series[0],
+                name = inputName.value,
+                undef,
+                dependency = chart.get(
+                    selectDependency.options[selectDependency.selectedIndex].value
+                ),
+                y = parseInt(
+                    selectDepartment.options[selectDepartment.selectedIndex].value,
+                    10
+                ),
+                maxEnd = reduce(series.points, function (acc, point) {
+                    return point.y === y && point.end ? Math.max(acc, point.end) : acc;
+                }, 0),
+                milestone = chkMilestone.checked || undef;
+
+            // Empty category
+            if (maxEnd === 0) {
+                maxEnd = today;
+            }
+
+            // Add the point
+            series.addPoint({
+                start: maxEnd + (milestone ? day : 0),
+                end: milestone ? undef : maxEnd + day,
+                y: y,
+                name: name,
+                dependency: dependency ? dependency.id : undef,
+                milestone: milestone
+            });
+
+            // Hide dialog
+            addTaskDialog.className += ' hidden';
+            isAddingTask = false;
+        };
+
+        btnCancelAddTask.onclick = function () {
+            // Hide dialog
+            addTaskDialog.className += ' hidden';
+            isAddingTask = false;
+        };
+
+
+    </script>
+
+{% endblock %}
