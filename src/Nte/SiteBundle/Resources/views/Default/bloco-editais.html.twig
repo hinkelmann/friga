@@ -9,7 +9,7 @@
                     <a href="{{ path('nte_site_edital', { id: e.id, url: e.url}) }}" class="">
                         <h4><i class="fa fa-globe"></i></h4>
                         <strong> {{ e.dataPublicacaoOficial|date('d/m/Y') }}</strong> -
-                        {{ e.titulo }}
+                        {{ e.numero }} - {{ e.titulo }}
                     </a>
                 </li>
             {% endfor %}
@@ -26,7 +26,7 @@
                     <a href="{{ path('nte_site_edital', { id: e.id, url: e.url}) }}" class="">
                         <h4><i class="fa fa-globe"></i></h4>
                         <strong> {{ e.dataPublicacaoOficial|date('d/m/Y') }}</strong> -
-                        {{ e.titulo }}
+                        {{ e.numero }} - {{ e.titulo }}
                     </a>
                 </li>
             {% endfor %}
@@ -51,7 +51,7 @@
                     <a href="{{ path('nte_site_edital', { id: e.id, url: e.url}) }}" class="">
                         <h4><i class="fa fa-globe"></i></h4>
                         <strong> {{ e.dataPublicacaoOficial|date('d/m/Y') }}</strong> -
-                        {{ e.titulo }}
+                        {{ e.numero }} -  {{ e.titulo }}
                     </a>
                 </li>
             {% endfor %}

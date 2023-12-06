@@ -1,6 +1,6 @@
 <!doctype html>
 {% trans_default_domain 'FOSUserBundle' %}
-<html class="fixed {% if app.request.cookies.get('sidebar-state') == 'true' %} sidebar-left-collapsed{% endif %}">
+<html class="fixed {% if app.request.cookies.get('sidebar-state') == 'true' %} {% else %} sidebar-left-collapsed{% endif %}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,8 +11,16 @@
     <meta name="author" content="NTE - UFSM">
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}" type="image/x-icon"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-
-    {#% stylesheets filter="scssphp" output="css/app.css"
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {"families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]},
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    {# % stylesheets filter="scssphp" output="css/app.css"
         "admin/assets/vendor/bootstrap/css/bootstrap.css"
         "admin/assets/vendor/font-awesome/css/font-awesome.css"
         "admin/assets/vendor/magnific-popup/magnific-popup.css"
@@ -27,12 +35,12 @@
         "admin/assets/stylesheets/theme-custom.css"
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %#}
+    {% endstylesheets % #}
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/vendor/magnific-popup/magnific-popup.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/magnific-popup/magnific-popup.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-ui/jquery-ui.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-ui/jquery-ui.theme.css') }}">
@@ -50,6 +58,7 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/dropzone/dropzone.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/elusive-icons/css/elusive-icons.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
     {% endblock %}
     <script src="{{ asset('assets/vendor/modernizr/modernizr.js') }}"></script>
 </head>
@@ -142,6 +151,98 @@
 
 {% endblock %}
 {% endblock %}
+
+<style>
+    body {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        color: #212529;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+
+    html, body {
+        font-weight: 300;
+        -ms-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    html, body {
+        background: #f4f4f4;
+        width: 100%;
+    }
+
+
+    .swal2-popup {
+        font-family: inherit;
+        font-size: inherit;
+    }
+
+    .dataTables_wrapper table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::before {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-radius: 0;
+        top: 50%;
+        left: 8px;
+        height: 18px;
+        width: 18px;
+        margin-top: -9px;
+        color: #204c90;
+        border: 0;
+        background-color: transparent;
+        font-family: "FontAwesome";
+        text-decoration: inherit;
+        text-rendering: optimizeLegibility;
+        text-transform: none;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+        content: "\f196";
+        margin-right: 5px;
+        padding-top: 10px;
+    }
+
+    .dataTables_wrapper table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child::before {
+        font-family: "FontAwesome";
+        text-decoration: inherit;
+        text-rendering: optimizeLegibility;
+        text-transform: none;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+        content: "\f147";
+        color: #204c90;
+        background-color: transparent;
+    }
+    .dataTables_wrapper .child .dtr-details > li .dtr-title::after {
+        content: ':';
+    }
+    .dataTables_wrapper .child .dtr-details > li .dtr-title {
+        display: table-cell;
+        vertical-align: top;
+        border-bottom: 1px dashed #ddd;
+        font-weight: 500;
+        padding: 0.5rem 2rem 0.5rem 0;
+    }
+    .dataTables_wrapper .child .dtr-details > li .dtr-data {
+        display: table-cell;
+        vertical-align: top;
+        border-bottom: 1px dashed #ddd;
+        padding: 0.5rem 0;
+    }
+    .dataTables_wrapper .child .dtr-details {
+        display: table !important;
+    }
+    .dataTables_wrapper .child .dtr-details > li {
+        display: table-row !important;
+        border: 0 !important;
+    }
+</style>
+
 <a class="scroll-to-top hidden-mobile visible" href="#"><i class="fa fa-chevron-up"></i></a>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77043326-7"></script>
 <script>
@@ -155,7 +256,7 @@
     gtag('config', 'UA-77043326-7');
 </script>
 <script>
-    $(function() {
+    $(function () {
         $('.item').matchHeight();
     });
 </script>

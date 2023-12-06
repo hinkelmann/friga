@@ -1,0 +1,475 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/theme.admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.admin.css') }}">
+</head>
+<body>
+<div class="body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel-body">
+                <div class="text-center">
+                    <h3><i class="icon-book-open"></i>&nbsp;&nbsp;Dados da Inscrição</h3>
+                    <br><br>
+                </div>
+                <table class="table  table-responsive table-condesed">
+                    <tr>
+                        <td class="text-right" width="50%"><b>Inscrição</b></td>
+                        <td>{{ inscricao.uuid }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>Situação Atual</b></td>
+                        <td>{{ inscricao.objsituacao.descricao }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>Data</b></td>
+                        <td>{{ inscricao.registroDataCriacao|date('d/m/Y \\À\\s H:i:s') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>Edital</b></td>
+                        <td>{{ inscricao.idEdital.titulo }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>Banca</b></td>
+                        <td>{% if inscricao.idEdital.banca.count >0 %}
+                                {% for u in inscricao.idEdital.banca %}
+                                    <a href="#">{{ u.nome }}</a>
+                                    {% if loop.last ==0 %},
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Nenhuma banca registrada
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>{{ inscricao.idEdital.campoCargoTitulo }}</b></td>
+                        <td>{{ inscricao.idCargo.descricao }}</td>
+                    </tr>
+                    {% if inscricao.idEdital.cota and inscricao.idCota %}
+                        <tr>
+                            <td class="text-right"><b>{{ inscricao.idEdital.campoListaTitulo }}</b></td>
+                            <td>{{ inscricao.idCota.descricao }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if inscricao.idEdital.modeloInscricao ==1 %}
+                        <tr>
+                            <td colspan="2">
+                                <h5 class="text-center">
+                                    <b>{{ inscricao.projetoTitulo }}</b>
+                                </h5>
+                                <p class="text-justify">{{ inscricao.projetoResumo }}</p>
+                                <small><b>Área do Conhecimento:</b> {{ inscricao.projetoAreaConhecimento }}</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right" style="vertical-align: middle !important;">
+                                <b>Participantes</b>
+                            </td>
+                            <td>
+                                <ol class="list-unstyled">
+                                    {% for p in inscricao.idProjetoParticipante %}
+                                        <li>
+                                            <b>{{ p.nome }}</b><br>
+                                            <br>
+                                            <br>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+            <br>
+            {% if contexto == 'DOCUMENTO' or contexto =="AUDITORIA" %}
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h3><i class="fa fa-user"></i> Informação Pessoal</h3>
+                        <br><br>
+                    </div>
+                    <table class="table  table-responsive table-condesed">
+                        <tr>
+                            <td class="text-right" width="50%"><b>Nome</b></td>
+                            <td>{{ inscricao.nome }}</td>
+                        </tr>
+                        {% if inscricao.idEdital.doc9 %}
+                            <tr>
+                                <td class="text-right"><b>Sexo</b></td>
+                                <td>{{ inscricao.sexo?"Masculino":"Feminino" }}</td>
+                            </tr>
+                        {% endif %}
+
+                        <tr>
+                            <td class="text-right"><b>Data de Nascimento</b></td>
+                            <td>{{ inscricao.dataNascimento|date('d/m/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>CPF</b></td>
+                            <td>{{ inscricao.cpf }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>Número do RG</b></td>
+                            <td>{{ inscricao.rgNro }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>Data de Expedição do RG</b></td>
+                            <td>{{ inscricao.rgDataExpedicao?inscricao.rgDataExpedicao|date('d/m/Y'): "-" }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>Órgão Expedidor do RG</b></td>
+                            <td>{{ inscricao.rgOrgaoExpedidor }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>UF do Órgão Expedidor do RG</b></td>
+                            <td>{{ inscricao.rgUF }}</td>
+                        </tr>
+                        {% if inscricao.idEdital.doc0 %}
+                            <tr>
+                                <td class="text-right"><b>Titulo de Eleitor</b></td>
+                                <td>{{ inscricao.teNro }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Data de Expedição do Titulo de Eleitor</b></td>
+                                <td>{{ inscricao.teDataExpedicao?inscricao.teDataExpedicao|date('d/m/Y'):"-" }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc1 %}
+                            <tr>
+                                <td class="text-right"><b>Certificado de Reservista</b></td>
+                                <td>{{ inscricao.crNro }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Data de Expedição do Certificado de Reservista</b></td>
+                                <td>{{ inscricao.crDataExpedicao?inscricao.crDataExpedicao|date('d/m/Y'):"-" }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.permitirEstrangeiro %}
+                            <tr>
+                                <td class="text-right"><b>Estrangeiro</b></td>
+                                <td>{{ inscricao.estrangeiro?"SIM":"Não" }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Nacionalidade</b></td>
+                                <td>{{ inscricao.nacionalidade }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc2 %}
+                            <tr>
+                                <td class="text-right"><b>Passaporte</b></td>
+                                <td>{{ inscricao.passaporteNro }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc3 %}
+                            <tr>
+                                <td class="text-right"><b>Registro Nacional de Estrangeiro</b></td>
+                                <td>{{ inscricao.rneNro }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Data de Expedição do Registro Nacional de Estrangeiro</b></td>
+                                <td>{{ inscricao.rneDataExpedicao?inscricao.rneDataExpedicao|date('d/m/Y'):"-" }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Validade do Registro Nacional de Estrangeiro</b></td>
+                                <td>{{ inscricao.rneDataValidade?inscricao.rneDataValidade|date('d/m/Y'):"-" }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc4 %}
+                            <tr>
+                                <td class="text-right"><b>Matricula</b></td>
+                                <td>{{ inscricao.matriculaNro }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc8 %}
+                            <tr>
+                                <td class="text-right"><b>Curso</b></td>
+                                <td>{{ inscricao.matriculaCurso }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc5 %}
+                            <tr>
+                                <td class="text-right"><b>Certidão de Nascimento</b></td>
+                                <td>{{ inscricao.certidaoNascimentoNro }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc6 %}
+                            <tr>
+                                <td class="text-right"><b>Currículo Lattes</b></td>
+                                <td><a href="{{ inscricao.url0 }}" target="_blank">{{ inscricao.url0 }}</a></td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc10 %}
+                            <tr>
+                                <td class="text-right"><b> URL de vídeo de apresentação</b></td>
+                                <td><a href="{{ inscricao.url1 }}" target="_blank">{{ inscricao.url1 }}</a></td>
+                            </tr>
+                        {% endif %}
+
+                        {% if inscricao.idEdital.doc11 %}
+                            <tr>
+                                <td class="text-right"><b>Banco</b></td>
+                                <td>{{ inscricao.bancoInstituicao }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Agência</b></td>
+                                <td>{{ inscricao.bancoAgencia }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Conta</b></td>
+                                <td>{{ inscricao.bancoConta }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if inscricao.idEdital.doc12 %}
+                            <tr>
+                                <td class="text-right"><b>Recebimento de Bolsa</b></td>
+                                <td>{{ inscricao.recebimentoBolsa }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td class="text-right"><b>Celular</b></td>
+                            <td>{{ inscricao.contatoTelefone1 }}</td>
+                        </tr>
+                        {% if inscricao.contatoTelefone1 != inscricao.idUsuario.contatoTelefone1 %}
+                            <tr>
+                                <td class="text-right"><b>Celular alternativo</b></td>
+                                <td>{{ inscricao.idUsuario.contatoTelefone1 }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td class="text-right"><b>Telefone</b></td>
+                            <td>
+                                {% if  inscricao.contatoTelefone2 != null %}
+                                    {{ inscricao.contatoTelefone2 }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if inscricao.contatoTelefone2 != inscricao.idUsuario.contatoTelefone2 %}
+                            <tr>
+                                <td class="text-right"><b>Telefone alternativo</b></td>
+                                <td>{{ inscricao.idUsuario.contatoTelefone1 }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td class="text-right"><b>e-Mail </b></td>
+                            <td>{{ inscricao.contatoEmail }}</td>
+                        </tr>
+                        {% if inscricao.contatoEmail != inscricao.idUsuario.email %}
+                            <tr>
+                                <td class="text-right"><b>e-Mail alternativo</b></td>
+                                <td>{{ inscricao.idUsuario.email }}</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+                {% if inscricao.idEdital.doc13 %}
+                    <br>
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h3><i class="fa fa-map-signs"></i> Endereço</h3>
+                            <br><br>
+                        </div>
+                        <table class="table  table-responsive table-condesed">
+                            <tr>
+                                <td width="50%" class="text-right"><b>CEP</b></td>
+                                <td>{{ inscricao.enderecoCep }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Endereço residencial</b></td>
+                                <td>{{ inscricao.enderecoLogradouro }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Número</b></td>
+                                <td>{{ inscricao.enderecoNumero }}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>Complemento</b></td>
+                                <td> {% if  inscricao.enderecoComplemento != null %}
+                                        {{ inscricao.enderecoComplemento }}
+                                    {% else %}
+                                        --
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>Bairro</b></td>
+                                <td>{{ inscricao.enderecoBairro }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>Municipio</b></td>
+                                <td>{{ inscricao.enderecoMunicipio }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>UF</b></td>
+                                <td>{{ inscricao.enderecoUf }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>País</b></td>
+                                <td>Brasil</td>
+                            </tr>
+                            <tr class="visible-md visible-lg">
+                                <td class="text-right"><b>Comprovantes</b></td>
+                                <td>
+                                    [{% if inscricao.idArquivo|length %}
+                                    {% for a in inscricao.idArquivo if a.idContexto ==1 and a.contexto == "DOCUMENTO" %}
+                                    <a title="Clique Aqui para baixar o comprovante"
+                                       href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                       data-titulo="{{ a.nome }}"
+                                       class="abrir-arquivo">
+                                            <i class="fa fa-2x fa-file-o"></i>
+                                        </a>{% endfor %}
+                                {% else %} Nenhum Anexo {% endif %}]
+                                </td>
+                            </tr>
+                            <tr class="visible-xs visible-sm">
+                                <td class="text-right"><b>Comprovantes</b></td>
+                                <td>
+                                    [{% if inscricao.idArquivo|length %}
+                                    {% for a in inscricao.idArquivo if a.idContexto ==1 and a.contexto == "DOCUMENTO" %}
+                                    <a title="Clique Aqui para baixar o comprovante"
+                                       href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                       data-titulo="{{ a.nome }}"
+                                       class="">
+                                            <i class="fa fa-2x fa-file-o"></i>
+                                        </a>{% endfor %}
+                                {% else %}Nenhum Anexo
+                                    {% endif %}]
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+                <br>
+            {% endif %}
+            {% if contexto == "PONTUACAO" or contexto =="CATEGORIA" or contexto =="AUDITORIA" %}
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h3><i class="fa fa-check"></i> Detalhamento da Pontuação</h3>
+                        <br><br>
+                    </div>
+                    <table class="table  table-responsive table-condesed">
+                        {% for peso in inscricao.idEdital.pontuacaoCategoriaPeso %}
+                            <tr>
+                                <td colspan="6">
+                                    {{ peso.descricao }} ({{ peso.valorMaximo +0 }})
+                                </td>
+                            </tr>
+                            {% for categoria in peso.filhos %}
+                                <tr>
+                                    <td></td>
+                                    <td colspan="5">
+                                        {{ categoria.descricao }} (
+                                        {{ categoria.valorMaximo +0 }}
+                                        {{ categoria.valorTexto }}
+                                        )
+                                    </td>
+                                </tr>
+                                {% for p in categoria.pontuacao %}
+                                    <tr>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="">{{ p.titulo }}({{ p.valorMaximo+0 }} {{ p.valorTexto }})</td>
+                                        <td class="text-center" style="color: #0a6aa1;">
+                                            <a title="Valor informado pelo candidato ">
+                                                {{ inscricao.pontuacaoItem(p.id)?inscricao.pontuacaoItem(p.id).valorInformado + 0:0 }}
+                                            </a>/
+                                            {% if  inscricao.pontuacaoAvaliacaoItem(p).count %}
+                                                {% if inscricao.pontuacaoAvaliacaoItem(p).count ==1 %}
+                                                    {% if inscricao.pontuacaoAvaliacaoItem(p).first.considerado %}
+                                                        <a title="Valor considerado pelo avaliador: {{ inscricao.pontuacaoAvaliacaoItem(p).first.idAvaliador.nome }} "
+                                                           class="text-primary">
+                                                            {{ inscricao.pontuacaoAvaliacaoItemValor(p) + 0 }}
+                                                        </a>
+                                                    {% else %}
+                                                        <a title="Valor 'NÃO ACEITO' pelo avaliador: {{ inscricao.pontuacaoAvaliacaoItem(p).first.idAvaliador.nome }}"
+                                                           class="text-danger">
+                                                            {{ inscricao.pontuacaoAvaliacaoItemValor(p) + 0 }}
+                                                        </a>
+                                                    {% endif %}
+                                                {% elseif inscricao.pontuacaoAvaliacaoItem(p).count > 1 %}
+                                                    ({% for t in inscricao.pontuacaoAvaliacaoItem(p) %}
+                                                    {% if t.considerado %}
+                                                        <a title="Valor considerado pelo avaliador "
+                                                           class="text-primary">
+                                                            {{ t.valorAvaliador + 0 }}
+                                                        </a>
+                                                    {% else %}
+                                                        <a title="Valor 'não aceito' pelo avaliador "
+                                                           class="text-danger">
+                                                            {{ t.valorAvaliador + 0 }}
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if loop.last == 0 %}
+                                                        ,
+                                                    {% endif %}
+                                                {% endfor %})
+                                                {% endif %}
+                                            {% else %}
+                                                <a title="Valor considerado pelo avaliador " class="text-primary">
+                                                    0
+                                                </a>
+                                            {% endif %}
+                                            {{ p.valorTexto }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
+                    <br>
+                </div>
+                <br>
+            {% endif %}
+            {% if contexto == "RECURSO" or contexto =="AUDITORIA"%}
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h3><i class="fa fa-gavel"></i> Recurso de Avaliação</h3>
+                        <br><br>
+                    </div>
+                    {% if inscricao.recursos.count %}
+                        {% for recurso in inscricao.recursos %}
+                            <div style="border-bottom: 1px solid #dfdfdf; padding-bottom: 5px">
+                                <b class="text-primary">{{ recurso.idEditalEtapa.descricao }}</b><br><br>
+                                <p class="text-justify">
+                                    <b>Recurso</b>:<br>
+                                    {{ recurso.justificativa|nl2br }}
+                                </p>
+                                <p>Anexos
+                                    [{% if inscricao.recursoArquivo(recurso.id).count() %}
+                                    {% for a in inscricao.recursoArquivo(recurso.id) %}
+                                        <a title="Clique Aqui para baixar o arquivo do recurso"
+                                           href="{{ path('arquivo_ver',{id: a.id}) }}"
+                                           data-titulo="{{ a.nome }}"
+                                           class="abrir-arquivo">
+                                            <i class="fa fa-2x fa-file-o"></i>
+                                        </a>
+                                    {% endfor %}
+                                {% else %} Nenhum Anexo {% endif %}]
+                                    <br><br>
+                                </p>
+                                <p class="text-justify">
+                                    <b>Parecer</b>:<br>
+                                    {{ recurso.desfecho|nl2br }}<br>
+                                    {{ recurso.objsituacao.descricao }}{% if  recurso.idJulgador %} por {{ recurso.idJulgador.nome }}{% endif %}
+                                </p>
+
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            Nenhum recurso encaminhado.
+                        </div>
+                    {% endif %}
+                </div>
+                <br>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -27,75 +27,60 @@
     {% endif %}
     <div class="container">
         {{ include('@NteUsuario/Candidato/menu.html.twig') }}
-        <div class="col-md-9">
+        <div class="col-lg-9">
             <div class="row">
                 <h3 class="mb-xl">
                     Minhas <strong>Inscrições</strong>
                 </h3>
-
                 {% if app.user.inscricao|length %}
-                    {% for inscricao in app.user.inscricao|reverse %}
-                        {% if loop.index%2 ==0 %}
-                            <div class="row">
-                        {% endif %}
-                        <div class="col-md-6">
-                            <div class="call-to-action with-borders  button-centered mb-5">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="row">
-                                            <div class="call-to-action-content">
-                                                {% if inscricao.idSituacao == -999 %}
-                                                    <a href="{{ path('nte_site_edital', { id: inscricao.idEdital.id, url: inscricao.idEdital.url}) }}">
-                                                        <h4>{{ inscricao.idEdital.titulo }}</h4>
-                                                    </a>
-                                                    <p class="{{ inscricao.objSituacao.cssAlert }}">
-                                                        {{ inscricao.uuid }} - {{ inscricao.objSituacao.descricao }}<br>
-                                                        {{ inscricao.registroDataCriacao|date('d/m/Y') }}
-                                                    </p>
-                                                {% else %}
-                                                    <a href="{{ path('nte_site_edital', { id: inscricao.idEdital.id, url: inscricao.idEdital.url}) }}">
-                                                        <h4>{{ inscricao.idEdital.titulo }}</h4>
-                                                    </a>
-                                                    <p class="alert alert-success">
-                                                        {{ inscricao.uuid }} - Inscrição Realizada<br>
-                                                        {{ inscricao.registroDataCriacao|date('d/m/Y') }}
-                                                    </p>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="row">
-                                            <div class="call-to-action-btn">
-                                                {% if inscricao.idSituacao == 0 %}
-                                                    <a href="{{ path('nte_usuario_candidato_inscricao_cancelar', {'uuid': inscricao.uuid}) }}"
-                                                       class="btn btn-dark remover "
-                                                       title="Clique aqui somente se você desejar cancelar a sua inscrição">
-                                                        Cancelar Inscrição
-                                                    </a>
-                                                {% endif %}
-                                                {% if inscricao.idSituacao != -999 %}
-                                                    <a href="{{ path('nte_usuario_candidato_inscricao_visualizacao', {'uuid': inscricao.uuid}) }}"
-                                                       class="btn btn-primary-scale-2">
-                                                        Acompanhar Inscrição
-                                                    </a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="visible-xs visible-sm">
-                            <hr class="tall">
-                        </div>
-                        {% if loop.index%2 ==0 %}
-                            </div>
-                            <div class="visible-md visible-lg">
-                                <hr class="tall">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    <table class="table table-striped table-responsive">
+                        <tbody>
+                        {% for inscricao in app.user.inscricao|reverse %}
+                            <tr>
+                                <td>
+                                    {% if inscricao.idSituacao == 0 %}
+                                        <a href="{{ path('nte_usuario_candidato_inscricao_cancelar', {'uuid': inscricao.uuid}) }}"
+                                           class="btn btn-dark remover "
+                                           title="Clique aqui somente se você desejar cancelar a sua inscrição">
+                                            CANCELAR <br> INSCRIÇÃO
+                                        </a>
+                                    {% endif %}
+                                    {% if inscricao.idSituacao != -999 %}
+                                        <a href="{{ path('nte_usuario_candidato_inscricao_visualizacao', {'uuid': inscricao.uuid}) }}"
+                                           class="btn btn-primary">
+                                            VER <br> INSCRIÇÃO
+                                        </a>
+                                    {% endif %}
+                                    {% if inscricao.idSituacao == -999 %}
+                                        <button disabled="disabled" class="btn btn-default" title="Inscrição cancelada">
+                                            VER <br> INSCRIÇÃO
+                                        </button>
+                                    {% endif %}
+                                </td>
+                                <td class="">
+                                    <small>
+                                        {% if inscricao.idSituacao == -999 %}
+                                            <span class="label label-dark">INSCRIÇÃO CANCELADA</span>
+                                        {% else %}
+                                            <span class="label label-success">INSCRIÇÃO REALIZADA</span>
+                                        {% endif %}
+                                    </small>
+                                    <a href="{{ path('nte_site_edital', { id: inscricao.idEdital.id, url: inscricao.idEdital.url}) }}">
+                                        <strong>{{ inscricao.idEdital.numero }} - {{ inscricao.idEdital.titulo }}</strong>
+                                    </a><br>
+                                    <i class="fa fa-ticket"></i> {{ inscricao.uuid }} -
+                                    {{ inscricao.idCargo.descricao }}
+                                    {% if inscricao.idCota is not null %}
+                                        / {{  inscricao.idCota.descricao }}
+                                    {% endif %}
+                                </td>
+                                <td width="170" class="text-right">
+                                    {{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 {% else %}
                     <div class="alert alert-info">
                         Até o presente momento você ainda não realizou nenhuma inscrição.<br>
@@ -105,6 +90,12 @@
             </div>
         </div>
     </div>
+    <style>
+        td{
+            line-height: 1.4em !important;
+            vertical-align: middle !important;
+        }
+    </style>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}

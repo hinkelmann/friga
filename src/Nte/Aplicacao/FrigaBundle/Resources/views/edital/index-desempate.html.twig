@@ -1,10 +1,10 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %} Configuração de Edital {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Desempate{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Desempate {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <section class="panel-body">
                 <div class="btn-group">
                     <button type="button"
@@ -20,6 +20,18 @@
                             <a href="{{ path('edital_desempate_criar', {'tipo': 3, 'uuid': frigaedital.uuid}) }}">
                                 <i class="fa fa-th-list"></i>
                                 <b>Formulário de Inscrição</b> - <small>Data de Nascimento</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('edital_desempate_criar', {'tipo': 4, 'uuid': frigaedital.uuid}) }}">
+                                <i class="fa fa-th-list"></i>
+                                <b>Formulário de Inscrição</b> - <small>Nome em ordem alfabética</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('edital_desempate_criar', {'tipo': 5, 'uuid': frigaedital.uuid}) }}">
+                                <i class="fa fa-th-list"></i>
+                                <b>Formulário de Inscrição</b> - <small>Índice de progressão acadêmica</small>
                             </a>
                         </li>
                         <li>
@@ -91,6 +103,18 @@
                                                     <a href="{{ path('edital_desempate_criar', {'tipo': 3, 'uuid': frigaedital.uuid}) }}">
                                                         <i class="fa fa-th-list"></i>
                                                         <b>Formulário de Inscrição</b> - <small>Data de Nascimento</small>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('edital_desempate_criar', {'tipo': 4, 'uuid': frigaedital.uuid}) }}">
+                                                        <i class="fa fa-th-list"></i>
+                                                        <b>Formulário de Inscrição</b> - <small>Nome em ordem alfabética</small>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('edital_desempate_criar', {'tipo': 5, 'uuid': frigaedital.uuid}) }}">
+                                                        <i class="fa fa-th-list"></i>
+                                                        <b>Formulário de Inscrição</b> - <small>Índice de progressão acadêmica</small>
                                                     </a>
                                                 </li>
                                                 <li>

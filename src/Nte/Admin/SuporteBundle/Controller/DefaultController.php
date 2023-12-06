@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Admin\SuporteBundle\Controller;
 
 use Nte\Admin\SuporteBundle\Entity\Suporte;
@@ -17,19 +34,19 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        if($this->isGranted('ROLE_ADMIN')){
+        if ($this->isGranted('ROLE_ADMIN')) {
             $suporte = $this->getDoctrine()
                 ->getManager()
                 ->getRepository(Suporte::class)->findAll();
-        }else{
+        } else {
             $suporte = $this->getDoctrine()
                 ->getManager()
                 ->getRepository(Suporte::class)
-                ->findBy(['idUsuarioSolicitante'=>$this->getUser()]);
+                ->findBy(['idUsuarioSolicitante' => $this->getUser()]);
         }
 
-        return $this->render('NteSuporteBundle:Default:index.html.twig',[
-            'suporte'=>$suporte,
+        return $this->render('NteSuporteBundle:Default:index.html.twig', [
+            'suporte' => $suporte,
         ]);
     }
 
@@ -40,6 +57,7 @@ class DefaultController extends Controller
     {
         return $this->render('NteSuporteBundle:Default:manual.html.twig');
     }
+
     /**
      * @return Response
      */
@@ -49,14 +67,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * Visualiza o chamado em aberto
-     * @param Request $request
-     * @param $id
+     * Visualiza o chamado em aberto.
+     *
      * @return Response
      */
     public function verAction(Request $request, Suporte $suporte)
     {
-        if(!$suporte){
+        if (!$suporte) {
             return $this->redirectToRoute('nte_suporte_homepage');
         }
         $em = $this->getDoctrine()->getManager();
@@ -71,19 +88,20 @@ class DefaultController extends Controller
             $suporte->setIdSituacao(1);
             $em->persist($suporte);
             $em->flush();
-            return $this->redirectToRoute('nte_suporte_visualizar',['id'=>$suporte->getId()]);
+
+            return $this->redirectToRoute('nte_suporte_visualizar', ['id' => $suporte->getId()]);
         }
-        return $this->render('NteSuporteBundle:Default:chamado.html.twig', array(
+
+        return $this->render('NteSuporteBundle:Default:chamado.html.twig', [
             'suporteIteracao' => $suporteIteracao,
             'suporte' => $suporte,
             'form' => $form->createView(),
-        ));
+        ]);
     }
+
     /**
-     * Abre ou edita uma solicitação de suporte
+     * Abre ou edita uma solicitação de suporte.
      *
-     * @param Request $request
-     * @param $id
      * @return Response
      */
     public function formAction(Request $request, $id)
@@ -100,12 +118,13 @@ class DefaultController extends Controller
             $suporte->setIdUsuarioSolicitante($this->getUser());
             $em->persist($suporte);
             $em->flush();
+
             return $this->redirectToRoute('nte_suporte_homepage');
         }
-        return $this->render('NteSuporteBundle:Default:form.html.twig', array(
+
+        return $this->render('NteSuporteBundle:Default:form.html.twig', [
             'suporte' => $suporte,
             'form' => $form->createView(),
-        ));
+        ]);
     }
-
 }

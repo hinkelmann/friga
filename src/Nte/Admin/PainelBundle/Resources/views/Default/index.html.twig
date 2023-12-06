@@ -2,1371 +2,860 @@
 {% block titulo %} Dashboard{% endblock %}
 {% block breadcumbsTitulo %}Painel  {% endblock %}
 {% block conteudo %}
-    {% if is_granted('ROLE_ADMIN') %}
+    <div id="dashboard">
         <div class="row">
             <div class="col-md-6">
-                <div class=" panel-body text-center">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-check fa-5x"></i>
-                                        <h4>Avaliação</h4>
-                                        <p>Registra e ou homologa avaliação dos candidatos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-trophy fa-5x"></i>
-                                        <h4>Classificação</h4>
-                                        <p>Determina a classificação oficial dos candidatos </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-calendar fa-5x"></i>
-                                        <h4>Convocação</h4>
-                                        <p>Convoca candidatos para apresentação.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('arquivo_assinaturadigital') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-credit-card fa-5x"></i>
-                                        <h4>Assinatura Digital</h4>
-                                        <p>Assine documentos usando seu certificado digital.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('relatorio_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured  icon icon-bar-chart fa-5x"></i>
-                                        <h4>Relatórios</h4>
-                                        <p>Visualiza todos os relatórios disponíveis no sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('relatorio_todos_inscritos') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-user fa-5x"></i>
-                                        <h4>Inscritos</h4>
-                                        <p>Relatório dos candidatos Inscritos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('relatorio_todos_anulados') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-user-times fa-5x"></i>
-                                        <h4>Anulados</h4>
-                                        <p>Relatório das Inscrições Anuladas</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('relatorio_recurso') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-gavel fa-5x"></i>
-                                        <h4>Recursos</h4>
-                                        <p>Relatório dos recursos entrepostos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('edital_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-file-text fa-5x"></i>
-                                        <h4>Editais</h4>
-                                        <p>Configura opções dos editais</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_usuario_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-users fa-5x"></i>
-                                        <h4>Usuários do sistema</h4>
-                                        <p>Administra os usuários do sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <!-- <a href="{{ path('nte_admin_mensagem') }}">-->
-                            <a href="#">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-envelope-square fa-5x"></i>
-                                        <h4>Mensagens</h4>
-                                        <p>Envia mensagens aos usuários do sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('arquivo_moodleprova') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-file-zip-o fa-5x"></i>
-                                        <h4>Exportar Moodle</h4>
-                                        <p>Gerar arquivo no moodle provas</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <div class="col-md-6">
-                {% set inscricao = 0 %}
-                {% set avaliacao = 0 %}
-                {% set classificacao = 0 %}
-                {% for edital in editais %}
-                    {% set inscricao=inscricao + edital.inscricaoValida|length %}
-                    {% for etapa in edital.etapaAvaliacaoClassificacao %}
-                        {% if etapa.tipo == 3 or etapa.tipo == 7 %}
-                            {% set avaliacao = avaliacao + 1 %}
-                        {% else %}
-                            {% set classificacao = classificacao + 1 %}
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-                <div class="row">
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-secondary">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Candidatos</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ inscricao }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon " style="background: #4FC3F7">
-                                            <i class="fa fa-check-square"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Editais abertos ou em andamento</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ editais|length }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #6aa84f">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon" style="background: #6aa84f">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Etapas de Avaliação</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ avaliacao }}</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color:#734ba9">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon" style="background: #734ba9">
-                                            <i class="fa fa-trophy"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Etapas de Classificação</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ classificacao }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <br>
-                <div class="panel-body">
-                    <div class="text-center">
-                        <h4 class="text-weight-bold text-primary"><i class="icon icon-calendar"></i> Datas Importantes
-                        </h4>
-                        <br>
-                    </div>
-                    {% for edital in editais if edital.situacao==1 %}
-                        <table class="table table-condensed">
-                            <thead>
-                            <tr>
-                                <td colspan="2" class="text-center text-primary">{{ edital.titulo }}</td>
-                            </tr>
-                            <tr>
-                                <th>Etapa</th>
-                                <th>Período</th>
-                            </tr>
-                            </thead>
-                            {% if edital.etapaAvaliacaoClassificacao|length %}
-                                {% for etapa in edital.etapaAvaliacaoClassificacao %}
-                                    <tr>
-                                        <td class="text-primary">
-                                            {{ etapa.descricao }}
-                                        </td>
-                                        <td>De {{ etapa.dataInicial|date('d/m/Y') }}
-                                            até {{ etapa.dataFinal|date('d/m/Y') }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                        </table>
-                        <br>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-    {% elseif is_granted('ROLE_AVALIADOR') and  is_granted('ROLE_GERENCIAL') == 0 %}
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel-body text-center">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-check fa-5x"></i>
-                                        <h4>Avaliação</h4>
-                                        <p>Registra e ou homologa avaliação dos candidatos.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-trophy fa-5x"></i>
-                                        <h4>Classificação</h4>
-                                        <p>Determina a classificação oficial dos candidatos. </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-calendar fa-5x"></i>
-                                        <h4>Convocação</h4>
-                                        <p>Convoca candidatos para apresentação.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('arquivo_assinaturadigital') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-credit-card fa-5x"></i>
-                                        <h4>Assinatura Digital</h4>
-                                        <p>Assine documentos usando seu certificado digital.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                {% set inscricao = 0 %}
-                {% set avaliacao = 0 %}
-                {% set classificacao = 0 %}
-                {% for edital in editais %}
-                    {% set inscricao=inscricao + edital.inscricaoValida|length %}
-                    {% for etapa in edital.etapaAvaliacaoClassificacao %}
-                        {% if etapa.tipo == 3 or etapa.tipo == 7 %}
-                            {% set avaliacao = avaliacao + 1 %}
-                        {% else %}
-                            {% set classificacao = classificacao + 1 %}
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-                <div class="row">
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-secondary">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Candidatos</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ inscricao }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon " style="background: #4FC3F7">
-                                            <i class="fa fa-check-square"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Editais abertos ou em andamento</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ editais.count }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #6aa84f">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon" style="background: #6aa84f">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Etapas de Avaliação</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ avaliacao }}</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color:#734ba9">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon" style="background: #734ba9">
-                                            <i class="fa fa-trophy"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Etapas de Classificação</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ classificacao }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel-body">
-                    <div class="text-center">
-                        <h4 class="text-weight-bold text-primary"><i class="icon icon-calendar"></i> Datas Importantes
-                        </h4>
-                        <br>
-                    </div>
-                    {% for edital in editais if edital.situacao==1 %}
-                        <table class="table table-condensed">
-                            <thead>
-                            <tr>
-                                <td colspan="2" class="text-center text-primary">{{ edital.titulo }}</td>
-                            </tr>
-                            <tr>
-                                <th>Etapa</th>
-                                <th>Período</th>
-                            </tr>
-                            </thead>
-                            {% if edital.etapaAvaliacaoClassificacao|length %}
-                                {% for etapa in edital.etapaAvaliacaoClassificacao %}
-                                    <tr>
-                                        <td class="text-primary">
-                                            {{ etapa.descricao }}
-                                        </td>
-                                        <td>De {{ etapa.dataInicial|date('d/m/Y') }}
-                                            até {{ etapa.dataFinal|date('d/m/Y') }}</td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                        </table>
-                        <br>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    {% elseif is_granted('ROLE_GERENCIAL') and  is_granted('ROLE_AVALIADOR') == 0 %}
-        <div class="col-md-6">
-            <div class=" panel-body text-center">
-                <div class="row">
-                    <div class="col-md-3 col-sm-4 col-xs-6">
-                        <a href="{{ path('relatorio_index') }}">
-                            <div class="featured-box featured-box-primary featured-box-effect-3">
-                                <div class="box-content">
-                                    <i class="icon-featured icon icon-bar-chart fa-5x"></i>
-                                    <h4>Relatórios</h4>
-                                    <p>Visualiza todos os relatórios disponíveis no sistema</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% elseif is_granted('ROLE_GERENCIAL')  and  is_granted('ROLE_AVALIADOR') %}
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel-body text-center">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-check fa-5x"></i>
-                                        <h4>Avaliação</h4>
-                                        <p>Registra e ou homologa avaliação dos candidatos.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-trophy fa-5x"></i>
-                                        <h4>Classificação</h4>
-                                        <p>Determina a classificação oficial dos candidatos. </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured icon icon-calendar fa-5x"></i>
-                                        <h4>Convocação</h4>
-                                        <p>Convoca candidatos para apresentação.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{{ path('relatorio_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured  icon icon-bar-chart fa-5x"></i>
-                                        <h4>Relatórios</h4>
-                                        <p>Visualiza todos os relatórios disponíveis no sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                {% set inscricao = 0 %}
-                {% set avaliacao = 0 %}
-                {% set classificacao = 0 %}
-                {% for edital in editais %}
-                    {% set inscricao=inscricao + edital.inscricaoValida|length %}
-                    {% for etapa in edital.etapaAvaliacaoClassificacao %}
-                        {% if etapa.tipo == 3 or etapa.tipo == 7 %}
-                            {% set avaliacao = avaliacao + 1 %}
-                        {% else %}
-                            {% set classificacao = classificacao + 1 %}
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-                <div class="row">
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-secondary">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Candidatos</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ inscricao }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #4FC3F7">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon " style="background: #4FC3F7">
-                                            <i class="fa fa-check-square"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Editais abertos ou em andamento</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ editais.count }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color: #6aa84f">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon" style="background: #6aa84f">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Etapas de Avaliação</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ avaliacao }}</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-sm-6">
-                        <section class="panel panel-featured-left" style="border-left-color:#734ba9">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-sm">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon" style="background: #734ba9">
-                                            <i class="fa fa-trophy"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Etapas de Classificação</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ classificacao }}
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel-body">
-                    <div class="text-center">
-                        <h4 class="text-weight-bold text-primary"><i class="icon icon-calendar"></i> Datas Importantes
-                        </h4>
-                        <br>
-                    </div>
-                    {% for edital in editais if edital.situacao==1 %}
-                        <table class="table table-condensed">
-                            <thead>
-                            <tr>
-                                <td colspan="2" class="text-center text-primary">{{ edital.titulo }}</td>
-                            </tr>
-                            <tr>
-                                <th>Etapa</th>
-                                <th>Período</th>
-                            </tr>
-                            </thead>
-                            {% if edital.etapaAvaliacaoClassificacao|length %}
-                                {% for etapa in edital.etapaAvaliacaoClassificacao %}
-                                    <tr>
-                                        <td class="text-primary">
-                                            {{ etapa.descricao }}
-                                        </td>
-                                        <td>De {{ etapa.dataInicial|date('d/m/Y') }}
-                                            até {{ etapa.dataFinal|date('d/m/Y') }}</td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                        </table>
-                        <br>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    {% else %}
-    {% endif %}
-    {#
-    {% if is_granted('ROLE_ADMIN_') %}
-        <div class="col-md-6">
-            <section class="panel">
-                <div class=" panel-body text-center">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigante_aplicacao_friga_etapa_index_homologacao') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-check-square fa-5x"></i>
-                                        <h4>Homologação</h4>
-                                        <p>Registra a homologação dos candidatos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigante_aplicacao_friga_etapa_index_entrevista') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-calendar-check-o fa-5x"></i>
-                                        <h4>Entrevistas</h4>
-                                        <p>Registra a pontuação da entrevista dos candidatos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigante_aplicacao_friga_etapa_index_recurso') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-gavel fa-5x"></i>
-                                        <h4>Recursos</h4>
-                                        <p>Avalia recursos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigaclassificacao_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-trophy fa-5x"></i>
-                                        <h4>Classificação</h4>
-                                        <p>Classificação geral por cidade</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigacrelatorio_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-area-chart fa-5x"></i>
-                                        <h4>Relatórios</h4>
-                                        <p>Visualiza todos os relatórios disponíveis no sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigacrelatorio_inscritos') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-user fa-5x"></i>
-                                        <h4>Inscritos</h4>
-                                        <p>Relatório dos candidatos Inscritos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigacrelatorio_anulados') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-user-times fa-5x"></i>
-                                        <h4>Anulados</h4>
-                                        <p>Relatório das Inscrições Anuladas</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('frigacrelatorio_resultado_final') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-file-code-o fa-5x"></i>
-                                        <h4>Classificação</h4>
-                                        <p>Relatório de classificação final (capes)</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('edital_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-file-text fa-5x"></i>
-                                        <h4>Editais</h4>
-                                        <p>Configura opções dos editais</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('polo_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-map fa-5x"></i>
-                                        <h4>Cidades</h4>
-                                        <p>Cadastro de opções disponíveis de polos</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('nte_usuario_index') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-users fa-5x"></i>
-                                        <h4>Usuários do sistema</h4>
-                                        <p>Administra os usuários do sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <a href="{-{- path('nte_admin_mensagem') }}">
-                                <div class="featured-box featured-box-primary featured-box-effect-3">
-                                    <div class="box-content">
-                                        <i class="icon-featured fa fa-envelope-square fa-5x"></i>
-                                        <h4>Mensagens</h4>
-                                        <p>Envia mensagens aos usuários do sistema</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        <div class="col-md-6">
-            <section class="panel">
-                <div class="panel-body">
-                    <div id="graficoAltaracaoSie" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
-                </div>
-            </section>
-        </div>
-    {% elseif is_granted('ROLE_IES') %}
-        <div class="row">
-            <div class="col-md-5 col-lg-5 col-xl-5">
-                <section class="panel">
-                    <div class=" panel-body text-center">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigacrelatorio_index') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-bar-chart fa-5x"></i>
-                                            <h4>Relatorio Geral</h4>
-                                            <p>Visualiza o principal relatório do sistema</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigacrelatorio_andamento') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-check-square fa-5x"></i>
-                                            <h4>Acompanhamento</h4>
-                                            <p>Relatório de acompnhamento das avaliações</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigacrelatorio_inscritos') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-user-plus fa-5x"></i>
-                                            <h4>Inscrições</h4>
-                                            <p>Relatório com a listagem dos candidatos inscritos</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigacrelatorio_anulados') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-user-times fa-5x"></i>
-                                            <h4>Anulados</h4>
-                                            <p>Relatório com a listagem das inscrições anuladas</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigacrelatorio_resultado_final') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-code fa-5x"></i>
-                                            <h4>Relatório CAPES</h4>
-                                            <p>Relatório com os nomes que serão enviados para CAPES</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('edital_index') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-file-o  fa-5x"></i>
-                                            <h4>Editais</h4>
-                                            <p>Configura as opções do edital cadastrado no sistema</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('nte_admin_mensagem') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-envelope-square fa-5x"></i>
-                                            <h4>Mensagens</h4>
-                                            <p>Envia mensagens aos usuários e candidatos</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <div class="col-md-7 col-lg-7 col-xl-7">
-                <section class="panel">
-                    <header class="panel-heading">
-                        <h2 class="panel-title">
-                            <span class="va-middle"> <i class="fa fa-calendar"> </i> Datas importantes</span>
-                        </h2>
-                    </header>
+                <div class="panel">
                     <div class="panel-body">
-                        <form class="form-horizontal form-bordered" action="#">
-                            <div class="form-group">
-                                <label class="col-md-6 col-sm-6 control-label">Homologar Inscrições</label>
-                                <div class="col-md-6">
-                                    De <b>{{ edital.homologacaoAbertura|date('d/m/Y ') }}</b> até
-                                    <b>{{ edital.homologacaoEncerramento|date('d/m/Y ') }}</b>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-6 col-sm-6 control-label">1° Avaliação de recursos</label>
-                                <div class="col-md-6">
-                                    De <b>{{ edital.recursoAnaliseHomologacaoAbertura|date('d/m/Y ') }}</b> até
-                                    <b>{{ edital.recursoAnaliseHomologacaoEncerramento|date('d/m/Y ') }}</b>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-6 col-sm-6 control-label">Entrevistar Candidatos</label>
-                                <div class="col-md-6">
-                                    De <b>{{ edital.entrevistaAbertura|date('d/m/Y ') }}</b> até
-                                    <b>{{ edital.entrevistaEncerramento|date('d/m/Y ') }}</b>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-6 col-sm-6 control-label">2° Avaliação de recursos</label>
-                                <div class="col-md-6">
-                                    De <b>{{ edital.recursoAnaliseEntrevistaAbertura|date('d/m/Y ') }}</b> até
-                                    <b>{{ edital.recursoAnaliseEntrevistaEncerramento|date('d/m/Y ') }}</b>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-6 col-sm-6 control-label">Resultado Final</label>
-                                <div class="col-md-6">
-                                    <b>{{ edital.resultadoFinal|date('d/m/Y ') }}</b>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </section>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-xl-12">
-                <section class="panel">
-                    <div class="panel-body">
-                        <div id="graficoAltaracaoSie" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
-                    </div>
-                </section>
-            </div>
-        </div>
+                        <div class="text-left ">
+                            <h4 class="text-weight-bold text-primary pull-left">
+                                <i class="icon icon-book-open"></i>
+                                EDITAIS
+                            </h4>
+                            <div class="pull-left ml-md">
+                                 <div class="input-group">
 
-    {% elseif is_granted('ROLE_AVALIADOR') %}
-        <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-6">
-                <section class="panel">
-                    <div class=" panel-body text-center">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigante_aplicacao_friga_etapa_index_homologacao') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-check-square fa-5x"></i>
-                                            <h4>Homologação</h4>
-                                            {% if
-                                            "now"|date('Y-m-d') >=  edital.homologacaoAbertura|date('Y-m-d') and
-                                            "now"|date('Y-m-d') <=  edital.homologacaoEncerramento|date('Y-m-d') %}
-                                                <small>
-                                                    De <b> {{ edital.homologacaoAbertura|date('d/m/Y ') }}</b> até
-                                                    <b>{{ edital.homologacaoEncerramento|date('d/m/Y ') }}</b>
-                                                </small>
-                                            {% endif %}
-                                            {% if
-                                            "now"|date('Y-m-d') >=  edital.recursoAnaliseHomologacaoAbertura|date('Y-m-d') and
-                                            "now"|date('Y-m-d') <=  edital.recursoAnaliseHomologacaoEncerramento|date('Y-m-d') %}
-                                                <small>
-                                                    Avaliação de Recursos: <br>
-                                                    De
-                                                    <b>{{ edital.recursoAnaliseHomologacaoAbertura|date('d/m/Y ') }}</b>
-                                                    até
-                                                    <b>{{ edital.recursoAnaliseHomologacaoEncerramento|date('d/m/Y ') }}</b>
-                                                </small>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </a>
+                                <input type="text" class="form-control input-sm " v-model="edital.search"
+                                       placeholder="Procurar por edital"/>
+                                       <div class="input-group-btn">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm  btn-default dropdown-toggle"
+                                            type="button" id="dropdownMenu1"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+
+                                        <i class="fa fa-filter"></i>
+                                    </button>
+                                    <ul class="dropdown-menu checkbox-menu" aria-labelledby="dropdownMenu1">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="0" v-model="edital.situacao"> Rascunho
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="1" v-model="edital.situacao">Abertos
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" value="2" v-model="edital.situacao">Encerrados
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                                </div>
+                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigante_aplicacao_friga_etapa_index_entrevista') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-calendar-check-o fa-5x"></i>
-                                            <h4>Entrevista</h4>
-                                            {% if
-                                            "now"|date('Y-m-d') >=  edital.entrevistaAbertura|date('Y-m-d') and
-                                            "now"|date('Y-m-d') <=  edital.entrevistaEncerramento|date('Y-m-d') %}
-                                                <small>
-                                                    <b>De {{ edital.entrevistaAbertura|date('d/m/Y ') }}</b> até
-                                                    <b>{{ edital.entrevistaEncerramento|date('d/m/Y ') }}</b>
-                                                </small>
-                                            {% endif %}
-                                            {% if
-                                            "now"|date('Y-m-d') >= edital.recursoAnaliseEntrevistaAbertura|date('Y-m-d')  and
-                                            "now"|date('Y-m-d') <= edital.recursoAnaliseEntrevistaEncerramento|date('Y-m-d') %}
-                                                <small>
-                                                    Avaliação de Recursos: <br>
-                                                    De
-                                                    <b>{{ edital.recursoAnaliseEntrevistaAbertura|date('d/m/Y ') }}</b>
-                                                    até
-                                                    <b>{{ edital.recursoAnaliseEntrevistaEncerramento|date('d/m/Y ') }}</b>
-                                                </small>
-                                            {% endif %}
-                                        </div>
-                                    </div>
+                            {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                                <a title="Clique aqui para criar um novo edital"
+                                   href="javascript:criarEdital()" class="btn btn-primary pull-right">
+                                    <i class="fa fa-plus"></i> Novo edital
                                 </a>
+                            {% endif %}
+                            &nbsp;
+                            <br>
+                            <br>
+                        </div>
+                        <div class="form-bordered" v-if="filtroEdital.length > 0">
+                            <div class="form-group" v-for="item in filtroEdital"
+                                 :class="item.situacao==1?'edital-item edital-item-active':'edital-item'">
+                                <h6>
+                                    <span :title="item.titulo">
+                                        @{ item.dataPublicacaoOficial + " - " + item.titulo}
+                                    </span>
+                                </h6>
+                                <div>
+                                    <div style="display: inline;"
+                                         title="">
+                                        <i class="fa fa-calendar"></i>
+                                        De @{ item.dataInicio} a @{ item.dataFim}
+                                    </div>
+                                    {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                                        <div class="dropdown pull-right">
+                                            <a class="  dropdown-toggle"
+                                               type="button" id="dropdownMenu1"
+                                               title="Clique aqui para acessar o menu de configurações do edital"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <i class="fa fa-cogs"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                <li v-for="itemmenu in item.menu">
+                                                    <a :title="itemmenu.titulo"
+                                                       :href="itemmenu.url">
+                                                        <i :class="itemmenu.icone"></i> @{ itemmenu.nome}
+                                                    </a>
+                                                </li>
+                                                <li  v-if="item.situacao !=='2'" role="separator" class="divider"></li>
+                                                <li v-if="item.situacao === '0'">
+                                                    <a :data-href="item.urlacao"
+                                                       :data-title="item.dataPublicacaoOficial +' '+ item.titulo"
+                                                       href="#" class="remover"
+                                                       title="Clique aqui para remover o edital -  todas as configurações serão perdidas">
+                                                        <i class="fa fa-trash text-danger"></i> Remover
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.situacao === '1'">
+                                                    <a :data-href="item.urlacao"
+                                                       :data-title="item.dataPublicacaoOficial +' '+ item.titulo"
+                                                       href="#" class="alterar"
+                                                       title="Clique aqui para finalizar o edital - O edital poderá ser acessada através dos itens encerrados">
+                                                        <i class="fa fa-check-square-o text-successr"></i>
+                                                        Finalizar edital
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                    {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                                        <div v-if="item.menuAvaliacao.length > 0">
+                                            <div class="dropdown pull-right">
+                                                <a class="  dropdown-toggle"
+                                                   type="button" id="dropdownMenu1"
+                                                   title="Clique aqui para acessar as etapas de avaliação do edital"
+                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <i class="icon icon-calendar"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                    <li v-for="itemmenu in item.menuAvaliacao">
+                                                        <a :title="itemmenu.titulo"
+                                                           :href="itemmenu.url">
+                                                            <i :class="itemmenu.icone"></i> @{ itemmenu.nome}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                                        <a class="pull-right btn-icon"
+                                           title="Clique aqui para visualizar as inscrições válidas"
+                                           :href="item.urlstats1">
+                                            <i class="icon icon-user-follow"></i>
+                                        </a>
+                                        <a class="pull-right btn-icon"
+                                           title="Clique aqui para visualizar as inscrições inválidas"
+                                           :href="item.urlstats2">
+                                            <i class="icon icon-user-unfollow"></i>
+                                        </a>
+                                    {% endif %}
+                                    <a title="Clique aqui para ver o relatório de estátisticas do edital"
+                                       class="pull-right btn-icon"
+                                       :href="item.urlstats">
+                                        <i class="icon icon-bar-chart"></i>
+
+                                    </a>
+                                    <a class="pull-right btn-icon"
+                                       title="Clique aqui para visualizar a página do edital"
+                                       target="_blank"
+                                       :href="item.urlsite">
+                                        <i class="fa fa-globe"></i>
+                                    </a>
+
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigante_aplicacao_friga_etapa_index_recurso') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-gavel fa-5x"></i>
-                                            <h4>Recursos</h4>
-                                            {% if
-                                            "now"|date('Y-m-d') >=  edital.recursoAnaliseHomologacaoAbertura|date('Y-m-d') and
-                                            "now"|date('Y-m-d') <=  edital.recursoAnaliseHomologacaoEncerramento|date('Y-m-d') %}
-                                                <small>
-                                                    Avaliação de Recursos: <br>
-                                                    De
-                                                    <b>{{ edital.recursoAnaliseHomologacaoAbertura|date('d/m/Y ') }}</b>
-                                                    até
-                                                    <b>{{ edital.recursoAnaliseHomologacaoEncerramento|date('d/m/Y ') }}</b>
-                                                </small>
-                                            {% endif %}
-                                            {% if
-                                            "now"|date('Y-m-d') >= edital.recursoAnaliseEntrevistaAbertura|date('Y-m-d')  and
-                                            "now"|date('Y-m-d') <= edital.recursoAnaliseEntrevistaEncerramento|date('Y-m-d') %}
-                                                <small>
-                                                    Avaliação de Recursos<br>
-                                                    De
-                                                    <b>{{ edital.recursoAnaliseEntrevistaAbertura|date('d/m/Y ') }}</b>
-                                                    até
-                                                    <b>{{ edital.recursoAnaliseEntrevistaEncerramento|date('d/m/Y ') }}</b>
-                                                </small>
-                                            {% endif %}
+                        <div class="body-error error-inside" v-else>
+                            <div class="center-error">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="main-error mb-xlg">
+                                            <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                                <i class="icon icon-book-open fa-icon-check-circle text-primary"></i>
+                                            </h2>
+                                            <p class="error-explanation text-center text-primary">
+                                                <br>Nenhum <b> edital </b> disponível.
+                                            </p>
                                         </div>
                                     </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a href="{-{- path('frigaclassificacao_index') }}">
-                                    <div class="featured-box featured-box-primary featured-box-effect-3">
-                                        <div class="box-content">
-                                            <i class="icon-featured fa fa-trophy fa-5x"></i>
-                                            <h4>Classificação</h4>
-                                            <small>
-                                                Disponível a partir de
-                                                <b>{{ edital.resultadoFinal|date('d/m/Y ') }}</b>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
             <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <section class="panel panel-featured-left panel-featured-secondary">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-lg">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-secondary">
-                                            <i class="fa fa-user"></i>
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="text-left">
+                            <h4 class="text-weight-bold text-primary pull-left ">
+                                <i class="icon icon-calendar"></i>
+                                DATAS IMPORTANTES
+                            </h4>
+                            <div class="pull-right">
+                                    <div class="input-group">
+                                       <div class="input-group-btn">
+                                           <div class="dropdown ">
+                                               <button class="btn btn-sm btn-default dropdown-toggle"
+                                                       type="button" id="dropdownMenu1"
+                                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+
+                                                   <i class="fa fa-filter"></i>
+                                               </button>
+                                               <ul class="dropdown-menu checkbox-menu" aria-labelledby="dropdownMenu1">
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="-1" v-model="etapa.situacao"> Encerrada
+                                                       </label>
+                                                   </li>
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="0" v-model="etapa.situacao">Abertas
+                                                       </label>
+                                                   </li>
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="1" v-model="etapa.situacao">Próximas
+                                                       </label>
+                                                   </li>
+                                                   <li role="separator" class="divider"></li>
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="3" v-model="etapa.tipo">Avaliação
+                                                       </label>
+                                                   </li>
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="7" v-model="etapa.tipo">Recurso
+                                                       </label>
+                                                   </li>
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="4" v-model="etapa.tipo">Resultado
+                                                       </label>
+                                                   </li>
+                                                   <li>
+                                                       <label>
+                                                           <input type="checkbox" value="5" v-model="etapa.tipo">Convocação
+                                                       </label>
+                                                   </li>
+                                               </ul>
+                                           </div>
+                                       </div>
+                                        <input type="text" class="form-control input-sm " v-model="etapa.search"
+                                               placeholder="Procurar por etapa"/>
+                                    </div>
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+
+                        <div v-if="filtroEtapa.length > 0">
+                            <div class="tracking-item" :id="item.id" v-for="item in filtroEtapa">
+                                <div :class="item.andamentoPrazo? 'tracking-icon status-delivered':'tracking-icon status-intransit'"
+                                     data-placement="top" :title="item.tipoDescricao"
+                                     :data-original-title="item.tipoDescricao">
+                                    <i :class="item.icone"></i>
+                                </div>
+                                <div class="tracking-date">
+                                    <div class="progress" data-toggle="tooltip" data-placement="top" title=""
+                                         v-if="item.andamentoPrazo >=0"
+                                         data-original-title="Prazo para finalizar a etapa. Quando este prazo chegar em 100% não será possível acessar a etapa">
+                                        <div class="progress-bar progress-bar-primary progress-bar-striped"
+                                             :style="'width:'+ item.andamentoPrazo+'%'">
+                                            @{item.andamentoPrazo}%
                                         </div>
                                     </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Candidatos</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ avaliador.candidatos }}</strong>
-                                            </div>
+                                    <div v-else>
+                                        @{item.dataDivulgacao}
+                                    </div>
+                                </div>
+                                <div class="tracking-content">
+                                    <h6 class="semi-bold">
+                                        <a title="Clique aqui para realizar a avaliação dos candidatos"
+                                           :href="item.urlavaliacao"> @{item.descricao} </a>
+                                        <a title="Clique aqui para alterar a etapa" v-if="item.urledicao !=null"
+                                           :href="item.urledicao">
+                                            <i class="fa fa-edit"> </i>
+                                        </a>
+                                    </h6>
+                                    <div>
+                                        <small class="">
+                                            @{item.edital.titulo}
+                                        </small>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <span>De @{item.dataInicio} Até @{item.dataFim} </span>
+                                            <span> Divulgação: @{item.dataDivulgacao}</span>
                                         </div>
-                                        <div class="summary-footer">
-                                            <a href="{-{- path('frigante_aplicacao_friga_etapa_index_homologacao') }}"
-                                               class="text-muted text-uppercase">Ver todos</a>
+                                        <div class="col-md-6">
+                                            <ul class="notifications  pull-right">
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                <li v-if="item.urlmoodle != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para enviar dados da convocação para o Moodle"
+                                                       :href="item.urlmoodle">
+                                                        <i class="fa fa-graduation-cap text-warning"></i>
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                                <li v-if="item.urlcsvconvocacao != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para baixar o arquivo CSV com a convocação"
+                                                       :href="item.urlcsvconvocacao">
+                                                        <i class="fa fa-cloud-download text-primary"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.urlrelacaoimpressao != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para imprimir a tabela com a relação dos convocados"
+                                                       :href="item.urlrelacaoimpressao">
+                                                        <i class="icon icon-printer text-warning"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.urlrelacaoimpressaopresenca != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para imprimir a lista de presença"
+                                                       :href="item.urlrelacaoimpressaopresenca">
+                                                        <i class="icon icon-printer text-success"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.urlrelacaoimpressaocontato != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para imprimir a lista de contatos"
+                                                       :href="item.urlrelacaoimpressaocontato">
+                                                        <i class="icon icon-printer text-info"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.classificacao === 0 && item.periodoHabilitado && item.urlresultadogerar != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para gerar a grade de resultados"
+                                                       :href="item.urlresultadogerar">
+                                                        <i class="fa fa-cog text-success"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.periodoHabilitado && item.urlresultadoparcial != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para ver a prévia dos resultados"
+                                                       :href="item.urlresultadoparcial">
+                                                        <i class="icon icon-eye"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.urlcsv != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para exportar os resultados em arquivo de planilha eletrônica no formato CSV"
+                                                       :href="item.urlcsv">
+                                                        <i class="fa fa-file-excel-o"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.urlresultadoimpressao != null">
+                                                    <a class="notification-icon "
+                                                       title="Clique aqui para imprimir a grade de resultados"
+                                                       :href="item.urlresultadoimpressao">
+                                                        <i class="icon icon-printer text-primary"></i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="item.periodoHabilitado && item.classificado >0 && item.urlresultadogerar != null && item.urlresultadoremover != null">
+                                                    <a class="notification-icon"
+                                                       title="Clique aqui para remover os resultados da etapa"
+                                                       :href="item.urlresultadoremover">
+                                                        <i class="fa fa-trash text-danger"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
-                        </section>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <section class="panel panel-featured-left panel-featured-primary">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-lg">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-quartenary">
-                                            <i class="fa fa-check-square"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Avaliados</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ avaliador.avaliados }}
-                                                    de {{ avaliador.candidatos }}</strong>
-                                            </div>
-                                            <div class="summary-footer">
-                                                <a href="{-{- path('frigante_aplicacao_friga_etapa_index_homologacao') }}"
-                                                   class="text-muted text-uppercase">Ver Todos</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <section class="panel panel-featured-left panel-featured-primary">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-lg">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-tertiary">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Entrevistados</h4>
-                                            <div class="info">
-                                                <strong class="amount">{{ avaliador.entrevistados }}</strong>
-                                            </div>
-                                            <div class="summary-footer">
-                                                <a href="{-{- path('frigante_aplicacao_friga_etapa_index_entrevista') }}"
-                                                   class="text-muted text-uppercase">Ver Todos</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <section class="panel panel-featured-left panel-featured-primary">
-                            <div class="panel-body">
-                                <div class="widget-summary widget-summary-lg">
-                                    <div class="widget-summary-col widget-summary-col-icon">
-                                        <div class="summary-icon bg-primary">
-                                            <i class="fa fa-balance-scale"></i>
-                                        </div>
-                                    </div>
-                                    <div class="widget-summary-col">
-                                        <div class="summary">
-                                            <h4 class="title">Recursos</h4>
-                                            <div class="info">
-                                                <strong class="amount">
-                                                    {{ avaliador.recursos }}
-                                                </strong>
-                                            </div>
-                                            <div class="summary-footer">
-                                                <a href="{-{- path('frigante_aplicacao_friga_etapa_index_recurso') }}"
-                                                   class="text-muted text-uppercase">Ver Todos</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <section class="panel">
-                        <header class="panel-heading">
-                            <h2 class="panel-title">
-                                <span class="va-middle"> <i class="fa fa-calendar"> </i> Datas importantes</span>
-                            </h2>
-                            <h2 class="panel-subtitle">
-                                <span class="va-middle">{{ edital.nro }} - {{ edital.titulo }}</span>
-                            </h2>
-                        </header>
-                        <div class="panel-body">
-                            <form class="form-horizontal form-bordered" action="#">
-                                <div class="form-group">
-                                    <label class="col-md-6 col-sm-6 control-label">Homologar Inscrições</label>
-                                    <div class="col-md-6">
-                                        De <b>{{ edital.homologacaoAbertura|date('d/m/Y ') }}</b> até
-                                        <b>{{ edital.homologacaoEncerramento|date('d/m/Y ') }}</b>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-6 col-sm-6 control-label">1° Avaliação de recursos</label>
-                                    <div class="col-md-6">
-                                        De <b>{{ edital.recursoAnaliseHomologacaoAbertura|date('d/m/Y ') }}</b> até
-                                        <b>{{ edital.recursoAnaliseHomologacaoEncerramento|date('d/m/Y ') }}</b>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-6 col-sm-6 control-label">Entrevistar Candidatos</label>
-                                    <div class="col-md-6">
-                                        De <b>{{ edital.entrevistaAbertura|date('d/m/Y ') }}</b> até
-                                        <b>{{ edital.entrevistaEncerramento|date('d/m/Y ') }}</b>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-6 col-sm-6 control-label">2° Avaliação de recursos</label>
-                                    <div class="col-md-6">
-                                        De <b>{{ edital.recursoAnaliseEntrevistaAbertura|date('d/m/Y ') }}</b> até
-                                        <b>{{ edital.recursoAnaliseEntrevistaEncerramento|date('d/m/Y ') }}</b>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-6 col-sm-6 control-label">Resultado Final</label>
-                                    <div class="col-md-6">
-                                        <b>{{ edital.resultadoFinal|date('d/m/Y ') }}</b>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
-                    </section>
+                        <div class="body-error error-inside" v-else>
+                            <div class="center-error">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="main-error mb-xlg">
+                                            <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                                <i class="icon icon-calculator fa-icon-check-circle text-primary"></i>
+                                            </h2>
+                                            <p class="error-explanation text-center text-primary">
+                                                <br>Nenhuma <b> etapa </b> disponível.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    {% else %}
-        <div class="alert alert-info">
-            <strong>Sem permissão de uso</strong><br>
-            Você não possui permissões para usar este software, entre em contato com um administrador e solicite suas
-            devidas permissões.
-        </div>
-    {% endif %}
-{% endblock %}
-{% block javascripts3 %}
-    {{ parent() }}
-    <script src="{{ asset('assets/vendor/highcharts/highcharts.js') }}"></script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+
+    <style>
+        .truncate {
+            width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .edital-item {
+            border-left: 5px solid #000;
+            padding-left: 5px;
+            padding-top: 1px;
+        }
+
+        .edital-item-active {
+            border-left: 5px solid #47a447;
+        }
+    </style>
 
     <script>
+        let appvue = new Vue({
+            el: '#dashboard',
+            delimiters: ['@{', '}'],
+            data: {
+                edital: {
+                    search: '',
+                    situacao: ["0", "1"],
+                    data: [
+                        {% for e in editais %}
+                        {
+                            id: "{{ e.id }}"
+                            , uuid: "{{ e.uuid }}"
+                            , titulo: "{{ e.numero }} - {{ e.titulo }}"
+                            , situacao: "{{ e.situacao }}"
+                            , urlsite: "{{ path('nte_site_edital', { id: e.id, url: e.url}) }}"
+                            , urlstats: "{{ path('relatorio_resumo', {'uuid': e.uuid}) }}"
+                            , urlstats1: "{{ path('relatorio_inscritos', {'uuid': e.uuid}) }}"
+                            , urlstats2: "{{ path('relatorio_anulados', {'uuid': e.uuid}) }}"
+                            , urlacao: {% if e.situacao == 0 %}"{{ path('edital_remover', {'uuid': e.uuid}) }}"{% elseif e.situacao == 1 %}"{{ path('edital_api_situacao', {'id': e.id, situacao: 2 }) }}"{% else %}"{{ path('edital_api_situacao', {'id': e.id, situacao: 1 }) }}"{% endif %}
+                            , dataPublicacaoOficial: "{{ e.dataPublicacaoOficial|date("d/m/Y") }}"
+                            , menuAvaliacao: [
+                                {% for subitem in e.idEtapaAvaliacao %}
+                                {
+                                    {% if subitem.tipo ==3 or subitem.tipo ==7 %}
+                                    url: "{{ path('avaliacao_etapa',{etapa: subitem.id} ) }}",
+                                    {% endif %}
+                                    {% if subitem.tipo ==4 %}
+                                    url: "{{ path('resultado_etapa',{etapa: subitem.id} ) }}",
+                                    {% endif %}
+                                    {% if subitem.tipo ==5 %}
+                                    url: "{{ path('convocacao_etapa',{etapa: subitem.id} ) }}",
+                                    {% endif %}
+                                    nome: "{{ subitem.descricao }}",
+                                    titulo: "",
+                                    icone: "{{ subitem.objTipo.icone }}"
+                                },
+                                {% endfor %}
 
+                            ]
+                            , menu: [
+                                {
+                                    url: "{{ path('edital_editar', {'uuid': e.uuid}) }}",
+                                    nome: "Informações",
+                                    titulo: "Clique aqui para editar as informações básicas do edital",
+                                    icone: "fa fa-star"
+                                }
+                                , {
+                                    url: "{{ path('edital_arquivo', {'uuid': e.uuid}) }}",
+                                    nome: "Arquivos",
+                                    titulo: "Clique aqui para adicionar arquivos ao edital",
+                                    icone: "fa fa-file-pdf-o"
+                                }, {
+                                    url: "{{ path('edital_editar_inscricoes', {'uuid': e.uuid}) }}",
+                                    nome: "Inscrição",
+                                    titulo: "Clique aqui para configurar o fomulário de inscrição",
+                                    icone: "fa fa-th-list"
+                                }, {
+                                    url: "{{ path('edital_avaliador', {'uuid': e.uuid}) }}",
+                                    nome: "Usuários",
+                                    titulo: "Clique aqui para adicionar os usuários da comissão de avaliação",
+                                    icone: "fa fa-users"
+                                }, {
+                                    url: "{{ path('edital_editar_termo', {'uuid': e.uuid}) }}",
+                                    nome: "Termo",
+                                    titulo: "Clique aqui para configurar o termo de compromisso/responsabilidade",
+                                    icone: " fa fa-gavel"
+                                }, {
+                                    url: "{{ path('edital_cargo', {'uuid': e.uuid}) }}",
+                                    nome: "Vagas",
+                                    titulo: "Clique aqui para configurar as vagas do edital",
+                                    icone: "fa fa-gift"
+                                }, {
+                                    url: "{{ path('edital_cota', {'uuid': e.uuid}) }}",
+                                    nome: "Listas de Classificação",
+                                    titulo: "Clique aqui para configuar as listas de classificação",
+                                    icone: " icon icon-user"
+                                }, {
+                                    url: "{{ path('edital_etapa', {'uuid': e.uuid}) }}",
+                                    nome: "Etapa",
+                                    titulo: "Clique aqui para configurar as etapas do cronograma do edital",
+                                    icone: " fa fa-flag"
+                                }, {
+                                    url: "{{ path('edital_pontuacao', {'uuid': e.uuid}) }}",
+                                    nome: "Pontuação",
+                                    titulo: "Clique aqui para configurar a tabela de pontuação do edital",
+                                    icone: "fa fa-calculator"
+                                }, {
+                                    url: "{{ path('edital_desempate', {'uuid': e.uuid}) }}",
+                                    nome: "Desempate",
+                                    titulo: "Clique aqui para configurar os critérios de desempate do edital",
+                                    icone: "icon icon-refresh"
+                                }, {
+                                    url: "{{ path('edital_resultados', {'uuid': e.uuid}) }}",
+                                    nome: "Resultados",
+                                    titulo: "Clique aqui para configurar a exibição dos resultados",
+                                    icone: "fa fa-trophy"
+                                }, {
+                                    url: "{{ path('edital_exportador', {'uuid': e.uuid}) }}",
+                                    nome: "Exportar",
+                                    titulo: "Clique aqui para exportar as configuraçẽs do edital",
+                                    icone: " fa fa-download "
+                                }, {
+                                    url: "{{ path('edital_importador', {'uuid': e.uuid}) }}",
+                                    nome: "Importar",
+                                    titulo: "Clique aqui para importar as configuraçõs de um edital externo através de um arquivo .friga",
+                                    icone: "fa fa-upload"
+                                }
+                            ]
+                            {% if e.periodoInscricao %}
+                            , dataInicio: "{{ e.periodoInscricao.dataInicial|date("d/m/Y") }}"
+                            {% else %}
+                            , dataInicio: "--/--/---"
+                            {% endif %}
+                            {% if e.resultadoFinal %}
+                            , dataFim: "{{ e.resultadoFinal.dataDivulgacao|date("d/m/Y") }}"
+                            {% else %}
+                            , dataFim: "--/--/---"
+                            {% endif %}
 
-        Highcharts.chart('graficoAltaracaoSie', {
-            chart: {
-                type: 'column'
+                        },
+                        {% endfor %}
+                    ]
+                },
+                etapa: {
+                    search: '',
+                    situacao: ["0"],
+                    tipo: ["3", "4", "5", "7"],
+                    data: [
+                        {% for etapa in editalEtapa %}
+                        {
+                            id: {{ etapa.id }}
+                            ,edital: {
+                                id: {{ etapa.idEdital.id }}
+                                , titulo: "{{ etapa.idEdital.numero }} - {{ etapa.idEdital.titulo }}"
+                            }
+                            ,situacao: "{{ etapa.situacao }}"
+                            ,tipo: "{{ etapa.tipo }}"
+                            ,descricao: "{{ etapa.descricao|upper }}"
+                            ,tipoDescricao: "{{ etapa.tipoDescricao|upper }}"
+                            ,periodoHabilitado: {{ etapa.periodoHabilitado?'1':'0' }}
+                            ,andamentoPrazo: {{ etapa.andamentoPrazo|number_format(2,".") }}
+                            ,icone: "{{ etapa.objTipo.icone }}"
+                            ,classificacao: {{ etapa.classificacao.count }}
+                            ,urledicao:{% if is_granted('ROLE_ADMIN_EDITAL') %} "{{ path('edital_etapa_editar', {'etapa': etapa.id, 'uuid': etapa.idEdital.uuid}) }}"{% else %} null{% endif %}
+                            ,dataInicio: "{{ etapa.dataInicial|date('d/m/Y') }}"
+                            ,dataFim: "{{ etapa.dataFinal|date('d/m/Y') }}"
+                            ,dataDivulgacao: "{{ etapa.dataDivulgacao|date('d/m/Y') }}"
+                            {% if etapa.tipo == 3 or etapa.tipo== 7 %}
+                            ,urlavaliacao: "{{ path('avaliacao_etapa',{etapa: etapa.id} ) }}"
+                            ,urlresultadoparcial: "{{ path('resultado_parcial', {'etapa': etapa.id}) }}"
+                            {% endif %}
+                            {% if etapa.tipo == 4 %}
+                            ,urlavaliacao: "{{ path('resultado_etapa',{etapa: etapa.id} ) }}"
+                            ,urlresultadogerar: "{{ path('resultado_etapa_classificacao_gerar', {'etapa': etapa.id}) }}"
+                            ,urlresultadoremover: "{{ path('resultado_etapa_classificacao_remover', {'etapa': etapa.id}) }}"
+                            ,urlresultadoparcial: "{{ path('resultado_parcial', {'etapa': etapa.id}) }}"
+                            ,urlresultadoimpressao: "{{ path('resultado_etapa_impressao', {'etapa': etapa.id}) }}"
+                            ,urlcsv: "{{ path('resultado_etapa_exportar_csv', {'etapa': etapa.id}) }}"
+                            {% endif %}
+                            {% if etapa.tipo == 5 %}
+                            ,urlavaliacao: "{{ path('convocacao_etapa',{etapa: etapa.id} ) }}"
+                            ,urlmoodle: "{{ path('convocacao_etapa_exportar_moodle', {'etapa': etapa.id}) }}"
+                            ,urlcsvconvocacao: "{{ path('convocacao_etapa_exportar_csv', {'etapa': etapa.id}) }}"
+                            ,urlrelacaoimpressao: "{{ path('convocacao_etapa_impressao_relacao', {'etapa': etapa.id}) }}"
+                            ,urlrelacaoimpressaopresenca: "{{ path('convocacao_etapa_impressao_presenca', {'etapa': etapa.id}) }}"
+                            ,urlrelacaoimpressaocontato: "{{ path('convocacao_etapa_impressao_relacao_contato', {'etapa': etapa.id}) }}"
+                            {% endif %}
+                        },
+                        {% endfor %}
+                    ]
+                },
             },
-            title: {
-                text: 'Inscrições por polo'
-            },
-            subtitle: {
-                text: '<a href="{-{- path('frigacrelatorio_inscritos') }}">Relatório de Inscritos</a>'
-            },
-            xAxis: {
-                type: 'category',
-                labels: {
-                    rotation: -45,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
+            methods: {},
+            computed: {
+                filtroEdital() {
+                    return this.edital.data.filter(item => {
+                        return item.titulo.toLowerCase().includes(this.edital.search.toLowerCase()) && this.edital.situacao.includes(item.situacao)
+                    })
                 }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Inscrições (Total)'
+                , filtroEtapa() {
+                    return this.etapa.data.filter(item => {
+                        return (item.descricao.toLowerCase().includes(this.etapa.search.toLowerCase())
+                            || item.edital.titulo.toLowerCase().includes(this.etapa.search.toLowerCase())
+                            )
+                            && this.etapa.situacao.includes(item.situacao)
+                            && this.etapa.tipo.includes(item.tipo)
+                    })
                 }
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            tooltip: {
-                pointFormat: 'Inscrições realizadas: <b>{point.y}</b>'
-            },
-            series: [{
-                name: 'Population',
-                data: {{ graficoAlteracoes|raw }},
-                dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            }]
+            }
         });
-    </script>#}
+    </script>
+    <style>
+        .checkbox-menu li label {
+            display: block;
+            padding: 3px 10px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.42857143;
+            color: #333;
+            white-space: nowrap;
+            margin: 0;
+            transition: background-color .4s ease;
+        }
+
+        .checkbox-menu li input {
+            margin: 0px 5px;
+            top: 2px;
+            position: relative;
+        }
+
+        .checkbox-menu li.active label {
+            background-color: #cbcbff;
+            font-weight: bold;
+        }
+
+        .checkbox-menu li label:hover,
+        .checkbox-menu li label:focus {
+            background-color: #f5f5f5;
+        }
+
+        .checkbox-menu li.active label:hover,
+        .checkbox-menu li.active label:focus {
+            background-color: #b8b8ff;
+        }
+
+        .tracking-item {
+            border-left: 1px solid #214977;
+            position: relative;
+            padding: 2rem 1.5rem .5rem 2.5rem;
+            margin-left: 3rem;
+            min-height: 5rem
+        }
+
+        .tracking-item:last-child {
+            padding-bottom: 4rem
+        }
+
+        .tracking-item .tracking-date {
+            margin-bottom: .5rem
+        }
+
+        .tracking-item .tracking-date span {
+            color: #888;
+            padding-left: .4rem
+        }
+
+        .tracking-item .tracking-content {
+            padding: .5rem .8rem;
+            background-color: #f4f4f4;
+            border-radius: .5rem
+        }
+
+        .tracking-item .tracking-content span {
+            display: block;
+            color: #888;
+
+        }
+
+        .tracking-item .tracking-icon {
+            line-height: 2.6rem;
+            position: absolute;
+            left: -1.3rem;
+            width: 2.6rem;
+            height: 2.6rem;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #fff
+        }
+
+        .tracking-item .tracking-icon.status-delivered {
+            background-color: #214977
+        }
+
+        .tracking-item .tracking-icon.status-intransit {
+            color: #214977;
+            border: 1px solid #214977;
+        }
+
+        @media (min-width: 992px) {
+            .tracking-item {
+                margin-left: 10rem
+            }
+
+            .tracking-item .tracking-date {
+                position: absolute;
+                left: -10rem;
+                width: 7.5rem;
+                text-align: right
+            }
+
+            .tracking-item .tracking-date span {
+                display: block
+            }
+
+            .tracking-item .tracking-content {
+                padding: 0;
+                background-color: transparent
+            }
+        }
+
+        html.scroll .col-xl-1, html.scroll .col-xl-2, html.scroll .col-xl-3, html.scroll .col-xl-4, html.scroll .col-xl-5, html.scroll .col-xl-6, html.scroll .col-xl-7, html.scroll .col-xl-8, html.scroll .col-xl-9, html.scroll .col-xl-10, html.scroll .col-xl-11, html.scroll .col-xl-12, html.fixed .col-xl-1, html.fixed .col-xl-2, html.fixed .col-xl-3, html.fixed .col-xl-4, html.fixed .col-xl-5, html.fixed .col-xl-6, html.fixed .col-xl-7, html.fixed .col-xl-8, html.fixed .col-xl-9, html.fixed .col-xl-10, html.fixed .col-xl-11, html.fixed .col-xl-12 {
+            position: relative;
+            min-height: 1px;
+            padding-right: 3px;
+            padding-left: 3px;
+            margin-bottom: 0px;
+            padding-bottom: 6px;
+        }
+
+        .panel {
+            margin-bottom: 0px;
+        }
+
+        .progress {
+            margin-top: 5px;
+        }
+    </style>
+
+    <template id="formedital">
+        <div class="text-left">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group ">
+                        <label for="friga_edital_titulo" class="control-label">Título do Edital</label>
+                        <input type="text" class="form-control" id="titulo" required="required"
+                               placeholder="SELEÇÃO TUTOR ...">
+                    </div>
+                    <div class="form-group ">
+                        <label for="friga_edital_titulo" class="control-label">URL amigável</label>
+                        <input type="text" class="form-control" id="url" required="required"
+                               placeholder="edital-uab-2030">
+                    </div>
+                    <div class="form-group ">
+                        <label for="data" class="control-label">Data de publicação</label>
+                        <input type="date" class="form-control" id="data" required="required"
+                               value="{{ "now"|date('Y-m-d') }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group ">
+                        <label for="data" class="control-label">Modelo de configurações</label>
+                        <select class="form-control" id="m0">
+                            <option value="0"> Criar edital em branco</option>
+                            {% for edital in editaisselect %}
+                                <option value="{{ edital.id }}">{{ edital.titulo }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label for="data" class="control-label">Modelo de etapas</label>
+                        <select class="form-control" id="m1">
+                            <option value="0"> Criar edital em branco</option>
+                            {% for edital in editaisselect %}
+                                <option value="{{ edital.id }}">{{ edital.titulo }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label for="data" class="control-label">Modelo pontuação</label>
+                        <select class="form-control" id="m2">
+                            <option value="0"> Criar edital em branco</option>
+                            {% for edital in editaisselect %}
+                                <option value="{{ edital.id }}">{{ edital.titulo }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
 {% endblock %}
+    {% block javascripts2 %}
+        <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+        <script>
+            Array.from(document.querySelectorAll('.remover')).forEach(el => {
+                el.addEventListener('click', e => {
+                    e.preventDefault();
+                    btnRemover(e.currentTarget.dataset.href, e.currentTarget.dataset.title)
+                });
+            });
+            let btnRemover = (href, title) => {
+                Swal.fire({
+                    type: 'question',
+                    icon: 'question',
+                    text: "Você tem certeza que deseja REMOVER o " + title + "?",
+                    confirmButtonColor: "#d2322d",
+                    confirmButtonText: '<i class="fa fa-trash"></i> Remover',
+                    cancelButtonText: "Cancelar",
+                    showCloseButton: false,
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                }).then((value) => {
+                    if (value.value) {
+                        $.get(href, data => {
+                            window.location.href = "{{ path('nte_admin_painel_homepage') }}";
+                        });
+                    }
+                });
+            };
+
+            Array.from(document.querySelectorAll('.alterar')).forEach(el => {
+                el.addEventListener('click', e => {
+                    e.preventDefault();
+                    btnAlterar(e.currentTarget.dataset.href, e.currentTarget.dataset.title)
+                });
+            });
+            let btnAlterar = (href, title) => {
+                Swal.fire({
+                    type: 'question',
+                    icon: 'question',
+                    text: "Você tem certeza que deseja finalizar o " + title + "?",
+                    confirmButtonColor: "#204c90",
+                    confirmButtonText: 'Finalizar edital',
+                    cancelButtonText: "Cancelar",
+                    showCloseButton: false,
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                }).then((value) => {
+                    if (value.value) {
+                        $.get(href, data => {
+                            window.location.href = "{{ path('nte_admin_painel_homepage') }}";
+                        });
+                    }
+                });
+            };
+            let criarEdital = () => {
+                Swal.fire({
+                    html: document.querySelector('#formedital').cloneNode(true).content,
+                    width: "900px",
+                    confirmButtonColor: "#204c90",
+                    confirmButtonText: 'Criar novo edital',
+                    cancelButtonText: "Cancelar",
+                    showCloseButton: false,
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                }).then((value) => {
+                    if (value.value) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ path('edital_criar') }}',
+                            dataType: 'json',
+                            data: {
+                                titulo: document.getElementById('titulo').value,
+                                data: document.getElementById('data').value,
+                                url: document.getElementById('url').value,
+                                m0: document.getElementById('m0').value,
+                                m1: document.getElementById('m1').value,
+                                m2: document.getElementById('m2').value,
+                            },
+                            complete: function (data) {
+                                window.location.href = "{{ path('nte_admin_painel_homepage') }}";
+                            }
+                        });
+                    }
+                });
+            };
+        </script>
+    {% endblock %}

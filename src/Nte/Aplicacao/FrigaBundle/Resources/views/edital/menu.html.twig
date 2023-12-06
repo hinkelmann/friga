@@ -1,10 +1,10 @@
-<div class="col-md-2">
+<div class="col-md-3 col-lg-2">
     {{ entidade.id }} - {{ entidade.url }}
     <div class="row">
         <div class="list-group">
             {% set classeX = app.request.attributes.get('_route') == 'edital_editar'? " active " : "  " %}
             <a href="{{ path('edital_editar', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
-                <i class="fa fa-star"></i> Configurações
+                <i class="fa fa-star"></i> Informações
             </a>
             {% set classeX = app.request.attributes.get('_route') == 'edital_arquivo'? " active " : "  " %}
             <a href="{{ path('edital_arquivo', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
@@ -79,6 +79,10 @@
             {% set classeX = app.request.attributes.get('_route') == 'edital_importador' ? " active " : "  " %}
             <a href="{{ path('edital_importador', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
                 <i class="fa fa-upload"></i> Importar
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'edital_logs' ? " active " : "  " %}
+            <a href="{{ path('edital_logs', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-history"></i> Logs
             </a>
         </div>
     </div>

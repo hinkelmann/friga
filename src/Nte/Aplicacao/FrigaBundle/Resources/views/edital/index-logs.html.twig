@@ -1,0 +1,60 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} {{ frigaedital.uuid }}/Logs{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Logs {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-9 col-lg-10">
+            <div class="row mb-lg">
+                <div class="col-md-12">
+                    <div class="text-right">
+                        <a class="btn btn-default"
+                           title="Clique aqui para exportar os dados em formato CSV"
+                           href="{{ path('edital_exportar_csv_logs', {'uuid': frigaedital.uuid}) }}">
+                            <i class="fa fa-file-excel-o"></i> Exportar
+                        </a>
+                        <br>
+                    </div>
+                </div>
+            </div>
+
+            <section class="panel-body mt-lg">
+                <table class="table table-hover table-condesed ">
+                    <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Usuário</th>
+                        <th>Operação</th>
+                        <th>Contexto</th>
+                        <th>Mensagem</th>
+                        <th>Usuário Afetado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in logs|reverse %}
+                        <tr>
+                            <td>{{ item.data|date('d/m/Y H:i:s') }}</td>
+                            <td>
+                                {{ item.idUsuario.nome }}
+                            </td>
+                            <td>
+                                {{ item.operacao }}
+                            </td>
+                            <td>
+                                {{ item.msg }}
+                            </td>
+                            <td>
+                                {{ item.contexto }}
+                            </td>
+
+                            <td>
+                                {{ item.usuario }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+{% endblock %}

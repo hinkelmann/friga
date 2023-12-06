@@ -59,78 +59,76 @@
                         or app.request.attributes.get('_route') == 'resultado_index_encerrado'
                         or app.request.attributes.get('_route') == 'resultado_index_proxima'
                         or app.request.attributes.get('_route') == 'resultado_parcial'
-                        or app.request.attributes.get('_route') == 'resultado_etapa'
-                    %}
+                        or app.request.attributes.get('_route') == 'resultado_etapa' %}
                         {% set classe1 = "nav-expanded nav-active" %}
                     {% else %}
                         {% set classe1 = "" %}
                     {% endif %}
-
-                    <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
-                        <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
-                            <i class="icon icon-list" aria-hidden="true"></i>
-                            <span>Etapas</span>
-                        </a>
-                    </li>
                     {#
-                    {% if is_granted('ROLE_AVALIADOR') %}
-                        {% if
-                            app.request.attributes.get('_route') == 'avaliacao_index'
-                            or app.request.attributes.get('_route') == 'avaliacao_index_encerrado'
-                            or app.request.attributes.get('_route') == 'avaliacao_index_proxima'
-                            or app.request.attributes.get('_route') == 'avaliacao_etapa'
-                            or app.request.attributes.get('_route') == 'avaliacao_etapa_candidato'
-                            or app.request.attributes.get('_route') == 'avaliacao_comprovante'
-                            or app.request.attributes.get('_route') == 'avaliacao_index_edital' %}
-                            {% set classe1 = "nav-expanded nav-active" %}
-                        {% else %}
-                            {% set classe1 = "" %}
-                        {% endif %}
-                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
-                            <a href="{{ path('avaliacao_index') }}">
-                                <i class="icon icon-check" aria-hidden="true"></i>
-                                <span>Avaliação</span>
-                            </a>
-                        </li>
-                        {% if
-                            app.request.attributes.get('_route') == 'convocacao_index'
-                            or app.request.attributes.get('_route') == 'convocacao_index_encerrado'
-                            or app.request.attributes.get('_route') == 'convocacao_index_proxima'
-                            or app.request.attributes.get('_route') == 'convocacao_etapa'
-                            or app.request.attributes.get('_route') == 'convocacao_etapa_candidato'
-                            or app.request.attributes.get('_route') == 'convocacao_comprovante'
-                            or app.request.attributes.get('_route') == 'convocacao_index_edital' %}
-                            {% set classe1 = "nav-expanded nav-active" %}
-                        {% else %}
-                            {% set classe1 = "" %}
-                        {% endif %}
-                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
-                            <a href="{{ path('convocacao_index') }}">
-                                <i class="icon icon-calendar" aria-hidden="true"></i>
-                                <span>Convocação</span>
-                            </a>
-                        </li>
+                    <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                     <a href="{{ path('nte_aplicacao_friga_etapa_index') }}">
+                         <i class="icon icon-list" aria-hidden="true"></i>
+                         <span>Etapas</span>
+                     </a>
+                 </li>
+                 {% if is_granted('ROLE_AVALIADOR') %}
+                     {% if
+                         app.request.attributes.get('_route') == 'avaliacao_index'
+                         or app.request.attributes.get('_route') == 'avaliacao_index_encerrado'
+                         or app.request.attributes.get('_route') == 'avaliacao_index_proxima'
+                         or app.request.attributes.get('_route') == 'avaliacao_etapa'
+                         or app.request.attributes.get('_route') == 'avaliacao_etapa_candidato'
+                         or app.request.attributes.get('_route') == 'avaliacao_comprovante'
+                         or app.request.attributes.get('_route') == 'avaliacao_index_edital' %}
+                         {% set classe1 = "nav-expanded nav-active" %}
+                     {% else %}
+                         {% set classe1 = "" %}
+                     {% endif %}
+                     <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                         <a href="{{ path('avaliacao_index') }}">
+                             <i class="icon icon-check" aria-hidden="true"></i>
+                             <span>Avaliação</span>
+                         </a>
+                     </li>
+                     {% if
+                         app.request.attributes.get('_route') == 'convocacao_index'
+                         or app.request.attributes.get('_route') == 'convocacao_index_encerrado'
+                         or app.request.attributes.get('_route') == 'convocacao_index_proxima'
+                         or app.request.attributes.get('_route') == 'convocacao_etapa'
+                         or app.request.attributes.get('_route') == 'convocacao_etapa_candidato'
+                         or app.request.attributes.get('_route') == 'convocacao_comprovante'
+                         or app.request.attributes.get('_route') == 'convocacao_index_edital' %}
+                         {% set classe1 = "nav-expanded nav-active" %}
+                     {% else %}
+                         {% set classe1 = "" %}
+                     {% endif %}
+                     <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                         <a href="{{ path('convocacao_index') }}">
+                             <i class="icon icon-calendar" aria-hidden="true"></i>
+                             <span>Convocação</span>
+                         </a>
+                     </li>
 
-                        {% if
-                            app.request.attributes.get('_route') == 'resultado_index'
-                            or app.request.attributes.get('_route') == 'resultado_index_encerrado'
-                            or app.request.attributes.get('_route') == 'resultado_index_proxima'
-                            or app.request.attributes.get('_route') == 'resultado_parcial'
-                            or app.request.attributes.get('_route') == 'resultado_etapa'
-                             %}
-                            {% set classe1 = "nav-expanded nav-active" %}
-                        {% else %}
-                            {% set classe1 = "" %}
-                        {% endif %}
-                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
-                            <a href="{{ path('resultado_index') }}">
-                                <i class="icon icon-trophy" aria-hidden="true"></i>
-                                <span> Resultados </span>
-                            </a>
-                        </li>
-                    {% endif %}
+                     {% if
+                         app.request.attributes.get('_route') == 'resultado_index'
+                         or app.request.attributes.get('_route') == 'resultado_index_encerrado'
+                         or app.request.attributes.get('_route') == 'resultado_index_proxima'
+                         or app.request.attributes.get('_route') == 'resultado_parcial'
+                         or app.request.attributes.get('_route') == 'resultado_etapa'
+                          %}
+                         {% set classe1 = "nav-expanded nav-active" %}
+                     {% else %}
+                         {% set classe1 = "" %}
+                     {% endif %}
+                     <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                         <a href="{{ path('resultado_index') }}">
+                             <i class="icon icon-trophy" aria-hidden="true"></i>
+                             <span> Resultados </span>
+                         </a>
+                     </li>
+                 {% endif %}
                     #}
-                    {% if is_granted('ROLE_ADMIN_EDITAL') %}
+                    {% if is_granted('ROLE_ADMIN') %}
                         {% if
                             app.request.attributes.get('_route') == 'edital_index'
                             or app.request.attributes.get('_route') == 'edital_index_rascunho'
@@ -280,7 +278,99 @@
                             </ul>
                         </li>
                     {% endif %}
+                    {% if is_granted('ROLE_AUDITOR') %}
+                        {% if
+                            app.request.attributes.get('_route')  == "auditoria_logs"
+                            or app.request.attributes.get('_route')  == "auditoria_logs"
+                            or app.request.attributes.get('_route')  == "auditoria_pessoal_index"
+                            or app.request.attributes.get('_route')  == "auditoria_edital_index"
+                            or app.request.attributes.get('_route')  == "auditoria_edital_index_usuario"
+                            or app.request.attributes.get('_route')  == "auditoria_edital_index_inscricao"
+                            or app.request.attributes.get('_route')  == "auditoria_edital_index_recurso"
+                            or app.request.attributes.get('_route')  == "auditoria_edital_index_arquivo"
+                            or app.request.attributes.get('_route')  == "auditoria_edital_index_log"
+                            or app.request.attributes.get('_route')  == "auditoria_usuario"
+                        %}
+
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-ajuda" class="nav-parent {{ classe1 }}">
+                            <a>
+                                <i class="icon icon-diamond" aria-hidden="true"></i>
+                                <span> Auditoria </span>
+                            </a>
+                            <ul class="nav nav-children">
+
+                                {% if app.request.attributes.get('_route') == 'auditoria_pessoal_index' %}
+                                    {% set classe2 = "nav-expanded nav-active" %}
+                                {% else %}
+                                    {% set classe2 = "" %}
+                                {% endif %}
+                                <li class="{{ classe2 }} ">
+                                    <a href="{{ path('auditoria_pessoal_index') }}">
+                                        <i class="fa fa-user"></i>
+                                        Pessoal
+                                    </a>
+                                </li>
+
+                                {% if app.request.attributes.get('_route') == 'auditoria_usuario' %}
+                                    {% set classe2 = "nav-expanded nav-active" %}
+                                {% else %}
+                                    {% set classe2 = "" %}
+                                {% endif %}
+                                <li class="{{ classe2 }} ">
+                                    <a href="{{ path('auditoria_usuario') }}">
+                                        <i class="fa fa-users"></i>
+                                        Usuários
+                                    </a>
+                                </li>
+                                {% if app.request.attributes.get('_route') == 'auditoria_edital_index'
+                                    or app.request.attributes.get('_route')  == "auditoria_edital_index_usuario"
+                                    or app.request.attributes.get('_route')  == "auditoria_edital_index_inscricao"
+                                    or app.request.attributes.get('_route')  == "auditoria_edital_index_recurso"
+                                    or app.request.attributes.get('_route')  == "auditoria_edital_index_arquivo"
+                                    or app.request.attributes.get('_route')  == "auditoria_edital_index_log"
+                                %}
+                                    {% set classe2 = "nav-expanded nav-active" %}
+                                {% else %}
+                                    {% set classe2 = "" %}
+                                {% endif %}
+                                <li class="{{ classe2 }} ">
+                                    <a href="{{ path('auditoria_edital_index') }}">
+                                        <i class="fa fa-file-text"></i>
+                                        Edital
+                                    </a>
+                                </li>
+                                {% if app.request.attributes.get('_route') == 'auditoria_logs' %}
+                                    {% set classe2 = "nav-expanded nav-active" %}
+                                {% else %}
+                                    {% set classe2 = "" %}
+                                {% endif %}
+                                <li class="{{ classe2 }} ">
+                                    <a href="{{ path('auditoria_logs') }}">
+                                        <i class="fa fa-history"></i>
+                                        Log geral
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
+
+                        {% if
+                            'arquivo_moodleprova' == app.request.attributes.get('_route') %}
+                            {% set classe1 = "nav-expanded nav-active" %}
+                        {% else %}
+                            {% set classe1 = "" %}
+                        {% endif %}
+                        <li id="menu-lateral-aplicacao" class="{{ classe1 }}">
+                            <a href="{{ path('arquivo_moodleprova') }}">
+                                <i class="icon fa fa-gear" aria-hidden="true"></i>
+                                <span>Moodle Prova</span>
+                            </a>
+                        </li>
                         {% if
                             'nte_usuario_index' == app.request.attributes.get('_route') or
                             'nte_usuario_perfil' == app.request.attributes.get('_route') or

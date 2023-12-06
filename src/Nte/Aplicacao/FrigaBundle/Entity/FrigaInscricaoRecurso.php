@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,25 +25,29 @@ use Doctrine\ORM\Mapping as ORM;
 use Nte\UsuarioBundle\Entity\Usuario;
 
 /**
- * FrigaInscricaoRecurso
+ * FrigaInscricaoRecurso.
  *
  * @ORM\Table(name="friga_inscricao_recurso")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaInscricaoRecurso
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_situacao", type="integer", nullable=true)
      */
@@ -70,7 +91,9 @@ class FrigaInscricaoRecurso
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_julgador", referencedColumnName="id")
      * })
      */
@@ -80,7 +103,9 @@ class FrigaInscricaoRecurso
      * @var FrigaEditalEtapa
      *
      * @ORM\ManyToOne(targetEntity="FrigaEditalEtapa", inversedBy="recurso")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital_etapa", referencedColumnName="id")
      * })
      */
@@ -90,7 +115,9 @@ class FrigaInscricaoRecurso
      * @var FrigaInscricao
      *
      * @ORM\ManyToOne(targetEntity="FrigaInscricao",inversedBy="recursos")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_inscricao", referencedColumnName="id")
      * })
      */
@@ -100,8 +127,10 @@ class FrigaInscricaoRecurso
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="FrigaArquivo", inversedBy="idInscricaoRecurso")
+     *
      * @ORM\JoinTable(name="friga_inscricao_recurso_tem_arquivo",
      *   joinColumns={
+     *
      *     @ORM\JoinColumn(name="id_inscricao_recurso", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
@@ -112,18 +141,17 @@ class FrigaInscricaoRecurso
     private $idArquivo;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->idArquivo = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -131,9 +159,9 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set idSituacao
+     * Set idSituacao.
      *
-     * @param integer $idSituacao
+     * @param int $idSituacao
      *
      * @return FrigaInscricaoRecurso
      */
@@ -145,9 +173,9 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get idSituacao
+     * Get idSituacao.
      *
-     * @return integer
+     * @return int
      */
     public function getIdSituacao()
     {
@@ -155,7 +183,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set justificativa
+     * Set justificativa.
      *
      * @param string $justificativa
      *
@@ -169,7 +197,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get justificativa
+     * Get justificativa.
      *
      * @return string
      */
@@ -179,7 +207,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set desfecho
+     * Set desfecho.
      *
      * @param string $desfecho
      *
@@ -193,7 +221,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get desfecho
+     * Get desfecho.
      *
      * @return string
      */
@@ -203,7 +231,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set registroDataCriacao
+     * Set registroDataCriacao.
      *
      * @param \DateTime $registroDataCriacao
      *
@@ -217,7 +245,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get registroDataCriacao
+     * Get registroDataCriacao.
      *
      * @return \DateTime
      */
@@ -227,7 +255,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set registroDataAtualizacao
+     * Set registroDataAtualizacao.
      *
      * @param \DateTime $registroDataAtualizacao
      *
@@ -241,7 +269,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get registroDataAtualizacao
+     * Get registroDataAtualizacao.
      *
      * @return \DateTime
      */
@@ -251,9 +279,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set idJulgador
-     *
-     * @param Usuario $idJulgador
+     * Set idJulgador.
      *
      * @return FrigaInscricaoRecurso
      */
@@ -265,7 +291,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get idJulgador
+     * Get idJulgador.
      *
      * @return Usuario
      */
@@ -275,7 +301,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set idEditalEtapa
+     * Set idEditalEtapa.
      *
      * @param FrigaEditalEtapa $idEditalEtapa
      *
@@ -289,7 +315,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get idEditalEtapa
+     * Get idEditalEtapa.
      *
      * @return FrigaEditalEtapa
      */
@@ -299,7 +325,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Set idInscricao
+     * Set idInscricao.
      *
      * @param FrigaInscricao $idInscricao
      *
@@ -322,17 +348,18 @@ class FrigaInscricaoRecurso
 
     /**
      * @param string $uuid
+     *
      * @return FrigaInscricaoRecurso
      */
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
+
         return $this;
     }
 
-
     /**
-     * Get idInscricao
+     * Get idInscricao.
      *
      * @return FrigaInscricao
      */
@@ -342,9 +369,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Add idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Add idArquivo.
      *
      * @return FrigaInscricaoRecurso
      */
@@ -356,9 +381,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Remove idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Remove idArquivo.
      */
     public function removeIdArquivo(FrigaArquivo $idArquivo)
     {
@@ -366,7 +389,7 @@ class FrigaInscricaoRecurso
     }
 
     /**
-     * Get idArquivo
+     * Get idArquivo.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -382,38 +405,37 @@ class FrigaInscricaoRecurso
     {
         $obj = new \stdClass();
         $obj->id = $this->idSituacao;
-        $obj->descricao = "";
-        $obj->icone = "";
-        $obj->css = "label label-info";
-        $obj->cssAlert = "alert alert-info";
+        $obj->descricao = '';
+        $obj->icone = '';
+        $obj->css = 'label label-info';
+        $obj->cssAlert = 'alert alert-info';
         switch ($this->idSituacao) {
             case -1:
-                $obj->descricao = "Indeferido";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Indeferido';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 0:
-                $obj->descricao = "Aguardando julgamento";
-                $obj->css = "label label-warning";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-warning";
+                $obj->descricao = 'Aguardando julgamento';
+                $obj->css = 'label label-warning';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-warning';
                 break;
             case 1:
-                $obj->descricao = "Deferido";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-check";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Deferido';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-check';
+                $obj->cssAlert = 'alert alert-success';
                 break;
         }
+
         return $obj;
     }
-
 
     /**
      * @ORM\PreUpdate
      *
-     * @param PreUpdateEventArgs $args
      * @throws \Exception
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -426,11 +448,12 @@ class FrigaInscricaoRecurso
 
     /**
      * @ORM\PrePersist
+     *
      * @throws \Exception
      */
     public function PrePersist()
     {
-        $this->uuid = uniqid();
+        $this->uuid = \uniqid();
         $this->setRegistroDataCriacao(new \DateTime());
         $this->setRegistroDataAtualizacao(new \DateTime());
     }

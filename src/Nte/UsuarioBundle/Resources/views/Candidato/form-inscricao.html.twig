@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-md-9">
                     <p>
-                        {{ edital.titulo }}
+                        {{ edital.numero }} - {{ edital.titulo }}
                         <span># Formulário de Inscrição</span>
                     </p>
                 </div>
@@ -665,7 +665,6 @@
                         <p>
                             {{ edital.info3|raw }}
                         </p>
-                        <hr class="light">
                     </div>
                     <div class="col-md-3 col-md-offset-1">
                         <h5 class="mb-sm">Inscrições </h5>
@@ -683,14 +682,20 @@
             <div class="footer-copyright hidden-xs hidden-sm">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-1">
-                            <a href="{{ path('nte_site_homepage') }}" class="logo">
-                                <img alt="" class="img-responsive"
-                                     src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                        <div class="col-md-12 text-center">
+                            <br>
+                            <a href="https://ufsm.br/">
+                                <img alt="" src="{{ asset('assets/img/UFSM_marca-web.png') }}" style="max-width: 100%">
                             </a>
-                        </div>
-                        <div class="col-md-11">
-                            <p>Núcleo de Tecnologia Educacional </p>
+                            <br>
+                            <small>
+                                <a href="https://www.ufsm.br/pro-reitorias/prograd/cte/" style="color: #777"> Coordenadoria
+                                    de Tecnologia
+                                    Educacional </a>
+                                <br>
+                                Av. Roraima nº 1000 - Prédio 14, Bairro Camobi, CEP: 97105-900 Santa Maria - RS - Telefone:
+                                (55) 3220-8007
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -721,17 +726,20 @@
             <div class="footer-copyright hidden-md hidden-lg text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-1 text-center">
-                            <a href="{{ path('nte_site_homepage') }}">
-                                <img alt="" width="130"
-                                     src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                        <div class="col-md-12 text-center">
+                            <br>
+                            <a href="https://ufsm.br/">
+                                <img alt="" src="{{ asset('assets/img/UFSM_marca-web.png') }}" style="max-width: 100%">
                             </a>
-                        </div>
-                        <div class="col-md-12">
-                            <h5>
-                                UNIVERISDADE FEDERAL DE SANTA MARIA<br>
-                                NÚCLEO DE TECNOLOGIA EDUCACIONAL
-                            </h5>
+                            <br>
+                            <small>
+                                <a href="https://www.ufsm.br/pro-reitorias/prograd/cte/" style="color: #777"> Coordenadoria
+                                    de Tecnologia
+                                    Educacional </a>
+                                <br>
+                                Av. Roraima nº 1000 - Prédio 14, Bairro Camobi, CEP: 97105-900 Santa Maria - RS - Telefone:
+                                (55) 3220-8007
+                            </small>
                         </div>
                     </div>
                 </div>

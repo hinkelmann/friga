@@ -1,28 +1,28 @@
 {% use "bootstrap_base_layout.html.twig" %}
 {% block form_row %}
     <div class="form-group">
-    {% spaceless %}
-        {% if 'checkbox' in form.vars.block_prefixes[1] %}
-            <div class="checkbox">
-                {#{{ form_widget(form) }} {{ form_label(form) }}#}
-                {% if label is not same as(false) %}
-                    {% if not compound %}
-                        {% set label_attr = label_attr|merge({'for': id}) %}
-                    {% endif %}
-                    {% if required %}
+        {% spaceless %}
+            {% if 'checkbox' in form.vars.block_prefixes[1] %}
+                <div class="checkbox">
+                    {#{{ form_widget(form) }} {{ form_label(form) }}#}
+                    {% if label is not same as(false) %}
+                        {% if not compound %}
+                            {% set label_attr = label_attr|merge({'for': id}) %}
+                        {% endif %}
+                        {% if required %}
 
+                        {% endif %}
+                        {% if label is empty %}
+                            {% set label = name|humanize %}
+                        {% endif %}
+                        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+                        {{ label|trans({}, translation_domain) }}
+                        </label>
                     {% endif %}
-                    {% if label is empty %}
-                        {% set label = name|humanize %}
-                    {% endif %}
-                    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-                    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-                    {{ label|trans({}, translation_domain) }}
-                    </label>
-                {% endif %}
 
-            </div>
-        {% else %}
+                </div>
+            {% else %}
 
                 <label class="col-md-4 col-sm-4 control-label">
                     {{ form_label(form) }}
@@ -31,9 +31,9 @@
                     {{ form_widget(form) }}
                     {{ form_errors(form) }}
                 </div>
-        {% endif %}
-    {% endspaceless %}
-            </div>
+            {% endif %}
+        {% endspaceless %}
+    </div>
 
 {% endblock form_row %}
 
@@ -67,7 +67,7 @@
     {% spaceless %}
         id="{{ id }}" name="{{ full_name }}"
         {#
-              {%- if read_only %} readonly="readonly"{% endif -%}
+        {%- if read_only %} readonly="readonly"{% endif -%}
         #}
         {%- if disabled %} disabled="disabled"{% endif -%}
 
@@ -125,13 +125,13 @@
  {% block button_row %}
      {% spaceless %}
          {#
-           <div>
-           <div class="">
-           <h4 class="pull-left"> </h4>
-           <div class="btn-toolbar pull-right">
-           <div class="btn-group">
-           <a href="#" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
-       #}
+         <div>
+         <div class="">
+         <h4 class="pull-left"> </h4>
+         <div class="btn-toolbar pull-right">
+         <div class="btn-group">
+         <a href="#" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+         #}
          {{ form_widget(form) }}
          {#
          </div>
@@ -171,13 +171,13 @@
     {% block choice_widget_collapsed %}
         {% spaceless %}
             {#
-             {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
-                {% set required = false %}
-            {% endif %}
-            <select class='form-control' {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
-                {% if empty_value is not none %}
-                    <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
-                {% endif %}
+            {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
+               {% set required = false %}
+           {% endif %}
+           <select class='form-control' {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+               {% if empty_value is not none %}
+                   <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+               {% endif %}
 
             #}
 
@@ -209,26 +209,29 @@
     {% endspaceless %}
 {% endblock radio_widget %}
 
+{% block checkbox_radio_label -%}
+    {# remove the checkbox-inline and radio-inline class, it's only useful for embed labels #}
+    {%- set label_attr = label_attr|merge({class: label_attr.class|default('')|replace({'checkbox-inline': '', 'radio-inline': '', 'checkbox-custom': '', 'radio-custom': '', 'switch-custom': ''})|trim}) -%}
+    {{- block('form_label') -}}
+{% endblock checkbox_radio_label %}
 
 {%- block choice_widget_expanded -%}
     <div {{ block('widget_container_attributes') }}>
         {%- for child in form %}
-            <div class="radio-custom">
-            {{- form_widget(child) -}}
-            {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+            {% set crcss = 'radio-custom' %}
+            {% if 'checkbox' in child.vars.block_prefixes %}
+                {% set crcss = 'checkbox-custom' %}
+            {% endif %}
+            {% if 'radio' in child.vars.block_prefixes %}
+                {% set crcss = 'radio-custom' %}
+            {% endif %}
+            <div class="{{ crcss }}">
+                {{- form_widget(child) -}}
+                {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
             </div>
         {% endfor -%}
     </div>
 {%- endblock choice_widget_expanded -%}
-
-{% block datetime_widget -%}
-    {%- if widget != 'single_text' and not valid -%}
-        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control is-invalid')|trim}) -%}
-        {% set valid = true %}
-    {%- endif -%}
-    {{- parent() -}}
-{%- endblock datetime_widget %}
-
 
 {% block datetime_widget -%}
     {%- if widget != 'single_text' and not valid -%}

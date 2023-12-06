@@ -9,7 +9,7 @@
 {% block conteudo %}
     <div class="row text-right">
         <div class="btn-group">
-            {% if etapa.classificacao.empty %}
+            {% if geral.empty %}
                 {% if is_granted('ROLE_ADMIN') or
                     ( is_granted('ROLE_AVALIADOR') and etapa.periodoHabilitado ) %}
                     <a class="btn btn-success"
@@ -20,7 +20,7 @@
                 {% endif %}
                 <a class="btn btn-default"
                    title="Clique aqui para ver a prévia dos resultados"
-                   href="{{ path('resultado_parcial', {'edital': edital.id}) }}">
+                   href="{{ path('resultado_parcial', {'etapa': etapa.id}) }}">
                     <i class="icon icon-eye"></i> Prévia
                 </a>
             {% else %}

@@ -1,52 +1,70 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use stdClass;
-use DateTime;
-use Exception;
 
 /**
- * FrigaEditalPontuacao
+ * FrigaEditalPontuacao.
  *
  * @ORM\Table(name="friga_edital_pontuacao")
+ *
  * @ORM\Entity
  */
 class FrigaEditalPontuacao
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="upload", type="boolean", nullable=true)
      */
     private $upload;
 
     /**
-     * @var integer
+     * @var int
+     *
      * @ORM\Column(name="pontuacao_auto", type="integer", nullable=true)
      */
     private $pontuacaoAuto;
 
-
     /**
-     * @var integer
+     * @var int
+     *
      * @ORM\Column(name="pontuacao_tipo", type="integer", nullable=true)
      */
     private $pontuacaoTipo;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="requisito", type="integer", nullable=true)
      */
@@ -109,15 +127,14 @@ class FrigaEditalPontuacao
     private $valorTexto;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="valor_alteracao", type="boolean", nullable=true)
      */
     private $valorAlteracao;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ordem", type="integer", nullable=true)
      */
@@ -127,7 +144,9 @@ class FrigaEditalPontuacao
      * @var FrigaEdital
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEdital", inversedBy="pontuacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      * })
      */
@@ -137,8 +156,10 @@ class FrigaEditalPontuacao
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa", inversedBy="idPontuacao")
+     *
      * @ORM\JoinTable(name="friga_edital_pontuacao_tem_etapa",
      *   joinColumns={
+     *
      *     @ORM\JoinColumn(name="id_pontuacao", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
@@ -152,7 +173,9 @@ class FrigaEditalPontuacao
      * @var FrigaEditalPontuacaoCategoria
      *
      * @ORM\ManyToOne(targetEntity="FrigaEditalPontuacaoCategoria", inversedBy="pontuacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_categoria", referencedColumnName="id")
      * })
      */
@@ -164,7 +187,6 @@ class FrigaEditalPontuacao
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoPontuacaoAvaliacao", mappedBy="idEditalPontuacao")
      */
     private $avaliacao;
-
 
     public function __construct()
     {
@@ -180,9 +202,9 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -190,9 +212,9 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set upload
+     * Set upload.
      *
-     * @param boolean $upload
+     * @param bool $upload
      *
      * @return FrigaEditalPontuacao
      */
@@ -204,9 +226,9 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get upload
+     * Get upload.
      *
-     * @return boolean
+     * @return bool
      */
     public function getUpload()
     {
@@ -223,11 +245,13 @@ class FrigaEditalPontuacao
 
     /**
      * @param int $pontuacaoAuto
+     *
      * @return FrigaEditalPontuacao
      */
     public function setPontuacaoAuto($pontuacaoAuto)
     {
         $this->pontuacaoAuto = $pontuacaoAuto;
+
         return $this;
     }
 
@@ -241,18 +265,20 @@ class FrigaEditalPontuacao
 
     /**
      * @param int $pontuacaoTipo
+     *
      * @return FrigaEditalPontuacao
      */
     public function setPontuacaoTipo($pontuacaoTipo)
     {
         $this->pontuacaoTipo = $pontuacaoTipo;
+
         return $this;
     }
 
     /**
-     * Set requisito
+     * Set requisito.
      *
-     * @param boolean $requisito
+     * @param bool $requisito
      *
      * @return FrigaEditalPontuacao
      */
@@ -264,9 +290,9 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get requisito
+     * Get requisito.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRequisito()
     {
@@ -274,7 +300,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set titulo
+     * Set titulo.
      *
      * @param string $titulo
      *
@@ -288,7 +314,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get titulo
+     * Get titulo.
      *
      * @return string
      */
@@ -298,7 +324,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set descricao
+     * Set descricao.
      *
      * @param string $descricao
      *
@@ -312,7 +338,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get descricao
+     * Get descricao.
      *
      * @return string
      */
@@ -322,7 +348,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set explicacao
+     * Set explicacao.
      *
      * @param string $explicacao
      *
@@ -336,7 +362,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get explicacao
+     * Get explicacao.
      *
      * @return string
      */
@@ -355,17 +381,18 @@ class FrigaEditalPontuacao
 
     /**
      * @param string $explicacaoTexto
+     *
      * @return FrigaEditalPontuacao
      */
     public function setExplicacaoTexto($explicacaoTexto)
     {
         $this->explicacaoTexto = $explicacaoTexto;
+
         return $this;
     }
 
-
     /**
-     * Set valorMaximo
+     * Set valorMaximo.
      *
      * @param float $valorMaximo
      *
@@ -379,7 +406,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get valorMaximo
+     * Get valorMaximo.
      *
      * @return float
      */
@@ -389,7 +416,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set valorMinimo
+     * Set valorMinimo.
      *
      * @param float $valorMinimo
      *
@@ -403,7 +430,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get valorMinimo
+     * Get valorMinimo.
      *
      * @return float
      */
@@ -428,9 +455,8 @@ class FrigaEditalPontuacao
         $this->valorIntervalo = $valorIntervalo;
     }
 
-
     /**
-     * Set valorTexto
+     * Set valorTexto.
      *
      * @param string $valorTexto
      *
@@ -444,7 +470,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get valorTexto
+     * Get valorTexto.
      *
      * @return string
      */
@@ -454,9 +480,9 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set valorAlteracao
+     * Set valorAlteracao.
      *
-     * @param boolean $valorAlteracao
+     * @param bool $valorAlteracao
      *
      * @return FrigaEditalPontuacao
      */
@@ -468,9 +494,9 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get valorAlteracao
+     * Get valorAlteracao.
      *
-     * @return boolean
+     * @return bool
      */
     public function getValorAlteracao()
     {
@@ -478,9 +504,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Set idEdital
-     *
-     * @param FrigaEdital $idEdital
+     * Set idEdital.
      *
      * @return FrigaEditalPontuacao
      */
@@ -492,7 +516,7 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * Get idEdital
+     * Get idEdital.
      *
      * @return FrigaEdital
      */
@@ -502,7 +526,6 @@ class FrigaEditalPontuacao
     }
 
     /**
-     * @param FrigaEditalEtapa $idEtapa
      * @return $this
      */
     public function addIdEtapa(FrigaEditalEtapa $idEtapa)
@@ -512,14 +535,10 @@ class FrigaEditalPontuacao
         return $this;
     }
 
-    /**
-     * @param FrigaEditalEtapa $idEtapa
-     */
     public function removeIdEtapa(FrigaEditalEtapa $idEtapa)
     {
         if ($this->idEtapa->contains($idEtapa)) {
             $this->idEtapa->removeElement($idEtapa);
-
         }
     }
 
@@ -531,11 +550,8 @@ class FrigaEditalPontuacao
         return $this->idEtapa;
     }
 
-
     /**
-     * Set idCategoria
-     *
-     * @param FrigaEditalPontuacaoCategoria $idCategoria
+     * Set idCategoria.
      *
      * @return FrigaEditalPontuacao
      */
@@ -556,17 +572,18 @@ class FrigaEditalPontuacao
 
     /**
      * @param int $ordem
+     *
      * @return FrigaEditalPontuacao
      */
     public function setOrdem($ordem)
     {
         $this->ordem = $ordem;
+
         return $this;
     }
 
-
     /**
-     * Get idCategoria
+     * Get idCategoria.
      *
      * @return FrigaEditalPontuacaoCategoria
      */
@@ -584,84 +601,109 @@ class FrigaEditalPontuacao
     }
 
     /**
-     *  Requisito
+     *  Requisito.
      */
     public function getObjRequisito()
     {
-        $obj = new stdClass();
+        $obj = new \stdClass();
         switch ($this->requisito) {
             case 0:
                 $obj->id = $this->requisito;
-                $obj->descricao = "Não obrigatório";
+                $obj->descricao = 'Não obrigatório';
                 break;
 
             case 1:
                 $obj->id = $this->requisito;
-                $obj->descricao = "Anexo Obrigatório";
+                $obj->descricao = 'Anexo Obrigatório';
                 break;
 
             case 2:
                 $obj->id = $this->requisito;
-                $obj->descricao = "Texto Obrigatório";
+                $obj->descricao = 'Texto Obrigatório';
                 break;
             case 3:
                 $obj->id = $this->requisito;
-                $obj->descricao = "Anexo e Texto Obrigatório";
+                $obj->descricao = 'Anexo e Texto Obrigatório';
                 break;
         }
+
         return $obj;
     }
 
     /**
-     * @return stdClass
+     * @return \stdClass
      */
     public function getObjPontuacaoTipo()
     {
-        $obj = new stdClass();
+        $obj = new \stdClass();
         switch ($this->pontuacaoTipo) {
             case 0:
                 $obj->id = $this->pontuacaoTipo;
-                $obj->descricao = "Nenhum - Não é necessário comprovar pontuação";
+                $obj->descricao = 'Nenhum - Não é necessário comprovar pontuação';
                 break;
 
             case 1:
                 $obj->id = $this->pontuacaoTipo;
-                $obj->descricao = "Anexo - O candidato poderá anexar seus arquivos para comprovar a pontuação";
+                $obj->descricao = 'Anexo - O candidato poderá anexar seus arquivos para comprovar a pontuação';
                 break;
 
             case 2:
                 $obj->id = $this->pontuacaoTipo;
-                $obj->descricao = "Texto - O candidato poderá enviar um texto para comprovar a pontuação";
+                $obj->descricao = 'Texto - O candidato poderá enviar um texto para comprovar a pontuação';
                 break;
 
             case 3:
                 $obj->id = $this->pontuacaoTipo;
-                $obj->descricao = "Texto e Anexo - O candidato poderá enviar um texto e anexar seus arquivos para comprovar a pontuação";
+                $obj->descricao = 'Texto e Anexo - O candidato poderá enviar um texto e anexar seus arquivos para comprovar a pontuação';
                 break;
         }
+
         return $obj;
     }
 
+    /**
+     * @return array
+     */
     public function getFormChoiceOptions()
     {
+        $min = \floatval($this->valorMinimo);
+        $max = \floatval($this->valorMaximo);
+        $intervalo = \floatval($this->valorIntervalo);
+
+        /**
+         * $precisao = (int) strpos(strrev($min), ".");
+         * if(bccomp($min, $intervalo, 4) !== 1){
+         * $precisao = 4;
+         * };.
+         */
+        $precisao = 4;
+
         $options = [];
-        $options["Sem Pontuação"] = 0;
-        if ($this->valorMinimo != $this->valorMaximo
-            and $this->valorIntervalo != null
+        $options['Sem Pontuação'] = 0;
+        if (0 !== \bccomp($min, $max, 4)
+            and null != $this->valorIntervalo
             or !$this->getIdCategoria()->isAgruparPontuacao()
         ) {
-            $i = $this->valorMinimo + 0;
-            while ($i <= $this->valorMaximo) {
-                $options[$i . " " . $this->getValorTexto()] = $i;
-                $i += $this->valorIntervalo;
+            $i = $min;
+            $loop = 0;
+            while (1 !== \bccomp($i, $max, 4)) {
+                $options[$i . ' ' . $this->getValorTexto()] = $i;
+                $i = \floatval(\bcadd($i, $intervalo, $precisao));
+                if ($loop > 600) {
+                    break;
+                }
+                ++$loop;
             }
-            if ($options[array_key_last($options)] < $this->valorMaximo + 0) {
-                unset($options[array_key_last($options)]);
-                $options[$this->valorMaximo + 0 . " " . $this->getValorTexto()] = $this->valorMaximo + 0;
+            if (-1 === \bccomp($options[\array_key_last($options)], $max, 4)) {
+                $options[$this->valorMaximo + 0 . ' ' . $this->getValorTexto()] = $max;
+            } elseif (1 === \bccomp($options[\array_key_last($options)], $max, 4)) {
+                unset($options[\array_key_last($options)]);
+                $options[$this->valorMaximo + 0 . ' ' . $this->getValorTexto()] = $max;
             }
         } else {
-            $options[$this->valorMaximo + 0 . " " . $this->getValorTexto() . " - " . $this->titulo] = $this->id;
+            $options[$this->valorMaximo + 0 . ' ' . $this->getValorTexto() . ' - ' . $this->titulo] = $this->id;
         }
+
         return $options;
     }
 }

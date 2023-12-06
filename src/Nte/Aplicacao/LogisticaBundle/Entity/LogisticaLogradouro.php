@@ -1,13 +1,31 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\LogisticaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LogisticaLogradouro
+ * LogisticaLogradouro.
  *
  * @ORM\Table(name="logistica_logradouro")
+ *
  * @ORM\Entity
  */
 class LogisticaLogradouro
@@ -16,7 +34,9 @@ class LogisticaLogradouro
      * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -46,7 +66,9 @@ class LogisticaLogradouro
      * @var LogisticaBairro
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\LogisticaBundle\Entity\LogisticaBairro")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_bairro_fim", referencedColumnName="id")
      * })
      */
@@ -56,7 +78,9 @@ class LogisticaLogradouro
      * @var LogisticaBairro
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\LogisticaBundle\Entity\LogisticaBairro")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_bairro_inicio", referencedColumnName="id")
      * })
      */
@@ -66,7 +90,9 @@ class LogisticaLogradouro
      * @var LogisticaLocalidade
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\LogisticaBundle\Entity\LogisticaLocalidade")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_cidade", referencedColumnName="id")
      * })
      */

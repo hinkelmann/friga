@@ -1,10 +1,34 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %}Avaliadores {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Pontuação{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Pontuação {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10 ">
+            <div class="panel-body hidden">
+                <a title="Atualiza a lista de categorias"
+                   class="m-portlet__nav-link m-portlet__nav-link--icon"
+                   onclick="atualizarArvore()">
+                    <i class="fa  fa-refresh"> </i>
+                </a>
+                <a title="Clique aqui para abrir todas as categorias"
+                   class="m-portlet__nav-link m-portlet__nav-link--icon"
+                   onclick="expandirNodos()">
+                    <i class="fa fa-search-plus"> </i>
+                </a>
+                <a title="Clique aqui para fechar todas as categorias"
+                   class="m-portlet__nav-link m-portlet__nav-link--icon"
+                   onclick="recolherNodos()">
+                    <i class="fa fa-search-minus"> </i>
+                </a>
+                <a title="Clique aqui para adicionar nova categoria"
+                   class="m-portlet__nav-link m-portlet__nav-link--icon"
+                   onclick="criarPaiNodo()">
+                    <i class="fa  fa-plus"> </i>
+                </a>
+                <div id="esquema0" class="hidden"></div>
+            </div>
+            <br><br>
             <section class="panel-body">
                 {% if frigaedital.pontuacaoCategoria|length %}
                     <div class="text-right">
@@ -135,8 +159,229 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/themes/default/style.min.css') }}">
 {% endblock %}
 {% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/jstree/jstree.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jstree/jstreegrid.js') }}"></script>
+    <script>
+        $("#esquema0").jstree({
+            'core': {
+                'themes': {
+                    'responsive': true,
+                    "stripes": true,
+                },
+                'strings' : {
+                    'New node': ' Nova Categoria'
+                },
+                "multiple": false,
+                'check_callback': true,
+                'data': {
+                    'url': function (node) {
+                        return '{{ path('nte_aplicacao_friga_api_get_pontuacao_index',{'uuid': frigaedital.uuid}) }}';
+                    },
+                    'data': function (node) {
+                        return {'parent': node.id};
+                    }
+                }
+            },
+            'types': {
+                'default': {
+                    'icon': 'fa fa-balance-scale  '
+                },
+
+                'item': {
+                    'icon': 'fa fa-file  text-primary'
+                },
+                'subitem': {
+                    'icon': 'fa fa-file  text-primary'
+                }
+            },
+            'plugins': [
+                "contextmenu",
+                "dnd",
+                "massload",
+                "search",
+                "sort",
+                "state",
+                "grid",
+                "types",
+                "unique",
+                "changed",
+                "conditionalselect"
+            ],
+            grid: {
+                columns: [
+                    {width: 300 , header: "Pontuação"}
+                    ,{width: 150, value: "etapa", header: "Etapa"}
+                    ,{width: 150, value: "min", header: "Min"}
+                    ,{width: 150, value: "max", header: "Max"}
+                    ,{width: 150, value: "valor", header: "Valor"}
+                ],
+                resizable:true,
+                width: "100%",
+            },
+            "ui": {
+                //    "select_limit": 1
+            },
+            "contextmenu": {
+                items: menuContextoPersonalizado,
+                select_node: true
+            },
+        }).bind("move_node.jstree", function(e, data) {
+            alocarNodo(data.node);
+        });
+
+        function menuContextoPersonalizado(node) {
+            return {
+                "create": {
+                    "separator_before": false,
+                    "separator_after": true,
+                    "_disabled": false,
+                    "label": "Nova subcategoria",
+                    "icon": "la la-plus",
+                    "action": function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                            obj = inst.get_node(data.reference);
+                        inst.create_node(obj, {}, "last", function (new_node) {
+                            setTimeout(function () {
+                                inst.edit(new_node, null, criarNodo);
+                            }, 0);
+
+                        });
+                    }
+                },
+                "rename": {
+                    "separator_before": false,
+                    "separator_after": false,
+                    "_disabled": false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
+                    "label": "Renomear",
+                    "icon": "la la-edit",
+                    "action": function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                            obj = inst.get_node(data.reference);
+                        inst.edit(obj, null, renomearNodo);
+                    }
+                },
+                "remove": {
+                    "separator_before": false,
+                    "separator_after": false,
+                    "_disabled": false,
+                    "label": "Remover",
+                    "icon": "fa fa-trash",
+                    "action": function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                            obj = inst.get_node(data.reference);
+                        if (inst.is_selected(obj)) {
+                            inst.delete_node(inst.get_selected());
+                        }
+                        else {
+                            inst.delete_node(obj);
+                        }
+                        removerNodo(obj);
+                    }
+                },
+            }
+        }
+
+        /**
+         * Renomeia um nodo existente
+         */
+        function renomearNodo(obj) {
+            $.ajax({
+                type: 'POST',
+                url: '#',
+                data: {descricao: obj.text, id: obj.id},
+                dataType: 'json',
+                complete: function (data) {
+                    toastr.success(data.responseJSON.text);
+                }
+            });
+            //   atualizarArvore();
+        }
+
+        /**
+         * Remove o nodo selecionado
+         */
+        function removerNodo(obj) {
+            $.ajax({
+                type: 'POST',
+                url: '#',
+                data: {id: obj.id},
+                dataType: 'json',
+                complete: function (data) {
+                    toastr.success(data.responseJSON.text);
+
+                }
+            });
+            atualizarArvore();
+        }
+
+        /**
+         * Cria um novo nodo
+         **/
+        function criarNodo(obj) {
+            $.ajax({
+                type: 'POST',
+                url: '#',
+                data: {descricao: obj.text, pai: obj.parent},
+                dataType: 'json',
+                complete: function (data) {
+                    toastr.success(data.responseJSON.text);
+                }
+            });
+            atualizarArvore();
+        }
+
+        function alocarNodo(obj) {
+            $.ajax({
+                type: 'POST',
+                url: '#',
+                data: {id: obj.id, pai: obj.parent},
+                dataType: 'json',
+                complete: function (data) {
+
+                }
+            });
+        }
+
+        /**
+         * Cria uma novo novo pai
+         */
+        function criarPaiNodo() {
+            $("#esquema0").jstree("create_node", null, null, "last", function (node) {
+                setTimeout(function () {
+                    $("#esquema0").jstree().edit(node, null, criarNodo);
+                }, 0);
+            });
+
+        }
+
+        /**
+         * Recolhe todos nodos da arvore
+         */
+        function recolherNodos() {
+            return $("#esquema0").jstree('close_all');
+        }
+
+        /**
+         * Expandi todos os nodos da arvore
+         */
+        function expandirNodos() {
+            return $("#esquema0").jstree('open_all');
+        }
+
+        /**
+         * Atualioza Arvore
+         */
+        function atualizarArvore() {
+            return $('#esquema0').jstree("refresh");
+        }
+    </script>
 <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
     <script>
         $('.importar').click(e=>{

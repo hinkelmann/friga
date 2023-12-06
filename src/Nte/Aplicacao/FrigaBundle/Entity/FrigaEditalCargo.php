@@ -1,25 +1,43 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FrigaEditalCargo
+ * FrigaEditalCargo.
  *
  * @ORM\Table(name="friga_edital_cargo")
+ *
  * @ORM\Entity
  */
 class FrigaEditalCargo
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -38,7 +56,6 @@ class FrigaEditalCargo
      */
     private $ativo;
 
-
     /**
      * @var string
      *
@@ -46,12 +63,13 @@ class FrigaEditalCargo
      */
     private $pontoCorte;
 
-
     /**
      * @var FrigaEdital
      *
      * @ORM\ManyToOne(targetEntity="FrigaEdital", inversedBy="cargo")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      * })
      */
@@ -67,29 +85,38 @@ class FrigaEditalCargo
     /**
      * @var ArrayCollection
      *
+     * @ORM\ManyToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuarioConvite", mappedBy="idEditalCargo")
+     */
+    protected $idEditalUsuarioConvite;
+
+    /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao", mappedBy="idCargo")
      */
     protected $idEditalUsuarioInscrito;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->idEditalUsuario = new ArrayCollection();
+        $this->idEditalUsuarioConvite = new ArrayCollection();
         $this->idEditalUsuarioInscrito = new ArrayCollection();
     }
+
     public function __clone()
     {
         $this->idEditalUsuario = new ArrayCollection();
+        $this->idEditalUsuarioConvite = new ArrayCollection();
         $this->idEditalUsuarioInscrito = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -106,18 +133,18 @@ class FrigaEditalCargo
 
     /**
      * @param string $pontoCorte
+     *
      * @return FrigaEditalCargo
      */
     public function setPontoCorte($pontoCorte)
     {
         $this->pontoCorte = $pontoCorte;
+
         return $this;
     }
 
-
-
     /**
-     * Set descricao
+     * Set descricao.
      *
      * @param string $descricao
      *
@@ -131,7 +158,7 @@ class FrigaEditalCargo
     }
 
     /**
-     * Get descricao
+     * Get descricao.
      *
      * @return string
      */
@@ -141,9 +168,7 @@ class FrigaEditalCargo
     }
 
     /**
-     * Set idEdital
-     *
-     * @param FrigaEdital $idEdital
+     * Set idEdital.
      *
      * @return FrigaEditalCargo
      */
@@ -155,7 +180,7 @@ class FrigaEditalCargo
     }
 
     /**
-     * Get idEdital
+     * Get idEdital.
      *
      * @return FrigaEdital
      */
@@ -185,9 +210,7 @@ class FrigaEditalCargo
     }
 
     /**
-     * Add idEditalUsuario
-     *
-     * @param FrigaEditalUsuario $idEditalUsuario
+     * Add idEditalUsuario.
      *
      * @return FrigaEditalCargo
      */
@@ -196,13 +219,12 @@ class FrigaEditalCargo
         if (!$this->idEditalUsuario->contains($idEditalUsuario)) {
             $this->idEditalUsuario->add($idEditalUsuario->addIdEditalCargo($this));
         }
+
         return $this;
     }
 
     /**
-     * Remove idEditalUsuario
-     *
-     * @param FrigaEditalUsuario $idEditalUsuario
+     * Remove idEditalUsuario.
      */
     public function removeIdEditalUsuario(FrigaEditalUsuario $idEditalUsuario)
     {
@@ -210,13 +232,45 @@ class FrigaEditalCargo
     }
 
     /**
-     * Get idEditalUsuario
+     * Get idEditalUsuario.
      *
      * @return ArrayCollection
      */
     public function getIdEditalUsuario()
     {
         return $this->idEditalUsuario;
+    }
+
+    /**
+     * Add idEditalUsuario.
+     *
+     * @return FrigaEditalCargo
+     */
+    public function addIdEditalUsuarioConvite(FrigaEditalUsuarioConvite $idEditalUsuarioConvite)
+    {
+        if (!$this->idEditalUsuarioConvite->contains($idEditalUsuarioConvite)) {
+            $this->idEditalUsuarioConvite->add($idEditalUsuarioConvite->addIdEditalCargo($this));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove idEditalUsuario.
+     */
+    public function removeIdEditalUsuarioConvite(FrigaEditalUsuarioConvite $idEditalUsuarioConvite)
+    {
+        $this->idEditalUsuarioConvite->removeElement($idEditalUsuarioConvite);
+    }
+
+    /**
+     * Get idEditalUsuario.
+     *
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioConvite()
+    {
+        return $this->idEditalUsuarioConvite;
     }
 
     /**
@@ -227,15 +281,14 @@ class FrigaEditalCargo
         return $this->idEditalUsuarioInscrito;
     }
 
-
     /**
      * @return ArrayCollection
      */
     public function getInscricaoValida()
     {
         return $this->getIdEditalUsuarioInscrito()->filter(
-            function (FrigaInscricao $inscricao) {
-                return $inscricao->getIdSituacao() !== -999;
+            function(FrigaInscricao $inscricao) {
+                return -999 !== $inscricao->getIdSituacao();
             });
     }
 
@@ -245,9 +298,8 @@ class FrigaEditalCargo
     public function getInscricaoSituacao($situacao = 0)
     {
         return $this->getIdEditalUsuarioInscrito()->filter(
-            function (FrigaInscricao $inscricao) use ($situacao) {
+            function(FrigaInscricao $inscricao) use ($situacao) {
                 return $inscricao->getIdSituacao() === $situacao;
             });
     }
-
 }

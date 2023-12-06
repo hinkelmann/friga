@@ -1,0 +1,24 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Agenda de entrevistas {% endblock %}
+{% block breadcumbsTitulo %}Exportar Moodle {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="#"> Convocação</a></span></li>
+    <li><span><a href="#">{{ etapa.idEdital.uuid }}</a></span></li>
+    <li><span><a href="#"> Moodle</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: edital }) }}
+        <div class="col-md-10">
+            <section class="panel-body">
+                {{ form_start(form) }}
+                {{ form_rest(form) }}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary center-block"><i class="fa fa-icon-cloud-upload"></i> Exportar Moodle </button>
+                </div>
+                {{ form_end(form) }}
+            </section>
+        </div>
+    </div>
+{% endblock %}

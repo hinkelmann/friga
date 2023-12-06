@@ -72,10 +72,23 @@
                                                         <li class="" role="menuitem" tabindex="0">
                                                             <a class="nav-fonte"
                                                                href="{{ path('nte_admin_painel_homepage') }}">
-                                                                <i class="icon-wrench icons"></i> Configurações
+                                                                <i class="fa fa-cubes "></i> Admin
                                                             </a>
                                                         </li>
                                                     {% endif %}
+                                                    {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_convites_index' or
+                                                        app.request.attributes.get('_route') == 'nte_usuario_candidato_convite_ver'
+                                                    %}
+                                                        {% set classeX = "active" %}
+                                                    {% else %}
+                                                        {% set classeX = "" %}
+                                                    {% endif %}
+                                                    <li class="hidden-md hidden-lg {{ classeX }}">
+                                                        <a class="nav-fonte " href="{{ path('nte_usuario_candidato_convites_index') }}">
+                                                            <i class="fa fa-user-md icons"></i>
+                                                            Convites
+                                                        </a>
+                                                    </li>
                                                     {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_index' or
                                                         app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_visualizacao' %}
                                                         {% set classeX = "active" %}
@@ -83,8 +96,11 @@
                                                         {% set classeX = "" %}
                                                     {% endif %}
                                                     <li class="hidden-md hidden-lg {{ classeX }}">
-                                                        <a class="nav-link "
-                                                           href="{{ path('nte_usuario_candidato_inscricao_index') }}">Inscrições</a>
+                                                        <a class="nav-fonte "
+                                                           href="{{ path('nte_usuario_candidato_inscricao_index') }}">
+                                                            <i class="icon-user icons"></i>
+                                                            Inscrições
+                                                        </a>
                                                     </li>
                                                     {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_index' or
                                                         app.request.attributes.get('_route') == 'nte_usuario_candidato_recursos_ver' or
@@ -94,8 +110,11 @@
                                                         {% set classeX = "" %}
                                                     {% endif %}
                                                     <li class="hidden-md hidden-lg {{ classeX }}">
-                                                        <a class="nav-link "
-                                                           href="{{ path('nte_usuario_candidato_recursos_index') }}">Recursos</a>
+                                                        <a class="nav-fonte "
+                                                           href="{{ path('nte_usuario_candidato_recursos_index') }}">
+                                                            <i class="fa fa-th icons"></i>
+                                                            Recursos
+                                                        </a>
                                                     </li>
                                                     {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_convocacao_index' or
                                                         app.request.attributes.get('_route') == 'nte_usuario_candidato_convocacao_ver' %}
@@ -104,8 +123,11 @@
                                                         {% set classeX = "" %}
                                                     {% endif %}
                                                     <li class="hidden-md hidden-lg {{ classeX }}">
-                                                        <a class="nav-link "
-                                                           href="{{ path('nte_usuario_candidato_convocacao_index') }}">Convocações</a>
+                                                        <a class="nav-fonte "
+                                                           href="{{ path('nte_usuario_candidato_convocacao_index') }}">
+                                                            <i class="fa fa-calendar-check-o icons"></i>
+                                                            Convocações
+                                                        </a>
                                                     </li>
                                                     {% if  app.request.attributes.get('_route') == 'nte_usuario_candidato_resultado_index' or
                                                         app.request.attributes.get('_route') == 'nte_usuario_candidato_resultado_index' %}
@@ -114,9 +136,14 @@
                                                         {% set classeX = "" %}
                                                     {% endif %}
                                                     <li class="hidden-md hidden-lg {{ classeX }}">
-                                                        <a class="nav-link "
-                                                           href="{{ path('nte_usuario_candidato_resultado_index') }}">Resultados</a>
+                                                        <a class="nav-fonte "
+                                                           href="{{ path('nte_usuario_candidato_resultado_index') }}">
+                                                            <i class="icon-trophy icons"></i>
+                                                            Resultados
+                                                        </a>
                                                     </li>
+
+                                                    {#
                                                     {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index' or
                                                         app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index' %}
                                                         {% set classeX = "active" %}
@@ -124,9 +151,9 @@
                                                         {% set classeX = "" %}
                                                     {% endif %}
                                                     <li class="hidden-md hidden-lg {{ classeX }}">
-                                                        <a class="nav-link "
+                                                        <a class="nav-fonte "
                                                            href="{{ path('nte_usuario_candidato_editais_index') }}">Editais</a>
-                                                    </li>
+                                                    </li>#}
 
                                                     {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_perfil' or
                                                         app.request.attributes.get('_route') == 'nte_usuario_candidato_editar' %}
@@ -135,8 +162,11 @@
                                                         {% set classeX = "" %}
                                                     {% endif %}
                                                     <li class="hidden-md hidden-lg {{ classeX }}">
-                                                        <a class="nav-link "
-                                                           href="{{ path('nte_usuario_candidato_perfil') }}">Cadastro</a>
+                                                        <a class="nav-fonte "
+                                                           href="{{ path('nte_usuario_candidato_perfil') }}">
+                                                            <i class="icon-user-follow icons"></i>
+                                                            Cadastro
+                                                        </a>
                                                     </li>
                                                     <li class="" role="menuitem" tabindex="1">
                                                         <a class="nav-fonte"
@@ -194,6 +224,69 @@
         {{ render(controller('NteSiteBundle:Default:parteRodape')) }}
     {% endblock %}
 </div>
+<style>
+    .radio-custom {
+        position: relative;
+        padding: 0 0 0 25px;
+        margin-bottom: 7px;
+        margin-top: 0;
+    }
+    .radio-custom input[type="radio"] {
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 3px;
+        margin: -6px 0 0 0;
+        z-index: 2;
+        cursor: pointer;
+    }
+    input[type="checkbox"], input[type="radio"] {
+        margin: 4px 0 0;
+        margin-top: 1px\9;
+        line-height: normal;
+    }
+    input[type="checkbox"], input[type="radio"] {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 0;
+    }
+    .radio-custom input[type="radio"]:checked + label::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        margin-top: -5px;
+        display: inline-block;
+        font-size: 11px;
+        line-height: 1;
+        width: 10px;
+        height: 10px;
+        background-color: #444;
+        border-radius: 50px;
+        -webkit-box-shadow: 0px 0px 1px #444;
+        box-shadow: 0px 0px 1px #444;
+    }
+    .radio-custom label::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        margin-top: -9px;
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        border-radius: 50px;
+        border: 1px solid #bbb;
+        background: #fff;
+    }
+    .radio-custom label {
+        cursor: pointer;
+        margin-bottom: 0;
+        text-align: left;
+        line-height: 1.2;
+    }
+</style>
 {% block javascripts %}
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery.easing/jquery.easing.min.js') }}"></script>

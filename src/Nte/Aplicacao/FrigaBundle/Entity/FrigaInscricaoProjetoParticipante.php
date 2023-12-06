@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,16 +26,20 @@ use Nte\UsuarioBundle\Entity\Usuario;
 
 /**
  * @ORM\Table(name="friga_inscricao_projeto_participante")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaInscricaoProjetoParticipante
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -27,7 +48,9 @@ class FrigaInscricaoProjetoParticipante
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario", inversedBy="idProjetoParticipante")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
      * })
      */
@@ -37,7 +60,9 @@ class FrigaInscricaoProjetoParticipante
      * @var FrigaInscricao
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao",inversedBy="idProjetoParticipante")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_inscricao", referencedColumnName="id")
      * })
      */
@@ -72,7 +97,7 @@ class FrigaInscricaoProjetoParticipante
     private $uuid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="confirmacao", type="integer",  nullable=true)
      */
@@ -92,13 +117,14 @@ class FrigaInscricaoProjetoParticipante
      */
     private $registroDataAtualizacao;
 
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaArquivo", inversedBy="idProjetoParticipante")
+     *
      * @ORM\JoinTable(name="friga_inscricao_projeto_participante_tem_arquivo",
      *   joinColumns={
+     *
      *     @ORM\JoinColumn(name="id_projeto_participante", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
@@ -109,7 +135,7 @@ class FrigaInscricaoProjetoParticipante
     private $idArquivo;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -127,11 +153,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param int $id
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -145,11 +173,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param Usuario $idUsuario
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setIdUsuario($idUsuario)
     {
         $this->idUsuario = $idUsuario;
+
         return $this;
     }
 
@@ -163,11 +193,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param FrigaInscricao $idInscricao
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setIdInscricao($idInscricao)
     {
         $this->idInscricao = $idInscricao;
+
         return $this;
     }
 
@@ -181,11 +213,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param string $nome
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setNome($nome)
     {
         $this->nome = $nome;
+
         return $this;
     }
 
@@ -199,11 +233,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param string $email
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -217,16 +253,18 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param string $observacao
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
+
         return $this;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getConfirmacao()
     {
@@ -234,15 +272,16 @@ class FrigaInscricaoProjetoParticipante
     }
 
     /**
-     * @param integer $confirmacao
+     * @param int $confirmacao
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setConfirmacao($confirmacao)
     {
         $this->confirmacao = $confirmacao;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -254,11 +293,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param string $uuid
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
+
         return $this;
     }
 
@@ -272,11 +313,13 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param \DateTime $registroDataCriacao
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setRegistroDataCriacao($registroDataCriacao)
     {
         $this->registroDataCriacao = $registroDataCriacao;
+
         return $this;
     }
 
@@ -290,25 +333,24 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @param \DateTime $registroDataAtualizacao
+     *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function setRegistroDataAtualizacao($registroDataAtualizacao)
     {
         $this->registroDataAtualizacao = $registroDataAtualizacao;
+
         return $this;
     }
 
-
     /**
-     * Add idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Add idArquivo.
      *
      * @return FrigaInscricaoProjetoParticipante
      */
     public function addIdArquivo(FrigaArquivo $idArquivo)
     {
-        if(!$this->idArquivo->contains($idArquivo)){
+        if (!$this->idArquivo->contains($idArquivo)) {
             $this->idArquivo->add($idArquivo);
         }
 
@@ -316,19 +358,17 @@ class FrigaInscricaoProjetoParticipante
     }
 
     /**
-     * Remove idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Remove idArquivo.
      */
     public function removeIdArquivo(FrigaArquivo $idArquivo)
     {
-        if($this->idArquivo->contains($idArquivo)){
+        if ($this->idArquivo->contains($idArquivo)) {
             $this->idArquivo->removeElement($idArquivo);
         }
     }
 
     /**
-     * Get idArquivo
+     * Get idArquivo.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -344,34 +384,33 @@ class FrigaInscricaoProjetoParticipante
     {
         $obj = new \stdClass();
         $obj->id = $this->confirmacao;
-        $obj->descricao = "Aguardando confirmação";
-        $obj->icone = "fa fa-clock-o";
-        $obj->css = "label label-info";
-        $obj->cssAlert = "alert alert-info";
-        if (!is_null($this->confirmacao)) {
+        $obj->descricao = 'Aguardando confirmação';
+        $obj->icone = 'fa fa-clock-o';
+        $obj->css = 'label label-info';
+        $obj->cssAlert = 'alert alert-info';
+        if (!\is_null($this->confirmacao)) {
             switch ($this->confirmacao) {
                 case 0:
-                    $obj->descricao = "Não confirmado";
-                    $obj->css = "label label-warning";
-                    $obj->icone = "fa fa-times";
-                    $obj->cssAlert = "alert alert-warning";
+                    $obj->descricao = 'Não confirmado';
+                    $obj->css = 'label label-warning';
+                    $obj->icone = 'fa fa-times';
+                    $obj->cssAlert = 'alert alert-warning';
                     break;
                 case 1:
-                    $obj->descricao = "Confirmado";
-                    $obj->css = "label label-success";
-                    $obj->icone = "fa fa-check-circle-o";
-                    $obj->cssAlert = "alert alert-success";
+                    $obj->descricao = 'Confirmado';
+                    $obj->css = 'label label-success';
+                    $obj->icone = 'fa fa-check-circle-o';
+                    $obj->cssAlert = 'alert alert-success';
                     break;
             }
         }
+
         return $obj;
     }
-
 
     /**
      * @ORM\PreUpdate
      *
-     * @param PreUpdateEventArgs $args
      * @throws \Exception
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -384,11 +423,12 @@ class FrigaInscricaoProjetoParticipante
 
     /**
      * @ORM\PrePersist
+     *
      * @throws \Exception
      */
     public function PrePersist()
     {
-        $this->uuid = uniqid();
+        $this->uuid = \uniqid();
         $this->setRegistroDataCriacao(new \DateTime());
         $this->setRegistroDataAtualizacao(new \DateTime());
     }

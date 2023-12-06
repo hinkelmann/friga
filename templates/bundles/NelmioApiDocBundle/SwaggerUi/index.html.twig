@@ -1,0 +1,18 @@
+{% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
+{% block header %}
+    <a id="logo" href="{{ path('nte_site_homepage') }}">
+        <img src="{{ asset('assets/img/logo_friga.svg') }}" alt="Friga API">
+    </a>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        header::before{
+            background-color: #fff !important;
+        }
+        header #logo img {
+            height: 48px;
+            background-color: transparent !important;
+        }
+    </style>
+{% endblock %}

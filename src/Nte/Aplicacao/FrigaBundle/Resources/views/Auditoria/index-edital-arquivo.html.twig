@@ -1,0 +1,252 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Auditoria Edital Arquivo {% endblock %}
+ {% block breadcumbsTitulo %} Auditoria Edital Arquivo {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="#"> Auditoria </a></span></li>
+     <li><span>Edital</span></li>
+     <li><span>Arquivo</span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/Auditoria/menu-edital.html.twig', {entidade: edital}) }}
+        <div class="col-md-9 col-lg-10">
+            <h4>Arquivo público</h4>
+            {% if edital.idArquivo.count %}
+                <ul class="list-group " id="areaArquivo">
+                    {% for a in edital.idArquivo %}
+                        <li class="list-group-item" id="arquivoItem{{ a.id }}" data-id="{{ a.id }}">
+                            <h6 class="text-weight-bold">
+                                <span id="arquivoTitulo{{ a.id }}">{{ a.titulo }}</span>
+                            </h6>
+                            <div>
+                                <i class="fa fa-calendar-o"></i>
+                                {{ a.dataPublicacao|date('d/m/Y \\à\\s H:i:s') }}
+                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                                {% if a.extrairCertificado|length %}
+                                    <i class="fa fa-certificate "></i>
+                                    <span data-toggle="popover"
+                                          data-placement="top" data-html="true"
+                                          data-content="<ul>{% for c in a.extrairCertificado %}<li><b>{{ c.subject["CN"] }}</b><br>S/N: <b>{{ c.serialNumber }}</b> <br>Certificado:  <b>{{ c.issuer['CN'] }}</b></li>{% endfor %}</ul>">
+                                                            Assinado digitalmente
+                                                        </span>
+                                {% else %}
+                                    <i class="fa fa-circle-o"></i>
+                                    <span class="text-danger">
+                                                            Sem assinatura digital
+                                                        </span>
+                                {% endif %}
+                                <a href="#"
+                                   title="Clique aqui para visualizar o arquivo"
+                                   class="imprimirHTML pull-right"
+                                   id="arquivoImprimir"
+                                   data-id="{{ a.id }}"
+                                   data-title="{{ a.titulo }}"
+                                   data-href="{{ path('arquivo_ver',{id: a.id}) }}">
+                                    <i class="fa fa-file-text-o"></i>
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>
+                    Nenhum arquivo enviado.
+                </p>
+            {% endif %}
+            <h4>Termo de Confidencialidade e sigilo</h4>
+            {% if edital.idEditalUsuarioConviteArquivo.count %}
+                <ul class="list-group " id="areaArquivo">
+                    {% for item in edital.idEditalUsuarioConvite %}
+                        <li class="list-group-item">
+                            <h6>
+                                <span class="text-weight-bold">{{ item.cpf }}</span> - {{ item.nome }}
+                                {% if item.aceite is null %}
+                                    <div class="badge alert-info text-center pull-right">
+                                        <strong>
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            PENDENTE
+                                        </strong>
+                                    </div>
+                                {% elseif item.aceite == 1 %}
+                                    <div class="badge alert-success text-center">
+                                        <strong>
+                                            <i class="fa fa-check-circle-o"></i>
+                                            ACEITO
+                                            {{ item.aceiteData|date('d/m/Y H:i:s') }}
+                                        </strong>
+                                    </div>
+                                {% elseif item.aceite == 0 %}
+                                    <div class="badge alert-danger text-center pull-right">
+                                        <strong>
+                                            <i class="fa fa-times-circle-o"></i>
+                                            RECUSADO
+                                        </strong>
+                                    </div>
+                                {% endif %}
+                            </h6>
+                            <ul class="list-unstyled">
+                                {% for a in item.idArquivo %}
+                                    <li>
+                                        <div>
+                                            <i class="fa fa-calendar-o"></i>
+                                            {{ a.registroDataCriacao|date('d/m/Y \\à\\s H:i:s') }}
+                                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                                            {% if a.extrairCertificado|length %}
+                                                <i class="fa fa-certificate "></i>
+                                                <span data-toggle="popover"
+                                                      data-placement="top" data-html="true"
+                                                      data-content="<ul>{% for c in a.extrairCertificado %}<li><b>{{ c.subject["CN"] }}</b><br>S/N: <b>{{ c.serialNumber }}</b> <br>Certificado:  <b>{{ c.issuer['CN'] }}</b></li>{% endfor %}</ul>">
+                                                            Assinado digitalmente
+                                                        </span>
+                                            {% else %}
+                                                <i class="fa fa-circle-o"></i>
+                                                <span class="text-danger">
+                                                            Sem assinatura digital
+                                                        </span>
+                                            {% endif %}
+                                            <a href="#"
+                                               title="Clique aqui para visualizar o arquivo"
+                                               class="imprimirHTML pull-right"
+                                               id="arquivoImprimir"
+                                               data-id="{{ a.id }}"
+                                               data-title="{{ a.titulo }}"
+                                               data-href="{{ path('arquivo_ver',{id: a.id}) }}">
+                                                <i class="fa fa-file-text-o"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>
+                    Nenhum arquivo enviado.
+                </p>
+            {% endif %}
+
+            <h4>Declaração de impedimento e não impedimento</h4>
+            {% if edital.idEditalUsuarioArquivo.count %}
+                <ul class="list-group ">
+                    {% for item in edital.idEditalUsuario %}
+                        <li class="list-group-item">
+                            <h6>
+                                <span class="text-weight-bold">{{ item.idUsuario.cpf }}</span>
+                                - {{ item.idUsuario.nome }}
+                                {% if item.termoCompromisso is null %}
+                                    <div class="badge alert-info text-center pull-right">
+                                        <strong>
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            PENDENTE
+                                        </strong>
+                                    </div>
+                                {% elseif item.termoCompromisso == 1 %}
+                                    <div class="badge alert-success text-center">
+                                        <strong>
+                                            <i class="fa fa-check-circle-o"></i>
+                                            NÃO IMPEDIMENTO
+                                            {{ item.termoCompromissoData|date('d/m/Y H:i:s') }}
+                                        </strong>
+                                    </div>
+                                {% elseif item.termoCompromisso ==0 %}
+                                    <div class="badge alert-danger text-center">
+                                        <strong>
+                                            <i class="fa fa-times-circle-o"></i>
+                                            IMPEDIMENTO
+                                            {{ item.termoCompromissoData|date('d/m/Y H:i:s') }}
+                                        </strong>
+                                    </div>
+                                {% endif %}
+                            </h6>
+                            <ul class="list-unstyled">
+                                {% for a in item.idArquivo %}
+                                    <li>
+                                        <div>
+                                            <i class="fa fa-calendar-o"></i>
+                                            {{ a.registroDataCriacao|date('d/m/Y \\à\\s H:i:s') }}
+                                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                                            {% if a.extrairCertificado|length %}
+                                                <i class="fa fa-certificate "></i>
+                                                <span data-toggle="popover"
+                                                      data-placement="top" data-html="true"
+                                                      data-content="<ul>{% for c in a.extrairCertificado %}<li><b>{{ c.subject["CN"] }}</b><br>S/N: <b>{{ c.serialNumber }}</b> <br>Certificado:  <b>{{ c.issuer['CN'] }}</b></li>{% endfor %}</ul>">
+                                                            Assinado digitalmente
+                                                        </span>
+                                            {% else %}
+                                                <i class="fa fa-circle-o"></i>
+                                                <span class="text-danger">
+                                                            Sem assinatura digital
+                                                        </span>
+                                            {% endif %}
+                                            <a href="#"
+                                               title="Clique aqui para visualizar o arquivo"
+                                               class="imprimirHTML pull-right"
+                                               id="arquivoImprimir"
+                                               data-id="{{ a.id }}"
+                                               data-title="{{ a.titulo }}"
+                                               data-href="{{ path('arquivo_ver',{id: a.id}) }}">
+                                                <i class="fa fa-file-text-o"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>
+                    Nenhum arquivo enviado.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+    <style>
+        .popover {
+            max-width: none;
+            font-size: 12px;
+        }
+    </style>
+{% endblock %}
+{% block javascripts2 %}
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}"/>
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                template: '<div class="tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+            })
+        })
+        let btnImprimirHtml = e => {
+            let btn = $('.imprimirHTML');
+            btn.unbind('click').click(e => {
+                e.preventDefault();
+                iframeviwer(e.currentTarget.dataset.href, e.currentTarget.dataset.title);
+
+            });
+        };
+        btnImprimirHtml();
+        iframeviwer = (href, title) => {
+            iframe = document.createElement('iframe');
+            iframe.src = href;
+            iframe.height = "75vh";
+            iframe.width = "100%";
+            iframe.style = "overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:75vh;width:100%;";
+            Swal.fire({
+                title: title,
+                html: iframe.outerHTML,
+                backdrop: false,
+                width: "95vw",
+                height: "95vh",
+//   focusCancel: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
+        };
+    </script>
+
+
+{% endblock %}

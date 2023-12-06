@@ -34,12 +34,13 @@
 
             <div class="panel-body">
                 <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
-                    <div class="form-group mb-lg">
-                        <label>{{ 'security.login.username'|trans }}</label>
-
+                    <div class="form-group mb-lg ">
+                        <label>CPF</label>
                         <div class="input-group input-group-icon">
+                            <input id="cpf" name="cpf" value="{{ last_username }}"
+                                   placeholder="000.000.000-00" type="text" class="form-control input-lg"/>
                             <input id="username" name="_username" value="{{ last_username }}"
-                                   placeholder="Informe seu Usuário ou e-Mail" type="text" class="form-control input-lg"/>
+                                   placeholder="000.000.000-00" type="hidden" class="form-control input-lg"/>
                             <span class="input-group-addon">
 										<span class="icon icon-lg">
 											<i class="fa fa-user"></i>
@@ -102,6 +103,25 @@
 <script src="{{ asset('assets/js/themeaadmin.init.js') }}"></script>
 <script src="{{ asset('assets/js/themeadmin.custom.js') }}"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-77043326-7"></script>
+<script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+
+<script>
+    cpf = $('#cpf'),
+        usuario = document.getElementById('username'),
+        forms = $('form');
+    forms.validate();
+    cpf.mask('000.000.000-00');
+    cpf.keypress(e => {
+        usuario.value = cpf.val().replace(/\D/g,'');
+    });
+    cpf.change(e => {
+        usuario.value = cpf.val().replace(/\D/g,'');
+    })
+    usuario.value = cpf.val().replace(/\D/g,'');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-77043
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -117,5 +137,6 @@
     });
     {% endif %}
 </script>
+
 </body>
 </html>

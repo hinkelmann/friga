@@ -1,26 +1,34 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacaoCategoria;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FrigaEditalPontuacaoCategoriaPesoType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var FrigaEditalPontuacao $data */
@@ -31,37 +39,28 @@ class FrigaEditalPontuacaoCategoriaPesoType extends AbstractType
                 'label' => 'Peso',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => '0'
-                ]
+                    'placeholder' => '0',
+                ],
             ])
             ->add('valorTexto', TextType::class, [
                 'label' => 'Valor texto',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Pontos'
-                ]
+                    'placeholder' => 'Pontos',
+                ],
             ])
         ;
-
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => FrigaEditalPontuacaoCategoria::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => FrigaEditalPontuacaoCategoria::class,
+        ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'edital_cargo';
     }
-
-
 }

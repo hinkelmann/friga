@@ -1,23 +1,38 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
+use Exception;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEdital;
+use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
-use Nte\UsuarioBundle\Entity\Usuario;
+use Nte\Aplicacao\FrigaBundle\Entity\Log;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use stdClass;
-use DateTime;
-use Exception;
 
 class RelatorioController extends Controller
 {
-
     private $mQuantitativo;
     private $mQuantitativoCargo;
     private $mString;
@@ -27,7 +42,7 @@ class RelatorioController extends Controller
      */
     public function __construct()
     {
-        $this->mQuantitativo = new stdClass();
+        $this->mQuantitativo = new \stdClass();
         $this->mQuantitativo->inscricao = 0;
         $this->mQuantitativo->homologacaoNegativa = 0;
         $this->mQuantitativo->homologacao = 0;
@@ -47,7 +62,7 @@ class RelatorioController extends Controller
         $this->mQuantitativo->etapaClassificacao = 0;
         $this->mQuantitativo->etapaClassificacaoConcluida = 0;
 
-        $this->mQuantitativoCargo = new stdClass();
+        $this->mQuantitativoCargo = new \stdClass();
         $this->mQuantitativoCargo->inscricao = 0;
         $this->mQuantitativoCargo->homologacaoNegativa = 0;
         $this->mQuantitativoCargo->homologacao = 0;
@@ -58,17 +73,17 @@ class RelatorioController extends Controller
         $this->mQuantitativoCargo->convocacao = 0;
 
         $this->mString = [
-            'inscricao' => "Inscrições Realizadas",
-            'homologacao' => "Inscrições Homologadas",
-            'homologacaoNegativa' => "Inscrições Não Homologadas",
-            'avaliacao' => "Inscrições em Avaliação",
-            'recurso' => "Inscrições com Recurso",
-            'classificacao' => "Classificados",
-            'desclassificacao' => "Desclassificados",
-            'convocacao' => "Convocados",
-            'recursos' => "Recursos sem avaliação",
-            'recursosDeferidos' => "Recurso Defirido",
-            'recursosIndeferidos' => "Recurso Indeferido",
+            'inscricao' => 'Inscrições Realizadas',
+            'homologacao' => 'Inscrições Homologadas',
+            'homologacaoNegativa' => 'Inscrições Não Homologadas',
+            'avaliacao' => 'Inscrições em Avaliação',
+            'recurso' => 'Inscrições com Recurso',
+            'classificacao' => 'Classificados',
+            'desclassificacao' => 'Desclassificados',
+            'convocacao' => 'Convocados',
+            'recursos' => 'Recursos sem avaliação',
+            'recursosDeferidos' => 'Recurso Defirido',
+            'recursosIndeferidos' => 'Recurso Indeferido',
         ];
     }
 
@@ -83,24 +98,23 @@ class RelatorioController extends Controller
         if ($this->isGranted('ROLE_ADMIN_EDITAL')) {
             $editais = new ArrayCollection($em->getRepository(FrigaEdital::class)->findAll());
         } elseif ($this->isGranted('ROLE_GERENCIAL')) {
-
             $editais = new ArrayCollection();
 
             /** @var FrigaEditalUsuario $eu */
             foreach ($this->getUser()->getIdEditalUsuario() as $eu) {
                 $editais->add($eu->getIdEdital());
-            };
+            }
         }
-        $editais = $editais->filter(function (FrigaEdital $edital){
+        $editais = $editais->filter(function(FrigaEdital $edital) {
             return $edital->getSituacao() > 0;
         });
         $editais = $editais->getIterator();
-        $editais->uasort(function (FrigaEdital $a, FrigaEdital $b){
+        $editais->uasort(function(FrigaEdital $a, FrigaEdital $b) {
             return $b->getDataPublicacaoOficial() <=> $a->getDataPublicacaoOficial();
         });
 
         return $this->render('@NteAplicacaoFriga/relatorio/index.html.twig', [
-            'editais' => $editais
+            'editais' => $editais,
         ]);
     }
 
@@ -112,25 +126,24 @@ class RelatorioController extends Controller
         if (!$this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('relatorio_index');
         }
+
         return $this->render('@NteAplicacaoFriga/relatorio/index-resumo.html.twig', [
             'editalCargo' => $this->getEditalCargo($this->getEditaisSituacao(), true),
             'editalCargoPilha' => $this->getEditalCargoACargo($this->getEditaisSituacao(), true),
             'editalCargoPilhaSeparada' => $this->getEditalCargoOdenadoSeparado($this->getEditaisSituacao()),
             'editalQuantitativo' => $this->getQuantitativoCargoEdtiais($this->getEditaisSituacao()),
             'editalQuantitativoSerie' => $this->getQuantitativoEdtiaisSerie($this->getEditaisSituacao()),
-            'editais' => $this->getEditaisTituloArray($this->getEditaisSituacao()->toArray())
+            'editais' => $this->getEditaisTituloArray($this->getEditaisSituacao()->toArray()),
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $frigaEdital
      * @return Response
      */
     public function resumoAction(Request $request, FrigaEdital $frigaEdital)
     {
-
         $em = $this->getDoctrine()->getManager();
+
         return $this->render('@NteAplicacaoFriga/relatorio/resumo.html.twig', [
             'edital' => $frigaEdital,
             'cargoLista' => $this->getCargoTituloArray($frigaEdital),
@@ -140,13 +153,13 @@ class RelatorioController extends Controller
             'editalCargoPilhaSeparada' => $this->getEditalCargoOdenadoSeparado([$frigaEdital]),
             'editalQuantitativo' => $this->getQuantitativoCargoEdtiais([$frigaEdital]),
             'editalQuantitativoSerie' => $this->getQuantitativoEdtiaisSerie([$frigaEdital]),
-            'editais' => $this->getEditaisTituloArray([$frigaEdital])
+            'editais' => $this->getEditaisTituloArray([$frigaEdital]),
         ]);
     }
 
-
     /**
      * @param int $situacao
+     *
      * @return ArrayCollection
      */
     private function getEditaisSituacao($situacao = 1)
@@ -158,40 +171,39 @@ class RelatorioController extends Controller
 
     private function getEditaisTituloArray($editais)
     {
-        return array_map(function (FrigaEdital $edital) {
+        return \array_map(function(FrigaEdital $edital) {
             return $edital->getTitulo();
         }, $editais);
     }
 
     /**
-     * @param FrigaEdital $edital
      * @return array
      */
     private function getCargoTituloArray(FrigaEdital $edital)
     {
-        return $edital->getCargo()->map(function (FrigaEditalCargo $cargo) {
+        return $edital->getCargo()->map(function(FrigaEditalCargo $cargo) {
             return $cargo->getDescricao();
         })->toArray();
     }
 
     /**
      * @param ArrayCollection $editais
-     * @param boolean $drilldown
-     * @return array|stdClass
+     * @param bool $drilldown
+     *
+     * @return array|\stdClass
      */
     private function getEditalCargo($editais, $drilldown = false)
     {
-        //
         if ($drilldown) {
-            $tmp = new stdClass();
-            $tmp->name = "Editais";
-            $tmp->colorByPoint = "Editais";
+            $tmp = new \stdClass();
+            $tmp->name = 'Editais';
+            $tmp->colorByPoint = 'Editais';
             $tmp->data = [];
             $tmp = [$tmp];
         } else {
             $tmp = [];
         }
-        /** @var  FrigaEdital $edital */
+        /** @var FrigaEdital $edital */
         foreach ($editais as $edital) {
             $soma = 0;
             /** @var FrigaEditalCargo $cargo */
@@ -199,7 +211,7 @@ class RelatorioController extends Controller
                 $soma += $cargo->getInscricaoValida()->count();
             }
             if ($drilldown) {
-                $obj = new stdClass();
+                $obj = new \stdClass();
                 $obj->name = $edital->getTitulo();
                 $obj->y = $soma;
                 $obj->drilldown = $edital->getId();
@@ -208,32 +220,32 @@ class RelatorioController extends Controller
                 $tmp[] = [$edital->getTitulo(), $soma];
             }
         }
+
         return $tmp;
     }
 
     /**
-     * @param $editais
      * @return mixed
      */
     public function getEditalCargoOdenadoSeparado($editais)
     {
         $tmp0 = $this->getEditalCargoACargoComTitulo($editais);
-        usort($tmp0, function ($a, $b) {
-            return ($b[1] <=> $a[1]);
+        \usort($tmp0, function($a, $b) {
+            return $b[1] <=> $a[1];
         });
-        $tmp[0] = array_filter($tmp0, function ($a) {
+        $tmp[0] = \array_filter($tmp0, function($a) {
             return $a[1] > 0;
         });
-        $tmp[1] = array_filter($tmp0, function ($a) {
+        $tmp[1] = \array_filter($tmp0, function($a) {
             return $a[1] <= 0;
         });
-        if (count($tmp[1])) {
+        if (\count($tmp[1])) {
             $aux = [];
             foreach ($tmp[1] as $item) {
-                if (array_key_exists($item[3], $aux)) {
+                if (\array_key_exists($item[3], $aux)) {
                     $aux[$item[3]]->cargo[] = $item[0];
                 } else {
-                    $obj = new stdClass();
+                    $obj = new \stdClass();
                     $obj->id = $item[3];
                     $obj->cargo = [$item[0]];
                     $obj->edital = $item[2];
@@ -242,18 +254,20 @@ class RelatorioController extends Controller
             }
             $tmp[1] = $aux;
         }
+
         return $tmp;
     }
 
     /**
      * @param ArrayCollection $editais
-     * @param boolean $drilldown
+     * @param bool $drilldown
+     *
      * @return array
      */
     private function getEditalCargoACargo($editais, $drilldown = false)
     {
         $tmp1 = [];
-        /** @var  FrigaEdital $edital */
+        /** @var FrigaEdital $edital */
         foreach ($editais as $edital) {
             $tmp0 = [];
             /** @var FrigaEditalCargo $cargo */
@@ -261,44 +275,48 @@ class RelatorioController extends Controller
                 $tmp0[] = [$cargo->getDescricao(), $cargo->getInscricaoValida()->count()];
             }
             if ($drilldown) {
-                $obj = new stdClass();
+                $obj = new \stdClass();
                 $obj->id = $edital->getId();
                 $obj->name = $edital->getTitulo();
                 $obj->data = $tmp0;
                 $tmp1[] = $obj;
             } else {
-                $tmp1 = array_merge($tmp1, $tmp0);
+                $tmp1 = \array_merge($tmp1, $tmp0);
             }
         }
+
         return $tmp1;
     }
 
     /**
      * @param ArrayCollection $editais
-     * @param boolean $drilldown
+     * @param bool $drilldown
+     *
      * @return array
      */
     private function getEditalCargoACargoComTitulo($editais, $drilldown = false)
     {
         $tmp = [];
-        /** @var  FrigaEdital $edital */
+        /** @var FrigaEdital $edital */
         foreach ($editais as $edital) {
             /** @var FrigaEditalCargo $cargo */
             foreach ($edital->getCargo() as $cargo) {
                 $tmp[] = [$cargo->getDescricao(), $cargo->getInscricaoValida()->count(), $edital->getTitulo(), $edital->getId()];
             }
         }
+
         return $tmp;
     }
 
     /**
      * @param ArrayCollection $editais
+     *
      * @return array
      */
     private function getEditalCargoACargoPilha($editais)
     {
         $tmp = [];
-        /** @var  FrigaEdital $edital */
+        /** @var FrigaEdital $edital */
         foreach ($editais as $edital) {
             $obj = new \stdClass();
             $obj->name = $edital->getDescricao();
@@ -309,11 +327,13 @@ class RelatorioController extends Controller
             }
             $tmp[] = $obj;
         }
+
         return $tmp;
     }
 
     /**
      * @param ArrayCollection $editais
+     *
      * @return array
      */
     private function getQuantitativoEdtiaisSerie($editais)
@@ -321,58 +341,58 @@ class RelatorioController extends Controller
         $tmp = [];
         $item = $this->getQuantitativoCargoEdtiais($editais);
 
-        $obj = new stdClass();
-        $obj->name = "Inscrições Realizadas";
+        $obj = new \stdClass();
+        $obj->name = 'Inscrições Realizadas';
         $obj->y = $item->inscricao;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Inscrições Homologadas";
+        $obj = new \stdClass();
+        $obj->name = 'Inscrições Homologadas';
         $obj->y = $item->homologacao;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Inscrições Não Homologadas";
+        $obj = new \stdClass();
+        $obj->name = 'Inscrições Não Homologadas';
         $obj->y = $item->homologacaoNegativa;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Inscrições em Avaliação";
+        $obj = new \stdClass();
+        $obj->name = 'Inscrições em Avaliação';
         $obj->y = $item->avaliacao;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Inscrições com Recurso";
+        $obj = new \stdClass();
+        $obj->name = 'Inscrições com Recurso';
         $obj->y = $item->recurso;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Classificados";
+        $obj = new \stdClass();
+        $obj->name = 'Classificados';
         $obj->y = $item->classificacao;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Desclassificados";
+        $obj = new \stdClass();
+        $obj->name = 'Desclassificados';
         $obj->y = $item->desclassificacao;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Convocados";
+        $obj = new \stdClass();
+        $obj->name = 'Convocados';
         $obj->y = $item->convocacao;
         $tmp[0][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Recursos sem avaliação";
+        $obj = new \stdClass();
+        $obj->name = 'Recursos sem avaliação';
         $obj->y = $item->recursos;
         $tmp[1][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Recurso Deferido";
+        $obj = new \stdClass();
+        $obj->name = 'Recurso Deferido';
         $obj->y = $item->recursosDeferidos;
         $tmp[1][] = $obj;
 
-        $obj = new stdClass();
-        $obj->name = "Recurso Indeferido";
+        $obj = new \stdClass();
+        $obj->name = 'Recurso Indeferido';
         $obj->y = $item->recursosIndeferidos;
         $tmp[1][] = $obj;
 
@@ -381,11 +401,11 @@ class RelatorioController extends Controller
 
     /**
      * @param ArrayCollection $editais
-     * @return stdClass
+     *
+     * @return \stdClass
      */
     private function getQuantitativoCargoEdtiais($editais)
     {
-
         $tmp0 = new ArrayCollection();
         /** @var FrigaEdital $edital */
         foreach ($editais as $edital) {
@@ -393,21 +413,19 @@ class RelatorioController extends Controller
         }
         $tmp1 = clone $this->mQuantitativo;
         foreach ($tmp0->toArray() as $item) {
-            foreach (get_object_vars($this->mQuantitativo) as $chave => $valor) {
+            foreach (\get_object_vars($this->mQuantitativo) as $chave => $valor) {
                 $tmp1->$chave += $item->$chave;
             }
         }
+
         return $tmp1;
     }
 
     /**
-     * @param FrigaEdital $edital
      * @return array
      */
     private function getQuantitativoCargo(FrigaEdital $edital)
     {
-
-
         $tmp0 = new ArrayCollection();
         /** @var FrigaEditalCargo $cargo */
         foreach ($edital->getCargo() as $cargo) {
@@ -415,8 +433,8 @@ class RelatorioController extends Controller
         }
 
         $tmp1 = [];
-        foreach (get_object_vars($this->mQuantitativoCargo) as $chave => $valor) {
-            $obj = new stdClass();
+        foreach (\get_object_vars($this->mQuantitativoCargo) as $chave => $valor) {
+            $obj = new \stdClass();
             $obj->name = $this->mString[$chave];
             $obj->data = [];
             foreach ($tmp0->toArray() as $item) {
@@ -424,14 +442,12 @@ class RelatorioController extends Controller
             }
             $tmp1[] = $obj;
         }
+
         return $tmp1;
     }
 
-
     /**
-     * @param FrigaEdital $edital
-     * @param FrigaEditalCargo|null $cargo
-     * @return stdClass
+     * @return \stdClass
      */
     private function getQuantitativo(FrigaEdital $edital, FrigaEditalCargo $cargo = null)
     {
@@ -457,58 +473,68 @@ class RelatorioController extends Controller
         return $obj;
     }
 
-
     /**
-     * @param Request $request
-     * @param FrigaInscricao $inscricao
      * @return Response
      */
     public function perfilAction(Request $request, FrigaInscricao $inscricao)
     {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $logs = $em->createQueryBuilder()
+            ->select('l')
+            ->from(Log::class, 'l')
+           // ->where("l.metodo = :metodo")
+            ->andWhere('l.uri like :uri')
+            ->orderBy('l.id', 'desc')
+            ->setParameter('uri', "%{$inscricao->getUuid()}%")
+            //->setParameter('metodo',"POST")
+            ->getQuery()
+            ->getResult();
+
         return $this->render('@NteAplicacaoFriga/relatorio/perfil.html.twig', [
-            'inscricao' => $inscricao
+            'inscricao' => $inscricao,
+            'logs' => $logs,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return Response
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function todosInscritosAction(Request $request)
     {
-        $editais  = $this->getEditaisSituacao();
+        $editais = $this->getEditaisSituacao();
         $pessoas = [];
         /** @var FrigaEdital $edital */
-        foreach ($editais as $edital){
-                $pessoas = array_merge($edital->getInscricaoValida()->toArray(), $pessoas);
+        foreach ($editais as $edital) {
+            $pessoas = \array_merge($edital->getInscricaoValida()->toArray(), $pessoas);
         }
+
         return $this->render('@NteAplicacaoFriga/relatorio/todos-inscricao.html.twig', [
             'inscricoes' => $pessoas,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return Response
      */
     public function todosAnuladosAction(Request $request)
     {
-        $editais  = $this->getEditaisSituacao();
+        $editais = $this->getEditaisSituacao();
         $pessoas = [];
         /** @var FrigaEdital $edital */
-        foreach ($editais as $edital){
-            $pessoas = array_merge($edital->getInscricaoSituacao(-999)->toArray(), $pessoas);
+        foreach ($editais as $edital) {
+            $pessoas = \array_merge($edital->getInscricaoSituacao(-999)->toArray(), $pessoas);
         }
+
         return $this->render('@NteAplicacaoFriga/relatorio/todos-anulados.html.twig', [
             'inscricoes' => $pessoas,
         ]);
     }
 
-
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital
      * @return Response
      */
     public function incritosAction(Request $request, FrigaEdital $edital)
@@ -519,8 +545,6 @@ class RelatorioController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital
      * @return Response
      */
     public function anuladosAction(Request $request, FrigaEdital $edital)
@@ -531,8 +555,6 @@ class RelatorioController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital = null
      * @return Response
      */
     public function recursoAction(Request $request, FrigaEdital $editais = null)
@@ -544,17 +566,16 @@ class RelatorioController extends Controller
         if ($editais->count()) {
             /** @var FrigaEdital $edital */
             foreach ($editais as $edital) {
-                $tmp = new ArrayCollection(array_merge($tmp->toArray(), $edital->getRecursos()->toArray()));
+                $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $edital->getRecursos()->toArray()));
             }
         }
+
         return $this->render('@NteAplicacaoFriga/relatorio/recurso.html.twig', [
-            'recursos' => $tmp
+            'recursos' => $tmp,
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital = null
      * @return Response
      */
     public function convocacoAction(Request $request, FrigaEdital $editais = null)
@@ -567,17 +588,17 @@ class RelatorioController extends Controller
             foreach ($editais as $edital) {
                 /** @var FrigaInscricao $incricao */
                 foreach ($edital->getInscricao() as $incricao) {
-                    $tmp = new ArrayCollection(array_merge($tmp->toArray(), $incricao->getConvocacao()->toArray()));
+                    $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $incricao->getConvocacao()->toArray()));
                 }
             }
         }
+
         return $this->render('@NteAplicacaoFriga/relatorio/convocacao.html.twig', [
-            'convocacoes' => $tmp
+            'convocacoes' => $tmp,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return Response
      */
     public function recursoSituacaoAction(Request $request, $id)
@@ -595,7 +616,6 @@ class RelatorioController extends Controller
             ->where('fp.idSituacao <>  -99 or fp.idSituacao is null')
             ->orderBy('fp.nome', 'asc')
             ->getQuery()->getResult();
-
 
         return $this->render('NteAplicacaoCadastrosBundle:frigarelatorio:recurso.html.twig', [
             'frigaEdital' => $editais,
@@ -615,8 +635,8 @@ class RelatorioController extends Controller
             ->createQueryBuilder()
             ->select('fp')
             ->from(FrigaPessoa::class, 'fp');
-        if ($situacao !== null) {
-            if ($situacao == 0) {
+        if (null !== $situacao) {
+            if (0 == $situacao) {
                 $pessoas->andWhere('fp.idSituacao = 0 or fp.idSituacao is null');
             } else {
                 $pessoas->andWhere('fp.idSituacao = :idSituacao')
@@ -625,6 +645,7 @@ class RelatorioController extends Controller
         }
         $pessoas = $pessoas->orderBy('fp.nome', 'asc')
             ->getQuery()->getResult();
+
         return $this->render('NteAplicacaoCadastrosBundle:frigarelatorio:inscricao.html.twig', [
             'frigaEdital' => $editais,
             'frigaPessoas' => $pessoas,
@@ -633,7 +654,6 @@ class RelatorioController extends Controller
 
     public function andamentoAction(Request $request, FrigaEdital $edital = null)
     {
-
         $obj0 = new \stdClass();
         $obj0->qtdCandidatos = 0;
         $obj0->qtdHomologacaoAguardando = 0;

@@ -2,27 +2,42 @@ nte_usuario_index:
     path:  /
     defaults: { _controller: NteUsuarioBundle:Usuario:index }
 
-nte_usuario_teste:
-    path:  /teste
-    defaults: { _controller: NteUsuarioBundle:Usuario:teste }
-
-
 nte_usuario_perfil:
     path:  /perfil/{id}
     defaults: { _controller: NteUsuarioBundle:Usuario:perfil, id: null }
 
 nte_usuario_editar:
     path:  /editar/{id}
-    defaults: { _controller: NteUsuarioBundle:Usuario:editar }
+    defaults: { _controller: NteUsuarioBundle:Usuario:editar,id: null }
 
 nte_usuario_ativar:
     path:  /ativar/{id}
-    defaults: { _controller: NteUsuarioBundle:Usuario:ativar }
+    defaults: { _controller: NteUsuarioBundle:Usuario:ativar,id: null }
 
 nte_usuario_update:
     path:  /atualizar/{id}
-    defaults: { _controller: NteUsuarioBundle:Usuario:update }
+    defaults: { _controller: NteUsuarioBundle:Usuario:update,id: null }
 
 nte_usuario_novo:
     path:  /novo
     defaults: { _controller: NteUsuarioBundle:Usuario:novo }
+
+nte_usuario_declaracao:
+    path:  /declaracao/formulario/{uuid}
+    defaults: { _controller: NteUsuarioBundle:Usuario:declaracao }
+
+nte_usuario_declaracao_pdf:
+    path:  /declaracao/pdf/{uuid}/{tipo}
+    defaults: { _controller: NteUsuarioBundle:Usuario:declaracaoPdf, uuid: null, tipo: null  }
+
+nte_usuario_declaracao_impedimento:
+    path:  /declaracao/impedimento/{id}
+    defaults: { _controller: NteUsuarioBundle:Usuario:declaracaoImpedimento, id: null, tipo: null  }
+
+nte_usuario_api_index:
+    path:  /api/index
+    defaults: { _controller: NteUsuarioBundle:Usuario:apiIndex }
+
+nte_usuario_api_lista:
+    path:  /api/lista
+    defaults: { _controller: NteUsuarioBundle:Usuario:apiListaUsuario }

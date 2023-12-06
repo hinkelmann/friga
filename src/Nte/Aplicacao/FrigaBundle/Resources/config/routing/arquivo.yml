@@ -5,9 +5,9 @@ edital_api_get_arquivo:
     methods:  [GET]
 
 edital_api_update_arquivo:
-    path:     /api/arquivo
-    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiUpdate" }
-    methods:  [POST]
+    path:     /api/arquivo-editar/{id}
+    defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiUpdate", id: null }
+
 
 edital_api_delete_arquivo:
     path:     /api/arquivo

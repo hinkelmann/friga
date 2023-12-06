@@ -1,10 +1,10 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %} Configuração de Edital {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Vaga{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Vaga {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <section class="panel-body">
                 {% if frigaedital.cargo|length %}
                     <table class="table table-hover table-condesed ">

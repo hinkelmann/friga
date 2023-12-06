@@ -1,0 +1,185 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Auditoria Edital Log {% endblock %}
+ {% block breadcumbsTitulo %} Auditoria Edital Log {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="#"> Auditoria </a></span></li>
+     <li><span>Edital</span></li>
+     <li><span>Usuario</span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/Auditoria/menu-edital.html.twig', {entidade: edital}) }}
+        <div class="col-md-9 col-lg-10">
+            {% if edital.idEditalUsuario|length or edital.idEditalUsuarioConvite|length %}
+                <section class="panel-body mb-lg">
+                    <table class="table table-hover table-condesed ">
+                        <thead>
+                        <tr>
+                            <th style="vertical-align: middle !important;"
+                                colspan="3">Convite para compor banca
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for convite in edital.idEditalUsuarioConvite %}
+                            <tr>
+                                <td>
+                                    {{ convite.cpf }} - {{ convite.nome|upper }}<br>
+                                    {% if convite.funcaoAdministracao %}
+                                        <span title="Convidado para administrar as configurações do edital">
+                                        <i class="fa fa-star text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if convite.funcaoAvaliacao %}
+                                        <span title="Convidado para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if convite.funcaoResultado %}
+                                        <span title="Convidado para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if convite.funcaoConvocacao %}
+                                        <span title="Convidado para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if convite.idEditalCargo|length %}
+                                        {% for c in convite.idEditalCargo %}
+                                            <span title="{{ c.descricao }}">{% if c.descricao|length >143 %}
+                                                    {{ c.descricao|slice(0, 144) }}...
+                                                {% else %}
+                                                    {{ c.descricao }}
+                                                {% endif %}
+                                            </span><br>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td style="vertical-align: middle !important;" class="text-right">
+                                    {% if convite.aceite is null %}
+                                        <div class="alert alert-info text-center">
+                                            <strong>PENDENTE</strong><br>
+                                        </div>
+                                    {% elseif  convite.aceite == 1 %}
+                                        <div class="alert alert-success text-center">
+                                            <strong>ACEITO</strong><br>
+                                        </div>
+                                    {% elseif  convite.aceite == 0 %}
+                                        <div class="alert alert-danger text-center">
+                                            <strong>RECUSADO</strong><br>
+                                        </div>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+                <section class="panel-body mt-lg">
+                    <table class="table table-hover table-condesed ">
+                        <thead>
+                        <tr>
+                            <th colspan="2">Membros da banca</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for usuario in edital.idEditalUsuarioOrdem %}
+                            <tr>
+                                <td>
+                                    {{ usuario.idUsuario.nome|upper }}<br>
+                                    {% if usuario.administrador %}
+                                        <span title="Habilitado para administrar as configurações do edital">
+                                        <i class="fa fa-star text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO administrar as configurações do edital">
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if usuario.avaliador %}
+                                        <span title="Habilitado para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if usuario.resultado %}
+                                        <span title="Habilitado para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if usuario.convocacao %}
+                                        <span title="Habilitado para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if usuario.idEditalCargo|length %}
+                                        {% for c in usuario.idEditalCargo %}
+                                            <span title="{{ c.descricao }}">{% if c.descricao|length >143 %}
+                                                    {{ c.descricao|slice(0, 144) }}...
+                                                {% else %}
+                                                    {{ c.descricao }}
+                                                {% endif %}
+                                            </span><br>
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            {% else %}
+                <section class="panel-body">
+                    <section class="body-error error-inside">
+                        <div class="center-error">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-error mb-xlg">
+                                        <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                            <i class="fa fa-users text-primary"></i>
+                                        </h2>
+                                        <p class="error-explanation text-center text-primary">
+                                            <br>
+                                           Até o momento, não temos nenhum membro da banca disponível para este
+                                                edital.
+                                                <br>
+                                                <br>
+                                                <br>
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

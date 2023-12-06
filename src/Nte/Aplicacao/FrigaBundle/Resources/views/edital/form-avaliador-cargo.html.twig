@@ -1,11 +1,11 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %}Avaliadores {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Avaliadores/Cargo{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Avaliadores/Cargo {% endblock %}
 {% block conteudo %}
     {{ form_start(config_form) }}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <section class="panel-body">
                 <div class="row">
                     <div class="col-md-12">

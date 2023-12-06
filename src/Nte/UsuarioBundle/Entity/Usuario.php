@@ -1,28 +1,47 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\UsuarioBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query\Expr\Func;
-use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaArquivo;
+use Nte\Aplicacao\FrigaBundle\Entity\FrigaClassificacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaConvocacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEdital;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa;
+use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaClassificacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoProjetoParticipante;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Usuario
+ * Usuario.
  *
  * @ORM\Table(name="fos_usuario")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
+ *
  * @UniqueEntity(fields={"email"}, message="Este valor já existe, por favor escolha outro")
  * @UniqueEntity(fields={"username"}, message="Este valor já existe, por favor escolha outro")
  */
@@ -30,13 +49,16 @@ class Usuario extends BaseUser
 {
     /**
      * @ORM\Id
+     *
      * @ORM\Column(type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="img", type="string", length=255, nullable=true)
      */
     protected $img = 'assets/img/default_user.png';
@@ -90,14 +112,12 @@ class Usuario extends BaseUser
      */
     private $crNro;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="rg_orgao_expedidor", type="string", length=25, nullable=true)
      */
     private $rgOrgaoExpedidor;
-
 
     /**
      * @var \DateTime
@@ -198,11 +218,53 @@ class Usuario extends BaseUser
     private $lattes;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="profissao", type="string", length=255, nullable=true)
+     */
+    private $profissao;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="escolaridade", type="string", length=255, nullable=true)
+     */
+    private $escolaridade;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="extra", type="text",  nullable=true)
+     */
+    private $extra;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="request_update", type="integer", nullable=true)
+     */
+    private $update;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_date", type="datetime", nullable=true)
+     */
+    private $updateDate;
+
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario", mappedBy="idUsuario")
      */
     private $idEditalUsuario;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuarioConvite", mappedBy="idUsuario")
+     */
+    private $idEditalUsuarioConvite;
 
     /**
      * @var ArrayCollection
@@ -217,7 +279,7 @@ class Usuario extends BaseUser
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao", mappedBy="idUsuario")
      */
     private $inscricao;
-   /**
+    /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoProjetoParticipante", mappedBy="idUsuario")
@@ -237,7 +299,12 @@ class Usuario extends BaseUser
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoPontuacaoAvaliacao", mappedBy="idAvaliador")
      */
     private $avaliacao;
-
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaUsuario", mappedBy="idUsuario")
+     */
+    private $idEditalEtapaUsuario;
 
     /**
      * Usuario constructor.
@@ -249,9 +316,12 @@ class Usuario extends BaseUser
         $this->inscricao = new ArrayCollection();
         $this->idProjetoParticipante = new ArrayCollection();
         $this->idArquivo = new ArrayCollection();
+        $this->idEditalUsuario = new ArrayCollection();
+        $this->idEditalUsuarioConvite = new ArrayCollection();
         $this->convocacao = new ArrayCollection();
         $this->avaliacao = new ArrayCollection();
-
+        $this->idEditalUsuario = new ArrayCollection();
+        $this->update = 1;
     }
 
     /**
@@ -304,14 +374,15 @@ class Usuario extends BaseUser
 
     /**
      * @param string $nomeSocial
+     *
      * @return Usuario
      */
     public function setNomeSocial($nomeSocial)
     {
         $this->nomeSocial = $nomeSocial;
+
         return $this;
     }
-
 
     /**
      * @return \DateTime
@@ -383,11 +454,13 @@ class Usuario extends BaseUser
 
     /**
      * @param string $teNro
+     *
      * @return Usuario
      */
     public function setTeNro($teNro)
     {
         $this->teNro = $teNro;
+
         return $this;
     }
 
@@ -401,14 +474,15 @@ class Usuario extends BaseUser
 
     /**
      * @param string $crNro
+     *
      * @return Usuario
      */
     public function setCrNro($crNro)
     {
         $this->crNro = $crNro;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -460,11 +534,13 @@ class Usuario extends BaseUser
 
     /**
      * @param \DateTime $teDataExpedicao
+     *
      * @return Usuario
      */
     public function setTeDataExpedicao($teDataExpedicao)
     {
         $this->teDataExpedicao = $teDataExpedicao;
+
         return $this;
     }
 
@@ -478,11 +554,13 @@ class Usuario extends BaseUser
 
     /**
      * @param \DateTime $crDataExpedicao
+     *
      * @return Usuario
      */
     public function setCrDataExpedicao($crDataExpedicao)
     {
         $this->crDataExpedicao = $crDataExpedicao;
+
         return $this;
     }
 
@@ -705,6 +783,19 @@ class Usuario extends BaseUser
     /**
      * @return ArrayCollection
      */
+    public function getIdArquivoInscricao($inscricao)
+    {
+        $tmp = new ArrayCollection();
+
+        return $this->idArquivo->filter(function(FrigaArquivo $item) use ($inscricao) {
+            return \is_object($item->getInscricaoContexto())
+                and $item->getInscricaoContexto()->getId() == $inscricao;
+        });
+    }
+
+    /**
+     * @return ArrayCollection
+     */
     public function getInscricao()
     {
         return $this->inscricao;
@@ -720,16 +811,115 @@ class Usuario extends BaseUser
 
     /**
      * @param string $lattes
+     *
      * @return Usuario
      */
     public function setLattes($lattes)
     {
         $this->lattes = $lattes;
+
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getProfissao()
+    {
+        return $this->profissao;
+    }
 
+    /**
+     * @param string $profissao
+     *
+     * @return Usuario
+     */
+    public function setProfissao($profissao)
+    {
+        $this->profissao = $profissao;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEscolaridade()
+    {
+        return $this->escolaridade;
+    }
+
+    /**
+     * @param string $escolaridade
+     *
+     * @return Usuario
+     */
+    public function setEscolaridade($escolaridade)
+    {
+        $this->escolaridade = $escolaridade;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtra()
+    {
+        return $this->extra;
+    }
+
+    /**
+     * @param string $extra
+     *
+     * @return Usuario
+     */
+    public function setExtra($extra)
+    {
+        $this->extra = $extra;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUpdate()
+    {
+        return $this->update;
+    }
+
+    /**
+     * @param int $update
+     *
+     * @return Usuario
+     */
+    public function setUpdate($update)
+    {
+        $this->update = $update;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
+    }
+
+    /**
+     * @param \DateTime $updateDate
+     *
+     * @return Usuario
+     */
+    public function setUpdateDate($updateDate)
+    {
+        $this->updateDate = $updateDate;
+
+        return $this;
+    }
 
     /**
      * @return array
@@ -737,15 +927,29 @@ class Usuario extends BaseUser
     public static function getRolesNames()
     {
         return [
-            "Usuário Administrador" => "ROLE_ADMIN",
-            "Usuário Gerente de Usuários" => "ROLE_ADMIN_USER",
-            "Usuário Gerente de Edital" => "ROLE_ADMIN_EDITAL",
-            "Usuário Gerente de Arquivo" => "ROLE_ADMIN_ARQUIVO",
-            "Usuário Suporte" => "ROLE_SUPORTE",
-            "Usuário Gerencial" => "ROLE_GERENCIAL",
-            "Usuário Avaliador" => "ROLE_AVALIADOR",
-            "Usuário Comum" => "ROLE_USER",
+            'ADMINISTRADOR' => 'ROLE_ADMIN',
+            'ADMINISTRADOR DE CONTAS DE USUÁRIO' => 'ROLE_ADMIN_USER',
+            'EDITAL - ADMINISTRADOR DE EDITAL' => 'ROLE_ADMIN_EDITAL',
+            'EDITAL - DOWNLOAD DE ARQUIVO' => 'ROLE_ADMIN_ARQUIVO',
+            'SUPORTE TÉCNICO' => 'ROLE_SUPORTE',
+            'EDITAL - RELATÓRIOS GERENCIAIS' => 'ROLE_GERENCIAL',
+            'EDITAL - AVALIADOR' => 'ROLE_AVALIADOR',
+            'AUDITOR' => 'ROLE_AUDITOR',
+            'COMUM' => 'ROLE_USER',
         ];
+    }
+
+    public function getRolesExtenco()
+    {
+        $str = [];
+        foreach ($this->roles as $role) {
+            $arrr = \array_flip(self::getRolesNames());
+            if (\key_exists($role, $arrr)) {
+                $str[] = $arrr[$role];
+            }
+        }
+
+        return \implode(', ', $str);
     }
 
     /**
@@ -754,14 +958,15 @@ class Usuario extends BaseUser
     public static function getRoles2()
     {
         return [
-            "ROLE_ADMIN" => "Usuário Administrador",
-            "ROLE_ADMIN_USER" => "Usuário Gerente de Usuários",
-            "ROLE_ADMIN_EDITAL" => "Usuário Gerente de Edital",
-            "ROLE_ADMIN_ARQUIVO" => "Usuário Gerente de Arquivo",
-            "ROLE_GERENCIAL" => "Usuário Gerencial",
-            "ROLE_AVALIADOR" => "Usuário Avaliador",
-            "ROLE_USER" => "Usuário Comum",
-            "ROLE_SUPORTE" => "Usuário Suporte",
+            'ROLE_ADMIN' => 'ADMINISTRADOR',
+            'ROLE_ADMIN_USER' => 'ADMINISTRADOR DE CONTAS DE USUÁRIO',
+            'ROLE_ADMIN_EDITAL' => 'EDITAL - ADMINISTRADOR DE EDITAL',
+            'ROLE_ADMIN_ARQUIVO' => 'EDITAL - DOWNLOAD DE ARQUIVO',
+            'ROLE_GERENCIAL' => 'EDITAL - RELATÓRIOS GERENCIAIS',
+            'ROLE_AVALIADOR' => 'EDITAL - AVALIADOR',
+            'ROLE_AUDITOR' => 'AUDITOR',
+            'ROLE_USER' => 'COMUM',
+            'ROLE_SUPORTE' => 'SUPORTE TÉCNICO',
         ];
     }
 
@@ -773,12 +978,14 @@ class Usuario extends BaseUser
             'ROLE_SUPORTE',
             'ROLE_GERENCIAL',
             'ROLE_AVALIADOR',
+            'ROLE_AUDITOR',
             'ROLE_USER'];
         foreach ($rolesSortedByImportance as $role) {
-            if (in_array($role, $this->roles)) {
+            if (\in_array($role, $this->roles)) {
                 return $role;
             }
         }
+
         return false;
     }
 
@@ -788,59 +995,73 @@ class Usuario extends BaseUser
     }
 
     /**
-     * Set img
+     * Set img.
+     *
      * @param string $img
+     *
      * @return Usuario
      */
     public function setImg($img)
     {
         $this->img = $img;
+
         return $this;
     }
 
     /**
-     * Get img
+     * Get img.
+     *
      * @return string
      */
     public function getImg()
     {
         /** @var FrigaArquivo $arquivo */
         foreach ($this->idArquivo as $arquivo) {
-            if ($arquivo->getContexto() == "PERFIL" and $arquivo->getAtributo() == 100) {
+            if ('PERFIL' == $arquivo->getContexto() and 100 == $arquivo->getAtributo()) {
                 return $arquivo->getId();
             }
         }
+
         return null;
     }
 
     /**
      * @param string $role
+     *
      * @return $this
      */
     public function addRole($role)
     {
-
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
             return $this;
         }
-        if (!in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
+
         return $this;
     }
 
     /**
-     * @param array $roles
      * @return $this
      */
     public function setRoles(array $roles)
     {
-        $this->roles = array();
+        $this->roles = [];
         foreach ($roles as $role => $id) {
             $this->addRole($id->id);
         }
+
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioConvite()
+    {
+        return $this->idEditalUsuarioConvite;
     }
 
     /**
@@ -859,9 +1080,10 @@ class Usuario extends BaseUser
         $tmp = new ArrayCollection();
         /** @var FrigaInscricao $inscricao */
         foreach ($this->getInscricao() as $inscricao) {
-            $tmp = new ArrayCollection(array_merge($tmp->toArray(), $inscricao->getConvocacao()->toArray()));
+            $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $inscricao->getConvocacao()->toArray()));
         }
-        return $tmp->filter(function (FrigaConvocacao $c) {
+
+        return $tmp->filter(function(FrigaConvocacao $c) {
             return $c->getIdEtapa()->getPeriodoDivulgacao();
         });
     }
@@ -874,9 +1096,10 @@ class Usuario extends BaseUser
         $tmp = new ArrayCollection();
         /** @var FrigaInscricao $inscricao */
         foreach ($this->getInscricao() as $inscricao) {
-            $tmp = new ArrayCollection(array_merge($tmp->toArray(), $inscricao->getClassificacao()->toArray()));
+            $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $inscricao->getClassificacao()->toArray()));
         }
-        return $tmp->filter(function (FrigaClassificacao $c) {
+
+        return $tmp->filter(function(FrigaClassificacao $c) {
             return $c->getIdEtapa()->getPeriodoDivulgacao();
         });
     }
@@ -889,12 +1112,14 @@ class Usuario extends BaseUser
         $tmp = new ArrayCollection();
         /** @var FrigaInscricao $inscricao */
         foreach ($this->getInscricao() as $inscricao) {
-            if ($inscricao->getIdSituacao() != -999) {
-                $tmp = new ArrayCollection(array_merge($tmp->toArray(), $inscricao->getRecursoEtapa()->toArray()));
+            if (-999 != $inscricao->getIdSituacao()) {
+                $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $inscricao->getRecursoEtapa()->toArray()));
             }
         }
-       return  $tmp;
+
+        return $tmp;
     }
+
     /**
      * @return ArrayCollection
      */
@@ -903,29 +1128,32 @@ class Usuario extends BaseUser
         $tmp = new ArrayCollection();
         /** @var FrigaInscricao $inscricao */
         foreach ($this->getInscricao() as $inscricao) {
-            if ($inscricao->getIdSituacao() != -999) {
-                $tmp = new ArrayCollection(array_merge($tmp->toArray(), $inscricao->getRecursos()->toArray()));
+            if (-999 != $inscricao->getIdSituacao()) {
+                $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $inscricao->getRecursos()->toArray()));
             }
         }
-        return  $tmp;
+
+        return $tmp;
     }
 
-    public function getInscicaoValida(){
-        return $this->inscricao->filter(function (FrigaInscricao $i){
-            return $i->getIdSituacao() != -999;
+    public function getInscicaoValida()
+    {
+        return $this->inscricao->filter(function(FrigaInscricao $i) {
+            return -999 != $i->getIdSituacao();
         });
     }
 
-    public function getInscricaoProjetoValida(){
-        return $this->idProjetoParticipante->filter(function (FrigaInscricaoProjetoParticipante $i){
-            return $i->getConfirmacao()==1 and  $i->getIdInscricao()->getIdSituacao() != -999;
+    public function getInscricaoProjetoValida()
+    {
+        return $this->idProjetoParticipante->filter(function(FrigaInscricaoProjetoParticipante $i) {
+            return 1 == $i->getConfirmacao() and -999 != $i->getIdInscricao()->getIdSituacao();
         });
     }
 
-    public function getTotalInscricaoValida(){
-      return  $this->getInscicaoValida()->count() + $this->getInscricaoProjetoValida()->count();
+    public function getTotalInscricaoValida()
+    {
+        return $this->getInscicaoValida()->count() + $this->getInscricaoProjetoValida()->count();
     }
-
 
     /**
      * @return ArrayCollection
@@ -943,5 +1171,107 @@ class Usuario extends BaseUser
         return $this->idProjetoParticipante;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalEtapaUsuario()
+    {
+        return $this->idEditalEtapaUsuario;
+    }
 
+    /**
+     * @return \stdClass
+     */
+    public function getProgressoEtapa(FrigaEditalEtapa $etapa)
+    {
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->eq('idEtapa', $etapa));
+        $pe = $this->idEditalEtapaUsuario->matching($criteria);
+        $obj = new \stdClass();
+        $obj->feito = $pe->count();
+        $obj->total = $etapa->getAvaliacao()->count();
+
+        return $obj;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTermoCompromisso(FrigaEditalEtapa $etapa)
+    {
+        /** @var FrigaEditalUsuario $item */
+        foreach ($this->getEtapaEditalUsuario($etapa->getIdEdital()) as $item) {
+            return $item->isTermoCompromisso();
+        }
+
+        return false;
+    }
+
+    /**
+     * @return ArrayCollection;
+     */
+    public function getEtapaEditalUsuario(FrigaEdital $edital)
+    {
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->eq('idEdital', $edital));
+
+        return $this->idEditalUsuario->matching($criteria);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPermissaoEtapa(FrigaEditalEtapa $etapa)
+    {
+        /** @var FrigaEditalUsuario $item */
+        foreach ($this->getEtapaEditalUsuario($etapa->getIdEdital()) as $item) {
+            switch ($etapa->getTipo()) {
+                case 3:
+                case 7:
+                    return $item->isAvaliador() && $item->isTermoCompromisso();
+                case 4:
+                    return $item->isResultado() && $item->isTermoCompromisso();
+                case 5:
+                    return $item->isConvocacao() && $item->isTermoCompromisso();
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPermissaoEtapaTermo(FrigaEditalEtapa $etapa)
+    {
+        /** @var FrigaEditalUsuario $item */
+        foreach ($this->getEtapaEditalUsuario($etapa->getIdEdital()) as $item) {
+            switch ($etapa->getTipo()) {
+                case 3:
+                case 7:
+                    return $item->isAvaliador() && \is_null($item->isTermoCompromisso());
+                case 4:
+                    return $item->isResultado() && \is_null($item->isTermoCompromisso());
+                case 5:
+                    return $item->isConvocacao() && \is_null($item->isTermoCompromisso());
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPermissaoEdital(FrigaEdital $edital)
+    {
+        /** @var FrigaEditalUsuario $item */
+        foreach ($this->getEtapaEditalUsuario($edital) as $item) {
+            if ($item->isAdministrador()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

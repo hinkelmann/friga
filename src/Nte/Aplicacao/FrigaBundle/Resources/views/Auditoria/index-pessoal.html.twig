@@ -1,0 +1,377 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Auditoria pessoal {% endblock %}
+ {% block breadcumbsTitulo %} Auditoria pessoal {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="#"> Auditoria </a></span></li>
+     <li><span>Pessoal</span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div id="app">
+        <div class="panel-body mb-lg">
+            {{ form_start(form) }}
+            <div class="input-group">
+                {{ form_widget(form.cpf) }}
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+        {% if usuario is  null %}
+            <div class="panel-body mt-lg">
+                <section class="body-error error-inside">
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                        <i class="icon icon-user text-primary"></i>
+                                    </h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br>Nenhum <b>usuário</b> encontrado.
+                                        <br>
+                                        <br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        {% else %}
+            <div class="panel-body mb-md">
+                <div class="col-md-4">
+                    <img src="{{ path('arquivo_download',{id: usuario.img}) }}" class="img-rounded img-responsive">
+                </div>
+                <div class="col-md-8">
+                    <h3 class="mb-xl">
+                        <strong> Dados </strong> cadastrais
+                    </h3>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Nome</strong><br>
+                            {{ usuario.nome }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Data de Nascimento</strong><br>
+                            {{ usuario.dataNascimento|date('d/m/Y') }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>CPF</strong><br>
+                            {{ usuario.cpf }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Carteira de Identidade</strong><br>
+                            {{ usuario.rgNro }}/{{ usuario.rgOrgaoExpedidor }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>e-Mail</strong><br>
+                            {{ usuario.email }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Lattes</strong><br>
+                            {{ usuario.lattes }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Celular</strong><br>
+                            {{ usuario.contatoTelefone1 }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Telefone</strong><br>
+                            {{ usuario.contatoTelefone2 }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>CEP</strong><br>
+                            {{ usuario.enderecoCep }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Número</strong><br>
+                            {{ usuario.enderecoNumero }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Complemento</strong><br>
+                            {{ usuario.enderecoComplemento }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Bairro</strong><br>
+                            {{ usuario.enderecoBairro }}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <strong>Cidade</strong><br>
+                            {{ usuario.enderecoMunicipio }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Estado</strong><br>
+                            {{ usuario.enderecoUf }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-md panel-body">
+                <div class="mb-md">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <div class="dropdown">
+                                <button class="btn btn-sm  btn-default dropdown-toggle"
+                                        type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+
+                                    <i class="fa fa-filter"></i>
+                                </button>
+                                <ul class="dropdown-menu checkbox-menu" aria-labelledby="dropdownMenu1">
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="DOCUMENTO" v-model="arquivo.contexto">DOCUMENTO
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="PONTUACAO" v-model="arquivo.contexto">PONTUACAO
+                                            DE ITEM
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="CATEGORIA" v-model="arquivo.contexto">PONTUACAO
+                                            DE CATEGORIA
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="RECURSO" v-model="arquivo.contexto">RECURSO
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="INSCRICAOPROJETO" v-model="arquivo.contexto">PROJETO
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="EDITAL" v-model="arquivo.contexto">EDITAL
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="PERFIL" v-model="arquivo.contexto">PERFIL
+                                        </label>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="TEMP" v-model="arquivo.contexto">TEMPORÁRIO
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" value="INVALIDADO" v-model="arquivo.contexto">INVALIDADO
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control input-sm " v-model="arquivo.search"
+                               placeholder="Procurar por arquivo"/>
+                    </div>
+                </div>
+                <div v-if="filtroArquivo.length > 0">
+                <table class="table table-condensed">
+                    <tr :id="item.id" v-for="item in filtroArquivo">
+                        <td width="10">@{item.contexto}</td>
+                        <td>
+                            @{item.descricao}
+                        </td>
+                        <td width="150">@{item.data}</td>
+                        <td width="10">
+                            <button :title="'Clique Aqui para baixar o arquivo do recurso friga://' +item.nome"
+                               @click="abrirArquivo('friga://' + item.nome, item.url)"
+                               class="btn-link">
+                                <i class="fa fa-download"></i>
+                            </button>
+                        </td>
+                        <td width="10">
+                            <button :title="'Clique Aqui para ver o contexto do arquivo' +item.nome"
+                                    @click="abrirArquivo(item.contexto, item.urlresumo)"
+                                    class="btn-link">
+                                <i class="fa fa-info-circle"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+                <div class="body-error error-inside" v-else>
+                    <div class="center-error">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="main-error mb-xlg">
+                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">
+                                        <i class="icon icon-folder text-primary"></i>
+                                    </h2>
+                                    <p class="error-explanation text-center text-primary">
+                                        <br>Nenhum <b> arquivo  </b> disponível.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
+    <style>
+        .checkbox-menu li label {
+            display: block;
+            padding: 3px 10px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.42857143;
+            color: #333;
+            white-space: nowrap;
+            margin: 0;
+            transition: background-color .4s ease;
+        }
+
+        .checkbox-menu li input {
+            margin: 0px 5px;
+            top: 2px;
+            position: relative;
+        }
+
+        .checkbox-menu li.active label {
+            background-color: #cbcbff;
+            font-weight: bold;
+        }
+
+        .checkbox-menu li label:hover,
+        .checkbox-menu li label:focus {
+            background-color: #f5f5f5;
+        }
+
+        .checkbox-menu li.active label:hover,
+        .checkbox-menu li.active label:focus {
+            background-color: #b8b8ff;
+        }
+
+        .swal-height {
+            height: 90vh;
+        }
+
+        .swal2-close:focus {
+            outline: none !important;
+        }
+
+        .swal2-close {
+            color: #f27474;
+        }
+    </style>
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery.rowspanizer/jquery.rowspanizer.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+    <script>
+        let cpf = $('#form_cpf'),
+            forms = $('form')
+        ;
+        cpf.mask('000.000.000-00');
+        forms.validate();
+        $.validator.addMethod("cpf", function (value, element) {
+            return this.optional(element) || CPF.validate(value);
+        }, "Por favor, Informe um CPF válido.");
+
+        $(".pt").rowspanizer({
+            vertical_align: 'middle',
+            columns: [0, 1]
+        });
+        $('.abrir-arquivo').click(function (e) {
+
+        });
+        let offsetFn = function () {
+            return $('#sec-vinsualizador').position().top;
+        };
+        $('#sec-vinsualizador').affix({
+            offset: {top: offsetFn}
+        });
+    </script>
+
+    {% if usuario is not null %}
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script>
+        let appvue = new Vue({
+            el: '#app',
+            delimiters: ['@{', '}'],
+            data: {
+                arquivo: {
+                    search: '',
+                    contexto: ["DOCUMENTO", "PONTUACAO", "CATEGORIA", "INSCRICAOPROJETO", "RECURSO"],
+                    data: [
+                        {% for item in usuario.idArquivo|reverse %}
+                        {
+                            id: {{ item.id }}
+                            , nome: '{{ item.nome }}'
+                            , contexto: '{{ item.metaContexto }}'
+                            , descricao: '{{ item.descricaoContexto }}'
+                            , conteudo: "{{ item.conteudo|json_encode }}"
+                            , data: '{{ item.registroDataCriacao|date('d/m/Y H:i:s') }}'
+                            , url: '{{ path('arquivo_ver',{id: item.id}) }}'
+                            , urlresumo:"{{ item.isTemp or item.contexto=="PERFIL" or item.contexto=="EDITAL" or item.inscricaoContexto is null ?path('arquivo_ver',{id: item.id}):path('auditoria_pessoal_resumo_inscricao',{inscricao: item.inscricaoContexto.id, contexto:item.contexto}) }}"
+
+
+                        },
+                        {% endfor %}
+                    ]
+                },
+            },
+            methods: {
+                abrirArquivo(nome, url){
+                    iframe = document.createElement('iframe');
+                    iframe.src = url;
+                    iframe.height = "90vh";
+                    iframe.width = "100%";
+                    iframe.style = "overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:90vh;width:100%;";
+                    Swal.fire({
+                        title: nome,
+                        html: iframe.outerHTML,
+                        width: "90%",
+                        height: "90vh",
+                        focusCancel: false,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    });
+                }
+            },
+            computed: {
+                filtroArquivo() {
+                    return this.arquivo.data.filter(item => {
+                        return (
+                                item.nome.toLowerCase().includes(this.arquivo.search.toLowerCase())
+                                || item.descricao.toLowerCase().includes(this.arquivo.search.toLowerCase())
+                                || item.conteudo.toLowerCase().includes(this.arquivo.search.toLowerCase())
+                            )
+                            && this.arquivo.contexto.includes(item.contexto)
+                    })
+                }
+            }
+        });
+        {% endif %}
+    </script>
+{% endblock %}

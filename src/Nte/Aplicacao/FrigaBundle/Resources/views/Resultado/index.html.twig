@@ -47,7 +47,7 @@
                                 {% if app.request.attributes.get('_route') == 'resultado_index_proxima'
                                     or app.request.attributes.get('_route') == 'resultado_index' %}
                                 <a class="btn btn-default"
-                                   href="{{ path('resultado_parcial', {'edital': etapa.idEdital.id}) }}">
+                                   href="{{ path('resultado_parcial', {'etapa': etapa.id}) }}">
                                     <i class="icon icon-refresh"> </i>
                                     Parcial
                                 </a>

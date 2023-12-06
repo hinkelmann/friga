@@ -1,22 +1,42 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FosRegra
+ * FosRegra.
  *
  * @ORM\Table(name="fos_regra")
+ *
  * @ORM\Entity
  */
 class Regra
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -42,12 +62,10 @@ class Regra
      */
     private $descricao = 'NULL';
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -55,7 +73,7 @@ class Regra
     }
 
     /**
-     * Set regra
+     * Set regra.
      *
      * @param string $regra
      *
@@ -69,7 +87,7 @@ class Regra
     }
 
     /**
-     * Get regra
+     * Get regra.
      *
      * @return string
      */
@@ -79,7 +97,7 @@ class Regra
     }
 
     /**
-     * Set titulo
+     * Set titulo.
      *
      * @param string $titulo
      *
@@ -93,7 +111,7 @@ class Regra
     }
 
     /**
-     * Get titulo
+     * Get titulo.
      *
      * @return string
      */
@@ -103,7 +121,7 @@ class Regra
     }
 
     /**
-     * Set descricao
+     * Set descricao.
      *
      * @param string $descricao
      *
@@ -117,7 +135,7 @@ class Regra
     }
 
     /**
-     * Get descricao
+     * Get descricao.
      *
      * @return string
      */

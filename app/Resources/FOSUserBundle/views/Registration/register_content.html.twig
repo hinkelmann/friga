@@ -1,8 +1,51 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'registration.submit'|trans }}" />
-    </div>
+
+<div class="form-group m-form__group">
+    {{ form_widget(form.nome) }}
+</div>
+<div class="form-group m-form__group">
+    {{ form_errors(form.username) }}
+    {{ form_widget(form.cpf) }}
+</div>
+<div class="form-group m-form__group">
+
+    {{ form_widget(form.username) }}
+</div>
+<div class="form-group m-form__group">
+    {{ form_errors(form.email) }}
+    {{ form_widget(form.email) }}
+</div>
+<div class="form-group m-form__group">
+    {{ form_errors(form.contatoTelefone1) }}
+    {{ form_widget(form.contatoTelefone1) }}
+</div>
+<div class="form-group m-form__group">
+    {{ form_errors(form.plainPassword.first) }}
+    {{ form_widget(form.plainPassword.first) }}
+</div>
+<div class="form-group m-form__group">
+    {{ form_errors(form.plainPassword.second) }}
+    {{ form_widget(form.plainPassword.second) }}
+</div>
+{{ form_rest(form) }}
+<br>
+<div class="form-group m-form__group">
+    <small>
+        Ao clicar em Cadastre-se, você concorda com nossos
+        <a href="termo">Termos</a>,
+        <a href="#">Política de Dados</a> e <a href="#">Política de Cookies</a>.
+        Você poderá receber notificações por e-Mail e cancelar isso quando quiser.
+    </small>
+</div>
+<br>
+<div class="m-login__form-action text-center">
+    <button id="m_login_signup_submit" class="btn btn-primary m-btn  m-btn--custom m-btn--air">
+        Cadastre-se
+    </button>
+    <a href="{{ path('fos_user_security_login') }}" class="btn btn-outline-primary  m-btn  m-btn--custom">
+        Cancelar
+    </a>
+</div>
 {{ form_end(form) }}

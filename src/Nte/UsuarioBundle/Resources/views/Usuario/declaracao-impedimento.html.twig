@@ -1,0 +1,27 @@
+<h4 style="text-align: center">
+    MINISTÉRIO DA EDUCAÇÃO<br>
+    UNIVERSIDADE FEDERAL DE SANTA MARIA<br><br>
+    Processo Seletivo Edital Nº {{ edital.numero }}<br><br>
+    <strong>DECLARAÇÃO DE IMPEDIMENTO</strong><br><br>
+</h4>
+<div style="text-align: justify-all;">
+    <p>Eu, <b>{{ usuario.nome }}</b>, portador do CPF nº <b>{{ usuario.cpf }}</b> e exercendo a profissão
+        de {{ usuario.profissao }}, declaro que estou impedido(a) de participar como membro da banca examinadora do
+        edital <b>Nº {{ edital.numero }} - {{ edital.titulo }}</b>, em todas as etapas e de todos os
+        candidatos para a vaga que concorre o(a) candidato(a) citados na tabela abaixo:
+    </p>
+</div>
+<table width="630" border="1" cellpadding="4" valign="middle">
+    <tr>
+        <th style="text-align: center" width="85">Inscrição</th>
+        <th style="text-align: center">Nome</th>
+        <th style="text-align: center">Motivo</th>
+    </tr>
+    {% for item in edital.idImpedimentoDeclaracao(app.user) %}
+        <tr style="border: 1px ">
+            <td style="vertical-align: middle !important;">{{ item.idInscricao.uuid }}</td>
+            <td style="vertical-align: middle !important;">{{ item.idInscricao.nome }}</td>
+            <td style="text-align: justify-all;">{{ item.justificativa }}</td>
+        </tr>
+    {% endfor %}
+</table>

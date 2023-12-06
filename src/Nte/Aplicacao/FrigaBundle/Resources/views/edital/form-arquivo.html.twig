@@ -1,23 +1,137 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %}Configuração de Edital {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Arquivo{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Arquivo {% endblock %}
 {% block conteudo %}
     <div class="row">
-       {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-9 col-lg-10">
             <div class="row">
-                <div class="col-md-6">
-                    <div id="jsGrid"></div>
+                <div class="col-md-6 col-lg-8">
+                    <ul class="list-group " id="areaArquivo">
+                        {% for a in frigaedital.idArquivo %}
+                            <li class="list-group-item" id="arquivoItem{{ a.id }}" data-id="{{ a.id }}">
+                                <h6 class="text-weight-bold">
+                                    <a title="Clique aqui para editar as informações do arquivo"
+                                       id="arquivoEditar{{ a.id }}"
+                                       data-id="{{ a.id }}"
+                                       class="arquivoEditar">
+                                        <span id="arquivoTitulo{{ a.id }}">{{ a.titulo }}</span>
+                                    </a>&nbsp;
+                                    <a href="#"
+                                       title="Clique aqui para remover o arquivo"
+                                       data-id="{{ a.id }}"
+                                       class="btn-icon arquivoRemover"
+                                       id="arquivoRemover{{ a.id }}"><i class="fa fa-trash"></i>
+                                    </a>
+                                </h6>
+                                <div>
+                                    <i class="fa fa-calendar-o"></i>
+                                    <span id="arquivoData{{ a.id }}"
+                                          data-date="{{ a.dataPublicacao|date('Y-m-d') }}"
+                                          data-time="{{ a.dataPublicacao|date('H:i') }}">
+                                        {{ a.dataPublicacao|date('d/m/Y \\à\\s H:i:s') }}
+                                    </span>
+                                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    {% if a.extrairCertificado|length %}
+                                        <i class="fa fa-certificate "></i>
+                                        <span data-toggle="popover"
+                                              data-placement="top" data-html="true"
+                                              data-content="<ul>{% for c in a.extrairCertificado %}<li><b>{{ c.subject["CN"] }}</b><br>S/N: <b>{{ c.serialNumber }}</b> <br>Certificado:  <b>{{ c.issuer['CN'] }}</b></li>{% endfor %}</ul>">
+                                                            Assinado digitalmente
+                                                        </span>
+                                    {% else %}
+                                        <i class="fa fa-circle-o"></i>
+                                        <span class="text-danger">
+                                                            Sem assinatura digital
+                                                        </span>
+                                    {% endif %}
+
+                                    <a href="#"
+                                       title="Clique aqui para visualizar o arquivo"
+                                       class="imprimirHTML pull-right"
+                                       id="arquivoImprimir"
+                                       data-id="{{ a.id }}"
+                                       data-title="{{ a.titulo }}"
+                                       data-href="{{ path('arquivo_ver',{id: a.id}) }}">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <div class="col-md-4">
-                    <div id="arquivo-edital" class="dropzone"></div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="m-dropzone dropzone m-dropzone--primary"
+                         action="{{ oneup_uploader_endpoint('frigadata') }}"
+                         id="arquivo-edital">
+                        <div class="m-dropzone__msg dz-message needsclick">
+                            <h4 class="m-dropzone__msg-title">
+                                <i class="fa-3x fa fa-cloud-upload"></i><br>
+                                Arraste ou clique aqui para fazer upload de arquivos do edital
+                            </h4>
+                            <span class="m-dropzone__msg-desc"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <section class="panel-body">
+                        <div class="alert ">
+                            <strong>Atenção!</strong> Se o você não possui um certificado digital, você poderá emitir através da
+                            <a href="https://pessoal.icpedu.rnp.br/home">ICP-Edu</a>.
+
+                        </div>
+                        {{ form_start(form) }}
+                        {{ form_rest(form) }}
+                        <p>
+                            A assinatura digital do documento, poderá ser verificada  através do
+                            <a href="https://assina.ufsc.br/verificador/" target="_blank">
+                                Verificador de Conformidade do Padrão de Assinatura Digital ICP-Edu
+                            </a>.
+                        </p>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary center-block">  <i class="fa fa-certificate"></i> Assinar Documento </button>
+                        </div>
+                        {{ form_end(form) }}
+                    </section>
                 </div>
             </div>
         </div>
     </div>
+    <template id="templateArquivo">
+        <li class="list-group-item" id="arquivoItem">
+            <h6 class="text-weight-bold">
+                <a title="Clique aqui para editar as informações do arquivo"
+                   class="arquivoEditar"
+                   id="arquivoEditar" data-id="">
+                    <span id="arquivoTitulo">Sem Título</span>
+                </a>
+                <a href="#" title="Clique aqui para remover o arquivo"
+                   class="btn-icon arquivoRemover"
+                   id="arquivoRemover">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </h6>
+            <div>
+                <i class="fa fa-calendar-o"></i>
+                <span id="arquivoData"
+                      data-date="{{ "now"|date('Y-m-d') }}"
+                      data-time="{{ "now"|date('H:i') }}">
+                      {{ "now"|date('d/m/Y \\à\\s H:i:s') }}
+                </span>
+                <a href="#"
+                   class="imprimirHTML pull-right"
+                   id="arquivoImprimir"
+                   data-title=""
+                   data-href="{{ path('arquivo_ver') }}/">
+                    <i class="fa fa-file-pdf-o"></i>
+                </a>
+            </div>
+        </li>
+    </template>
 {% endblock %}
 
 {% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/pnotify/pnotify.custom.js') }}"></script>
     <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/moment/locales.min.js') }}"></script>
@@ -25,59 +139,207 @@
     <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
 
     <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}"/>
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}"/>
-    <script type="text/javascript" src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
-    <script>
 
-        //DropZone
-        Dropzone.autoDiscover = false;
-        Dropzone.prototype.defaultOptions.acceptedFiles = "image/*,application/pdf";
-        Dropzone.prototype.defaultOptions.maxFilesize = 10;
-        Dropzone.prototype.defaultOptions.headers = {'x-contexto': "EDITAL", "x-id": {{ frigaedital.id }} };
-        Dropzone.prototype.defaultOptions.dictFileTooBig = "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente";
-        Dropzone.prototype.defaultOptions.dictInvalidFileType = "O arquivo escolhido não é do tipo  imagem ou PDF. Escolha outro arquivo e tente novamente.";
+    <script>
+        /**
+         *  Notificação
+         * @param x
+         * @returns {PNotify}
+         */
+        function notificar(x) {
+            return new PNotify({
+                text: x.msg,
+                type: x.tipo,
+                icon: 'fa fa-2x fa-exclamation-triangle'
+            });
+        }
+
+        Dropzone.prototype.defaultOptions.headers = {
+            'x-contexto': "EDITAL",
+            "x-id": {{ frigaedital.id }}
+        };
+
         Dropzone.prototype.defaultOptions.init = function () {
-            /*this.on("sending", function (file, xhr, formData) {
-                //      formData.append("xtk", "{{ csrf_token('friga-upload-edital-form') }}");
-            });*/
-            this.on("success", function (file) {
-                if (jQuery.parseJSON(file.xhr.response).error) {
-                    new PNotify({
-                        text: jQuery.parseJSON(file.xhr.response).message,
-                        type: 'error',
-                        addclass: 'notification-error',
-                        icon: 'fa fa-2x fa-exclamation-triangle'
-                    });
-                    this.removeFile(file);
-                } else {
-                    new PNotify({
-                        title: "Envio de arquivo",
-                        text: "Arquivo enviado com sucesso!",
-                        type: 'success',
-                        addclass: 'notification-success',
-                        icon: 'fa fa-2x fa-exclamation-triangle'
-                    });
-                    this.removeFile(file);
+            this.on("sending", function (file, xhr, formData) {
+            });
+            this.on("success", function (file, responseText) {
+                notificar(responseText);
+                if (!responseText.error) {
+                    addArquivo(responseText);
                 }
-                $("#jsGrid").jsGrid("loadData");
+                let _this = this;
+                $(file.previewElement).fadeOut(1000, function () {
+                    _this.removeFile(file);
+                });
             });
             this.on('error', function (file, errorMessage, XMLHttpRequest) {
-                new PNotify({
-                    text: (XMLHttpRequest.status == 500 ? "Arquivo não aceito" : errorMessage),
-                    type: 'error',
-                    addclass: 'notification-error',
-                    icon: 'fa fa-2x fa-exclamation-triangle'
-                });
                 this.removeFile(file);
             })
         };
-        new Dropzone("#arquivo-edital", {
-            url: "{{ oneup_uploader_endpoint('frigadata') }}",
-            dictDefaultMessage: "<i class='fa fa-2x fa-upload'></i><br> Anexar arquivo relativo ao edital",
-        });
+
+        function addArquivo(arquivo, id, areaarquivo) {
+            let template = document.querySelector('#templateArquivo').cloneNode(true),
+                btnRemover = template.content.querySelector('#arquivoRemover'),
+                btnEditar = template.content.querySelector('#arquivoEditar'),
+                btnImprimir = template.content.querySelector('#arquivoImprimir'),
+                linha = template.content.querySelector('#arquivoItem'),
+                titulo = template.content.querySelector('#arquivoTitulo'),
+                data = template.content.querySelector('#arquivoData'),
+                area = document.getElementById("areaArquivo")
+            ;
+            linha.id += arquivo.id;
+            titulo.id += arquivo.id;
+            data.id += arquivo.id;
 
 
+            btnRemover.id += arquivo.id;
+            btnEditar.id += arquivo.id;
+            btnImprimir.id += arquivo.id;
+            btnRemover.dataset.id = arquivo.id;
+            btnImprimir.dataset.id = arquivo.id;
+            btnImprimir.dataset.title = arquivo.hash;
+            btnImprimir.dataset.href += arquivo.id;
+            btnEditar.dataset.id = arquivo.id;
+            btnEditar.dataset.attr = null;
+
+            area.append(document.importNode(template.content, true));
+            btnRemoverArquivo();
+            btnEditarArquivo();
+            btnImprimirHtml();
+        }
+
+        let btnRemoverArquivo = e => {
+            let btn = $('.arquivoRemover');
+            btn.unbind('click').click(e => {
+                e.preventDefault();
+                let id = e.currentTarget.dataset.id,
+                    linha = document.getElementById('arquivoItem' + id);
+
+                Swal.fire({
+                    title: "Remover Anexo",
+                    type: 'question',
+                    allowOutsideClick: false,
+                    showCancelButton: true,
+                    //backdrop: false,
+                    html: "Você deseja remover o arquivo  ?",
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                }).then((value) => {
+                    if (value.value) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ path('arquivo_remover') }}',
+                            dataType: 'json',
+                            data: {
+                                id: id,
+                            },
+                            complete: function (data) {
+                                linha.remove();
+                            }
+                        });
+                    }
+                });
+            })
+        };
+        let btnEditarArquivo = e => {
+            let btn = $('.arquivoEditar');
+            btn.unbind('click').click(e => {
+                e.preventDefault();
+                let id = e.currentTarget.dataset.id,
+                    a = e.currentTarget.dataset.attr,
+                    input0 = document.createElement('input'),
+                    input1 = document.createElement('input'),
+                    input2 = document.createElement('input'),
+                    titulo = document.getElementById('arquivoTitulo' + id),
+                    data0 = document.getElementById('arquivoData' + id),
+                    btn0 = document.getElementById('arquivoEditar' + id);
+
+                input0.id = "titulo";
+                input1.id = "data";
+                input2.id = "hora";
+                input0.className = 'form-control'
+                input0.className = 'form-control'
+
+                input1.className = 'form-control'
+                input1.type = "date";
+                input2.className = 'form-control'
+                input2.type = "time";
+
+
+                Swal.fire({
+                    // title: "",
+                    allowOutsideClick: false,
+                    showCancelButton: true,
+                    onOpen: e => {
+                        document.getElementById('titulo').value = titulo.innerText;
+                        document.getElementById('data').value = data0.dataset.date;
+                        document.getElementById('hora').value = data0.dataset.time;
+                    },
+                    //backdrop: false,
+                    html: input0.outerHTML
+                        + "<br>"
+                        + input1.outerHTML
+                        + "<br>"
+                        + input2.outerHTML,
+                    confirmButtonText: "Sim",
+                    cancelButtonText: "Não",
+                }).then((value) => {
+                    if (value.value) {
+                        let v0 = document.getElementById('titulo').value
+                            , v1 = document.getElementById('data').value
+                            , v2 = document.getElementById('hora').value
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ path('edital_api_update_arquivo') }}/' + id,
+                            dataType: 'json',
+                            data: {
+                                id: id,
+                                titulo: v0,
+                                data: v1 + " " + v2 + ":00"
+                            },
+                            complete: function (data) {
+                                titulo.innerText = v0;
+                                data0.dataset.date = v1
+                                data0.dataset.time = v2;
+                                data0.innerText = v1 + ' às ' + v2;
+                            }
+                        });
+                    }
+                });
+            })
+        };
+        let btnImprimirHtml = e => {
+            let btn = $('.imprimirHTML');
+            btn.unbind('click').click(e => {
+                e.preventDefault();
+                iframeviwer(e.currentTarget.dataset.href, e.currentTarget.dataset.title);
+
+            });
+        };
+        btnRemoverArquivo();
+        btnEditarArquivo();
+        btnImprimirHtml();
+
+        iframeviwer = (href, title) => {
+            iframe = document.createElement('iframe');
+            iframe.src = href;
+            iframe.height = "75vh";
+            iframe.width = "100%";
+            iframe.style = "overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:75vh;width:100%;";
+            Swal.fire({
+                title: title,
+                html: iframe.outerHTML,
+                backdrop: false,
+                width: "95vw",
+                height: "95vh",
+                //   focusCancel: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
+        };
     </script>
+
 
 {% endblock %}

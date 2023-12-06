@@ -1,50 +1,70 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 
 /**
- * FrigaEditalPontuacaoCategoria
+ * FrigaEditalPontuacaoCategoria.
  *
  * @ORM\Table(name="friga_edital_pontuacao_categoria")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks
  */
 class FrigaEditalPontuacaoCategoria
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
+     *
      * @ORM\Column(name="pontuacao_auto", type="integer", nullable=true)
      */
     private $pontuacaoAuto;
 
-
     /**
-     * @var integer
+     * @var int
+     *
      * @ORM\Column(name="pontuacao_tipo", type="integer", nullable=true)
      */
     private $pontuacaoTipo;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="requisito", type="integer", nullable=true)
      */
     private $requisito;
-
 
     /**
      * @var string
@@ -89,25 +109,26 @@ class FrigaEditalPontuacaoCategoria
     private $explicacaoTexto;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="bloqueio", type="boolean", nullable=true)
      */
     private $bloqueio;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="agrupar_pontuacao", type="boolean", nullable=true)
      */
     private $agruparPontuacao;
 
-
     /**
      * @var FrigaEdital
      *
      * @ORM\ManyToOne(targetEntity="FrigaEdital", inversedBy="pontuacaoCategoria")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      * })
      */
@@ -117,7 +138,9 @@ class FrigaEditalPontuacaoCategoria
      * @var FrigaEditalPontuacaoCategoria
      *
      * @ORM\ManyToOne(targetEntity="FrigaEditalPontuacaoCategoria", inversedBy="filhos")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_categoria", referencedColumnName="id")
      * })
      */
@@ -138,7 +161,7 @@ class FrigaEditalPontuacaoCategoria
     private $pontuacao;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ordem", type="integer", nullable=true)
      */
@@ -149,23 +172,19 @@ class FrigaEditalPontuacaoCategoria
      */
     public function __construct()
     {
-
         $this->pontuacao = new ArrayCollection();
     }
 
-    /**
-     *
-     */
     public function __clone()
     {
         $this->idCategoria = null;
-        $this->filhos =  new ArrayCollection();
+        $this->filhos = new ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -182,11 +201,13 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param int $pontuacaoAuto
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
-    public function setPontuacaoAuto( $pontuacaoAuto)
+    public function setPontuacaoAuto($pontuacaoAuto)
     {
         $this->pontuacaoAuto = $pontuacaoAuto;
+
         return $this;
     }
 
@@ -200,16 +221,18 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param int $pontuacaoTipo
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
-    public function setPontuacaoTipo( $pontuacaoTipo)
+    public function setPontuacaoTipo($pontuacaoTipo)
     {
         $this->pontuacaoTipo = $pontuacaoTipo;
+
         return $this;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getRequisito()
     {
@@ -218,11 +241,13 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param bool $requisito
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
-    public function setRequisito( $requisito)
+    public function setRequisito($requisito)
     {
         $this->requisito = $requisito;
+
         return $this;
     }
 
@@ -236,15 +261,15 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param string $explicacaoTexto
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
-    public function setExplicacaoTexto( $explicacaoTexto)
+    public function setExplicacaoTexto($explicacaoTexto)
     {
         $this->explicacaoTexto = $explicacaoTexto;
+
         return $this;
     }
-
-
 
     /**
      * @return string
@@ -278,9 +303,8 @@ class FrigaEditalPontuacaoCategoria
         $this->valorMaximo = $valorMaximo;
     }
 
-
     /**
-     * Set descricao
+     * Set descricao.
      *
      * @param string $descricao
      *
@@ -294,7 +318,7 @@ class FrigaEditalPontuacaoCategoria
     }
 
     /**
-     * Get descricao
+     * Get descricao.
      *
      * @return string
      */
@@ -312,22 +336,23 @@ class FrigaEditalPontuacaoCategoria
     }
 
     /**
-     * Set bloqueio
+     * Set bloqueio.
      *
-     * @param boolean $bloqueio
+     * @param bool $bloqueio
      *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setBloqueio($bloqueio)
     {
         $this->bloqueio = $bloqueio;
+
         return $this;
     }
 
     /**
-     * Get bloqueio
+     * Get bloqueio.
      *
-     * @return boolean
+     * @return bool
      */
     public function getBloqueio()
     {
@@ -344,11 +369,13 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param bool $agruparPontuacao
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setAgruparPontuacao($agruparPontuacao)
     {
         $this->agruparPontuacao = $agruparPontuacao;
+
         return $this;
     }
 
@@ -362,30 +389,30 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param string $valorTexto
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setValorTexto($valorTexto)
     {
         $this->valorTexto = $valorTexto;
+
         return $this;
     }
 
-
     /**
-     * Set idEdital
-     *
-     * @param FrigaEdital $idEdital
+     * Set idEdital.
      *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setIdEdital(FrigaEdital $idEdital = null)
     {
         $this->idEdital = $idEdital;
+
         return $this;
     }
 
     /**
-     * Get idEdital
+     * Get idEdital.
      *
      * @return FrigaEdital
      */
@@ -404,29 +431,30 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param string $explicacao
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setExplicacao($explicacao)
     {
         $this->explicacao = $explicacao;
+
         return $this;
     }
 
     /**
-     * Set idCategoria
-     *
-     * @param FrigaEditalPontuacaoCategoria $idCategoria
+     * Set idCategoria.
      *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setIdCategoria(FrigaEditalPontuacaoCategoria $idCategoria = null)
     {
         $this->idCategoria = $idCategoria;
+
         return $this;
     }
 
     /**
-     * Get idCategoria
+     * Get idCategoria.
      *
      * @return FrigaEditalPontuacaoCategoria
      */
@@ -453,11 +481,13 @@ class FrigaEditalPontuacaoCategoria
 
     /**
      * @param int $ordem
+     *
      * @return FrigaEditalPontuacaoCategoria
      */
     public function setOrdem($ordem)
     {
         $this->ordem = $ordem;
+
         return $this;
     }
 
@@ -470,15 +500,14 @@ class FrigaEditalPontuacaoCategoria
     }
 
     /**
-     *
      * @return ArrayCollection
      */
     public function getPontuacaoInscricao()
     {
-        return $this->pontuacao->filter(function (FrigaEditalPontuacao $pt) {
+        return $this->pontuacao->filter(function(FrigaEditalPontuacao $pt) {
             /** @var FrigaEditalEtapa $etapa */
             foreach ($pt->getIdEtapa() as $etapa) {
-                if ($etapa->getTipo() == 1) {
+                if (1 == $etapa->getTipo()) {
                     return $pt;
                 }
             }
@@ -488,20 +517,22 @@ class FrigaEditalPontuacaoCategoria
     /**
      * @return ArrayCollection
      */
-    public function getPontuacaoFilhos(){
+    public function getPontuacaoFilhos()
+    {
         $tmp = new ArrayCollection();
         /** @var FrigaEditalPontuacaoCategoria $categoria */
-        foreach ($this->filhos as $categoria){
+        foreach ($this->filhos as $categoria) {
             $tmp = new ArrayCollection(
-                array_merge($tmp->toArray(), $categoria->getPontuacao()->toArray())
+                \array_merge($tmp->toArray(), $categoria->getPontuacao()->toArray())
             );
         }
+
         return $tmp;
     }
 
     public function getPontuacaoEtapa(FrigaEditalEtapa $etapa)
     {
-        return $this->pontuacao->filter(function (FrigaEditalPontuacao $pt) use ($etapa) {
+        return $this->pontuacao->filter(function(FrigaEditalPontuacao $pt) use ($etapa) {
             return $pt->getIdEtapa()->contains($etapa);
         });
     }
@@ -509,8 +540,7 @@ class FrigaEditalPontuacaoCategoria
     /**
      * @ORM\PreRemove
      *
-     * @param LifecycleEventArgs $args
-     * @throws Exception
+     * @throws \Exception
      */
     public function preRemove(LifecycleEventArgs $args)
     {

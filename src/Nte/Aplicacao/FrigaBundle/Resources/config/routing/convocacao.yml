@@ -23,6 +23,11 @@ convocacao_etapa_impressao_relacao:
   defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:impresaoRelacao" }
   methods:  GET
 
+convocacao_etapa_impressao_relacao_contato:
+  path:     /etapa/{etapa}/impressao/relacao-contato
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:impresaoRelacaoContato" }
+  methods:  GET
+
 convocacao_etapa_impressao_presenca:
   path:     /etapa/{etapa}/impressao/presenca
   defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:impresaoPresenca" }
@@ -33,6 +38,11 @@ convocacao_etapa_exportar_csv:
   path:     /etapa/{etapa}/exportar/csv
   defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:exportarCsv" }
   methods:  GET
+
+convocacao_etapa_exportar_moodle:
+  path:     /etapa/{etapa}/exportar/moodle
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:exportarMoodle" }
+  methods:  GET|POST
 
 convocacao_etapa_candidato:
   path:     /etapa/{etapa}/inscricao/{uuid}

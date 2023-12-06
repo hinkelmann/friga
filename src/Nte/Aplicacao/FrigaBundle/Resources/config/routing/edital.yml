@@ -52,6 +52,11 @@ edital_clone_pontuacao:
   path:     /clone-pontuacao/{destino}/{origem}
   defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:clonarPontuacao", origem: null}
 
+edital_api_situacao:
+  path:     /api/situacao-editar/{id}/{situacao}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:apiSituacao"}
+
+
 
 edital_remover:
   path:     /remover/{uuid}
@@ -101,10 +106,34 @@ edital_avaliador:
   defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexAvaliador" }
   methods:  [GET, POST]
 
+edital_avaliador_api_lista:
+  path:     /{uuid}/api/avaliador/lista
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:apiAvaliadorLista" }
+  methods:  [GET, POST]
 
 edital_avaliador_adicionar:
   path:     /{uuid}/avaliador/criar
   defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarAvaliador" }
+  methods:  [GET, POST]
+
+edital_avaliador_convidar:
+  path:     /{uuid}/avaliador/convidar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarConvite" }
+  methods:  [GET, POST]
+
+edital_avaliador_convidar_editar:
+  path:     /{uuid}/avaliador/convidar/{convite}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarConvite", convite: null }
+  methods:  [GET, POST]
+
+edital_avaliador_convidar_remover:
+  path:     /{uuid}/avaliador/convidar/remover/{convite}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerConvite", convite: null }
+  methods:  [GET, POST]
+
+edital_avaliador_convidar_enviar:
+  path:     /{uuid}/avaliador/convidar/enviar/{convite}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:enviarConvite", convite: null }
   methods:  [GET, POST]
 
 edital_avaliador_editar:
@@ -144,6 +173,18 @@ edital_etapa_remover:
   path:     /{uuid}/etapa/{etapa}/remover
   defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerEtapa" }
   methods:  [GET, POST]
+
+edital_etapa_categoria_criar:
+  path:     /{uuid}/etapa-categoria/criar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:criarEtapaCategoria" }
+
+edital_etapa_categoria_editar:
+  path:     /{uuid}/etapa-categiria/{categoria}/editar
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:formEtapaCategoria", categoria: null }
+
+edital_etapa_categoria_remover:
+  path:     /{uuid}/etapa-categoria/{categoria}/remover
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerEtapaCategoria" }
 
 #Pontuacao
 edital_pontuacao:
@@ -259,6 +300,18 @@ edital_desempate_remover:
   path:     /{uuid}/desempate/{criterio}/remover
   defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:removerDesempate" }
   methods:  [GET, POST]
+
+
+edital_logs:
+  path:     /{uuid}/logs
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:indexLogs" }
+  methods:  [GET, POST]
+
+edital_exportar_csv_logs:
+  path:     /{uuid}/exportar/csv/logs
+  defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:logsExportarCsv" }
+  methods:  [GET, POST]
+
 
 #teste
 teste_api_arquivo:

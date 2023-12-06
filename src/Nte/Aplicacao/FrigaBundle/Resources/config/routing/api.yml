@@ -1,0 +1,7 @@
+#API
+nte_aplicacao_friga_api_get_pontuacao_index:
+  path:     /{uuid}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Api:getPontuacaoIndex", uuid: null }
+  methods:  GET
+
+

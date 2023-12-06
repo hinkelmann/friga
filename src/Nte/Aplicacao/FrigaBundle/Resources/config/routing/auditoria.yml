@@ -1,0 +1,68 @@
+auditoria_pessoal_index:
+  path:  /pessoal/{id}
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:index, id: null }
+
+auditoria_pessoal_resumo_inscricao:
+  path:  /pessoal/resumo/{inscricao}/{contexto}
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:resumoInscricao, id: null, contexto: null }
+
+auditoria_logs:
+  path:  /logs
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexLog }
+
+auditoria_logs_api:
+  path:  /logs/api
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:getLogIndex }
+
+
+auditoria_usuario:
+  path:  /usuario
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexUsuario }
+
+auditoria_usuario_exportar_csv:
+  path:  /usuario/exportar/csv
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:usuarioCsv }
+
+auditoria_usuario_exportar_csv2:
+  path:  /usuario/exportar/csv2
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:usuarioCsv2 }
+
+auditoria_usuario_api:
+  path:  /usuario/api
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:getUsuarioIndex }
+
+auditoria_usuario_api_lista:
+  path:  /usuario/api/lista
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:apiListaUsuario }
+
+auditoria_edital_api_lista:
+  path:  /edital/api/lista
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:apiListaEdital }
+
+auditoria_edital_index:
+  path:  /edital
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexEdital }
+
+auditoria_edital_index_usuario:
+  path:  /edital/{uuid}/usuario
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexEditalUsuario }
+
+auditoria_edital_index_recurso:
+  path:  /edital/{uuid}/recurso
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexEditalRecurso }
+
+auditoria_edital_index_inscricao:
+  path:  /edital/{uuid}/inscricao
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexEditalInscricao }
+
+auditoria_edital_index_arquivo:
+  path:  /edital/{uuid}/arquivo
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexEditalArquivo }
+
+auditoria_edital_index_log:
+  path:  /edital/{uuid}/log
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:indexEditalLogs }
+
+auditoria_edital_index_log_exportar:
+  path:  /edital/{uuid}/log/exportar
+  defaults: { _controller: NteAplicacaoFrigaBundle:Auditoria:logsCsv }

@@ -1,0 +1,91 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} {{ frigaedital.uuid }}/Avaliadores/Edição{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Avaliadores/Edição {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
+        <div class="col-md-9 col-lg-10">
+            <section class="panel-body">
+                {{ form_start(form) }}
+                <div class="row mb-md">
+                </div>
+                <div class="row mt-md mb-md">
+                    <div class="col-md-6">
+                        <h5>&nbsp;</h5>
+                        {{ form_row(form.nome) }}
+                        {{ form_row(form.cpf) }}
+                        {{ form_row(form.email) }}
+                        <br>
+                        <div class="form-group">
+                            <label class="col-md-4 col-sm-4 control-label">
+                                Funções
+                            </label>
+                            <div class="col-md-8">
+                                <div class="checkbox-custom">
+                                    {{ form_widget(form.funcaoAdministracao) }}
+                                    <label for="friga_usuario_funcaoAdministracao">
+                                        <i class="fa fa-star text-primary"></i>&nbsp;Administração
+                                    </label>
+                                </div>
+                                <div class="checkbox-custom">
+                                    {{ form_widget(form.funcaoAvaliacao) }}
+                                    <label for="friga_usuario_funcaoAvaliacao">
+                                        <i class="fa fa-calculator text-primary"></i>&nbsp;Avaliação
+                                    </label>
+                                </div>
+                                <div class="checkbox-custom">
+                                    {{ form_widget(form.funcaoResultado) }}
+                                    <label for="friga_usuario_funcaoResultado">
+                                        <i class="fa fa-trophy text-primary"></i>&nbsp;Resultados
+                                    </label>
+                                </div>
+                                <div class="checkbox-custom">
+                                    {{ form_widget(form.funcaoConvocacao) }}
+                                    <label for="friga_usuario_funcaoConvocacao">
+                                        <i class="fa fa-star text-primary"></i>&nbsp;Convocação
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Observações</h5>
+                        {{ form_widget(form.descricao) }}
+                        <br>
+                        <h5>Banca</h5>
+                        {{ form_widget(form.idEditalCargo) }}
+                        <br>
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+                <div class="form-group mt-md">
+                    <button type="submit" class="btn btn-primary center-block"><i class="fa fa-save"></i> Salvar
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </section>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+    <script>
+        let cpf = $('#friga_usuario_cpf'),
+            forms = $('form');
+        forms.validate();
+        cpf.mask('000.000.000-00');
+        $.validator.addMethod("cpf", function (value, element) {
+            return this.optional(element) || CPF.validate(value);
+        }, "Por favor, Informe um CPF válido.");
+
+
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+    </script>
+{% endblock %}

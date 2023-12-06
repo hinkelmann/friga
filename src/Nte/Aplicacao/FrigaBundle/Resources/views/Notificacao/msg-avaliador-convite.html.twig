@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Convite para participar de banca</title>
+</head>
+<body>
+<div style="padding:10px">
+    <p>
+        Prezado(a) {{ convite.nome }},<br>
+        Gostaríamos de informar que você convidado como membro para participar da banca de avaliação
+        no processo seletivo: <b><i>{{ edital.titulo }}</i></b>
+    </p>
+    <h4>DETALHES DO PROCESSO SELETIVO:</h4>
+    <ul>
+        <li>Edital: {{ edital.titulo }}</li>
+        <li>Período:
+            De {{ edital.dataPublicacaoOficial|date('d/m/Y')}}
+            {% if edital.resultadoFinal.dataDivulgacao is defined  %}
+                a {{ edital.resultadoFinal.dataDivulgacao|date('d/m/Y') }}
+            {% endif %}
+        </li>
+        <li> Banca examinadora do(a) ( {{ edital.campoCargoTitulo }} ):
+            <ul>
+                {% for item in convite.idEditalCargo %}
+                    <li>{{ item.descricao }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+
+    {% if convite.descricao is not null %}
+    <p>
+        {{ convite.descricao|raw }}
+    </p>
+    {% endif %}
+    <p>
+        Sua participação é fundamental para garantir um processo seletivo justo e eficiente.
+        <br>
+        Para acessar a plataforma e responder a este convite, por favor,
+        faça login na sua conta e siga as instruções em
+        <a href="https://processoseletivo.nte.ufsm.br{{ path('nte_usuario_candidato_convite_ver', {uuid: convite.uuid}) }}">
+            https://processoseletivo.nte.ufsm.br{{ path('nte_usuario_candidato_convite_ver',{uuid: convite.uuid}) }}
+        </a>.
+    </p>
+    <p>
+        Agradecemos pelo seu comprometimento e contribuição para o sucesso deste processo seletivo.
+        <br>
+        Atenciosamente,
+    </p>
+    <br><br><br><br>
+    <center>
+        <small>
+            Esta é uma mensagem automática disparada pela plataforma.<br>
+            Favor não responder este e-mail.
+        </small>
+    </center>
+</div>
+</body>
+</html>

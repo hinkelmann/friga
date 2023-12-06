@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -7,57 +24,62 @@ use Doctrine\ORM\Mapping as ORM;
 use Nte\UsuarioBundle\Entity\Usuario;
 
 /**
- * FrigaInscricaoFeedback
+ * FrigaInscricaoFeedback.
  *
  * @ORM\Table(name="friga_inscricao_feedback")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaInscricaoFeedback
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
-	/**
-	 * @var integer
-	 *
-	 * @ORM\Column(name="situacao", type="integer", nullable=true)
-	 */
-	private $situacao;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="situacao", type="integer", nullable=true)
+     */
+    private $situacao;
 
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="feedback", type="text", length=65535, nullable=true)
-	 */
-	private $feedback;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="feedback", type="text", length=65535, nullable=true)
+     */
+    private $feedback;
 
-	/**
-	 * @var \DateTime
-	 *
-	 * @ORM\Column(name="registro_data_atualizacao", type="datetime", nullable=true)
-	 */
-	private $registroDataAtualizacao;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="registro_data_atualizacao", type="datetime", nullable=true)
+     */
+    private $registroDataAtualizacao;
 
-	/**
-	 * @var \DateTime
-	 *
-	 * @ORM\Column(name="registro_data_criacao", type="datetime", nullable=true)
-	 */
-	private $registroDataCriacao;
-
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="registro_data_criacao", type="datetime", nullable=true)
+     */
+    private $registroDataCriacao;
 
     /**
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_avaliador", referencedColumnName="id")
      * })
      */
@@ -67,7 +89,9 @@ class FrigaInscricaoFeedback
      * @var FrigaEditalEtapa
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_etapa", referencedColumnName="id")
      * })
      */
@@ -77,7 +101,9 @@ class FrigaInscricaoFeedback
      * @var FrigaInscricao
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao", inversedBy="feedback")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_inscricao", referencedColumnName="id")
      * })
      */
@@ -92,12 +118,12 @@ class FrigaInscricaoFeedback
     }
 
     /**
-     * @param int $id
      * @return FrigaInscricaoFeedback
      */
     public function setId(int $id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -111,11 +137,13 @@ class FrigaInscricaoFeedback
 
     /**
      * @param int $situacao
+     *
      * @return FrigaInscricaoFeedback
      */
-    public function setSituacao( $situacao)
+    public function setSituacao($situacao)
     {
         $this->situacao = $situacao;
+
         return $this;
     }
 
@@ -129,11 +157,13 @@ class FrigaInscricaoFeedback
 
     /**
      * @param string $feedback
+     *
      * @return FrigaInscricaoFeedback
      */
-    public function setFeedback( $feedback)
+    public function setFeedback($feedback)
     {
         $this->feedback = $feedback;
+
         return $this;
     }
 
@@ -147,11 +177,13 @@ class FrigaInscricaoFeedback
 
     /**
      * @param \DateTime $registroDataAtualizacao
+     *
      * @return FrigaInscricaoFeedback
      */
     public function setRegistroDataAtualizacao($registroDataAtualizacao)
     {
         $this->registroDataAtualizacao = $registroDataAtualizacao;
+
         return $this;
     }
 
@@ -165,11 +197,13 @@ class FrigaInscricaoFeedback
 
     /**
      * @param \DateTime $registroDataCriacao
+     *
      * @return FrigaInscricaoFeedback
      */
-    public function setRegistroDataCriacao( $registroDataCriacao)
+    public function setRegistroDataCriacao($registroDataCriacao)
     {
         $this->registroDataCriacao = $registroDataCriacao;
+
         return $this;
     }
 
@@ -183,11 +217,13 @@ class FrigaInscricaoFeedback
 
     /**
      * @param Usuario $idAvaliador
+     *
      * @return FrigaInscricaoFeedback
      */
     public function setIdAvaliador($idAvaliador)
     {
         $this->idAvaliador = $idAvaliador;
+
         return $this;
     }
 
@@ -201,11 +237,13 @@ class FrigaInscricaoFeedback
 
     /**
      * @param FrigaEditalEtapa $idEtapa
+     *
      * @return FrigaInscricaoFeedback
      */
-    public function setIdEtapa( $idEtapa)
+    public function setIdEtapa($idEtapa)
     {
         $this->idEtapa = $idEtapa;
+
         return $this;
     }
 
@@ -219,34 +257,35 @@ class FrigaInscricaoFeedback
 
     /**
      * @param FrigaInscricao $idInscricao
+     *
      * @return FrigaInscricaoFeedback
      */
-    public function setIdInscricao( $idInscricao)
+    public function setIdInscricao($idInscricao)
     {
         $this->idInscricao = $idInscricao;
+
         return $this;
     }
 
     /**
-     * @param PreUpdateEventArgs $args
      * @throws \Exception
+     *
      * @ORM\PreUpdate
      */
-	public function preUpdate(PreUpdateEventArgs $args)
-	{
-		if ($args->hasChangedField('registroDataCriacao'))
-		{
-			$this->setRegistroDataCriacao($args->getOldValue('registroDataCriacao'));
-		}
-			$this->setRegistroDataAtualizacao(new \DateTime());
-	}
+    public function preUpdate(PreUpdateEventArgs $args)
+    {
+        if ($args->hasChangedField('registroDataCriacao')) {
+            $this->setRegistroDataCriacao($args->getOldValue('registroDataCriacao'));
+        }
+        $this->setRegistroDataAtualizacao(new \DateTime());
+    }
 
-	/**
-	 * @ORM\PrePersist
-	 */
-	public function PrePersist()
-	{
-		$this->setRegistroDataCriacao(new \DateTime());
-		$this->setRegistroDataAtualizacao(new \DateTime());
-	}
+    /**
+     * @ORM\PrePersist
+     */
+    public function PrePersist()
+    {
+        $this->setRegistroDataCriacao(new \DateTime());
+        $this->setRegistroDataAtualizacao(new \DateTime());
+    }
 }

@@ -1,18 +1,46 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edição de Avaliadores{% endblock %}
-{% block breadcumbsTitulo %}Edição de Avaliadores{% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Avaliadores/Edição{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Avaliadores/Edição {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <section class="panel-body">
                 {{ form_start(form) }}
+                <div class="row mb-md">
+                    <div class="col-md-12">
+                        {% if frigaeditalusuario.id is null %}
+                            {{ form_row(form.idUsuario) }}
+                        {% else %}
+                            {{ frigaeditalusuario.idUsuario.cpf }} - {{ frigaeditalusuario.idUsuario.nome|upper }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mt-md">
+                    <div class="col-md-6">
+                        <h5 class="">Funções</h5>
+                        {{ form_row(form.administrador) }}
+                        {{ form_row(form.avaliador) }}
+                        {{ form_row(form.resultado) }}
+                        {{ form_row(form.convocacao) }}
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="">{{ frigaedital.campoCargoTitulo }}</h5>
+                        {{ form_widget(form.idEditalCargo) }}
+                    </div>
+                </div>
                 {{ form_rest(form) }}
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary center-block"><i class="fa fa-save"></i> Salvar </button>
+                    <button type="submit" class="btn btn-primary center-block"><i class="fa fa-save"></i> Salvar
+                    </button>
                 </div>
                 {{ form_end(form) }}
             </section>
         </div>
     </div>
+{% endblock %}
+{% block javascripts2 %}
+    <script>
+        $('select').select2();
+    </script>
 {% endblock %}

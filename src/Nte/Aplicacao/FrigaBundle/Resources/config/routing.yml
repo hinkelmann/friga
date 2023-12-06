@@ -34,3 +34,10 @@ nte_aplicacao_friga_arquivo:
       resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/arquivo.yml"
       prefix:   /arquivo
 
+nte_aplicacao_friga_api:
+  resource: "@NteAplicacaoFrigaBundle/Resources/config/routing/api.yml"
+  prefix:   /ipa/
+
+nte_aplicacao_auditoria:
+  resource: "routing/auditoria.yml"
+  prefix:   /auditoria

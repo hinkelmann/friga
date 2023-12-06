@@ -1,17 +1,30 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacao;
+use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaCategoria;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,9 +33,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FrigaEditalEtapaType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var FrigaEditalEtapa $data */
@@ -32,10 +42,26 @@ class FrigaEditalEtapaType extends AbstractType
                 'label' => 'Descrição da Etapa',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Inscrições - primeiro etapa'
-                ]
+                    'placeholder' => 'Inscrições - primeiro etapa',
+                ],
             ]);
-        if ($data->getTipo() == 6 or $data->getTipo() == 7) {
+        if ($data->getIdEdital()->getIdEtapaCategoria()->count()) {
+            $builder->add('idEtapaCategoria', EntityType::class, [
+                'class' => FrigaEditalEtapaCategoria::class,
+                'label' => 'Categoria',
+                'empty_data' => null,
+                'expanded' => true,
+                'required' => false,
+                'placeholder' => 'Nenhuma categoria',
+                'choice_label' => 'descricao',
+                'query_builder' => function(EntityRepository $er) use ($data) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.idEdital = :edital')
+                        ->setParameter('edital', $data->getIdEdital()->getId());
+                },
+            ]);
+        }
+        if (6 == $data->getTipo() or 7 == $data->getTipo()) {
             $builder->add('idEtapa', EntityType::class, [
                 'class' => FrigaEditalEtapa::class,
                 'label' => 'Etapa complementar',
@@ -44,22 +70,38 @@ class FrigaEditalEtapaType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Nenhuma Etapa',
                 'choice_label' => 'descricao',
-                'query_builder' => function (EntityRepository $er) use ($data) {
+                'query_builder' => function(EntityRepository $er) use ($data) {
                     return $er->createQueryBuilder('e')
                         ->where('e.idEdital = :edital and (e.tipo = 3)')
                         ->setParameter('edital', $data->getIdEdital()->getId());
                 },
             ]);
         }
-        if ($data->getTipo() == 5 or $data->getTipo() == 4) {
+        if (5 == $data->getTipo() or 4 == $data->getTipo()) {
+            if (5 == $data->getTipo()) {
+                $builder->add('idEtapa', EntityType::class, [
+                    'class' => FrigaEditalEtapa::class,
+                    'label' => 'Etapa complementar',
+                    'empty_data' => null,
+                    'expanded' => true,
+                    'required' => true,
+                    'placeholder' => 'Nenhuma Etapa',
+                    'choice_label' => 'descricao',
+                    'query_builder' => function(EntityRepository $er) use ($data) {
+                        return $er->createQueryBuilder('e')
+                            ->where('e.idEdital = :edital and (e.tipo = 4)')
+                            ->setParameter('edital', $data->getIdEdital()->getId());
+                    },
+                ]);
+            }
             $builder
                 ->add('observacao', TextareaType::class, [
                     'label' => 'Observações',
                     'required' => false,
                     'attr' => [
                         'class' => 'form-control',
-                        'placeholder' => 'Informações complementares - Utilize este campo para adicionar informações na página do edital relativa a esta etapa'
-                    ]
+                        'placeholder' => 'Informações complementares - Utilize este campo para adicionar informações na página do edital relativa a esta etapa',
+                    ],
                 ])
                 ->add('final', ChoiceType::class, [
                     'label' => 'Situação das inscrições ao final da etapa',
@@ -68,7 +110,7 @@ class FrigaEditalEtapaType extends AbstractType
                     'choices' => [
                         'Manter a situação atual' => 0,
                         'Alterar a situação para Classificado/Convocado' => 1,
-                    ]
+                    ],
                 ])
                 ->add('desconsiderarInscricao', ChoiceType::class, [
                     'label' => 'Desconsiderar Inscrições',
@@ -77,46 +119,45 @@ class FrigaEditalEtapaType extends AbstractType
                     'choices' => [
                         'Mostrar todas  inscrições ' => 0,
                         'Não mostrar inscrições com a situação "não homologada" ou "desclassificado"' => 1,
-                    ]
+                    ],
                 ]);
-            if ($data->getTipo() == 4) {
-
-                $builder->add('cron',ChoiceType::class,[
-                    'label'=>"Publicar resultados automaticamente",
+            if (4 == $data->getTipo()) {
+                $builder->add('cron', ChoiceType::class, [
+                    'label' => 'Publicar resultados automaticamente',
                     'expanded' => true,
                     'choices' => [
                         'Não' => 0,
                         'Sim' => 1,
-                    ]
+                    ],
                 ])
                     ->add('qtdClassificado', TextType::class, [
-                    'label' => 'Número máximo de classificados',
-                    'required' => false,
-                    'attr' => [
-                        'placeholder' => 'Ex: 10'
-                    ]
-                ]);
+                        'label' => 'Número máximo de classificados',
+                        'required' => false,
+                        'attr' => [
+                            'placeholder' => 'Ex: 10',
+                        ],
+                    ]);
             }
         }
-        if ($data->getTipo() == 3) {
+        if (3 == $data->getTipo()) {
             $builder->add('pontuacaoMultipla', ChoiceType::class, [
                 'label' => 'Pontuação Individual',
                 'expanded' => true,
                 'choices' => [
                     'Não' => 0,
                     'Sim' => 1,
-                ]
+                ],
             ]);
         }
-        if($data->getTipo() == 8 or $data->getTipo()==9){
+        if (8 == $data->getTipo() or 9 == $data->getTipo()) {
             $builder
                 ->add('observacao', TextareaType::class, [
                     'label' => 'Observações',
                     'required' => false,
                     'attr' => [
                         'class' => 'form-control',
-                        'placeholder' => 'Informações complementares - Utilize este campo para adicionar informações na página do edital relativa a esta etapa'
-                    ]
+                        'placeholder' => 'Informações complementares - Utilize este campo para adicionar informações na página do edital relativa a esta etapa',
+                    ],
                 ]);
         }
         if ($data->getTipo() > 0 and $data->getTipo() < 8) {
@@ -147,23 +188,15 @@ class FrigaEditalEtapaType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => FrigaEditalEtapa::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => FrigaEditalEtapa::class,
+        ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'edital_etapa';
     }
-
-
 }

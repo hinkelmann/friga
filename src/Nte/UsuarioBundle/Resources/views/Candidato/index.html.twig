@@ -26,7 +26,7 @@
     {% endif %}
     <div class="container">
         {{ include('@NteUsuario/Candidato/menu.html.twig') }}
-        <div class="col-md-9">
+        <div class="col-lg-9">
             <div class="row">
                 <h3 class="mb-xl">
                     Olá, <strong> {{ app.user.nome }}! </strong>
@@ -35,7 +35,7 @@
             <div class="featured-boxes featured-boxes-style-3">
                 <div class="row">
                     <a href="{{ path('nte_usuario_candidato_inscricao_index') }}">
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
                         <div class="featured-box featured-box-primary featured-box-effect-4">
                             <div class="box-content">
                                 <i class="icon-featured fa fa-user"></i>
@@ -57,7 +57,7 @@
                     </div>
                     </a>
                     <a href="{{ path('nte_usuario_candidato_convocacao_index') }}">
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
                         <div class="featured-box featured-box-tertiary featured-box-effect-4">
                             <div class="box-content">
                                 <i class="icon-featured fa fa-calendar-check-o"></i>
@@ -79,7 +79,7 @@
                     </div>
                     </a>
                     <a href="{{ path('nte_usuario_candidato_recursos_index') }}">
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
                         <div class="featured-box featured-box-secondary featured-box-effect-4">
                             <div class="box-content">
                                 <i class="icon-featured fa fa-th"></i>
@@ -88,17 +88,39 @@
                                     {% if app.user.recursoInscricao.count >0 %}
                                         Você possuí {{ app.user.recursoInscricao.count }}
                                         {% if  app.user.recursoInscricao.count == 1 %}
-                                            recurso entreposto
+                                            recurso
                                         {% else %}
-                                            recursos entrepostos
+                                            recursos
                                         {% endif %}
                                     {% else %}
-                                        Você não possuí recursos entrepostos
+                                        Você não possuí recursos
                                     {% endif %}
                                 </p>
                             </div>
                         </div>
                     </div>
+                    </a>
+                    <a href="{{ path('nte_usuario_candidato_convites_index') }}">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="featured-box featured-box-quaternary featured-box-effect-4">
+                                <div class="box-content">
+                                    <i class="icon-featured fa fa-user-md"></i>
+                                    <h4>Convites</h4>
+                                    <p>
+                                        {% if convites|length >0 %}
+                                            Você possuí {{ convites|length }}
+                                            {% if  convites|length == 1 %}
+                                                convite
+                                            {% else %}
+                                                convites
+                                            {% endif %}
+                                        {% else %}
+                                            Você não possuí convites
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </a>
                 </div>
             </div>

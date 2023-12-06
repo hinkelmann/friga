@@ -1,24 +1,43 @@
 <?php
 
-namespace Nte\Admin\SuporteBundle\Entity;
-use Nte\UsuarioBundle\Entity\Usuario;
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
+namespace Nte\Admin\SuporteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Nte\UsuarioBundle\Entity\Usuario;
 
 /**
- * SuporteFaq
+ * SuporteFaq.
  *
-  @ORM\Table(name="suporte_faq")
+ * @ORM\Table(name="suporte_faq")
+ *
  * @ORM\Entity
  */
 class SuporteFaq
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -49,24 +68,23 @@ class SuporteFaq
      * @ORM\Column(name="registro_data_criacao", type="datetime", nullable=true)
      */
     private $registroDataCriacao;
-    
 
     /**
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
      * })
      */
     private $idUsuario;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -74,7 +92,7 @@ class SuporteFaq
     }
 
     /**
-     * Set resposta
+     * Set resposta.
      *
      * @param string $resposta
      *
@@ -88,7 +106,7 @@ class SuporteFaq
     }
 
     /**
-     * Get resposta
+     * Get resposta.
      *
      * @return string
      */
@@ -107,18 +125,18 @@ class SuporteFaq
 
     /**
      * @param string $pergunta
+     *
      * @return SuporteFaq
      */
     public function setPergunta($pergunta)
     {
         $this->pergunta = $pergunta;
+
         return $this;
     }
 
-
-
     /**
-     * Set registroDataAtualizacao
+     * Set registroDataAtualizacao.
      *
      * @param \DateTime $registroDataAtualizacao
      *
@@ -132,7 +150,7 @@ class SuporteFaq
     }
 
     /**
-     * Get registroDataAtualizacao
+     * Get registroDataAtualizacao.
      *
      * @return \DateTime
      */
@@ -142,7 +160,7 @@ class SuporteFaq
     }
 
     /**
-     * Set registroDataCriacao
+     * Set registroDataCriacao.
      *
      * @param \DateTime $registroDataCriacao
      *
@@ -156,7 +174,7 @@ class SuporteFaq
     }
 
     /**
-     * Get registroDataCriacao
+     * Get registroDataCriacao.
      *
      * @return \DateTime
      */
@@ -165,11 +183,8 @@ class SuporteFaq
         return $this->registroDataCriacao;
     }
 
-
     /**
-     * Set idUsuario
-     *
-     * @param Usuario $idUsuario
+     * Set idUsuario.
      *
      * @return SuporteFaq
      */
@@ -181,7 +196,7 @@ class SuporteFaq
     }
 
     /**
-     * Get idUsuario
+     * Get idUsuario.
      *
      * @return Usuario
      */

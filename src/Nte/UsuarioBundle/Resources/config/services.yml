@@ -15,6 +15,7 @@ services:
                 - '@security.token_storage'
                 - '@router'
                 - '@security.authorization_checker'
+                - "@doctrine.orm.entity_manager"
         tags:
                 - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 

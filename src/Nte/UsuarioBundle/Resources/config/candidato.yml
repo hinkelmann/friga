@@ -42,6 +42,13 @@ nte_usuario_candidato_recursos_ver:
   path:     /recursos/{uuid}/ver/
   defaults: { _controller: NteUsuarioBundle:Candidato:verRecurso }
 
+nte_usuario_candidato_convites_index:
+  path:     /convites
+  defaults: { _controller: NteUsuarioBundle:Candidato:indexConvite }
+
+nte_usuario_candidato_convite_ver:
+  path:     /convites/{uuid}/ver/
+  defaults: { _controller: NteUsuarioBundle:Candidato:verConvite }
 
 nte_usuario_candidato_convocacao_index:
   path:     /convocacoes
@@ -58,3 +65,7 @@ nte_usuario_candidato_perfil:
 nte_usuario_candidato_download_arquivo_pessoal:
   path:     /download/arquivo/{uuid}/{arquivo}
   defaults: { _controller: NteUsuarioBundle:Candidato:downloadArquivo }
+
+nte_usuario_candidato_download_termo_confidencialidade:
+  path:     /download/termo/{uuid}
+  defaults: { _controller: NteUsuarioBundle:Candidato:gerarTermo, uuid: null }

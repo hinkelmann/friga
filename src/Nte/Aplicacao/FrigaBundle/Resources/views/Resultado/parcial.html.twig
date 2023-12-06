@@ -100,21 +100,39 @@
                         {% if inscricao.idSituacao == 3 or inscricao.idSituacao == 1 %}
                             <tr>
                                 <td width="10">{{ inscricao.uuid }}</td>
-                                <td>
-                                    <a title="Clique aqui para visualizar as informações de contato do candidato"
-                                       href="{{ path('relatorio_perfil', {'id': inscricao.id}) }}">
-                                        <b class="text-uppercase">{{ inscricao.nome }}</b> </a>
-                                </td>
+
+                                {% if edital.modeloInscricao == 1 %}
+                                    <td>
+
+                                        <a title="{{ inscricao.idCargo.descricao }}{% if inscricao.idCota %}/{{ inscricao.idCota.descricao }}{% endif %}"
+                                           href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                                            <b class="text-uppercase">{{ inscricao.projetoTitulo }}</b> </a>
+                                    </td>
+                                    <td>
+                                        {% for p in inscricao.idProjetoParticipante %}
+                                            {{ p.nome }}<br>
+                                        {% endfor %}
+                                    </td>
+                                {% else %}
+                                    <td>
+
+                                        <a title="{{ inscricao.idCargo.descricao }}{% if inscricao.idCota %}/{{ inscricao.idCota.descricao }}{% endif %}"
+                                           href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
+                                            <b class="text-uppercase">{{ inscricao.nome }}</b> </a>
+                                    </td>
+                                {% endif %}
                                 {% for p in edital.pontuacaoCategoriaPeso %}
                                     <td width="70"
                                         class="{% if loop.first %}b1{% else %}b2{% endif %} text-center ">
                                         {{ inscricao.pontuacaoSoma(true,p) }}
+
                                     </td>
                                 {% endfor %}
                                 <td width="70" class="b3 text-center">{{ inscricao.pontuacaoSoma(true) }}</td>
-                                <td width="10" class="text-center">--</td>
+                                <td width="10" class="text-center">-</td>
                                 <td width="10" class="text-right">
                                     <div class="{{ inscricao.objsituacao.css }}">
+
                                         <i class="{{ inscricao.objsituacao.icone }}"></i>
                                         {{ inscricao.objsituacao.descricao }}
                                     </div>

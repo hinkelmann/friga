@@ -45,13 +45,12 @@ nte_site_arquivo_download:
 #    methods:  [GET]
 
 
-nte_site_rota_a_moda_miguelao:
-    path:     /3-professor-formador-2019
-    defaults: { _controller: NteSiteBundle:Default:indexRedirect }
+nte_site_termo_uso:
+    path:     /termo-de-uso
+    defaults: { _controller: NteSiteBundle:Default:Default:legal, modelo: 1 }
     methods:  [GET]
 
-
-nte_site_rota_a_moda_miguelao_teste:
-    path:     /ead12-teste
-    defaults: { _controller: NteSiteBundle:Default:teste }
+nte_site_politica-de-dados:
+    path:     /politica-de-dados
+    defaults: { _controller: NteSiteBundle:Default:Default:legal, modelo: 2 }
     methods:  [GET]

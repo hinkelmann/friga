@@ -7,15 +7,15 @@
             <div class="row">
                 <div class="col-md-9">
                     <p>
-                        {{ edital.titulo }}
-                        {% if edital.periodoInscricaoHabilitado %}
+                        {{ edital.numero }} - {{ edital.titulo }}
+                        {% if edital.getPeriodoInscricaoAtual is not null %}
                             está com  <em>Inscrições Abertas</em>
-                            de {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }} até {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}.
+                            de {{ edital.getPeriodoInscricaoAtual.dataInicial|date('d/m/Y') }} até {{ edital.getPeriodoInscricaoAtual.dataFinal|date('d/m/Y') }}.
                         {% endif %}
                     </p>
                 </div>
                 <div class="col-md-3">
-                    {% if edital.periodoInscricaoHabilitado %}
+                    {% if edital.getPeriodoInscricaoAtual is not null %}
                         <div class="get-started">
                             <a href="{{ path('nte_usuario_candidato_inscricao',{'uuid': edital.uuid}) }}"
                                class="btn btn-lg btn-inverse">
@@ -100,69 +100,32 @@
             <div class="col-md-5">
                 <h2 class="mb-xl"><strong>Informações</strong> Importantes</h2>
                 <ul class="list list-icons list-primary list-borders">
-                    {% for etapa in edital.etapaCronologica|reverse  if (etapa.periodoDivulgacao
-                        and ( etapa.tipo == 4 or etapa.tipo == 5  or etapa.tipo == 7 or etapa.tipo == 8  or etapa.tipo == 9)) %}
-                        {% if etapa.tipo == 4 and etapa.classificacao.count %}
-                            <li>
-                                <a href="{{ path('nte_site_edital_classificao', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-                                    <h4><i class="fa fa-globe"></i></h4>
-                                    <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-                                    {{ etapa.descricao }}
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if etapa.tipo == 5 %}
-                            {% if etapa.final  == 1%}
-                                {% if etapa.convocacaoData.count %}
-                                    {% for chave, valor in etapa.convocacaoData %}
-                                        <li>
-                                            <a href="{{ path('nte_site_edital_convocacao', {'etapa': etapa.id, 'uuid': edital.uuid, data: chave}) }}">
-                                                <h4><i class="fa fa-calendar-check-o"></i></h4>
-                                                {% if chave|date('Ymd')>  etapa.dataDivulgacao|date('Ymd') %}
-                                                    <strong> {{ chave|date('d/m/Y') }}</strong>
-                                                {% else %}
-                                                    <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-                                                {% endif %}
-                                                {{ etapa.descricao }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                {% endif %}
+                    {% set icone = {'4':'fa fa-globe','5':'fa fa-calendar-check-o',
+                        '7':'fa fa-gavel','8':'fa fa-th','9':'fa fa-th','0':'fa fa-file-pdf-o'
+                    } %}
+                    {% for item in edital.informacaoPublico %}
+                        {% set url='#' %}
+                        {% if item.tipo == 4 %}
+                            {% set url =path('nte_site_edital_classificao', {'etapa': item.id, 'uuid': edital.uuid}) %}
+                        {% elseif item.tipo  == 5 %}
+                            {% if item.final %}
+                                {% set url =path('nte_site_edital_convocacao', {'etapa': item.id, 'uuid': edital.uuid, data: item.data|date('Y-m-d')}) %}
                             {% else %}
-                                <li>
-                                    <a href="{{ path('nte_site_edital_convocacao', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-                                        <h4><i class="fa fa-calendar-check-o"></i></h4>
-                                        <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-                                        {{ etapa.descricao }}
-                                    </a>
-                                </li>
+                                {% set url =path('nte_site_edital_convocacao', {'etapa': item.id, 'uuid': edital.uuid }) %}
                             {% endif %}
+                        {% elseif item.tipo  == 7 %}
+                            {% set url=path('nte_site_edital_recurso', {'etapa': item.id, 'uuid': edital.uuid}) %}
+                        {% elseif item.tipo  == 8 %}
+                            {% set url=path('nte_site_edital_lista', {'etapa': item.id, 'uuid': edital.uuid}) %}
+                        {% elseif item.tipo  == 9 %}
+                            {% set url=path('nte_site_edital_lista', {'etapa': item.id, 'uuid': edital.uuid}) %}
+                        {% elseif item.tipo  == 0 %}
+                            {% set url=path('nte_site_arquivo_download',{id:item.id}) %}
                         {% endif %}
-                        {% if etapa.tipo == 7 and etapa.idEtapa and etapa.idEtapa.recurso.count %}
-                            <li>
-                                <a href="{{ path('nte_site_edital_recurso', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-                                    <h4><i class="fa fa-gavel"></i></h4>
-                                    <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-                                    {{ etapa.descricao }}
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% if etapa.tipo == 8 or (etapa.tipo == 9 and edital.idEditalUsuarioBanca.count) %}
-                       <li>
-                            <a href="{{ path('nte_site_edital_lista', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-                                <h4><i class="{{  etapa.objTipo.icone }}"></i></h4>
-                                <strong> {{ etapa.dataInicial|date('d/m/Y') }} </strong> -
-                                {{ etapa.descricao }}
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% endfor %}
-                    {% for a in edital.idArquivo %}
                         <li>
-                            <a target="_blank" href="{{ path('nte_site_arquivo_download',{id:a.id}) }}">
-                                <h4><i class="fa fa-file-pdf-o"></i></h4>
-                                <strong> {{ a.registroDataCriacao|date('d/m/Y') }} </strong> -
-                                {{ a.titulo }}
+                            <a href="{{ url }}" title="{{ item.titulo }}">
+                                <h4><i class="{{ icone[item.tipo] }}"></i></h4>
+                                <strong>{{ item.data|date('d/m/Y') }}</strong> - {{ item.titulo }}
                             </a>
                         </li>
                     {% endfor %}
@@ -175,51 +138,100 @@
             </div>
             <div class="col-md-offset-2 col-lg-offset-4 col-md-8">
                 <div class="tracking-list">
-                    {% for etapa in edital.etapaCronologica %}
-                        <div class="tracking-item">
-                            <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}">
-                                <i class="{{ etapa.objTipo.icone }}"></i>
-                            </div>
-                            <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}</div>
-                            <div class="tracking-content">
-                                {{ etapa.descricao }}
-                                {% if etapa.tipo ==1
-                                    or etapa.tipo == 2
-                                    or etapa.tipo == 3
-                                    or etapa.tipo == 6
-                                    or etapa.tipo == 7 %}
-                                    <span>
+                    {% if edital.idEtapaCategoria.empty %}
+                        {% for etapa in edital.etapaCronologica %}
+                            <div class="tracking-item">
+                                <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}">
+                                    <i class="{{ etapa.objTipo.icone }}"></i>
+                                </div>
+                                <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}</div>
+                                <div class="tracking-content">
+                                    {{ etapa.descricao }}
+                                    {% if etapa.tipo ==1
+                                        or etapa.tipo == 2
+                                        or etapa.tipo == 3
+                                        or etapa.tipo == 6
+                                        or etapa.tipo == 7 %}
+                                        <span>
                                         De {{ etapa.dataInicial|date('d/m/Y') }}
                                         Até {{ etapa.dataFinal|date('d/m/Y ') }}
                                     </span>
-                                {% endif %}
-                                {% if etapa.tipo ==3
-                                    or etapa.tipo == 4
-                                    or etapa.tipo == 5
-                                    or etapa.tipo == 7 %}
-                                    <span>
+                                    {% endif %}
+                                    {% if etapa.tipo ==3
+                                        or etapa.tipo == 4
+                                        or etapa.tipo == 5
+                                        or etapa.tipo == 7 %}
+                                        <span>
                                         Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}
                                     </span>
-                                {% endif %}
-                                {% if (etapa.tipo ==3
-                                    or etapa.tipo == 4
-                                    or etapa.tipo == 5
-                                    or etapa.tipo == 7)
-                                    and edital.idEditalUsuarioBanca.count
-                                %}
-                                    <span>
+                                    {% endif %}
+                                    {% if (etapa.tipo ==3
+                                        or etapa.tipo == 4
+                                        or etapa.tipo == 5
+                                        or etapa.tipo == 7)
+                                        and edital.idEditalUsuarioBanca.count %}
+                                        <span>
                                         <br>
                                         Comissão de avaliação:<br>
                                         {% for u in edital.idEditalUsuarioBanca %}
-                                            <a href="{{ u.idUsuario.lattes?u.idUsuario.lattes:"#" }}">
+                                        <a href="{{ u.idUsuario.lattes?u.idUsuario.lattes:"#" }}">
                                             {{ u.idUsuario.nome }}
                                             </a>{% if not loop.last %}, {% endif %}
                                         {% endfor %}
                                     </span>
-                                {% endif %}
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        {% for cat in edital.idEtapaCategoria %}
+                            <h6 class="mt-md"><strong>{{ cat.ordem }} - {{ cat.descricao }}</strong></h6>
+                            {% for etapa in cat.etapaCronologica %}
+                                <div class="tracking-item">
+                                    <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}">
+                                        <i class="{{ etapa.objTipo.icone }}"></i>
+                                    </div>
+                                    <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}</div>
+                                    <div class="tracking-content">
+                                        {{ etapa.descricao }}
+                                        {% if etapa.tipo ==1
+                                            or etapa.tipo == 2
+                                            or etapa.tipo == 3
+                                            or etapa.tipo == 6
+                                            or etapa.tipo == 7 %}
+                                            <span>
+                                        De {{ etapa.dataInicial|date('d/m/Y') }}
+                                        Até {{ etapa.dataFinal|date('d/m/Y ') }}
+                                    </span>
+                                        {% endif %}
+                                        {% if etapa.tipo ==3
+                                            or etapa.tipo == 4
+                                            or etapa.tipo == 5
+                                            or etapa.tipo == 7 %}
+                                            <span>
+                                        Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}
+                                    </span>
+                                        {% endif %}
+                                        {% if (etapa.tipo ==3
+                                            or etapa.tipo == 4
+                                            or etapa.tipo == 5
+                                            or etapa.tipo == 7)
+                                            and edital.idEditalUsuarioBanca.count %}
+                                            <span>
+                                        <br>
+                                        Comissão de avaliação:<br>
+                                        {% for u in edital.idEditalUsuarioBanca %}
+                                        <a href="{{ u.idUsuario.lattes?u.idUsuario.lattes:"#" }}">
+                                            {{ u.idUsuario.nome }}
+                                            </a>{% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
             </div>
@@ -233,12 +245,14 @@
         .btn.btn-lg.btn-inverse:hover {
             background-color: #153c4b;
         }
+
         .btn.btn-lg.btn-inverse {
             background-color: #38ae8a;
             color: #fff;
             border: #fff 2px solid;
             font-weight: bold;
         }
+
         .tracking-item {
             border-left: 1px solid #214977;
             position: relative;
@@ -325,13 +339,18 @@
                         <p class="text-weight-bold">
                             {{ edital.info3|raw }}
                         </p>
-                        <hr class="light">
+                        <!--<hr class="light">-->
                     </div>
                     <div class="col-md-3 col-md-offset-1">
                         <h5 class="mb-sm">Inscrições </h5>
                         <i class="fa fa-calendar"> </i> &nbsp;
-                        <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
-                        <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                        {% if edital.periodoInscricaoAtual is null %}
+                            <b>De</b> {{ edital.periodoInscricao.dataInicial|date('d/m/Y') }}
+                            <b>Até</b> {{ edital.periodoInscricao.dataFinal|date('d/m/Y') }}
+                        {% else %}
+                            <b>De</b> {{ edital.periodoInscricaoAtual.dataInicial|date('d/m/Y') }}
+                            <b>Até</b> {{ edital.periodoInscricaoAtual.dataFinal|date('d/m/Y') }}
+                        {% endif %}
                     </div>
                     <div class="col-md-3 col-md-offset-1">
                         <h5 class="mb-sm">Resultado Final </h5>
@@ -343,14 +362,23 @@
             <div class="footer-copyright">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-1">
-                            <a href="{{ path('nte_site_homepage') }}" class="logo">
-                                <img alt="" class="img-responsive"
-                                     src="{{ asset('assets/img/marca_apenas_sigla_branca.svg') }}">
+                        <div class="col-md-12 text-center">
+                            <br><br>
+                            <a href="https://ufsm.br/">
+                                <img alt="" src="{{ asset('assets/img/UFSM_marca-web.png') }}" style="max-width: 100%">
                             </a>
-                        </div>
-                        <div class="col-md-11">
-                            <p>Núcleo de Tecnologia Educacional </p>
+                            <br>
+                            <small>
+                                <a href="https://www.ufsm.br/pro-reitorias/prograd/cte/" style="color: #777">
+                                    Coordenadoria
+                                    de Tecnologia
+                                    Educacional
+                                </a>
+                                <br>
+                                Av. Roraima nº 1000 - Prédio 14, Bairro Camobi, CEP: 97105-900 Santa Maria - RS -
+                                Telefone:
+                                (55) 3220-8007
+                            </small>
                         </div>
                     </div>
                 </div>

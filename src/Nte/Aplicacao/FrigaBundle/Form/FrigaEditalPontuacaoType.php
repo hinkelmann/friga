@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
@@ -8,7 +25,6 @@ use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacaoCategoria;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,12 +34,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FrigaEditalPontuacaoType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         /** @var FrigaEditalPontuacao $data */
         $data = $options['data'];
         $builder
@@ -31,29 +43,29 @@ class FrigaEditalPontuacaoType extends AbstractType
                 'label' => 'Título',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Publicação em eventos da area'
-                ]
+                    'placeholder' => 'Publicação em eventos da area',
+                ],
             ])
             ->add('descricao', TextType::class, [
                 'label' => 'Descrição do item',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Publicação em eventos da area'
-                ]
+                    'placeholder' => 'Publicação em eventos da area',
+                ],
             ])
             ->add('explicacao', TextareaType::class, [
                 'label' => 'Explicação do item para o candidato no campo anexo',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Texto explicativo sobre o item para o candidato'
-                ]
+                    'placeholder' => 'Texto explicativo sobre o item para o candidato',
+                ],
             ])
             ->add('explicacaoTexto', TextareaType::class, [
                 'label' => 'Explicação do item para o candidato no campo texto',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Texto explicativo sobre o item para o candidato'
-                ]
+                    'placeholder' => 'Texto explicativo sobre o item para o candidato',
+                ],
             ])
             ->add('pontuacaoAuto', ChoiceType::class, [
                 'label' => 'Pontuação informada pelo candidato',
@@ -64,19 +76,19 @@ class FrigaEditalPontuacaoType extends AbstractType
                 ],
                 'attr' => [
                     //   'class' => 'form-control',
-                ]
+                ],
             ])
 
             ->add('pontuacaoTipo', ChoiceType::class, [
                 'label' => 'Comprovante de pontuação',
                 'expanded' => true,
                 'choices' => [
-                    'Nenhum - Não é necessário comprovar pontuação'=>0,
-                    'Anexo - O candidato poderá  anexar seus arquivos para comprovar a pontuação'=>1,
-                    'Texto - O candidato poderá enviar um texto para comprovar a pontuação'=>2,
-                    'Texto e Anexo - O candidato poderá enviar um texto e anexar seus arquivos para comprovar a pontuação'=>3,
+                    'Nenhum - Não é necessário comprovar pontuação' => 0,
+                    'Anexo - O candidato poderá  anexar seus arquivos para comprovar a pontuação' => 1,
+                    'Texto - O candidato poderá enviar um texto para comprovar a pontuação' => 2,
+                    'Texto e Anexo - O candidato poderá enviar um texto e anexar seus arquivos para comprovar a pontuação' => 3,
                 ],
-                'attr' => []
+                'attr' => [],
             ])
             ->add('requisito', ChoiceType::class, [
                     'label' => 'Preenchimento Obrigatório',
@@ -86,42 +98,44 @@ class FrigaEditalPontuacaoType extends AbstractType
                         'Anexo Obrigatório' => 1,
                         'Texto Obrigatório' => 2,
                         'Anexo e Texto Obrigatório' => 3,
-                    ]
+                    ],
                 ]
             )
             ->add('valorMinimo', NumberType::class, [
                 'label' => 'Valor mínimo',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => '1'
-                ]
+                    'placeholder' => '1',
+                    'min' => '0.0001',
+                ],
             ])
             ->add('valorMaximo', NumberType::class, [
                 'label' => 'Valor Máximo',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => '0'
-                ]
+                    'placeholder' => '0',
+                ],
             ])
             ->add('valorIntervalo', NumberType::class, [
                 'label' => 'Intervalo de Pontuação',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => '0'
-                ]
+                    'placeholder' => '1',
+                     'min' => '0.0001',
+                ],
             ])
             ->add('valorTexto', TextType::class, [
                 'label' => 'Valor Texto',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Pontos'
-                ]
+                    'placeholder' => 'Pontos',
+                ],
             ])
             ->add('idEtapa', EntityType::class, [
                 'class' => FrigaEditalEtapa::class,
-                'label' => "Etapa",
+                'label' => 'Etapa',
                 'choice_label' => 'descricao',
-                'query_builder' => function (EntityRepository $er) use ($data) {
+                'query_builder' => function(EntityRepository $er) use ($data) {
                     return $er->createQueryBuilder('e')
                         ->where('e.idEdital = :edital and (e.tipo =1 or e.tipo =2 or e.tipo = 3)')
                         ->setParameter('edital', $data->getIdEdital()->getId());
@@ -130,13 +144,12 @@ class FrigaEditalPontuacaoType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
-
             ])
             ->add('idCategoria', EntityType::class, [
                 'class' => FrigaEditalPontuacaoCategoria::class,
-                'label' => "Categoria",
+                'label' => 'Categoria',
                 'choice_label' => 'descricao',
-                'query_builder' => function (EntityRepository $er) use ($data) {
+                'query_builder' => function(EntityRepository $er) use ($data) {
                     return $er->createQueryBuilder('e')
                         ->where('e.idEdital = :edital and e.idCategoria is not null')
                         ->setParameter('edital', $data->getIdEdital()->getId());
@@ -145,27 +158,18 @@ class FrigaEditalPontuacaoType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'required' => true,
-
             ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => FrigaEditalPontuacao::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => FrigaEditalPontuacao::class,
+        ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return 'edital_pontuacao';
     }
-
-
 }

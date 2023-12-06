@@ -3,3 +3,43 @@
 {% block fos_user_content %}
 {% include "@FOSUser/Registration/register_content.html.twig" %}
 {% endblock fos_user_content %}
+{% block javascripts  %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+    <script>
+        let telefone1 = $('#fos_user_registration_form_contatoTelefone1'),
+            usuario = document.getElementById('fos_user_registration_form_username'),
+            forms = $('form'),
+            cpf = $('#fos_user_registration_form_cpf'),
+            telefoneOptions = {
+                onKeyPress: (nro) => {
+                    telefone1.mask(((nro.length < 14) ? '(00) 0000-0000' : '(00) 0000-0000'), telefoneOptions);
+                }
+            };
+        forms.validate();
+        telefone1.mask('(00) 00000-0000');
+        cpf.mask('000.000.000-00');
+
+        usuario.type = 'hidden';
+
+        $.validator.addMethod("cpf", function (value, element) {
+            return this.optional(element) || CPF.validate(value);
+        }, "Por favor, Informe um CPF válido.");
+
+
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+
+        cpf.keypress(e => {
+            usuario.value = cpf.val().replace(/\D/g,'');
+        });
+        cpf.change(e => {
+            usuario.value = cpf.val().replace(/\D/g,'');
+        })
+        usuario.value = cpf.val().replace(/\D/g,'');
+    </script>
+{% endblock %}

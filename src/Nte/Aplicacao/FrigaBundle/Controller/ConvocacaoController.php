@@ -1,74 +1,149 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query\Expr\Func;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaArquivo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaConvocacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEdital;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCota;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacao;
+use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoFeedback;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoPontuacao;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoPontuacaoAvaliacao;
-use Nte\Aplicacao\FrigaBundle\Form\AvaliacaoType;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacaoCategoria;
+use Nte\Aplicacao\FrigaBundle\Form\ExportarMoodleType;
 use Nte\Aplicacao\FrigaBundle\Form\FrigaEditalConvocacaoType;
-use Nte\UsuarioBundle\Entity\Usuario;
-use Nte\UsuarioBundle\Form\InscricaoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use stdClass;
-use DateTime;
-use Exception;
 
 /**
- * Class ConvocacaoController
- * @package Nte\Aplicacao\FrigaBundle\Controller
+ * Class ConvocacaoController.
  */
 class ConvocacaoController extends Controller
 {
+    use ClassificacaoTrait;
 
     /**
-     * Editais em aberto
+     * Editais em aberto.
      *
-     * @param Request $request
      * @return Response
      */
     public function indexAction(Request $request, $situacao = 50)
     {
-        if (!$this->isGranted('ROLE_ADMIN') AND !$this->isGranted('ROLE_AVALIADOR')) {
+        if (!$this->isGranted('ROLE_ADMIN') and !$this->isGranted('ROLE_AVALIADOR')) {
             return $this->redirectToRoute('nte_admin_painel_homepage');
         }
         $tmp = new ArrayCollection();
 
         /** @var FrigaEdital $edital */
         foreach ($this->editais() as $edital) {
-            $x = $edital->getEtapa()->filter(Function (FrigaEditalEtapa $etapa) use ($situacao) {
-                if ($situacao == 50) {
-                    return $etapa->getTipo() == 5 and $etapa->getPeriodoHabilitado();
-                } else if ($situacao == 100) {
-                    return $etapa->getTipo() == 5
-                        and $etapa->getPeriodoHabilitado() == false
-                        and $etapa->getAndamentoPrazo() == 100;
-                } else if ($situacao == 0) {
-                    return $etapa->getTipo() == 5
-                        and $etapa->getPeriodoHabilitado() == false
-                        and $etapa->getAndamentoPrazo() == 0;
+            $x = $edital->getEtapa()->filter(function(FrigaEditalEtapa $etapa) use ($situacao) {
+                if (50 == $situacao) {
+                    return 5 == $etapa->getTipo() and $etapa->getPeriodoHabilitado();
+                } elseif (100 == $situacao) {
+                    return 5 == $etapa->getTipo()
+                        and false == $etapa->getPeriodoHabilitado()
+                        and 100 == $etapa->getAndamentoPrazo();
+                } elseif (0 == $situacao) {
+                    return 5 == $etapa->getTipo()
+                        and false == $etapa->getPeriodoHabilitado()
+                        and 0 == $etapa->getAndamentoPrazo();
                 }
             });
-            $tmp = new ArrayCollection(array_merge($tmp->toArray(), $x->toArray()));
+            $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $x->toArray()));
         }
+
         return $this->render('NteAplicacaoFrigaBundle:convocacao:index.html.twig', [
             'editais' => $tmp,
+        ]);
+    }
+
+    public function exportarMoodleAction(Request $request, FrigaEditalEtapa $etapa)
+    {
+        $form = $this->createForm(ExportarMoodleType::class, null, ['edital' => $etapa->getIdEdital()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+
+            /** @var ArrayCollection $idCargo */
+            $idCargo = $form->get('idCargo')->getData();
+
+            /** @var ArrayCollection $idCota */
+            $idCota = $form->get('idCota')->getData();
+
+            $idCargo = $idCargo->map(function(FrigaEditalCargo $c) {
+                return $c->getId();
+            })->toArray();
+
+            $idCota = $idCota->map(function(FrigaEditalCota $c) {
+                return $c->getId();
+            })->toArray();
+
+            $geral = $em->createQueryBuilder()
+                ->select('i')
+                ->from(FrigaInscricao::class, 'i')
+                ->where('i.idSituacao not in (:situacao)')
+                ->setParameter('situacao', [-999, -10, -1, 0, 1, 3, 5])
+                ->andWhere('i.idEdital = :edital')
+                ->setParameter('edital', $etapa->getIdEdital())
+                ->andWhere('i.idCota in (:idCota)')
+                ->setParameter('idCota', $idCota)
+                ->andWhere('i.idCargo in (:idCargo)')
+                ->setParameter('idCargo', $idCargo)
+                ->orderBy('i.nome', 'asc')
+                ->getQuery()
+                ->getResult();
+            $tmp = [];
+            /** @var FrigaInscricao $item */
+            foreach ($geral as $item) {
+                $obj = new \stdClass();
+                $obj->name = $item->getNome();
+                $obj->username = \str_replace(['.', '-'], null, $item->getCpf());
+                $obj->email = $item->getContatoEmail();
+                $obj->auth = 'manual';
+                $tmp[] = $obj;
+            }
+
+            $obj = new \stdClass();
+            $obj->name = $etapa->getIdEdital()->getTitulo();
+            $obj->url = $this->generateUrl('nte_site_edital', ['id' => $etapa->getIdEdital()->getId(), 'url' => $etapa->getIdEdital()->getUrl()]);
+            $obj->timestart = $form->get('dataInicial')->getData()->getTimestamp();
+            $obj->timeend = $form->get('dataFinal')->getData()->getTimestamp();
+            $obj->roleid = $form->get('papel')->getData();
+            $obj->course = $form->get('curso')->getData();
+            $obj->users = $tmp;
+            $obj = \base64_encode(\json_encode($obj));
+
+            return $this->redirect($form->get('ambiente')->getData() . '/local/venom/api.php?obj=' . $obj);
+            //exit();
+        }
+
+        return $this->render('NteAplicacaoFrigaBundle:convocacao:form-moodle.html.twig', [
+            'form' => $form->createView(),
+            'etapa' => $etapa,
+            'edital' => $etapa->getIdEdital(),
         ]);
     }
 
@@ -86,30 +161,35 @@ class ConvocacaoController extends Controller
             ->addOrderBy('i.nome', 'asc')
             ->getQuery()->getResult();
 
-        $arquivo = "/tmp/agendamento-" . $etapa->getId() . ".csv";
-        if (is_file($arquivo)) {
-            unlink($arquivo);
+        $arquivo = '/tmp/agendamento-' . $etapa->getId() . '.csv';
+        if (\is_file($arquivo)) {
+            \unlink($arquivo);
         }
 
-        $out = fopen($arquivo, 'w');
-        fputcsv($out, [
+        $out = \fopen($arquivo, 'w');
+        \fputcsv($out, [
             'inscricao',
             'nome',
+            'cpf',
+            'email',
             'data',
-            "hora",
-            "local",
+            'hora',
+            'local',
         ]);
         /** @var FrigaConvocacao $p */
         foreach ($convocacao as $p) {
-            fputcsv($out, [
+            \fputcsv($out, [
                 $p->getIdInscricao()->getUuid(),
                 $p->getIdInscricao()->getNome(),
-                $p->getData()->format('d/m/Y'),
-                $p->getData()->format('H:i:s'),
+                $p->getIdInscricao()->getCpf(),
+                $p->getIdInscricao()->getContatoEmail(),
+                \is_null($p->getData()) ? '' : $p->getData()->format('d/m/Y'),
+                \is_null($p->getData()) ? '' : $p->getData()->format('H:i:s'),
                 $p->getObservacao(),
             ]);
         }
-        fclose($out);
+        \fclose($out);
+
         return $this->file($arquivo);
     }
 
@@ -153,13 +233,7 @@ class ConvocacaoController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param FrigaEdital $edital
-     * @return RedirectResponse|Response
-     * @throws Exception
-     */
-    public function indexCandidatoAction(Request $request, FrigaEditalEtapa $etapa)
+    public function impresaoRelacaoContatoAction(Request $request, FrigaEditalEtapa $etapa)
     {
         if (!$this->isGranted('ROLE_ADMIN') and !$this->isGranted('ROLE_AVALIADOR')) {
             return $this->redirectToRoute('nte_admin_painel_homepage');
@@ -169,17 +243,16 @@ class ConvocacaoController extends Controller
 
         $edital = $etapa->getIdEdital();
         $geral = $edital->getInscricaoValida()
-            ->filter(function (FrigaInscricao $inscricao) {
-                return $inscricao->getIdSituacao() != 0
-                    and $inscricao->getIdSituacao() != 1
-                    and $inscricao->getIdSituacao() != 3
-                    and $inscricao->getIdSituacao() != 5;
+            ->filter(function(FrigaInscricao $inscricao) {
+                return 0 != $inscricao->getIdSituacao()
+                    and 1 != $inscricao->getIdSituacao()
+                    and 3 != $inscricao->getIdSituacao()
+                    and 5 != $inscricao->getIdSituacao();
             })->getIterator();
-        $geral->uasort(function (FrigaInscricao $a, FrigaInscricao $b) {
+        $geral->uasort(function(FrigaInscricao $a, FrigaInscricao $b) {
             return $b->getPontuacaoSoma(true) <=> $a->getPontuacaoSoma(true);
         });
         $geral = new ArrayCollection($geral->getArrayCopy());
-
 
         if ($edital->isResultado0() or $edital->isResultado1()) {
             /** @var FrigaEditalCargo $cargo */
@@ -188,11 +261,11 @@ class ConvocacaoController extends Controller
                     if ($edital->getCota()->count()) {
                         /** @var FrigaEditalCota $lista */
                         foreach ($edital->getCota() as $lista) {
-                            $obj = new stdClass();
-                            $obj->nome = $cargo->getDescricao() . "/" . $lista->getDescricao();
+                            $obj = new \stdClass();
+                            $obj->nome = $cargo->getDescricao() . '/' . $lista->getDescricao();
                             $obj->cargo = $cargo;
                             $obj->lista = $lista;
-                            $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($cargo, $lista) {
+                            $obj->classificacao = $geral->filter(function(FrigaInscricao $inscricao) use ($cargo, $lista) {
                                 return $inscricao->getIdCargo()->getId() == $cargo->getId()
                                     and $inscricao->getIdCota()->getId() == $lista->getId();
                             });
@@ -201,11 +274,11 @@ class ConvocacaoController extends Controller
                     }
                 }
                 if ($edital->isResultado1()) {
-                    $obj = new stdClass();
-                    $obj->nome = "Classificação Geral / " . $cargo->getDescricao();
+                    $obj = new \stdClass();
+                    $obj->nome = 'Classificação Geral / ' . $cargo->getDescricao();
                     $obj->cargo = $cargo;
                     $obj->lista = null;
-                    $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($cargo) {
+                    $obj->classificacao = $geral->filter(function(FrigaInscricao $inscricao) use ($cargo) {
                         return $inscricao->getIdCargo()->getId() == $cargo->getId();
                     });
                     $classificacao->add($obj);
@@ -214,27 +287,55 @@ class ConvocacaoController extends Controller
         }
         if ($edital->isResultado2()) {
             foreach ($edital->getCota() as $lista) {
-                $obj = new stdClass();
-                $obj->nome = "Classificação Geral/" . $lista->getDescricao();
+                $obj = new \stdClass();
+                $obj->nome = 'Classificação Geral/' . $lista->getDescricao();
                 $obj->cargo = null;
                 $obj->lista = $lista;
-                $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($lista) {
+                $obj->classificacao = $geral->filter(function(FrigaInscricao $inscricao) use ($lista) {
                     return $inscricao->getIdCota()->getId() == $lista->getId();
                 });
                 $classificacao->add($obj);
             }
         }
         if ($edital->isResultado3()) {
-            $obj = new stdClass();
-            $obj->nome = "Classificação Geral";
+            $obj = new \stdClass();
+            $obj->nome = 'Classificação Geral';
             $obj->cargo = null;
             $obj->lista = null;
             $obj->classificacao = $geral;
             $classificacao->add($obj);
         }
-        return $this->render('NteAplicacaoFrigaBundle:convocacao:index-candidato.html.twig', [
+
+        return $this->render('NteAplicacaoFrigaBundle:convocacao:impressao-contato.html.twig', [
             'classificao' => $classificacao,
             'edital' => $edital,
+            'etapa' => $etapa,
+        ]);
+    }
+
+    /**
+     * @return RedirectResponse|Response
+     *
+     * @throws \Exception
+     */
+    public function indexCandidatoAction(Request $request, FrigaEditalEtapa $etapa)
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if (!$this->getUser()->getPermissaoEtapa($etapa)) {
+                $this->addFlash('danger', 'Você não tem permissão para realizar a convocação!');
+
+                return $this->redirectToRoute('nte_admin_painel_homepage');
+            }
+            if (!$etapa->getPeriodoHabilitado()) {
+                $this->addFlash('danger', 'Convocação fora do período.');
+
+                return $this->redirectToRoute('nte_admin_painel_homepage');
+            }
+        }
+
+        return $this->render('NteAplicacaoFrigaBundle:convocacao:index-candidato.html.twig', [
+            'classificacao' => $this->gerarObjetoClassificacao($etapa->getIdEtapaClassificacao()),
+            'edital' => $etapa->getIdEdital(),
             'etapa' => $etapa,
         ]);
     }
@@ -244,6 +345,7 @@ class ConvocacaoController extends Controller
      * Se administrador, traz todos os editais.
      *
      * @param int $situacao
+     *
      * @return array|ArrayCollection|object[]
      */
     public function editais($situacao = 1)
@@ -252,12 +354,11 @@ class ConvocacaoController extends Controller
         $editais = new ArrayCollection();
         if ($this->isGranted('ROLE_ADMIN')) {
             $editais = $em->getRepository(FrigaEdital::class)->findAll();
-        } else if ($this->isGranted('ROLE_AVALIADOR')) {
-
+        } elseif ($this->isGranted('ROLE_AVALIADOR')) {
             /** @var ArrayCollection $tmp */
             $tmp = $this->getUser()
                 ->getIdEditalUsuario()
-               // ->filter(function (FrigaEditalUsuario $eu) use ($situacao) {
+                // ->filter(function (FrigaEditalUsuario $eu) use ($situacao) {
                 //    return $eu->getIdEdital()->getSituacao() == $situacao;
                 //})
             ;
@@ -267,22 +368,19 @@ class ConvocacaoController extends Controller
                     if (!$editais->contains($eu->getIdEdital())) {
                         $editais->add($eu->getIdEdital());
                     }
-                };
-                $editais = $editais->filter(function (FrigaEdital $edital) {
-                    return $edital->getEtapa()->filter(function (FrigaEditalEtapa $etapa) {
-                        return true;//$etapa->getPeriodoHabilitado();
+                }
+                $editais = $editais->filter(function(FrigaEdital $edital) {
+                    return $edital->getEtapa()->filter(function(FrigaEditalEtapa $etapa) {
+                        return true; //$etapa->getPeriodoHabilitado();
                     })->count();
                 });
             }
         }
+
         return $editais;
     }
 
-
     /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
-     * @param FrigaInscricao $inscricao
      * @return RedirectResponse|Response
      */
     public function formAction(Request $request, FrigaEditalEtapa $etapa, FrigaInscricao $inscricao)
@@ -308,10 +406,15 @@ class ConvocacaoController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $etapaUsuario = new FrigaEditalEtapaUsuario($etapa, $inscricao, $this->getUser());
+            $em->persist($etapaUsuario);
+
             $convocacao->setIdUsuario($this->getUser());
             $em->persist($convocacao);
             $em->flush();
-            $this->addFlash('success', "Agendamento realizado com sucesso!");
+
+            $this->addFlash('success', 'Agendamento realizado com sucesso!');
+
             return $this->redirectToRoute('convocacao_etapa', ['etapa' => $etapa->getId()]);
         }
 

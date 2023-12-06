@@ -1,33 +1,54 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Admin\SuporteBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Mapping as ORM;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaArquivo;
 use Nte\UsuarioBundle\Entity\Usuario;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-
 /**
- * Suporte
+ * Suporte.
  *
  * @ORM\Table(name="suporte")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class Suporte
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_situacao", type="integer", nullable=true)
      */
@@ -39,7 +60,6 @@ class Suporte
      * @ORM\Column(name="descricao", type="text", length=65535, nullable=true)
      */
     private $descricao;
-
 
     /**
      * @var string
@@ -66,7 +86,9 @@ class Suporte
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_usuario_solicitante", referencedColumnName="id")
      * })
      */
@@ -76,7 +98,9 @@ class Suporte
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_usuario_responsavel", referencedColumnName="id", nullable=true)
      * })
      */
@@ -89,7 +113,6 @@ class Suporte
      */
     private $idArquivo;
 
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -97,20 +120,17 @@ class Suporte
      */
     private $iteracao;
 
-
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->idArquivo = new ArrayCollection();
     }
 
-	/**
-	 * @param PreUpdateEventArgs $args
-	 * @ORM\PreUpdate
-	 */
+    /**
+     * @ORM\PreUpdate
+     */
     public function preUpdate(PreUpdateEventArgs $args)
     {
         if ($args->hasChangedField('registroDataCriacao')) {
@@ -127,10 +147,11 @@ class Suporte
         $this->registroDataCriacao = new \DateTime();
         $this->registroDataAtualizacao = new \DateTime();
     }
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -138,9 +159,9 @@ class Suporte
     }
 
     /**
-     * Set idSituacao
+     * Set idSituacao.
      *
-     * @param integer $idSituacao
+     * @param int $idSituacao
      *
      * @return Suporte
      */
@@ -152,9 +173,9 @@ class Suporte
     }
 
     /**
-     * Get idSituacao
+     * Get idSituacao.
      *
-     * @return integer
+     * @return int
      */
     public function getIdSituacao()
     {
@@ -171,16 +192,18 @@ class Suporte
 
     /**
      * @param string $assunto
+     *
      * @return Suporte
      */
     public function setAssunto($assunto)
     {
         $this->assunto = $assunto;
+
         return $this;
     }
 
     /**
-     * Set descricao
+     * Set descricao.
      *
      * @param string $descricao
      *
@@ -194,7 +217,7 @@ class Suporte
     }
 
     /**
-     * Get descricao
+     * Get descricao.
      *
      * @return string
      */
@@ -204,7 +227,7 @@ class Suporte
     }
 
     /**
-     * Set registroDataCriacao
+     * Set registroDataCriacao.
      *
      * @param \DateTime $registroDataCriacao
      *
@@ -218,7 +241,7 @@ class Suporte
     }
 
     /**
-     * Get registroDataCriacao
+     * Get registroDataCriacao.
      *
      * @return \DateTime
      */
@@ -228,7 +251,7 @@ class Suporte
     }
 
     /**
-     * Set registroDataAtualizacao
+     * Set registroDataAtualizacao.
      *
      * @param \DateTime $registroDataAtualizacao
      *
@@ -242,7 +265,7 @@ class Suporte
     }
 
     /**
-     * Get registroDataAtualizacao
+     * Get registroDataAtualizacao.
      *
      * @return \DateTime
      */
@@ -252,9 +275,7 @@ class Suporte
     }
 
     /**
-     * Set idUsuarioSolicitante
-     *
-     * @param Usuario $idUsuarioSolicitante
+     * Set idUsuarioSolicitante.
      *
      * @return Suporte
      */
@@ -266,7 +287,7 @@ class Suporte
     }
 
     /**
-     * Get idUsuarioSolicitante
+     * Get idUsuarioSolicitante.
      *
      * @return Usuario
      */
@@ -276,9 +297,7 @@ class Suporte
     }
 
     /**
-     * Set idUsuarioResponsavel
-     *
-     * @param Usuario $idUsuarioResponsavel
+     * Set idUsuarioResponsavel.
      *
      * @return Suporte
      */
@@ -290,7 +309,7 @@ class Suporte
     }
 
     /**
-     * Get idUsuarioResponsavel
+     * Get idUsuarioResponsavel.
      *
      * @return Usuario
      */
@@ -300,9 +319,7 @@ class Suporte
     }
 
     /**
-     * Add idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Add idArquivo.
      *
      * @return Suporte
      */
@@ -314,9 +331,7 @@ class Suporte
     }
 
     /**
-     * Remove idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Remove idArquivo.
      */
     public function removeIdArquivo(FrigaArquivo $idArquivo)
     {
@@ -324,7 +339,7 @@ class Suporte
     }
 
     /**
-     * Get idArquivo
+     * Get idArquivo.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -340,5 +355,4 @@ class Suporte
     {
         return $this->iteracao;
     }
-
 }

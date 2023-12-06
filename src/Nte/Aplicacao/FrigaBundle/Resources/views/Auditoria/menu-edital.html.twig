@@ -1,0 +1,28 @@
+<div class="col-md-3 col-lg-2">
+    {{ entidade.id }} - {{ entidade.url }}
+    <div class="row">
+        <div class="list-group">
+            {% set classeX = app.request.attributes.get('_route') == 'auditoria_edital_index_arquivo'? " active " : "  " %}
+            <a href="{{ path('auditoria_edital_index_arquivo', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-file-pdf-o"></i> Arquivos
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'auditoria_edital_index_inscricao'? " active " : "  " %}
+            <a href="{{ path('auditoria_edital_index_inscricao', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-th-list"></i> Inscrição
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'auditoria_edital_index_recurso'? " active " : "  " %}
+            <a href="{{ path('auditoria_edital_index_recurso', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-gavel"></i> Recursos
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'auditoria_edital_index_usuario'? " active " : "  "
+            %}
+            <a href="{{ path('auditoria_edital_index_usuario', {'uuid': entidade.uuid}) }}" class="list-group-item  {{ classeX }}">
+                <i class="fa fa-users"></i> Usuários
+            </a>
+            {% set classeX = app.request.attributes.get('_route') == 'auditoria_edital_index_log' ? " active " : "  " %}
+            <a href="{{ path('auditoria_edital_index_log', {'uuid': entidade.uuid}) }}" class="list-group-item {{ classeX }}">
+                <i class="fa fa-history"></i> Logs
+            </a>
+        </div>
+    </div>
+</div>

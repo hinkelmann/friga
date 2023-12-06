@@ -9,19 +9,136 @@
 {% block conteudo %}
     <div class="row text-right">
         <div class="btn-group">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="btn btn-default" href="{{ path('convocacao_etapa_exportar_moodle', {'etapa': etapa.id}) }}">
+                    <i class="fa fa-file-excel-o"></i> Exportar Moodle
+                </a>
+            {% endif %}
             <a class="btn btn-default" href="{{ path('convocacao_etapa_exportar_csv', {'etapa': etapa.id}) }}">
                 <i class="fa fa-file-excel-o"></i> Baixar CSV
             </a>
             <a class="btn btn-default" href="{{ path('convocacao_etapa_impressao_relacao', {'etapa': etapa.id}) }}">
-                <i class="icon icon-printer"></i> Imprimir Relação
+                <i class="icon icon-printer"></i> Relação
             </a>
             <a class="btn btn-default" href="{{ path('convocacao_etapa_impressao_presenca', {'etapa': etapa.id}) }}">
-                <i class="icon icon-printer"></i> Imprimir Presença
+                <i class="icon icon-printer"></i> Presença
+            </a>
+            <a title="Clique aqui para imprimir a relação de candiatos com os seus respectivos contatos"
+               class="btn btn-default btn-info"
+               href="{{ path('convocacao_etapa_impressao_relacao_contato', {'etapa': etapa.id}) }}">
+                <i class="icon icon-printer"></i> Contato
             </a>
         </div>
     </div>
     <div class="row">
-        {% for chave, lista in classificao %}
+        <div class="alert alert-info">
+            <strong>ATENÇÃO!</strong><br>
+            A ordem de classificação dos candidatos a serem convocados está relacionada a etapa: <strong>
+                {% if is_granted('ROLE_ADMIN') or app.user.permissaoEdital(edital) %}
+                    <a title="Clique aqui para alterar a etapa com a ordem de classificação"
+                       href="{{ path('edital_etapa_editar', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
+                        {{ etapa.idEtapaClassificacao.id }} -
+                        {{ etapa.idEtapaClassificacao.descricao }}</a>
+                {% else %}
+                    {{ etapa.idEtapaClassificacao.id }} -
+                    {{ etapa.idEtapaClassificacao.descricao }}
+                {% endif %}
+            </strong>.
+        </div>
+        {% for chave, lista in classificacao %}
+            <div class="panel-body">
+                <table class="table table-responsive table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th {% if edital.modeloInscricao == 1 %}colspan="3" {% else %} colspan="2"{% endif %}
+                            class="text-primary">
+                            <i class="icon icon-trophy"></i> &nbsp;
+                            {{ lista.nome }}
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        {% if edital.modeloInscricao == 1 %}
+                            <th>Projeto</th>
+                            <th>Participantes</th>
+                        {% else %}
+                            <th>Nome</th>
+                        {% endif %}
+                        <th width="10" class="text-center hidden-xs">Data</th>
+                        <th width="10" class="text-center"></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cc in lista.classificacao %}
+                        <tr class="{% if cc.empate %}b2{% endif %}">
+
+                            {% if edital.modeloInscricao == 1 %}
+                                <td>
+                                    <a title=""
+                                       href="{{ path('relatorio_perfil', {'uuid': cc.idInscricao.uuid}) }}">
+                                        {{ cc.idInscricao.uuid }} - <b
+                                                class="text-uppercase">{{ cc.idInscricao.projetoTitulo }}</b>
+                                    </a>
+                                    {% if cc.observacao %}
+                                        <br>
+                                        <small>Desempate: {{ cc.observacao }}</small>
+                                    {% endif %}
+                                </td>
+                                <td class="hidden-xs">
+                                    {% for p in cc.idInscricao.idProjetoParticipante %}
+                                        {{ p.nome }}<br>
+                                    {% endfor %}
+                                </td>
+                            {% else %}
+                                <td>
+                                    <a title=""
+                                       href="{{ path('relatorio_perfil', {'uuid': cc.idInscricao.uuid}) }}">
+                                        {{ cc.idInscricao.uuid }} - <b
+                                                class="text-uppercase">{{ cc.idInscricao.nome }}</b> </a>
+                                    {% if cc.observacao %}
+                                        <br>
+                                        <small>Desempate: {{ cc.observacao }}</small>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td class="hidden-xs">
+                                {% if cc.idInscricao.convocacaoEtapa(etapa).count %}
+                                    <div class="badge {% if etapa.final %}label-success {% else %} label-primary {% endif%} ">
+                                        {{ cc.idInscricao.convocacaoEtapa(etapa).first.registroDataCriacao|date('d/m/Y \\à\\s H:i:s') }}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('convocacao_etapa_candidato', {'etapa': etapa.id, 'uuid': cc.idInscricao.uuid}) }}"
+                                   class="btn btn-default"><i class="icon icon-calendar"></i>  {{ cc.posicao }}°
+                                    Agendar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% if lista.classificacao.count<1 %}
+                        <tr>
+                            <td colspan="5">Nenhum candidato classificado.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+                <div class="col-md-8 text-left">
+                    <b>
+                        Cálculo da pontuação:
+                        {% for p in edital.pontuacaoCategoriaPeso %}
+                            ({{ p.descricao }}) x {{ p.valorMaximo+0 }}  {% if loop.last == 0 %} + {% endif %}
+                        {% endfor %}
+                        = (Pontuação Total)
+                    </b>
+                </div>
+            </div>
+            <br><br>
+        {% endfor %}
+    </div>
+    <div class="row">
+        {% for chave, lista in [] %}
             <div class="panel-body">
                 <div class="form-bordered">
                     <div class="form-group">
@@ -100,6 +217,9 @@
         {% endfor %}
     </div>
     <style>
+        tr >td{
+            vertical-align: middle !important;
+        }
         .table > thead > tr > .b {
             border-top: 1px solid #c7d5de !important;
             border-bottom: 0 !important;
@@ -131,12 +251,4 @@
             border-bottom: 0px;
         }
     </style>
-{% endblock %}
-{% block javascripts2 %}
-    <script>
-        $('select').select2({
-            width: '100%',
-        });
-
-    </script>
 {% endblock %}

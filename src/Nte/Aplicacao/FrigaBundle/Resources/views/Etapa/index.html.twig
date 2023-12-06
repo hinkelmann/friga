@@ -63,6 +63,120 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        {% if editalEtapa|length %}
+        {% for ee in editalEtapa %}
+            <div class="col-md-6 col-lg-6 col-xl-4 item">
+                <div class="panel">
+                    <div class="panel-body">
+                        <h6>
+                            {{ ee.edital.titulo|length > 100 ? ee.edital.titulo|slice(0, 100) ~ '...' : ee.edital.titulo }}
+                        </h6>
+                        {% for etapa in ee.etapa %}
+                            <div class="tracking-item" id="{{ etapa.id }}">
+                                <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}"
+                                     data-placement="top" title="{{ etapa.tipoDescricao }}"
+                                     data-original-title="{{ etapa.tipoDescricao }}">
+                                    <i class="{{ etapa.objTipo.icone }}"></i>
+                                </div>
+                                <div class="tracking-date">
+                                    {% if etapa.andamentoPrazo >=0  and app.request.attributes.get('_route') == 'nte_aplicacao_friga_etapa_index' %}
+                                        <div class="progress" data-toggle="tooltip" data-placement="top" title=""
+                                             data-original-title="Prazo para finalizar a etapa. Quando este prazo chegar em 100% não será possível acessar a etapa">
+                                            <div class="progress-bar progress-bar-primary progress-bar-striped"
+                                                 style="width: {{ etapa.andamentoPrazo }}%">
+                                                {{ etapa.andamentoPrazo }}%
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                            {% if ('nte_aplicacao_friga_etapa_index_proxima' == app.request.attributes.get('_route')
+                                                or 'nte_aplicacao_friga_etapa_index_todas' == app.request.attributes.get('_route'))
+                                                and (
+                                                etapa.tipo ==1
+                                                or etapa.tipo == 2
+                                                or etapa.tipo == 3
+                                                or etapa.tipo == 4
+                                                or etapa.tipo == 5
+                                                or etapa.tipo == 6
+                                                or etapa.tipo == 7)
+                                                %}
+                                                {{ etapa.dataInicial|date('d/m/Y') }}
+                                            {% endif %}
+                                            {% if 'nte_aplicacao_friga_etapa_index_ecenrrada' == app.request.attributes.get('_route') %}
+                                                {{ etapa.dataDivulgacao|date('d/m/Y') }}
+                                            {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="tracking-content">
+                                    {% if etapa.periodoHabilitado or is_granted('ROLE_ADMIN') %}
+                                        {% if etapa.tipo == 3 or etapa.tipo== 7 %}
+                                            <a title="Clique aqui para realizar a avaliação dos candidatos"
+                                               href="{{ path('avaliacao_etapa',{etapa: etapa.id} ) }}">
+                                                {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                            </a>
+                                        {% endif %}
+                                        {% if etapa.tipo == 4 %}
+                                            <a href="{{ path('resultado_etapa', {'etapa': etapa.id}) }}">
+                                                {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                            </a>
+                                        {% endif %}
+                                        {% if etapa.tipo == 5 %}
+                                            <a title="Clique aqui para realizar a convocação dos candidatos"
+                                               href="{{ path('convocacao_etapa',{etapa: etapa.id} ) }}">
+                                                {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                    {% endif %}
+
+
+                                    {% if etapa.tipo ==1
+                                        or etapa.tipo == 2
+                                        or etapa.tipo == 3
+                                        or etapa.tipo == 4
+                                        or etapa.tipo == 5
+                                        or etapa.tipo == 6
+                                        or etapa.tipo == 7 %}
+                                        <span>
+                                        De {{ etapa.dataInicial|date('d/m/Y') }}
+                                        Até {{ etapa.dataFinal|date('d/m/Y ') }}
+                                    </span>
+                                    {% endif %}
+                                    {% if etapa.tipo ==3
+                                        or etapa.tipo == 4
+                                        or etapa.tipo == 5
+                                        or etapa.tipo == 7 %}
+                                        <span> Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+            <div class="body-error error-inside">
+                <div class="center-error">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="main-error mb-xlg">
+                                <h2 class="error-code text-dark text-center text-weight-semibold m-none"><i
+                                            class="icon icon-calculator fa-icon-check-circle text-primary"></i></h2>
+                                <p class="error-explanation text-center text-primary">
+                                    <br>Nenhuma <b> etapa </b> disponível.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {#
     <div class="row">
         {% if etapas.count %}
             {% for etapa in etapas %}
@@ -172,6 +286,98 @@
             </div>
         {% endif %}
     </div>
+    #}
+    <style>
+        .tracking-item {
+            border-left: 1px solid #214977;
+            position: relative;
+            padding: 2rem 1.5rem .5rem 2.5rem;
+            margin-left: 3rem;
+            min-height: 5rem
+        }
+
+        .tracking-item:last-child {
+            padding-bottom: 4rem
+        }
+
+        .tracking-item .tracking-date {
+            margin-bottom: .5rem
+        }
+
+        .tracking-item .tracking-date span {
+            color: #888;
+            padding-left: .4rem
+        }
+
+        .tracking-item .tracking-content {
+            padding: .5rem .8rem;
+            background-color: #f4f4f4;
+            border-radius: .5rem
+        }
+
+        .tracking-item .tracking-content span {
+            display: block;
+            color: #888;
+
+        }
+
+        .tracking-item .tracking-icon {
+            line-height: 2.6rem;
+            position: absolute;
+            left: -1.3rem;
+            width: 2.6rem;
+            height: 2.6rem;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #fff;
+            color: #fff
+        }
+
+        .tracking-item .tracking-icon.status-delivered {
+            background-color: #214977
+        }
+
+        .tracking-item .tracking-icon.status-intransit {
+            color: #214977;
+            border: 1px solid #214977;
+        }
+
+        @media (min-width: 992px) {
+            .tracking-item {
+                margin-left: 10rem
+            }
+
+            .tracking-item .tracking-date {
+                position: absolute;
+                left: -10rem;
+                width: 7.5rem;
+                text-align: right
+            }
+
+            .tracking-item .tracking-date span {
+                display: block
+            }
+
+            .tracking-item .tracking-content {
+                padding: 0;
+                background-color: transparent
+            }
+        }
+        html.scroll .col-xl-1, html.scroll .col-xl-2, html.scroll .col-xl-3, html.scroll .col-xl-4, html.scroll .col-xl-5, html.scroll .col-xl-6, html.scroll .col-xl-7, html.scroll .col-xl-8, html.scroll .col-xl-9, html.scroll .col-xl-10, html.scroll .col-xl-11, html.scroll .col-xl-12, html.fixed .col-xl-1, html.fixed .col-xl-2, html.fixed .col-xl-3, html.fixed .col-xl-4, html.fixed .col-xl-5, html.fixed .col-xl-6, html.fixed .col-xl-7, html.fixed .col-xl-8, html.fixed .col-xl-9, html.fixed .col-xl-10, html.fixed .col-xl-11, html.fixed .col-xl-12 {
+            position: relative;
+            min-height: 1px;
+            padding-right: 3px;
+            padding-left: 3px;
+            margin-bottom: 0px;
+            padding-bottom: 6px;
+        }
+        .panel {
+            margin-bottom: 0px;
+        }
+        .progress{
+            margin-top:5px;
+        }
+    </style>
 {% endblock %}
 {% block javascripts2 %}
     <script>

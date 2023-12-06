@@ -1,54 +1,72 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Monolog\Handler\IFTTTHandler;
 use Nte\UsuarioBundle\Entity\Usuario;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * FrigaInscricao
+ * FrigaInscricao.
  *
  * @ORM\Table(name="friga_inscricao")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaInscricao
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_situacao", type="integer", nullable=true)
      */
     private $idSituacao;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_situacao_anterior", type="integer", nullable=true)
      */
     private $idSituacaoAnterior;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="posicao", type="integer", nullable=true)
      */
     private $posicao;
-
 
     /**
      * @var string
@@ -79,7 +97,7 @@ class FrigaInscricao
     private $projetoAreaConhecimento;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sexo", type="integer", nullable=true)
      */
@@ -92,7 +110,7 @@ class FrigaInscricao
     private $dataNascimento;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="estrangeiro", type="boolean", nullable=true)
      */
@@ -148,7 +166,7 @@ class FrigaInscricao
     private $matriculaCurso;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="matricula_beneficio", type="integer",  nullable=true)
      */
@@ -156,10 +174,10 @@ class FrigaInscricao
 
     /**
      * @var string
+     *
      * @ORM\Column(name="matricula_indice_desempenho", type="string", length=225, nullable=true)
      */
     private $matriculaIndiceDesempenho;
-
 
     /**
      * @var string
@@ -224,7 +242,6 @@ class FrigaInscricao
      */
     private $url3;
 
-
     /**
      * @var string
      *
@@ -260,7 +277,6 @@ class FrigaInscricao
      */
     private $bancoConta;
 
-
     /**
      * @var string
      *
@@ -275,14 +291,12 @@ class FrigaInscricao
      */
     private $rgDataExpedicao;
 
-
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="te_data_expedicao", type="date", nullable=true)
      */
     private $teDataExpedicao;
-
 
     /**
      * @var \DateTime
@@ -400,7 +414,9 @@ class FrigaInscricao
      * @var FrigaEditalCargo
      *
      * @ORM\ManyToOne(targetEntity="FrigaEditalCargo", inversedBy="idEditalUsuarioInscrito", fetch="EXTRA_LAZY")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_cargo", referencedColumnName="id")
      * })
      */
@@ -410,7 +426,9 @@ class FrigaInscricao
      * @var FrigaEditalCargo
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCota", inversedBy="idEditalUsuarioInscrito", fetch="EXTRA_LAZY")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_cota", referencedColumnName="id")
      * })
      */
@@ -420,22 +438,37 @@ class FrigaInscricao
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario", inversedBy="inscricao", fetch="EXTRA_LAZY")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
      * })
      */
     private $idUsuario;
 
-
     /**
      * @var FrigaEdital
      *
      * @ORM\ManyToOne(targetEntity="FrigaEdital", inversedBy="inscricao", fetch="EXTRA_LAZY")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      * })
      */
     private $idEdital;
+
+    /**
+     * @var FrigaEditalEtapa
+     *
+     * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa", inversedBy="inscricao", fetch="EXTRA_LAZY")
+     *
+     * @ORM\JoinColumns({
+     *
+     *   @ORM\JoinColumn(name="id_etapa", referencedColumnName="id")
+     * })
+     */
+    private $idEtapa;
 
     /**
      * @var ArrayCollection
@@ -482,6 +515,13 @@ class FrigaInscricao
     /**
      * @var ArrayCollection
      *
+     * @ORM\OneToMany(targetEntity="Nte\UsuarioBundle\Entity\ImpedimentoDeclaracao", mappedBy="idInscricao")
+     */
+    private $idImpedimentoDeclaracao;
+
+    /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoProjetoParticipante", mappedBy="idInscricao")
      */
     private $idProjetoParticipante;
@@ -490,8 +530,10 @@ class FrigaInscricao
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="FrigaArquivo", inversedBy="idInscricao", fetch="EXTRA_LAZY")
+     *
      * @ORM\JoinTable(name="friga_inscricao_tem_arquivo",
      *   joinColumns={
+     *
      *     @ORM\JoinColumn(name="id_inscricao", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
@@ -502,7 +544,14 @@ class FrigaInscricao
     private $idArquivo;
 
     /**
-     * Constructor
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaUsuario", mappedBy="idInscricao")
+     */
+    private $idEditalEtapaUsuario;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
@@ -512,15 +561,16 @@ class FrigaInscricao
         $this->convocacao = new ArrayCollection();
         $this->recursos = new ArrayCollection();
         $this->classificacao = new ArrayCollection();
+        $this->idEditalEtapaUsuario = new ArrayCollection();
         $this->feedback = new ArrayCollection();
         $this->idProjetoParticipante = new ArrayCollection();
+        $this->idImpedimentoDeclaracao = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -528,9 +578,9 @@ class FrigaInscricao
     }
 
     /**
-     * Set idSituacao
+     * Set idSituacao.
      *
-     * @param integer $idSituacao
+     * @param int $idSituacao
      *
      * @return FrigaInscricao
      */
@@ -542,9 +592,9 @@ class FrigaInscricao
     }
 
     /**
-     * Get idSituacao
+     * Get idSituacao.
      *
-     * @return integer
+     * @return int
      */
     public function getIdSituacao()
     {
@@ -561,19 +611,20 @@ class FrigaInscricao
 
     /**
      * @param int $idSituacaoAnterior
+     *
      * @return FrigaInscricao
      */
     public function setIdSituacaoAnterior($idSituacaoAnterior)
     {
         $this->idSituacaoAnterior = $idSituacaoAnterior;
+
         return $this;
     }
 
-
     /**
-     * Set posicao
+     * Set posicao.
      *
-     * @param integer $posicao
+     * @param int $posicao
      *
      * @return FrigaInscricao
      */
@@ -585,9 +636,9 @@ class FrigaInscricao
     }
 
     /**
-     * Get posicao
+     * Get posicao.
      *
-     * @return integer
+     * @return int
      */
     public function getPosicao()
     {
@@ -595,7 +646,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set nome
+     * Set nome.
      *
      * @param string $nome
      *
@@ -609,7 +660,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get nome
+     * Get nome.
      *
      * @return string
      */
@@ -619,7 +670,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set dataNascimento
+     * Set dataNascimento.
      *
      * @param \DateTime $dataNascimento
      *
@@ -633,7 +684,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get dataNascimento
+     * Get dataNascimento.
      *
      * @return \DateTime
      */
@@ -643,7 +694,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set cpf
+     * Set cpf.
      *
      * @param string $cpf
      *
@@ -657,7 +708,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get cpf
+     * Get cpf.
      *
      * @return string
      */
@@ -667,7 +718,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set rgNro
+     * Set rgNro.
      *
      * @param string $rgNro
      *
@@ -681,7 +732,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get rgNro
+     * Get rgNro.
      *
      * @return string
      */
@@ -700,11 +751,13 @@ class FrigaInscricao
 
     /**
      * @param string $teNro
+     *
      * @return FrigaInscricao
      */
     public function setTeNro($teNro)
     {
         $this->teNro = $teNro;
+
         return $this;
     }
 
@@ -718,17 +771,18 @@ class FrigaInscricao
 
     /**
      * @param string $crNro
+     *
      * @return FrigaInscricao
      */
     public function setCrNro($crNro)
     {
         $this->crNro = $crNro;
+
         return $this;
     }
 
-
     /**
-     * Set rgOrgaoExpedidor
+     * Set rgOrgaoExpedidor.
      *
      * @param string $rgOrgaoExpedidor
      *
@@ -742,7 +796,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get rgOrgaoExpedidor
+     * Get rgOrgaoExpedidor.
      *
      * @return string
      */
@@ -752,7 +806,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set rgDataExpedicao
+     * Set rgDataExpedicao.
      *
      * @param \DateTime $rgDataExpedicao
      *
@@ -766,7 +820,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get rgDataExpedicao
+     * Get rgDataExpedicao.
      *
      * @return \DateTime
      */
@@ -785,11 +839,13 @@ class FrigaInscricao
 
     /**
      * @param \DateTime $teDataExpedicao
+     *
      * @return FrigaInscricao
      */
     public function setTeDataExpedicao($teDataExpedicao)
     {
         $this->teDataExpedicao = $teDataExpedicao;
+
         return $this;
     }
 
@@ -803,16 +859,18 @@ class FrigaInscricao
 
     /**
      * @param \DateTime $crDataExpedicao
+     *
      * @return FrigaInscricao
      */
     public function setCrDataExpedicao($crDataExpedicao)
     {
         $this->crDataExpedicao = $crDataExpedicao;
+
         return $this;
     }
 
     /**
-     * Set contatoTelefone1
+     * Set contatoTelefone1.
      *
      * @param string $contatoTelefone1
      *
@@ -826,7 +884,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get contatoTelefone1
+     * Get contatoTelefone1.
      *
      * @return string
      */
@@ -836,7 +894,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set contatoTelefone2
+     * Set contatoTelefone2.
      *
      * @param string $contatoTelefone2
      *
@@ -850,7 +908,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get contatoTelefone2
+     * Get contatoTelefone2.
      *
      * @return string
      */
@@ -860,7 +918,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set contatoEmail
+     * Set contatoEmail.
      *
      * @param string $contatoEmail
      *
@@ -874,7 +932,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get contatoEmail
+     * Get contatoEmail.
      *
      * @return string
      */
@@ -884,7 +942,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set enderecoCep
+     * Set enderecoCep.
      *
      * @param string $enderecoCep
      *
@@ -898,7 +956,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoCep
+     * Get enderecoCep.
      *
      * @return string
      */
@@ -908,7 +966,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set enderecoBairro
+     * Set enderecoBairro.
      *
      * @param string $enderecoBairro
      *
@@ -922,7 +980,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoBairro
+     * Get enderecoBairro.
      *
      * @return string
      */
@@ -932,7 +990,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set enderecoLogradouro
+     * Set enderecoLogradouro.
      *
      * @param string $enderecoLogradouro
      *
@@ -946,7 +1004,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoLogradouro
+     * Get enderecoLogradouro.
      *
      * @return string
      */
@@ -956,7 +1014,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set enderecoNumero
+     * Set enderecoNumero.
      *
      * @param string $enderecoNumero
      *
@@ -970,7 +1028,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoNumero
+     * Get enderecoNumero.
      *
      * @return string
      */
@@ -980,7 +1038,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set enderecoComplemento
+     * Set enderecoComplemento.
      *
      * @param string $enderecoComplemento
      *
@@ -994,7 +1052,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoComplemento
+     * Get enderecoComplemento.
      *
      * @return string
      */
@@ -1013,17 +1071,18 @@ class FrigaInscricao
 
     /**
      * @param \DateTime $rneDataExpedicao
+     *
      * @return FrigaInscricao
      */
     public function setRneDataExpedicao($rneDataExpedicao)
     {
         $this->rneDataExpedicao = $rneDataExpedicao;
+
         return $this;
     }
 
-
     /**
-     * Set enderecoMunicipio
+     * Set enderecoMunicipio.
      *
      * @param string $enderecoMunicipio
      *
@@ -1037,7 +1096,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoMunicipio
+     * Get enderecoMunicipio.
      *
      * @return string
      */
@@ -1047,7 +1106,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set enderecoUf
+     * Set enderecoUf.
      *
      * @param string $enderecoUf
      *
@@ -1061,7 +1120,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get enderecoUf
+     * Get enderecoUf.
      *
      * @return string
      */
@@ -1071,7 +1130,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set uuid
+     * Set uuid.
      *
      * @param string $uuid
      *
@@ -1085,7 +1144,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get uuid
+     * Get uuid.
      *
      * @return string
      */
@@ -1104,11 +1163,13 @@ class FrigaInscricao
 
     /**
      * @param bool $estrangeiro
+     *
      * @return FrigaInscricao
      */
     public function setEstrangeiro($estrangeiro)
     {
         $this->estrangeiro = $estrangeiro;
+
         return $this;
     }
 
@@ -1122,11 +1183,13 @@ class FrigaInscricao
 
     /**
      * @param string $nacionalidade
+     *
      * @return FrigaInscricao
      */
     public function setNacionalidade($nacionalidade)
     {
         $this->nacionalidade = $nacionalidade;
+
         return $this;
     }
 
@@ -1140,11 +1203,13 @@ class FrigaInscricao
 
     /**
      * @param string $passaporteNro
+     *
      * @return FrigaInscricao
      */
     public function setPassaporteNro($passaporteNro)
     {
         $this->passaporteNro = $passaporteNro;
+
         return $this;
     }
 
@@ -1158,11 +1223,13 @@ class FrigaInscricao
 
     /**
      * @param string $rneNro
+     *
      * @return FrigaInscricao
      */
     public function setRneNro($rneNro)
     {
         $this->rneNro = $rneNro;
+
         return $this;
     }
 
@@ -1176,14 +1243,15 @@ class FrigaInscricao
 
     /**
      * @param string $rgUF
+     *
      * @return FrigaInscricao
      */
     public function setRgUF($rgUF)
     {
         $this->rgUF = $rgUF;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -1195,11 +1263,13 @@ class FrigaInscricao
 
     /**
      * @param string $certidaoNascimentoNro
+     *
      * @return FrigaInscricao
      */
     public function setCertidaoNascimentoNro($certidaoNascimentoNro)
     {
         $this->certidaoNascimentoNro = $certidaoNascimentoNro;
+
         return $this;
     }
 
@@ -1213,11 +1283,13 @@ class FrigaInscricao
 
     /**
      * @param string $url0
+     *
      * @return FrigaInscricao
      */
     public function setUrl0($url0)
     {
         $this->url0 = $url0;
+
         return $this;
     }
 
@@ -1231,11 +1303,13 @@ class FrigaInscricao
 
     /**
      * @param string $url1
+     *
      * @return FrigaInscricao
      */
     public function setUrl1($url1)
     {
         $this->url1 = $url1;
+
         return $this;
     }
 
@@ -1249,11 +1323,13 @@ class FrigaInscricao
 
     /**
      * @param string $url2
+     *
      * @return FrigaInscricao
      */
     public function setUrl2($url2)
     {
         $this->url2 = $url2;
+
         return $this;
     }
 
@@ -1267,11 +1343,13 @@ class FrigaInscricao
 
     /**
      * @param string $url3
+     *
      * @return FrigaInscricao
      */
     public function setUrl3($url3)
     {
         $this->url3 = $url3;
+
         return $this;
     }
 
@@ -1285,11 +1363,13 @@ class FrigaInscricao
 
     /**
      * @param string $url4
+     *
      * @return FrigaInscricao
      */
     public function setUrl4($url4)
     {
         $this->url4 = $url4;
+
         return $this;
     }
 
@@ -1303,11 +1383,13 @@ class FrigaInscricao
 
     /**
      * @param string $bancoInstituicao
+     *
      * @return FrigaInscricao
      */
     public function setBancoInstituicao($bancoInstituicao)
     {
         $this->bancoInstituicao = $bancoInstituicao;
+
         return $this;
     }
 
@@ -1321,11 +1403,13 @@ class FrigaInscricao
 
     /**
      * @param string $bancoAgencia
+     *
      * @return FrigaInscricao
      */
     public function setBancoAgencia($bancoAgencia)
     {
         $this->bancoAgencia = $bancoAgencia;
+
         return $this;
     }
 
@@ -1339,14 +1423,15 @@ class FrigaInscricao
 
     /**
      * @param string $bancoConta
+     *
      * @return FrigaInscricao
      */
     public function setBancoConta($bancoConta)
     {
         $this->bancoConta = $bancoConta;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -1358,17 +1443,18 @@ class FrigaInscricao
 
     /**
      * @param string $apresentacao
+     *
      * @return FrigaInscricao
      */
     public function setApresentacao($apresentacao)
     {
         $this->apresentacao = $apresentacao;
+
         return $this;
     }
 
-
     /**
-     * Set registroDataCriacao
+     * Set registroDataCriacao.
      *
      * @param \DateTime $registroDataCriacao
      *
@@ -1382,7 +1468,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get registroDataCriacao
+     * Get registroDataCriacao.
      *
      * @return \DateTime
      */
@@ -1392,7 +1478,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set registroDataAtualizacao
+     * Set registroDataAtualizacao.
      *
      * @param \DateTime $registroDataAtualizacao
      *
@@ -1406,7 +1492,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get registroDataAtualizacao
+     * Get registroDataAtualizacao.
      *
      * @return \DateTime
      */
@@ -1416,9 +1502,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set idCargo
-     *
-     * @param FrigaEditalCargo $idCargo
+     * Set idCargo.
      *
      * @return FrigaInscricao
      */
@@ -1430,7 +1514,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get idCargo
+     * Get idCargo.
      *
      * @return FrigaEditalCargo
      */
@@ -1440,9 +1524,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set idUsuario
-     *
-     * @param Usuario $idUsuario
+     * Set idUsuario.
      *
      * @return FrigaInscricao
      */
@@ -1454,7 +1536,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get idUsuario
+     * Get idUsuario.
      *
      * @return Usuario
      */
@@ -1464,9 +1546,7 @@ class FrigaInscricao
     }
 
     /**
-     * Set idEdital
-     *
-     * @param FrigaEdital $idEdital
+     * Set idEdital.
      *
      * @return FrigaInscricao
      */
@@ -1478,13 +1558,33 @@ class FrigaInscricao
     }
 
     /**
-     * Get idEdital
+     * Get idEdital.
      *
      * @return FrigaEdital
      */
     public function getIdEdital()
     {
         return $this->idEdital;
+    }
+
+    /**
+     * @return FrigaEditalEtapa
+     */
+    public function getIdEtapa()
+    {
+        return $this->idEtapa;
+    }
+
+    /**
+     * @param FrigaEditalEtapa $idEtapa
+     *
+     * @return FrigaInscricao
+     */
+    public function setIdEtapa($idEtapa)
+    {
+        $this->idEtapa = $idEtapa;
+
+        return $this;
     }
 
     /**
@@ -1497,11 +1597,13 @@ class FrigaInscricao
 
     /**
      * @param FrigaEditalCargo $idCota
+     *
      * @return FrigaInscricao
      */
     public function setIdCota($idCota)
     {
         $this->idCota = $idCota;
+
         return $this;
     }
 
@@ -1515,11 +1617,13 @@ class FrigaInscricao
 
     /**
      * @param string $matriculaNro
+     *
      * @return FrigaInscricao
      */
     public function setMatriculaNro($matriculaNro)
     {
         $this->matriculaNro = $matriculaNro;
+
         return $this;
     }
 
@@ -1533,11 +1637,13 @@ class FrigaInscricao
 
     /**
      * @param string $matriculaCurso
+     *
      * @return FrigaInscricao
      */
     public function setMatriculaCurso($matriculaCurso)
     {
         $this->matriculaCurso = $matriculaCurso;
+
         return $this;
     }
 
@@ -1551,16 +1657,18 @@ class FrigaInscricao
 
     /**
      * @param string $matriculaIndiceDesempenho
+     *
      * @return FrigaInscricao
      */
     public function setMatriculaIndiceDesempenho($matriculaIndiceDesempenho)
     {
         $this->matriculaIndiceDesempenho = $matriculaIndiceDesempenho;
+
         return $this;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getMatriculaBeneficio()
     {
@@ -1568,15 +1676,16 @@ class FrigaInscricao
     }
 
     /**
-     * @param integer $matriculaBeneficio
+     * @param int $matriculaBeneficio
+     *
      * @return FrigaInscricao
      */
     public function setMatriculaBeneficio($matriculaBeneficio)
     {
         $this->matriculaBeneficio = $matriculaBeneficio;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -1588,14 +1697,15 @@ class FrigaInscricao
 
     /**
      * @param string $recebimentoBolsa
+     *
      * @return FrigaInscricao
      */
     public function setRecebimentoBolsa($recebimentoBolsa)
     {
         $this->recebimentoBolsa = $recebimentoBolsa;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -1607,19 +1717,39 @@ class FrigaInscricao
 
     /**
      * @param string $rneDataValidade
+     *
      * @return FrigaInscricao
      */
     public function setRneDataValidade($rneDataValidade)
     {
         $this->rneDataValidade = $rneDataValidade;
+
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdImpedimentoDeclaracao(Usuario $usuario = null)
+    {
+        if (!\is_null($usuario)) {
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('idUsuario', $usuario));
+            $this->idImpedimentoDeclaracao->matching($criteria);
+        }
+
+        return $this->idImpedimentoDeclaracao;
+    }
 
     /**
-     * Add idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * @return ArrayCollection
+     */
+    public function getIdEditalEtapaUsuario()
+    {
+        return $this->idEditalEtapaUsuario;
+    }
+
+    /**
+     * Add idArquivo.
      *
      * @return FrigaInscricao
      */
@@ -1631,9 +1761,7 @@ class FrigaInscricao
     }
 
     /**
-     * Remove idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Remove idArquivo.
      */
     public function removeIdArquivo(FrigaArquivo $idArquivo)
     {
@@ -1641,7 +1769,7 @@ class FrigaInscricao
     }
 
     /**
-     * Get idArquivo
+     * Get idArquivo.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1660,11 +1788,13 @@ class FrigaInscricao
 
     /**
      * @param int $sexo
+     *
      * @return FrigaInscricao
      */
     public function setSexo($sexo)
     {
         $this->sexo = $sexo;
+
         return $this;
     }
 
@@ -1678,11 +1808,13 @@ class FrigaInscricao
 
     /**
      * @param string $projetoTitulo
+     *
      * @return FrigaInscricao
      */
     public function setProjetoTitulo($projetoTitulo)
     {
         $this->projetoTitulo = $projetoTitulo;
+
         return $this;
     }
 
@@ -1696,11 +1828,13 @@ class FrigaInscricao
 
     /**
      * @param string $projetoResumo
+     *
      * @return FrigaInscricao
      */
     public function setProjetoResumo($projetoResumo)
     {
         $this->projetoResumo = $projetoResumo;
+
         return $this;
     }
 
@@ -1714,15 +1848,15 @@ class FrigaInscricao
 
     /**
      * @param string $projetoAreaConhecimento
+     *
      * @return FrigaInscricao
      */
     public function setProjetoAreaConhecimento($projetoAreaConhecimento)
     {
         $this->projetoAreaConhecimento = $projetoAreaConhecimento;
+
         return $this;
     }
-
-
 
     /**
      * @return ArrayCollection
@@ -1742,46 +1876,45 @@ class FrigaInscricao
             if ($pt->getIdEditalPontuacao()->getId() == $id) {
                 return $pt;
             }
-        };
+        }
+
         return null;
     }
 
     /**
-     * @param FrigaEditalPontuacao $item
      * @return ArrayCollection
      */
     public function getPontuacaoAvaliacaoItem(FrigaEditalPontuacao $item)
     {
-        $pt = $this->avaliacao->filter(function (FrigaInscricaoPontuacaoAvaliacao $a) use ($item) {
+        $pt = $this->avaliacao->filter(function(FrigaInscricaoPontuacaoAvaliacao $a) use ($item) {
             if ($a->getIdEditalPontuacao()) {
                 return $a->getIdEditalPontuacao()->getId() == $item->getId();
             } else {
                 return $a->getIdEditalPontuacaoCategoria()->getId() == $item->getIdCategoria()->getId();
             }
         });
+
         return $pt;
     }
 
     /**
-     * @param FrigaEditalPontuacao $item
      * @return int|string|null
      */
     public function getPontuacaoAvaliacaoItemValor(FrigaEditalPontuacao $item, $divulgacao = false)
     {
         $pt = $this->getPontuacaoAvaliacaoItem($item);
         $tmp = 0;
-        if ($pt->count() == 1) {
+        if (1 == $pt->count()) {
             $tmp = $pt->first()->getValorAvaliador() + 0;
         } elseif ($pt->count() > 1) {
             foreach ($pt as $p) {
-                $tmp = bcadd($tmp, $p->getValorAvaliador(), 5);
+                $tmp = \bcadd($tmp, $p->getValorAvaliador(), 5);
             }
-            $tmp = bcdiv($tmp, $pt->count(), 5);
+            $tmp = \bcdiv($tmp, $pt->count(), 5);
         }
 
         return $tmp;
     }
-
 
     /**
      * @return FrigaInscricaoPontuacao|null
@@ -1795,7 +1928,8 @@ class FrigaInscricao
                     return $pt;
                 }
             }
-        };
+        }
+
         return null;
     }
 
@@ -1806,66 +1940,67 @@ class FrigaInscricao
     {
         $obj = new \stdClass();
         $obj->id = $this->idSituacao;
-        $obj->descricao = "";
-        $obj->icone = "";
-        $obj->css = "label label-info";
-        $obj->cssAlert = "alert alert-info";
+        $obj->descricao = '';
+        $obj->icone = '';
+        $obj->css = 'label label-info';
+        $obj->cssAlert = 'alert alert-info';
         switch ($this->idSituacao) {
             case -999:
-                $obj->descricao = "Inscrição Cancelada";
-                $obj->css = "label label-dark";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-dark";
+                $obj->descricao = 'Inscrição Cancelada';
+                $obj->css = 'label label-dark';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-dark';
                 break;
             case 0:
-                $obj->descricao = "Inscrição Realizada";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Inscrição Realizada';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
             case 1:
-                $obj->descricao = "Inscrição Não Homologada";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-times";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Inscrição Não Homologada';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-times';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 2:
-                $obj->descricao = "Inscrição Homologada";
-                $obj->css = "label label-info";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Inscrição Homologada';
+                $obj->css = 'label label-info';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
             case 3:
-                $obj->descricao = "Desclassificado";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Desclassificado';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 4:
-                $obj->descricao = "Em avaliação";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Em avaliação';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 5:
-                $obj->descricao = "Aguardando Recurso";
-                $obj->css = "label label-warning";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-warning";
+                $obj->descricao = 'Aguardando Recurso';
+                $obj->css = 'label label-warning';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-warning';
                 break;
             case 6:
-                $obj->descricao = "Classificado";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Classificado';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
             case 7:
-                $obj->descricao = "Convocado";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Convocado';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
         }
+
         return $obj;
     }
 
@@ -1890,8 +2025,8 @@ class FrigaInscricao
      */
     public function getRecursoEtapa()
     {
-        return $this->idEdital->getEtapa()->filter(function (FrigaEditalEtapa $e) {
-            return $e->getTipo() == 6;
+        return $this->idEdital->getEtapa()->filter(function(FrigaEditalEtapa $e) {
+            return 6 == $e->getTipo();
         });
     }
 
@@ -1903,14 +2038,12 @@ class FrigaInscricao
         return $this->idProjetoParticipante;
     }
 
-
     /**
-     * @param $id
      * @return FrigaInscricaoRecurso
      */
     public function getRecurso($id)
     {
-        return $this->getRecursos()->filter(function (FrigaInscricaoRecurso $r) use ($id) {
+        return $this->getRecursos()->filter(function(FrigaInscricaoRecurso $r) use ($id) {
             return $r->getId() == $id;
         })->first();
     }
@@ -1922,32 +2055,31 @@ class FrigaInscricao
         if ($recurso) {
             $tmp = $recurso->getIdArquivo();
         }
-        return $tmp;
 
+        return $tmp;
     }
 
     /**
      * @param FrigaEditalEtapa|null $etapa
+     *
      * @return ArrayCollection
      */
     public function getRecursosEtapa($etapa)
     {
         //dump($this->recursos);
-        return $this->recursos->filter(function (FrigaInscricaoRecurso $r) use ($etapa) {
-            return !is_null($etapa) and $r->getIdEditalEtapa()->getId() == $etapa->getId();
+        return $this->recursos->filter(function(FrigaInscricaoRecurso $r) use ($etapa) {
+            return !\is_null($etapa) and $r->getIdEditalEtapa()->getId() == $etapa->getId();
         });
     }
 
-
     /**
-     * @param FrigaEditalEtapa $etapa
      * @return ArrayCollection
      */
     public function getConvocacaoEtapa(FrigaEditalEtapa $etapa)
     {
-        return $this->convocacao->filter(function (FrigaConvocacao $c) use ($etapa) {
-            return $c->getIdEtapa()->getId() == $etapa->getId();
-        });
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('idEtapa', $etapa));
+
+        return $this->convocacao->matching($criteria);
     }
 
     /**
@@ -1976,17 +2108,15 @@ class FrigaInscricao
 
     public function getFeedbackEtapa(FrigaEditalEtapa $etapa)
     {
-        return $this->feedback->filter(function (FrigaInscricaoFeedback $f) use ($etapa) {
+        return $this->feedback->filter(function(FrigaInscricaoFeedback $f) use ($etapa) {
             return $etapa->getId() == $f->getIdEtapa()->getId();
         });
     }
 
-
     /**
      * @param bool $avaliacao
-     * @param FrigaEditalPontuacaoCategoria|null $peso
-     * @param boolean $excedente
-     * @param FrigaEditalEtapa|null $etapa
+     * @param bool $excedente
+     *
      * @return int|string
      */
     public function getPontuacaoSoma($avaliacao = false, FrigaEditalPontuacaoCategoria $peso = null, $excedente = false, FrigaEditalEtapa $etapa = null)
@@ -1994,7 +2124,7 @@ class FrigaInscricao
         //dump($peso);
         $total = 0;
         $totalExcedente = 0;
-        if ($this->idSituacao == 1 or $this->idSituacao == 3) {
+        if (1 == $this->idSituacao or 3 == $this->idSituacao) {
             return 0;
         }
         if ($peso) {
@@ -2002,83 +2132,99 @@ class FrigaInscricao
             $root->add($peso);
         } else {
             $root = $this->getIdEdital()->getPontuacaoCategoria()
-                ->filter(function (FrigaEditalPontuacaoCategoria $c) use ($peso) {
-                    return $c->getIdCategoria() == null;
+                ->filter(function(FrigaEditalPontuacaoCategoria $c) {
+                    return null == $c->getIdCategoria();
                 });
         }
         /** @var FrigaEditalPontuacaoCategoria $peso */
         foreach ($root as $peso) {
             $pontuacaoCategoria = 0;
             $pontuacaoCategoriaExcedente = 0;
+
             /** @var FrigaEditalPontuacaoCategoria $categoria */
             foreach ($peso->getFilhos() as $categoria) {
                 $pontuacaoItem = 0;
+
+                //Quantidade de avaliações
+                $pontuacaoAvaliador = 0;
+
                 /** @var FrigaEditalPontuacao $item */
                 foreach ($categoria->getPontuacao() as $item) {
                     //Se $avalicao == true então capturar a nota do avaliador
                     //Se $avalicao == false então capturar a nota informada pelo candidato
                     if ($avaliacao) {
                         $pontuacaoAvaliacao = $this->avaliacao
-                            ->filter(function (FrigaInscricaoPontuacaoAvaliacao $avaliacao) use ($item) {
-
-                                return $avaliacao->getIdEditalPontuacao() != null
+                            ->filter(function(FrigaInscricaoPontuacaoAvaliacao $avaliacao) use ($item) {
+                                return null != $avaliacao->getIdEditalPontuacao()
                                     and $avaliacao->getIdEditalPontuacao()->getId() == $item->getId();
                             });
+                        if ($categoria->isAgruparPontuacao()) {
+                            $pontuacaoAvaliador = \bcadd($pontuacaoAvaliador, $pontuacaoAvaliacao->count());
+                        }
                         // se $pontuacaoAvaliacao == 1, pontuação avaliada pelo coletivo
                         // se $pontuacaoAvaliacao  > 1, pontuacao avaliada individualmente
-                        if ($pontuacaoAvaliacao->count() == 1) {
+                        if (1 == $pontuacaoAvaliacao->count()) {
                             if ($item->getPontuacaoTipo() > 0) {
                                 //Verifica se o anexo foi aceito
                                 if ($pontuacaoAvaliacao->first()->isConsiderado()) {
-                                    $pontuacaoItem = bcadd($pontuacaoItem, $pontuacaoAvaliacao->first()->getValorAvaliador(), 5);
+                                    $pontuacaoItem = \bcadd($pontuacaoItem, $pontuacaoAvaliacao->first()->getValorAvaliador(), 5);
                                 }
                             } else {
-                                $pontuacaoItem = bcadd($pontuacaoItem, $pontuacaoAvaliacao->first()->getValorAvaliador(), 5);
+                                $pontuacaoItem = \bcadd($pontuacaoItem, $pontuacaoAvaliacao->first()->getValorAvaliador(), 5);
                             }
                         } elseif ($pontuacaoAvaliacao->count() > 1) {
                             $tmp = 0;
                             /** @var FrigaInscricaoPontuacaoAvaliacao $a */
                             foreach ($pontuacaoAvaliacao as $a) {
-                                $tmp = bcadd($tmp, $a->getValorAvaliador(), 5);
+                                $tmp = \bcadd($tmp, $a->getValorAvaliador(), 5);
                             }
-                            $pontuacaoItem = bcadd($pontuacaoItem, bcdiv($tmp, $pontuacaoAvaliacao->count(), 5), 5);
+                            if ($categoria->isAgruparPontuacao()) {
+                                $pontuacaoItem = \bcadd($pontuacaoItem, $tmp, 5);
+                            } else {
+                                $pontuacaoItem = \bcadd($pontuacaoItem, \bcdiv($tmp, $pontuacaoAvaliacao->count(), 5), 5);
+                            }
                         }
                     } else {
                         if ($this->getPontuacaoItem($item->getId())) {
-                            $pontuacaoItem = bcadd($pontuacaoItem, $this->getPontuacaoItem($item->getId())->getValorInformado(), 5);
+                            $pontuacaoItem = \bcadd($pontuacaoItem, $this->getPontuacaoItem($item->getId())->getValorInformado(), 5);
                         }
                     }
                 }
+                //Se pontuação agrupada, criar média da pontuação
+                if ($categoria->isAgruparPontuacao() and $pontuacaoAvaliador > 0) {
+                    $pontuacaoItem = \bcdiv($pontuacaoItem, $pontuacaoAvaliador, 5);
+                }
+
                 if ($pontuacaoItem > $categoria->getValorMaximo()) {
-                    $pontuacaoCategoria = bcadd($pontuacaoCategoria, $categoria->getValorMaximo(), 5);
-                    $tmp = bcsub($pontuacaoItem, $categoria->getValorMaximo(), 5);
-                    $pontuacaoCategoriaExcedente = bcadd($pontuacaoCategoriaExcedente, $tmp, 5);
+                    $pontuacaoCategoria = \bcadd($pontuacaoCategoria, $categoria->getValorMaximo(), 5);
+                    $tmp = \bcsub($pontuacaoItem, $categoria->getValorMaximo(), 5);
+                    $pontuacaoCategoriaExcedente = \bcadd($pontuacaoCategoriaExcedente, $tmp, 5);
                 } else {
-                    $pontuacaoCategoria = bcadd($pontuacaoCategoria, $pontuacaoItem, 5);
+                    $pontuacaoCategoria = \bcadd($pontuacaoCategoria, $pontuacaoItem, 5);
                 }
             }
-            $total = bcadd($total, bcmul($peso->getValorMaximo(), $pontuacaoCategoria, 5), 5);
-            $totalExcedente = bcadd($totalExcedente, bcmul($peso->getValorMaximo(), $pontuacaoCategoriaExcedente, 5), 5);
+            $total = \bcadd($total, \bcmul($peso->getValorMaximo(), $pontuacaoCategoria, 5), 5);
+            $totalExcedente = \bcadd($totalExcedente, \bcmul($peso->getValorMaximo(), $pontuacaoCategoriaExcedente, 5), 5);
         }
 
-        return $excedente ? floatval($totalExcedente) : floatval($total);
+        return $excedente ? \floatval($totalExcedente) : \floatval($total);
     }
 
     /**
      * @param bool $avaliacao
-     * @param FrigaEditalPontuacaoCategoria|null $categoria
      * @param bool $excedente
-     * @param FrigaEditalEtapa|null $etapa
+     *
      * @return float|int
      */
     public function getPontuacaoSomaCategoria($avaliacao = false, FrigaEditalPontuacaoCategoria $categoria = null, $excedente = false, FrigaEditalEtapa $etapa = null)
     {
         $total = 0;
         $totalExcedente = 0;
-        if ($this->idSituacao == 1 or $this->idSituacao == 3) {
+        if (1 == $this->idSituacao or 3 == $this->idSituacao) {
             return 0;
         }
-        $peso = $categoria->getIdCategoria();
+        $peso = \is_null($categoria->getIdCategoria()) ? 1 : $categoria->getIdCategoria()->getValorMaximo();
+
         $pontuacaoCategoria = 0;
         $pontuacaoCategoriaExcedente = 0;
         $pontuacaoItem = 0;
@@ -2088,46 +2234,44 @@ class FrigaInscricao
             //Se $avalicao == false então capturar a nota informada pelo candidato
             if ($avaliacao) {
                 $pontuacaoAvaliacao = $this->avaliacao
-                    ->filter(function (FrigaInscricaoPontuacaoAvaliacao $avaliacao) use ($item) {
-
-                        return $avaliacao->getIdEditalPontuacao() != null
+                    ->filter(function(FrigaInscricaoPontuacaoAvaliacao $avaliacao) use ($item) {
+                        return null != $avaliacao->getIdEditalPontuacao()
                             and $avaliacao->getIdEditalPontuacao()->getId() == $item->getId();
                     });
                 // se $pontuacaoAvaliacao == 1, pontuação avaliada pelo coletivo
                 // se $pontuacaoAvaliacao  > 1, pontuacao avaliada individualmente
-                if ($pontuacaoAvaliacao->count() == 1) {
+                if (1 == $pontuacaoAvaliacao->count()) {
                     //Verifica se o anexo foi aceito
                     if ($pontuacaoAvaliacao->first()->isConsiderado()) {
-                        $pontuacaoItem = bcadd($pontuacaoItem, $pontuacaoAvaliacao->first()->getValorAvaliador(), 5);
+                        $pontuacaoItem = \bcadd($pontuacaoItem, $pontuacaoAvaliacao->first()->getValorAvaliador(), 5);
                     }
                 } elseif ($pontuacaoAvaliacao->count() > 1) {
                     $tmp = 0;
                     /** @var FrigaInscricaoPontuacaoAvaliacao $a */
                     foreach ($pontuacaoAvaliacao as $a) {
-                        $tmp = bcadd($tmp, $a->getValorAvaliador(), 5);
+                        $tmp = \bcadd($tmp, $a->getValorAvaliador(), 5);
                     }
-                    $pontuacaoItem = bcadd($pontuacaoItem, bcdiv($tmp, $pontuacaoAvaliacao->count(), 5), 5);
+                    $pontuacaoItem = \bcadd($pontuacaoItem, \bcdiv($tmp, $pontuacaoAvaliacao->count(), 5), 5);
                 }
             } else {
                 if ($this->getPontuacaoItem($item->getId())) {
-                    $pontuacaoItem = bcadd($pontuacaoItem, $this->getPontuacaoItem($item->getId())->getValorInformado(), 5);
+                    $pontuacaoItem = \bcadd($pontuacaoItem, $this->getPontuacaoItem($item->getId())->getValorInformado(), 5);
                 }
             }
         }
         if ($pontuacaoItem > $categoria->getValorMaximo()) {
-            $pontuacaoCategoria = bcadd($pontuacaoCategoria, $categoria->getValorMaximo(), 5);
-            $tmp = bcsub($pontuacaoItem, $categoria->getValorMaximo(), 5);
-            $pontuacaoCategoriaExcedente = bcadd($pontuacaoCategoriaExcedente, $tmp, 5);
+            $pontuacaoCategoria = \bcadd($pontuacaoCategoria, $categoria->getValorMaximo(), 5);
+            $tmp = \bcsub($pontuacaoItem, $categoria->getValorMaximo(), 5);
+            $pontuacaoCategoriaExcedente = \bcadd($pontuacaoCategoriaExcedente, $tmp, 5);
         } else {
-            $pontuacaoCategoria = bcadd($pontuacaoCategoria, $pontuacaoItem, 5);
+            $pontuacaoCategoria = \bcadd($pontuacaoCategoria, $pontuacaoItem, 5);
         }
 
-        $total = bcadd($total, bcmul($peso->getValorMaximo(), $pontuacaoCategoria, 5), 5);
-        $totalExcedente = bcadd($totalExcedente, bcmul($peso->getValorMaximo(), $pontuacaoCategoriaExcedente, 5), 5);
+        $total = \bcadd($total, \bcmul($peso, $pontuacaoCategoria, 5), 5);
+        $totalExcedente = \bcadd($totalExcedente, \bcmul($peso, $pontuacaoCategoriaExcedente, 5), 5);
 
-        return $excedente ? floatval($totalExcedente) : floatval($total);
+        return $excedente ? \floatval($totalExcedente) : \floatval($total);
     }
-
 
     /***
      * Retorna a pontuação de um avaliador numa detemrinada etapa
@@ -2139,17 +2283,15 @@ class FrigaInscricao
     public function getAvalicaoAvaliador(Usuario $avaliador, FrigaEditalEtapa $etapa)
     {
         return $this->avaliacao->filter(
-            function (FrigaInscricaoPontuacaoAvaliacao $avalicao) use ($avaliador, $etapa) {
-                return $avalicao->getIdAvaliador()->getId() == $avaliador->getId() and
-                    $avalicao->getIdEtapa() == $etapa->getId();
+            function(FrigaInscricaoPontuacaoAvaliacao $avalicao) use ($avaliador, $etapa) {
+                return $avalicao->getIdAvaliador()->getId() == $avaliador->getId()
+                    and $avalicao->getIdEtapa() == $etapa->getId();
             });
     }
-
 
     /**
      * @ORM\PreUpdate
      *
-     * @param PreUpdateEventArgs $args
      * @throws \Exception
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -2165,7 +2307,7 @@ class FrigaInscricao
      */
     public function PrePersist()
     {
-        $this->uuid = uniqid();
+        $this->uuid = \uniqid();
         $this->setRegistroDataCriacao(new \DateTime());
         $this->setRegistroDataAtualizacao(new \DateTime());
     }

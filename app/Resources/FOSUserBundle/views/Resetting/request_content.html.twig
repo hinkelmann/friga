@@ -2,10 +2,13 @@
 
 <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
     <div class="form-group mb-lg">
-        <label for="username">{{ 'resetting.request.username'|trans }}</label>
+        <label for="username">CPF</label>
         <div class="input-group input-group-icon">
-            <input id="username" name="username" value="" placeholder="Informe o seu {{ 'resetting.request.username'|trans }}" type="text"
+            <input id="cpf" name="cpf" value="" placeholder="000.000.000-00" type="text"
+                   data-rule-cpf="true"
                    class="form-control input-lg" required="required"/>
+            <input id="username" name="username" value="" placeholder="Informe o seu cpf" type="hidden"
+                   class="form-control input-lg"/>
             <span class="input-group-addon">
             <span class="icon icon-lg">
                 <i class="fa fa-user"></i>

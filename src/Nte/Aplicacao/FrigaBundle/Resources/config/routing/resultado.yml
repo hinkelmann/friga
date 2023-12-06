@@ -14,8 +14,8 @@ resultado_index_proxima:
     methods:  GET
 
 resultado_parcial:
-  path:     /parcial/{edital}
-  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:parcial", edital: null }
+  path:     /parcial/{etapa}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Resultado:parcial", etapa: null }
   methods:  [GET,POST]
 
 resultado_etapa:

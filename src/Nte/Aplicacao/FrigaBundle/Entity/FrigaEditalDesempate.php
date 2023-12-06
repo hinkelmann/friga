@@ -1,36 +1,55 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FrigaEditalDesempate
+ * FrigaEditalDesempate.
  *
  * @ORM\Table(name="friga_edital_desempate")
+ *
  * @ORM\Entity
  */
 class FrigaEditalDesempate
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="posicao", type="integer", nullable=true)
      */
     private $posicao;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="tipo", type="integer", nullable=true)
      */
@@ -51,14 +70,14 @@ class FrigaEditalDesempate
     private $propriedade;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_contexto", type="integer", nullable=true)
      */
     private $idContexto;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sentido", type="integer", nullable=true)
      */
@@ -68,17 +87,18 @@ class FrigaEditalDesempate
      * @var FrigaEdital
      *
      * @ORM\ManyToOne(targetEntity="FrigaEdital", inversedBy="desempate")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      * })
      */
     private $idEdital;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -86,9 +106,9 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Set posicao
+     * Set posicao.
      *
-     * @param integer $posicao
+     * @param int $posicao
      *
      * @return FrigaEditalDesempate
      */
@@ -100,9 +120,9 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Get posicao
+     * Get posicao.
      *
-     * @return integer
+     * @return int
      */
     public function getPosicao()
     {
@@ -110,7 +130,7 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Set contexto
+     * Set contexto.
      *
      * @param string $contexto
      *
@@ -124,7 +144,7 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Get contexto
+     * Get contexto.
      *
      * @return string
      */
@@ -134,9 +154,9 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Set idContexto
+     * Set idContexto.
      *
-     * @param integer $idContexto
+     * @param int $idContexto
      *
      * @return FrigaEditalDesempate
      */
@@ -148,9 +168,9 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Get idContexto
+     * Get idContexto.
      *
-     * @return integer
+     * @return int
      */
     public function getIdContexto()
     {
@@ -158,9 +178,7 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Set idEdital
-     *
-     * @param FrigaEdital $idEdital
+     * Set idEdital.
      *
      * @return FrigaEditalDesempate
      */
@@ -172,7 +190,7 @@ class FrigaEditalDesempate
     }
 
     /**
-     * Get idEdital
+     * Get idEdital.
      *
      * @return FrigaEdital
      */
@@ -191,11 +209,13 @@ class FrigaEditalDesempate
 
     /**
      * @param int $tipo
+     *
      * @return FrigaEditalDesempate
      */
     public function setTipo($tipo)
     {
         $this->tipo = $tipo;
+
         return $this;
     }
 
@@ -209,14 +229,15 @@ class FrigaEditalDesempate
 
     /**
      * @param string $propriedade
+     *
      * @return FrigaEditalDesempate
      */
     public function setPropriedade($propriedade)
     {
         $this->propriedade = $propriedade;
+
         return $this;
     }
-
 
     /**
      * @return int
@@ -228,38 +249,61 @@ class FrigaEditalDesempate
 
     /**
      * @param int $sentido
+     *
      * @return FrigaEditalDesempate
      */
     public function setSentido($sentido)
     {
         $this->sentido = $sentido;
+
         return $this;
     }
 
     public function getObj()
     {
         $obj = new \stdClass();
-        $obj->descricao = "";
-        $obj->regra = "";
-        $obj->sentido = $this->sentido == 1 ? " Maior " : " Menor ";
+        $obj->descricao = '';
+        $obj->regra = '';
+        $obj->sentido = 1 == $this->sentido ? ' Maior ' : ' Menor ';
+
         switch ($this->getContexto()) {
             case FrigaInscricao::class:
-                $obj->descricao = "Formulário de Inscrição";
-                $obj->regra .= $obj->sentido;
-                $obj->regra .= " Data de Nascimento";
+                $obj->descricao = 'Formulário de Inscrição';
+
+                switch ($this->getPropriedade()) {
+                    case 'dataNascimento':
+                        $obj->regra .= $obj->sentido;
+                        $obj->regra .= ' Data de Nascimento';
+                        break;
+
+                    case 'nome':
+                        ;
+                        $obj->regra .= 'Nome - Ordem alfabética';
+                        $obj->regra .= (1 == $this->sentido ? ' Z-a' : ' A-z ');
+                        break;
+
+                    case 'matriculaIndiceDesempenho':
+                        $obj->regra .= ' Valor do índice de desempenho acadêmico';
+                        break;
+                    default:
+                        $obj->regra .= ' ' . $this->getPropriedade();
+                        break;
+                }
+
                 break;
             case FrigaEditalPontuacao::class:
-                $obj->descricao = "Item de Pontuação";
+                $obj->descricao = 'Item de Pontuação';
                 $obj->regra .= $obj->sentido;
-                $obj->regra .= " valor da pontuação: " . $this->getContextoObjeto()->getDescricao();
+                $obj->regra .= ' valor da pontuação: ' . $this->getContextoObjeto()->getDescricao();
 
                 break;
             case FrigaEditalPontuacaoCategoria::class:
-                $obj->descricao = "Categoria de Pontuação";
+                $obj->descricao = 'Categoria de Pontuação';
                 $obj->regra .= $obj->sentido;
-                $obj->regra .= " valor da categoria: " . $this->getContextoObjeto()->getDescricao();
+                $obj->regra .= ' valor da categoria: ' . $this->getContextoObjeto()->getDescricao();
                 break;
         }
+
         return $obj;
     }
 
@@ -270,21 +314,29 @@ class FrigaEditalDesempate
         }
         $idContexto = $this->getIdContexto();
 
+        $obj = false;
         switch ($this->getContexto()) {
             case FrigaEditalPontuacao::class:
-                return $this->getIdEdital()
+                $obj = $this->getIdEdital()
                     ->getPontuacao()
-                    ->filter(function (FrigaEditalPontuacao $p) use ($idContexto) {
+                    ->filter(function(FrigaEditalPontuacao $p) use ($idContexto) {
                         return $p->getId() == $idContexto;
                     })->first();
+                break;
 
             case FrigaEditalPontuacaoCategoria::class:
-                return $this->getIdEdital()
+                $obj = $this->getIdEdital()
                     ->getPontuacaoCategoria()
-                    ->filter(function (FrigaEditalPontuacaoCategoria $p) use ($idContexto) {
+                    ->filter(function(FrigaEditalPontuacaoCategoria $p) use ($idContexto) {
                         return $p->getId() == $idContexto;
                     })->first();
+                break;
         }
-    }
+        if (false === $obj) {
+            $obj = new FrigaEditalPontuacao();
+            $obj->setDescricao('Indefinido');
+        }
 
+        return $obj;
+    }
 }

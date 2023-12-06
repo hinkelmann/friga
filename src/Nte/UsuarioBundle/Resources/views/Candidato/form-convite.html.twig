@@ -1,0 +1,325 @@
+{% extends '@NteSite/Default/layout.site.html.twig' %}
+{% block titulo %} Convite/Formulário/{{ app.user.nome }} {% endblock %}
+{% block chamada %}
+    <div class="home-intro" id="home-intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <p>
+                        Painel do candidato
+                        <span># Convite / FORMULÁRIO PARA PARTICIPAÇÃO EM BANCA EXAMINADORA  </span>
+                    </p>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block conteudo %}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <div class="container">
+        {{ include('@NteUsuario/Candidato/menu.html.twig') }}
+        <div class="col-lg-9">
+            <div class="row">
+                <h3 class="mb-xl">
+                    Participação de <strong>Banca</strong> examinadora
+                </h3>
+            </div>
+            <div class="row">
+                <h5 class="">{{ convite.idEdital.titulo }}</h5>
+                <p class="text-justify">{{ convite.idEdital.sobre }}</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <h5>Banca Examinadora</h5>
+                        <ul class="">
+                            {% for item in convite.idEditalCargo %}
+                                <li>{{ item.descricao }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <h5>Funções habilitadas</h5>
+                        <ul class="list-unstyled">
+                            {% if convite.funcaoAdministracao %}
+                                <li>
+                            <span title="Convidado para administrar as configurações do edital">
+                                        <i class="fa fa-star text-primary"></i>
+                            </span> <b>ADMINISTRADOR</b>
+                                </li>
+                            {% endif %}
+                            {% if convite.funcaoAvaliacao %}
+                                <li>
+                            <span title="Convidado para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator text-primary"></i>
+                            </span> <b>AVALIAÇÃO</b>
+                                </li>
+                            {% endif %}
+                            {% if convite.funcaoResultado %}
+                                <li>
+                            <span title="Convidado para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy text-primary"></i>
+                            </span> <b>RESULTADOS</b>
+                                </li>
+                            {% endif %}
+                            {% if convite.funcaoConvocacao %}
+                                <li>
+                            <span title="Convidado para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o text-primary"></i>
+                            </span> <b>CONVOCAÇÃO</b>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <hr>
+                {% include '@NteUsuario/Candidato/termo-sigilo.html.twig' with {usuario: app.user, edital: convite.idEdital} %}
+                <hr>
+            </div>
+
+            <div class="row">
+                {{ form_start( form) }}
+                <div class="form-group">
+                    <div class=" col-sm-6 col-md-7 text-center">
+                        <br>
+                        Você aceita o termo de confidencialidade e sigilo?
+                        <br>
+                        <br>
+                    </div>
+                    <div class="col-sm-6 col-md-5">
+                        <label for="friga_usuario_aceite_0" class="">
+                            {{ form_widget(form.aceite[0]) }}
+                            &nbsp;RECUSAR - Eu não aceito os termos.
+                        </label>
+                        <br>
+                        <label for="friga_usuario_aceite_1">
+                            {{ form_widget(form.aceite[1]) }}
+                            &nbsp;ACEITAR&nbsp;&nbsp;&nbsp;- Eu aceito os termos.
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group hidden" id="termo">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <br>
+                            <div class="text-center">
+                                <a href="{{ path('nte_usuario_candidato_download_termo_confidencialidade', {'uuid': convite.uuid}) }}"
+                                   title="Clique aqui para efetuar o download do documento">
+                                    <i class="fa fa-file-pdf-o fa-3x mb-lg"></i><br>
+                                    Download do TERMO
+                                </a>
+                            </div>
+                            <br><br>
+                        </div>
+                        <div class="col-md-8 text-center">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div id="dz0" class="dropzone"></div>
+                                    <input type="checkbox" class='hidden validar checkbox-anexo'
+                                           id="chk0" name="anexo1"
+                                           required="required"
+                                           value="1" aria-required="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Observação: </strong>
+                        O termo de confidencialidade e sigilo deve ser assinado utilizando uma assinatura digital
+                        qualificada. Você tem a opção de usar um certificado do tipo A1 ou A3, ou então pode
+                        empregar o <a target="_blank" href="https://assinador.iti.br/">Assinador ITI</a> para
+                        efetuar a assinatura do documento.
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    {{ form_rest( form) }}
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-send"> </i> Responder convite
+                        </button>
+                    </div>
+                    <br>
+                    {{ form_end( form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-wizard/jquery.bootstrap.wizard.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/dropzone.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/dropzone/basic.min.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/pnotify/pnotify.custom.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2/css/select2.css") }}">
+    <link rel="stylesheet" href="{{ asset("assets/vendor/select2-bootstrap-theme/select2-bootstrap.css") }}">
+{% endblock %}
+{% block jsOpcional %}
+
+    <script src="{{ asset('assets/vendor/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.pt-BR.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-mask/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/pnotify/pnotify.custom.js') }}"></script>
+    <script src="{{ asset('assets/vendor/select2/js/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/CPF/CPF.min.js') }}"></script>
+{% endblock %}
+
+{% block  js %}
+    <script>
+        let arquivosSubmetidos = []
+            , chkCampo = []
+            , dzAreaAtivo = []
+            , forms = $('form')
+            , btnSubmit = $('button')
+            , termo = $('#termo')
+        ;
+
+        btnSubmit.on('click', function (ev) {
+            ev.preventDefault();
+            $("#chk0").removeClass('hidden');
+            let validated = forms.valid();
+            $("#chk0").addClass('hidden');
+            if (validated) {
+                arquivosSubmetidos.forEach(function (v) {
+                    forms.append('<input type="hidden" name="arquivos[]" value="' + v + '" /> ');
+                });
+                forms.submit();
+            } else {
+                notificar({msg: "Existem campos ou anexos obrigatórios não preenchidos!", tipo: "warning"});
+            }
+        });
+
+        forms.submit(function (e) {
+
+            console.log(e);
+            /*
+            $("#chk0").removeClass('hidden');
+            let validated = forms.valid();
+            $("#chk0").addClass('hidden');
+           // e.preventDefault();
+            if (validated) {
+                // forms.submit();
+            }*/
+            arquivosSubmetidos.forEach(function (v) {
+                $('form').append('<input type="hidden" name="arquivos[]" value="' + v + '" /> ');
+            });
+        });
+
+
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+        $("[type='radio']").change(event => {
+            areaUpload(parseInt(event.target.value));
+        });
+
+        let areaUpload = (valor) => {
+            if (valor) {
+                termo.removeClass('hidden');
+                dzAreaAtivo[0] = mkDropZone(0, "Anexar termo de confidencialidade e sigilo com assinatura digital", "CONVITE", {{ convite.id }});
+            } else {
+                termo.addClass('hidden');
+                $("chk0").required = false;
+            }
+        }
+
+        /**
+         * Cria uma nova instância do DropZone
+         *
+         * @param id
+         * @param observacao
+         * @param contexto
+         * @param idContexto
+         * @returns {Dropzone};
+         */
+        function mkDropZone(id, observacao, contexto, idContexto) {
+            return new Dropzone("#dz" + id, {
+                url: "{{ oneup_uploader_endpoint('frigadata') }}",
+                headers: {
+                    "x-contexto": contexto,
+                    'x-id': idContexto
+                },
+                dictDefaultMessage: "<i class='fa fa-2x fa-upload'></i><br>" + observacao,
+                acceptedFiles: "image/*,application/pdf",
+                maxFilesize: 10,
+                addRemoveLinks: true,
+                dictRemoveFile: "Remover Arquivo",
+                dictFileTooBig: "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente",
+                dictInvalidFileType: "O arquivo escolhido não é do tipo  imagem ou PDF. Escolha outro arquivo e tente novamente."
+
+            }).on('sending', (arquivo, requisicao, dataset) => {
+                requisicao.timeout = 99999999999999999;
+            }).on('removedfile', (arquivo) => {
+                let a = arquivo,
+                    xhr = JSON.parse(a.xhr.response);
+                if (typeof xhr.error == 'undefined') {
+                    $.post('{{ path('arquivo_remover') }}', {id: xhr.id})
+                        .complete(e => {
+                            notificar(e.responseJSON);
+                            arquivosSubmetidos.splice(arquivosSubmetidos.indexOf(xhr.id), 1);
+                            chkCampo.splice(chkCampo.indexOf(id));
+                        });
+                    if (chkCampo.indexOf(id) !== -1) {
+                        $("#chk" + id).prop("checked", false);
+                    }
+                }
+            }).on('success', (arquivo, xhr) => {
+                console.log(id);
+                $("#chk" + id).prop("checked", true);
+                notificar(xhr);
+                arquivosSubmetidos.push(xhr.id);
+                if (chkCampo.indexOf(id) === -1) {
+                    chkCampo.push(id);
+                }
+            }).on('error', function (arquivo, xhr, requisicao) {
+                if (requisicao.status === 500) {
+                    notificar({msg: "Erro ao enviar arquivo!", tipo: "error"});
+                }
+                this.removeFile(arquivo);
+            });
+        }
+
+        Dropzone.autoDiscover = false;
+
+        {% if convite.aceite %}
+        areaUpload(1);
+        {% endif %}
+
+        /**
+         *  Notificação
+         * @param x
+         * @returns {PNotify}
+         */
+        function notificar(x) {
+            return new PNotify({
+                text: x.msg,
+                type: x.tipo,
+                icon: 'fa fa-2x fa-exclamation-triangle'
+            });
+        }
+    </script>
+{% endblock %}

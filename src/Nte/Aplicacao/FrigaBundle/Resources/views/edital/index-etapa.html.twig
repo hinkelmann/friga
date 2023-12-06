@@ -1,10 +1,10 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %}Etapas {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Etapas{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Etapas {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <div class="panel-body">
                 {% if frigaedital.etapa.count %}
                     <div class="btn-group">
@@ -81,51 +81,189 @@
                             </li>
                         </ul>
                     </div>
+                    <a href="{{ path('edital_etapa_categoria_criar', {'uuid': frigaedital.uuid}) }}"
+                       title="Clique aqui para adicionar categorias as etapas"
+                       class="btn btn-default">
+                        <i class="fa fa-th-list"></i> Adicionar Categoria
+                    </a>
                     <a href="#"
                        title="Clique aqui para importar as etapas de outro edital"
                        class="btn btn-primary importar">
                         <i class="fa fa-cloud-download"></i> Importar
                     </a>
-                    {% for etapa in frigaedital.etapaCronologica %}
-                        <div class="tracking-item" id="{{ etapa.id }}">
-                            <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}"
-                                 data-placement="top" title="{{ etapa.tipoDescricao }}"
-                                 data-original-title="{{ etapa.tipoDescricao }}">
-                                <i class="{{ etapa.objTipo.icone }}"></i>
-                            </div>
-                            <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}
-                                <br>
-                                <a href="{{ path('edital_etapa_remover',{uuid: frigaedital.uuid, etapa: etapa.id}) }}"
-                                   data-id="{{ etapa.id }}"
-                                   class="remover-item">
-                                    Remover
-                                </a>
-                            </div>
-                            <div class="tracking-content">
-                                <a href="{{ path('edital_etapa_editar',{uuid: frigaedital.uuid,  etapa: etapa.id}) }}">
-                                    {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
-                                </a>
-                                {% if etapa.tipo ==1
-                                    or etapa.tipo == 2
-                                    or etapa.tipo == 3
-                                    or etapa.tipo == 4
-                                    or etapa.tipo == 5
-                                    or etapa.tipo == 6
-                                    or etapa.tipo == 7 %}
-                                    <span>
+                    {% if frigaedital.idEtapaCategoria.empty %}
+                        {% for etapa in frigaedital.etapaCronologica %}
+                            <div class="tracking-item" id="{{ etapa.id }}">
+                                <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}"
+                                     data-placement="top" title="{{ etapa.tipoDescricao }}"
+                                     data-original-title="{{ etapa.tipoDescricao }}">
+                                    <i class="{{ etapa.objTipo.icone }}"></i>
+                                </div>
+                                <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}
+                                    <br>
+                                    <a href="{{ path('edital_etapa_remover',{uuid: frigaedital.uuid, etapa: etapa.id}) }}"
+                                       data-id="{{ etapa.id }}"
+                                       class="remover-item">
+                                        Remover
+                                    </a>
+                                </div>
+                                <div class="tracking-content">
+                                    <a href="{{ path('edital_etapa_editar',{uuid: frigaedital.uuid,  etapa: etapa.id}) }}">
+                                        {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                    </a>
+                                    {% if etapa.tipo ==1
+                                        or etapa.tipo == 2
+                                        or etapa.tipo == 3
+                                        or etapa.tipo == 4
+                                        or etapa.tipo == 5
+                                        or etapa.tipo == 6
+                                        or etapa.tipo == 7 %}
+                                        <span>
                                         De {{ etapa.dataInicial|date('d/m/Y') }}
                                         Até {{ etapa.dataFinal|date('d/m/Y ') }}
                                     </span>
-                                {% endif %}
-                                {% if etapa.tipo ==3
-                                    or etapa.tipo == 4
-                                    or etapa.tipo == 5
-                                    or etapa.tipo == 7 %}
-                                    <span> Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}</span>
-                                {% endif %}
+                                    {% endif %}
+                                    {% if etapa.tipo ==3
+                                        or etapa.tipo == 4
+                                        or etapa.tipo == 5
+                                        or etapa.tipo == 7 %}
+                                        <span> Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                        {% else %}
+                            <div class="panel-group mt-md" id="categoria" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="catheader0">
+                                        <h6 class="panel-title">
+                                            <a role="button" data-toggle="collapse"
+                                               data-parent="#categoria"
+                                               class="collapsed"
+                                               href="#cat0" aria-expanded="true" aria-controls="cat0">
+                                                0 - NENHUMA CATEGORIA
+                                            </a>
+                                        </h6>
+                                    </div>
+                                    <div id="cat0" class="panel-collapse collapse "
+                                         role="tabpanel" aria-labelledby="catheader0">
+                                        <div class="panel-body">
+                                            {% for etapa in frigaedital.etapaCronologica(null) %}
+                                                <div class="tracking-item" id="{{ etapa.id }}">
+                                                    <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}"
+                                                         data-placement="top" title="{{ etapa.tipoDescricao }}"
+                                                         data-original-title="{{ etapa.tipoDescricao }}">
+                                                        <i class="{{ etapa.objTipo.icone }}"></i>
+                                                    </div>
+                                                    <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}
+                                                        <br>
+                                                        <a href="{{ path('edital_etapa_remover',{uuid: frigaedital.uuid, etapa: etapa.id}) }}"
+                                                           data-id="{{ etapa.id }}"
+                                                           class="remover-item">
+                                                            Remover
+                                                        </a>
+                                                    </div>
+                                                    <div class="tracking-content">
+                                                        <a href="{{ path('edital_etapa_editar',{uuid: frigaedital.uuid,  etapa: etapa.id}) }}">
+                                                            {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                                        </a>
+                                                        {% if etapa.tipo ==1
+                                                            or etapa.tipo == 2
+                                                            or etapa.tipo == 3
+                                                            or etapa.tipo == 4
+                                                            or etapa.tipo == 5
+                                                            or etapa.tipo == 6
+                                                            or etapa.tipo == 7 %}
+                                                            <span>
+                                        De {{ etapa.dataInicial|date('d/m/Y') }}
+                                        Até {{ etapa.dataFinal|date('d/m/Y ') }}
+                                    </span>
+                                                        {% endif %}
+                                                        {% if etapa.tipo ==3
+                                                            or etapa.tipo == 4
+                                                            or etapa.tipo == 5
+                                                            or etapa.tipo == 7 %}
+                                                            <span> Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% for cat in frigaedital.idEtapaCategoria %}
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="catheader{{ cat.id}}">
+                                            <h6 class="panel-title">
+                                                <a role="button" data-toggle="collapse"
+                                                   data-parent="#categoria"
+                                                   class="collapsed"
+                                                   href="#cat{{ cat.id}}" aria-expanded="true" aria-controls="cat{{ cat.id}}">
+                                                    {{ cat.ordem}} - {{ cat.descricao}}
+                                                </a>
+                                                <a title="Clique aqui para editar a categoria da etapa"
+                                                   href="{{ path('edital_etapa_categoria_editar', {'categoria': cat.id, 'uuid': frigaedital.uuid}) }}">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                <div class="pull-right">
+                                                    <a title="Clique aqui para remover a categoria da etapa"
+                                                       href="{{ path('edital_etapa_categoria_remover', {'categoria': cat.id, 'uuid': frigaedital.uuid}) }}"
+                                                       class="text-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </h6>
+                                        </div>
+                                        <div id="cat{{ cat.id}}" class="panel-collapse collapse"
+                                             role="tabpanel" aria-labelledby="catheader{{ cat.id}}">
+                                            <div class="panel-body">
+                                                {% for etapa in cat.etapaCronologica %}
+                                                    <div class="tracking-item" id="{{ etapa.id }}">
+                                                        <div class="tracking-icon status-{% if etapa.andamentoPrazo %}delivered{% else %}intransit{% endif %}"
+                                                             data-placement="top" title="{{ etapa.tipoDescricao }}"
+                                                             data-original-title="{{ etapa.tipoDescricao }}">
+                                                            <i class="{{ etapa.objTipo.icone }}"></i>
+                                                        </div>
+                                                        <div class="tracking-date">{{ etapa.dataInicial|date('d/m/Y') }}
+                                                            <br>
+                                                            <a href="{{ path('edital_etapa_remover',{uuid: frigaedital.uuid, etapa: etapa.id}) }}"
+                                                               data-id="{{ etapa.id }}"
+                                                               class="remover-item">
+                                                                Remover
+                                                            </a>
+                                                        </div>
+                                                        <div class="tracking-content">
+                                                            <a href="{{ path('edital_etapa_editar',{uuid: frigaedital.uuid,  etapa: etapa.id}) }}">
+                                                                {% if etapa.descricao %}{{ etapa.descricao }}{% else %} Nova etapa {% endif %}
+                                                            </a>
+                                                            {% if etapa.tipo ==1
+                                                                or etapa.tipo == 2
+                                                                or etapa.tipo == 3
+                                                                or etapa.tipo == 4
+                                                                or etapa.tipo == 5
+                                                                or etapa.tipo == 6
+                                                                or etapa.tipo == 7 %}
+                                                                <span>
+                                        De {{ etapa.dataInicial|date('d/m/Y') }}
+                                        Até {{ etapa.dataFinal|date('d/m/Y ') }}
+                                    </span>
+                                                            {% endif %}
+                                                            {% if etapa.tipo ==3
+                                                                or etapa.tipo == 4
+                                                                or etapa.tipo == 5
+                                                                or etapa.tipo == 7 %}
+                                                                <span> Divulgação: {{ etapa.dataDivulgacao|date('d/m/Y') }}</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
                 {% else %}
                     <div class="body-error error-inside">
                         <div class="center-error">
@@ -160,6 +298,9 @@
         </div>
     </div>
     <style>
+        .panel-title {
+            font-size: unset;
+        }
         .tracking-item {
             border-left: 1px solid #214977;
             position: relative;

@@ -55,7 +55,7 @@
                         <div class="btn-group btn-group-justified">
                             <a class="btn btn-default"
                                title="Clique aqui para visualizar a classificação parcial dos candidatos"
-                               href="{{ path('resultado_parcial',{edital: etapa.idEdital.id} ) }}">
+                               href="{{ path('resultado_parcial',{'etapa': etapa.id} ) }}">
                                 <i class="icon icon-refresh"></i> Resultados
                             </a>
                             {% if etapa.periodoHabilitado or is_granted('ROLE_ADMIN') %}

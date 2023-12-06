@@ -7,103 +7,273 @@
 {% endblock %}
 {% block conteudo %}
     <div class="row">
-        <div class="panel-body">
-            {% set lista = [] %}
-            {% if etapa.tipo == 7 %}
-                {% set lista = etapa.idEdital.inscricaoRecurso(etapa.idEtapa) %}
-            {% else %}
-                {% if is_granted('ROLE_ADMIN') %}
-
-                        {% set lista = etapa.idEdital.inscricaoValida %}
-                    {% else %}
-                        {% set lista = etapa.idEdital.inscricaoValida(app.user) %}
-                    {% endif %}
-            {% endif %}
-            {% if lista|length %}
-                <div class="form-bordered">
-                    {% for inscricao in lista %}
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <a title="Clique aqui, apenas se for visualizar a inscrição do candidato: {{ inscricao.nome }}"
-                                   target="_blank"
-                                   href="{{ path('relatorio_perfil', {'uuid': inscricao.uuid}) }}">
-                                    {% if etapa.idEdital.modeloInscricao ==1  %}
-                                        <b class="text-uppercase">{{ inscricao.projetoTitulo }}</b>
-                                    {% else %}
-                                        <b class="text-uppercase">{{ inscricao.nome }}</b>
-                                    {% endif %}
-                                </a>
-                                <br>
-                                {% if inscricao.idCargo %}{{ inscricao.idCargo.descricao }}{% endif %}
-                                {% if inscricao.idCota != null %}/{{ inscricao.idCota.descricao }}{% endif %}<br>
-                                {% if etapa.pontuacaoRelativaUsuario %}
-                                    Pontuação informada pelo candidato: <b>{{ inscricao.pontuacaoSoma }}</b>
-                                    {% if inscricao.pontuacaoSoma(false,null,true) %}
-                                        <span data-toggle="tooltip" data-placement="top"
-                                              title="Pontuação que excedeu o máximo de pontos definido para o grupo de itens de avaliação">
-                                        - Excedente: <b>{{ inscricao.pontuacaoSoma(false,null,true) }}</b>
-                                </span>
-                                    {% endif %}
-
-                                    <br>
-                                {% endif %}
-                                Pontuação considerada pelo avaliador: <b>{{ inscricao.pontuacaoSoma(true) }}</b>
-                                {% if inscricao.pontuacaoSoma(true,null,true) %}
-                                    <span data-toggle="tooltip" data-placement="top"
-                                          title="Pontuação que excedeu o máximo de pontos definido para o grupo de itens de avaliação">
-                                    - Excedente: <b>{{ inscricao.pontuacaoSoma(true,null,true) }}</b>
-                                    </span>
-                                {% endif %}
-                            </div>
-                            <div class="btn-group pull-right hidden-xs">
-                                <div class="btn ">
-                                    Inscrição N° <strong>{{ inscricao.uuid ~ "-" ~ inscricao.id }}</strong>
-                                    <br>
-                                    <small class="{{ inscricao.objsituacao.css }}">
-                                        <i class="{{ inscricao.objsituacao.icone }}"></i>
-                                        {{ inscricao.objsituacao.descricao }}
-                                    </small>
-                                </div>
-                                <a href="{{ path('avaliacao_etapa_candidato', {'etapa': etapa.id, 'uuid': inscricao.uuid}) }}"
-                                   class="btn btn-default"><i class="fa fa-check-square-o"></i><br>
-                                    Avaliar
-                                </a>
-                            </div>
-                            <div class="visible-xs">
-                                <div class="btn btn-block text-right">
-                                    Inscrição N° <strong>{{ inscricao.uuid ~ "-" ~ inscricao.id }}</strong>
-                                    <br>
-                                    <small class="{{ inscricao.objsituacao.css }}">
-                                        <i class="{{ inscricao.objsituacao.icone }}"></i>
-                                        {{ inscricao.objsituacao.descricao }}
-                                    </small>
-                                </div>
-                                <a href="{{ path('avaliacao_etapa_candidato', {'etapa': etapa.id, 'uuid': inscricao.uuid}) }}"
-                                   class="btn btn-block btn-default">
-                                    <i class="fa fa-check-square-o"></i><br>
-                                    Avaliar
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <section class="body-error error-inside">
-                    <div class="center-error">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="main-error mb-xlg">
-                                    <h2 class="error-code text-dark text-center text-weight-semibold m-none">0 <i
-                                                class="fa fa-users text-primary"></i></h2>
-                                    <p class="error-explanation text-center text-primary">
-                                        <br><b>Nenhum candidato </b> Inscrito até o momento.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
+        <div class="text-right">
+            <a class="btn btn-default"
+               title="Clique aqui para exportar os dados em formato CSV"
+               href="{{ path('avaliacao_etapa_exportar_csv', {'etapa': etapa.id}) }}">
+                <i class="fa fa-file-excel-o"></i> Exportar
+            </a>
         </div>
     </div>
+    <div class="row">
+        <div class="panel-body">
+            <div class="row mb-lg">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select class="form-control m-input" id="usuario">
+                                <option value="-1" selected>
+                                    -- Avaliador --
+                                </option>
+                                {% for item in etapa.idEdital.idEditalUsuarioBanca %}
+                                    <option value="{{ item.idUsuario.id }}">
+                                        {{ item.idUsuario.nome }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control m-input" id="situacao">
+                                <option value="-1" selected>
+                                    -- SITUAÇÃO --
+                                </option>
+                                <option value="0">
+                                    Inscrição Realizada
+                                </option>
+                                <option value="1">
+                                    Inscrição Não Homologada
+                                </option>
+                                <option value="2">
+                                    Inscrição Homologada
+                                </option>
+                                <option value="3">
+                                    Desclassificado
+                                </option>
+                                <option value="4">
+                                    Em avaliação
+                                </option>
+                                <option value="5">
+                                    Aguardando Recurso
+                                </option>
+                                <option value="6">
+                                    Classificado
+                                </option>
+                                <option value="7">
+                                    Convocado
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-control m-input" id="cota">
+                                <option value="-1">
+                                    {% if etapa.idEdital.campoListaTitulo is null %}
+                                        -- {{ "lista de classificação"|upper }} --
+                                    {% else %}
+                                        -- {{  etapa.idEdital.campoListaTitulo }} --
+                                    {% endif %}
+                                </option>
+                                {% for item in etapa.idEdital.cota %}
+                                    <option value="{{ item.id }}">
+                                        {{ item.descricao }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control m-input" id="cargo">
+                                <option value="-1">
+                                    -- {{ etapa.idEdital.campoCargoTitulo }} --
+                                </option>
+                                {% for item in etapa.idEdital.cargo %}
+                                    <option value="{{ item.id }}">
+                                        {{ item.descricao }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-condensed  table-hover table-checkable mt-md" id="m_table">
+                <thead>
+                <tr>
+                    <th>Candidato</th>
+                    <th>Pontuação Candidato</th>
+                    <th>Pontuação Avaliador</th>
+                    <th>Situação</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts2 %}
+    <link href="{{ asset('assets/vendor/datatables/datatables.min.css') }}">
+    <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}"></script>
+    <script>
+        $('select').select2({
+            width: '100%',
+        });
+       /* $('#usuario').select2({
+            width: '100%',
+            placeholder: "-- Avaliador --",
+            closeOnSelect: true,
+            allowClear: true,
+            dropdownAutoWidth: true,
+            ajax: {
+                url: '{{ path('edital_avaliador_api_lista',{'uuid': etapa.idEdital.uuid }) }}',
+                dataType: 'json',
+                method: "POST",
+                data: (params) => {
+                    return {
+                        termo: params.term,
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            escapeMarkup: markup => {
+                return markup;
+            }
+        });*/
+
+        let dt = function () {
+            let initTable1 = function () {
+                let table = $('#m_table').DataTable({
+                    responsive: true,
+                    searchDelay: 500,
+                    processing: true,
+                    dom: "<'row'>" +
+                        "<'row'" +
+                        "<'col-sm-12'tr>>\n\t\t\t" +
+                        "<'row'" +
+                        "<' col-md-6 'il>" +
+                        "<' col-md-6 text-right dataTables_pager'p>>",
+                    serverSide: true,
+                    order: [[1, 'asc']],
+                    lengthMenu: [10, 15, 25, 50, 100, 200, 500, 1000],
+                    ajax: '{{ path('avaliacao_etapa_api_index',{'etapa':etapa.id}) }}',
+                    columns: [
+                        {data: 'uuid'},
+                        {data: 'ptCandidato'},
+                        {data: 'ptAvaliador'},
+                        {data: 'uuid'},
+                        {data: 'acao'},
+                    ],
+                    initComplete: function () {
+                        $(".m-input").change(function () {
+                            delete $.ajaxSettings.data;
+                            $.ajaxSetup({
+                                data: {
+                                    //dt0: document.getElementById('dt0').value,
+                                    //dt1: document.getElementById('dt1').value,
+                                    cota: document.getElementById('cota').value,
+                                    cargo: document.getElementById('cargo').value,
+                                    situacao: document.getElementById('situacao').value,
+                                    usuario: document.getElementById('usuario').value,
+                                }
+                            });
+                            table.ajax.url('{{ path('avaliacao_etapa_api_index',{'etapa':etapa.id}) }}');
+                            table.draw();
+                        });
+                    },
+                    columnDefs: [{
+                        targets: 0,
+                        sortable: true,
+                        width: "80%",
+                        render: function (data, type, full, meta) {
+                            let txt = ''
+                                , titulo = document.createElement('a');
+                            titulo.innerText = full.titulo
+                            titulo.href = "{{ path('relatorio_perfil') }}/" + full.uuid
+                            titulo.title = "Clique aqui, apenas se for visualizar a inscrição de :" + full.titulo;
+                            titulo.target = "_blank";
+                            txt += "<br>" + full.cargo + (full.cota ? "/" + full.cota : "");
+                            /*txt += "<br>Pontuação informada pelo candidato: <b>" + full.ptCandidato + "</b>";
+
+                            if (full.pteCandidato > 0) {
+                                txt += " - Excedente: <b>" + full.pteCandidato + "</b>";
+                            }
+
+                            txt += "<br>Pontuação informada pelo avaliador: <b>" + full.ptAvaliador + "</b>";
+
+                            if (full.pteAvaliador > 0) {
+                                txt += " - Excedente: <b>" + full.pteAvaliador + "</b>";
+                            }*/
+                            return titulo.outerHTML + txt;
+                        }
+                    }, {
+                        targets: -2,
+                        width: 100,
+                        render: function (data, type, full, meta) {
+                            let span = document.createElement('span');
+                            span.className = "m-badge m-badge--wide " + full.situacao.css;
+                            span.innerHTML = full.situacao.descricao
+                            return span.outerHTML;
+                        }
+
+                    },
+                        {
+                            targets: -1,
+                            title: '',
+                            className: "text-right",
+                            width: 250,
+                            orderable: false,
+                            render: function (data, type, full, meta) {
+                                let btn = document.createElement('a')
+                                    , icone0 = document.createElement('i');
+
+                                icone0.className = 'fa fa-check-square-o'
+                               // btn.appendChild(icone0);
+                               // btn.appendChild(document.createElement('br'))
+                                btn.innerHTML = "Avaliar";
+                                btn.className = 'btn btn-default';
+                                btn.href = full.url0
+
+                                return btn.outerHTML;
+                            }
+                        }
+                    ],
+                    language: {
+                        lengthMenu: " _MENU_",
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sInfoThousands": ".",
+                        // "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        /* "oPaginate": {
+                             "sNext": "Próximo",
+                             "sPrevious": "Anterior",
+                             "sFirst": "Primeiro",
+                             "sLast": "Último"
+                         },*/
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        }
+                    }
+                });
+            };
+            return {
+                init: function () {
+                    initTable1();
+                },
+            };
+        }();
+        jQuery(document).ready(function () {
+            dt.init();
+        });
+    </script>
 {% endblock %}

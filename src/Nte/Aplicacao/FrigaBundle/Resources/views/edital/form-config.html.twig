@@ -1,11 +1,11 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %}Configuração de Edital {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Informação{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Informação {% endblock %}
 {% block conteudo %}
     {{ form_start(config_form) }}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <div class="panel">
                 <div class="panel-body text-right">
                     <a class="btn btn-default"
@@ -18,32 +18,32 @@
             </div>
             <section class="panel-body">
                 <div class="row">
-                    <div class="form-group">
-                        <label class="col-md-2 col-sm-4 control-label">
-                            {{ form_label(config_form.titulo) }}
-                        </label>
-                        <div class="col-md-10">
-                            {{ form_widget(config_form.titulo) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 col-sm-4 control-label">
-                            {{ form_label(config_form.subtitulo) }}
-                        </label>
-                        <div class="col-md-10">
-                            {{ form_widget(config_form.subtitulo) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 col-sm-4 control-label">
-                            {{ form_label(config_form.url) }}
-                        </label>
-                        <div class="col-md-10">
-                            {{ form_widget(config_form.url) }}
-                        </div>
-                    </div>
                     <div class="col-md-6">
                         <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.numero) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.numero) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.titulo) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.titulo) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.subtitulo) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.subtitulo) }}
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-4 col-sm-4 control-label">
                                     {{ form_label(config_form.idCategoria) }}
@@ -57,14 +57,6 @@
                                        href="{{ path('edital_categoria_criar',{'uuid': frigaedital.uuid}) }}">
                                         Adicionar nova
                                     </a>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 col-sm-4 control-label">
-                                    {{ form_label(config_form.dataPublicacaoOficial) }}
-                                </label>
-                                <div class="col-md-8">
-                                    {{ form_widget(config_form.dataPublicacaoOficial) }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -89,12 +81,37 @@
                         <div class="row">
                             <div class="form-group">
                                 <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.url) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.url) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.urlProcesso) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.urlProcesso) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
+                                    {{ form_label(config_form.dataPublicacaoOficial) }}
+                                </label>
+                                <div class="col-md-8">
+                                    {{ form_widget(config_form.dataPublicacaoOficial) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 col-sm-4 control-label">
                                     {{ form_label(config_form.publico) }}
                                 </label>
                                 <div class="col-md-8">
                                     {{ form_widget(config_form.publico) }}
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-md-4 col-sm-4 control-label">
                                     {{ form_label(config_form.situacao) }}

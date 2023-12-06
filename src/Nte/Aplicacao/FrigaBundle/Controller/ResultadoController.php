@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -7,40 +24,32 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaArquivo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaClassificacao;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaConvocacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEdital;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCota;
-use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalDesempate;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa;
+use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacao;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacaoCategoria;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao;
-use Nte\Aplicacao\FrigaBundle\Form\AvaliacaoType;
 use Nte\Aplicacao\FrigaBundle\Form\FrigaClassificacaoType;
-use Nte\Aplicacao\FrigaBundle\Form\FrigaEditalResultadoType;
-use Nte\Aplicacao\FrigaBundle\Model\FrigaClassificacaoComprovante;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use stdClass;
-use DateTime;
-use Exception;
 
 /**
- * Class AvaliacaoController
- * @package Nte\Aplicacao\FrigaBundle\Controller
+ * Class AvaliacaoController.
  */
 class ResultadoController extends Controller
 {
+    use ClassificacaoTrait;
 
     /**
-     * Editais em aberto
+     * Editais em aberto.
      *
-     * @param Request $request
      * @return Response
      */
     public function indexAction(Request $request, $situacao = 50)
@@ -52,20 +61,20 @@ class ResultadoController extends Controller
 
         /** @var FrigaEdital $edital */
         foreach ($this->editais() as $edital) {
-            $x = $edital->getEtapa()->filter(function (FrigaEditalEtapa $etapa) use ($situacao) {
-                if ($situacao == 50) {
-                    return $etapa->getTipo() == 4 and $etapa->getPeriodoHabilitado();
-                } else if ($situacao == 100) {
-                    return $etapa->getTipo() == 4
-                        and $etapa->getPeriodoHabilitado() == false
-                        and $etapa->getAndamentoPrazo() == 100;
-                } else if ($situacao == 0) {
-                    return $etapa->getTipo() == 4
-                        and $etapa->getPeriodoHabilitado() == false
-                        and $etapa->getAndamentoPrazo() == 0;
+            $x = $edital->getEtapa()->filter(function(FrigaEditalEtapa $etapa) use ($situacao) {
+                if (50 == $situacao) {
+                    return 4 == $etapa->getTipo() and $etapa->getPeriodoHabilitado();
+                } elseif (100 == $situacao) {
+                    return 4 == $etapa->getTipo()
+                        and false == $etapa->getPeriodoHabilitado()
+                        and 100 == $etapa->getAndamentoPrazo();
+                } elseif (0 == $situacao) {
+                    return 4 == $etapa->getTipo()
+                        and false == $etapa->getPeriodoHabilitado()
+                        and 0 == $etapa->getAndamentoPrazo();
                 }
             });
-            $tmp = new ArrayCollection(array_merge($tmp->toArray(), $x->toArray()));
+            $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $x->toArray()));
         }
 
         return $this->render('NteAplicacaoFrigaBundle:Resultado:index.html.twig', [
@@ -74,78 +83,17 @@ class ResultadoController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital
      * @return RedirectResponse|Response
-     * @throws Exception
+     *
+     * @throws \Exception
      */
-    public function parcialAction(Request $request, FrigaEdital $edital)
+    public function parcialAction(Request $request, FrigaEditalEtapa $etapa)
     {
         if (!$this->isGranted('ROLE_ADMIN') and !$this->isGranted('ROLE_AVALIADOR')) {
             return $this->redirectToRoute('nte_admin_painel_homepage');
         }
 
-        $classificacao = new ArrayCollection();
-
-        $geral = $edital->getInscricaoValida()->getIterator();
-        $geral->uasort(function (FrigaInscricao $a, FrigaInscricao $b) {
-            return bccomp($b->getPontuacaoSoma(true), $a->getPontuacaoSoma(true), 6);
-        });
-
-        $geral = new ArrayCollection($geral->getArrayCopy());
-
-        if ($edital->isResultado0() or $edital->isResultado1()) {
-            /** @var FrigaEditalCargo $cargo */
-            foreach ($edital->getCargo() as $cargo) {
-                if ($edital->isResultado0()) {
-                    if ($edital->getCota()->count()) {
-                        /** @var FrigaEditalCota $lista */
-                        foreach ($edital->getCota() as $lista) {
-                            $obj = new stdClass();
-                            $obj->nome = $cargo->getDescricao() . "/" . $lista->getDescricao();
-                            $obj->cargo = $cargo;
-                            $obj->lista = $lista;
-                            $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($cargo, $lista) {
-                                return $inscricao->getIdCargo()->getId() == $cargo->getId()
-                                    and $inscricao->getIdCota()->getId() == $lista->getId();
-                            });
-                            $classificacao->add($obj);
-                        }
-                    }
-                }
-                if ($edital->isResultado1()) {
-                    $obj = new stdClass();
-                    $obj->nome = "Classificação Geral / " . $cargo->getDescricao();
-                    $obj->cargo = $cargo;
-                    $obj->lista = null;
-                    $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($cargo) {
-                        return $inscricao->getIdCargo()->getId() == $cargo->getId();
-                    });
-                    $classificacao->add($obj);
-                }
-            }
-        }
-        if ($edital->isResultado2()) {
-            foreach ($edital->getCota() as $lista) {
-                $obj = new stdClass();
-                $obj->nome = "Classificação Geral/" . $lista->getDescricao();
-                $obj->cargo = null;
-                $obj->lista = $lista;
-                $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($lista) {
-                    return $inscricao->getIdCota()->getId() == $lista->getId();
-                });
-                $classificacao->add($obj);
-            }
-        }
-        if ($edital->isResultado3()) {
-            $obj = new stdClass();
-            $obj->nome = "Classificação Geral";
-            $obj->cargo = null;
-            $obj->lista = null;
-            $obj->classificacao = $geral;
-            $classificacao->add($obj);
-        }
-
+        $classificacao = $this->gerarObjetoParcial($etapa);
         $form = $this->createForm(FrigaClassificacaoType::class, null);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -153,19 +101,19 @@ class ResultadoController extends Controller
             $etapa = $em->find(FrigaEditalEtapa::class, $request->request->get('etapa'));
             if ($etapa) {
                 $this->processarResultado($etapa, $classificacao);
+
                 return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
             }
         }
+
         return $this->render('NteAplicacaoFrigaBundle:Resultado:parcial.html.twig', [
             'classificao' => $classificacao,
-            'edital' => $edital,
+            'edital' => $etapa->getIdEdital(),
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
      * @return RedirectResponse
      */
     public function gerarResultadoAction(Request $request, FrigaEditalEtapa $etapa)
@@ -175,7 +123,14 @@ class ResultadoController extends Controller
                 return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
             }
         }
-        if(!$etapa->getClassificacao()->isEmpty()){
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $geral = $etapa->getClassificacaoCargo();
+        } else {
+            $geral = $etapa->getClassificacaoCargo($this->getUser());
+        }
+
+        if (!$geral->isEmpty()) {
             return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
         }
 
@@ -183,9 +138,15 @@ class ResultadoController extends Controller
 
         try {
             $classificacao = new ArrayCollection();
-            $geral = $edital->getInscricaoValida()->getIterator();
-            $geral->uasort(function (FrigaInscricao $a, FrigaInscricao $b) {
-                return bccomp($b->getPontuacaoSoma(true), $a->getPontuacaoSoma(true), 6);
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $geral = $edital->getInscricaoValida(false, $etapa->getIdEtapaCategoria())->getIterator();
+                $editalCargoUsuario = $edital->getArrayIdEditalCargo();
+            } else {
+                $geral = $edital->getInscricaoValida($this->getUser(), $etapa->getIdEtapaCategoria())->getIterator();
+                $editalCargoUsuario = $edital->getUsuarioEditalCargos($this->getUser());
+            }
+            $geral->uasort(function(FrigaInscricao $a, FrigaInscricao $b) {
+                return \bccomp($b->getPontuacaoSoma(true), $a->getPontuacaoSoma(true), 6);
             });
 
             $geral = new ArrayCollection($geral->getArrayCopy());
@@ -193,15 +154,18 @@ class ResultadoController extends Controller
             if ($edital->isResultado0() or $edital->isResultado1()) {
                 /** @var FrigaEditalCargo $cargo */
                 foreach ($edital->getCargo() as $cargo) {
+                    if (!\in_array($cargo->getId(), $editalCargoUsuario)) {
+                        continue;
+                    }
                     if ($edital->isResultado0()) {
                         if ($edital->getCota()->count()) {
                             /** @var FrigaEditalCota $lista */
                             foreach ($edital->getCota() as $lista) {
-                                $obj = new stdClass();
-                                $obj->nome = $cargo->getDescricao() . "/" . $lista->getDescricao();
+                                $obj = new \stdClass();
+                                $obj->nome = $cargo->getDescricao() . '/' . $lista->getDescricao();
                                 $obj->cargo = $cargo;
                                 $obj->lista = $lista;
-                                $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($cargo, $lista) {
+                                $obj->classificacao = $geral->filter(function(FrigaInscricao $inscricao) use ($cargo, $lista) {
                                     return $inscricao->getIdCargo()->getId() == $cargo->getId()
                                         and $inscricao->getIdCota()->getId() == $lista->getId();
                                 });
@@ -210,11 +174,11 @@ class ResultadoController extends Controller
                         }
                     }
                     if ($edital->isResultado1()) {
-                        $obj = new stdClass();
-                        $obj->nome = "Classificação Geral / " . $cargo->getDescricao();
+                        $obj = new \stdClass();
+                        $obj->nome = 'Classificação Geral / ' . $cargo->getDescricao();
                         $obj->cargo = $cargo;
                         $obj->lista = null;
-                        $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($cargo) {
+                        $obj->classificacao = $geral->filter(function(FrigaInscricao $inscricao) use ($cargo) {
                             return $inscricao->getIdCargo()->getId() == $cargo->getId();
                         });
                         $classificacao->add($obj);
@@ -224,11 +188,11 @@ class ResultadoController extends Controller
 
             if ($edital->isResultado2()) {
                 foreach ($edital->getCota() as $lista) {
-                    $obj = new stdClass();
-                    $obj->nome = "Classificação Geral/" . $lista->getDescricao();
+                    $obj = new \stdClass();
+                    $obj->nome = 'Classificação Geral/' . $lista->getDescricao();
                     $obj->cargo = null;
                     $obj->lista = $lista;
-                    $obj->classificacao = $geral->filter(function (FrigaInscricao $inscricao) use ($lista) {
+                    $obj->classificacao = $geral->filter(function(FrigaInscricao $inscricao) use ($lista) {
                         return $inscricao->getIdCota()->getId() == $lista->getId();
                     });
                     $classificacao->add($obj);
@@ -236,8 +200,8 @@ class ResultadoController extends Controller
             }
 
             if ($edital->isResultado3()) {
-                $obj = new stdClass();
-                $obj->nome = "Classificação Geral";
+                $obj = new \stdClass();
+                $obj->nome = 'Classificação Geral';
                 $obj->cargo = null;
                 $obj->lista = null;
                 $obj->classificacao = $geral;
@@ -245,16 +209,14 @@ class ResultadoController extends Controller
             }
 
             $this->processarResultado($etapa, $classificacao);
-
-        } catch (Exception $e) {
-            $this->addFlash('danger', "Erro ao processar resultado:" . $e->getMessage());
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Erro ao processar resultado:' . $e->getMessage());
         }
 
         return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
     }
 
     /**
-     * @param FrigaEditalEtapa $etapa
      * @return RedirectResponse
      */
     public function removerResultadoAction(Request $request, FrigaEditalEtapa $etapa)
@@ -267,24 +229,28 @@ class ResultadoController extends Controller
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $geral = $etapa->getClassificacaoCargo();
+            } else {
+                $geral = $etapa->getClassificacaoCargo($this->getUser());
+            }
             //Remove o resultado anterior
-            if ($etapa->getClassificacao()->count()) {
+            if ($geral->count()) {
                 /** @var FrigaClassificacao $resultado */
-                foreach ($etapa->getClassificacao() as $resultado) {
+                foreach ($geral as $resultado) {
                     $em->remove($resultado);
                     $em->flush();
                 }
-                $this->addFlash('success', "Classificação removida!");
+                $this->addFlash('success', 'Classificação removida!');
             }
-        } catch (Exception $e) {
-            $this->addFlash('danger', "Erro ao remover classificação");
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Erro ao remover classificação');
         }
+
         return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
     }
 
     /**
-     * @param FrigaEditalEtapa $etapa
-     * @param ArrayCollection $resultado
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -293,7 +259,7 @@ class ResultadoController extends Controller
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        /** @var stdClass $item */
+        /** @var \stdClass $item */
         foreach ($resultado as $item) {
             $pos = 1;
 
@@ -302,12 +268,15 @@ class ResultadoController extends Controller
             $empates = [];
             /** @var FrigaInscricao $inscricao */
             foreach ($item->classificacao as $inscricao) {
+                $etapaUsuario = new FrigaEditalEtapaUsuario($etapa, $inscricao, $this->getUser());
+                $em->persist($etapaUsuario);
+                $em->flush();
 
                 //Se etapa final, então marcar inscrição como classificado;
                 if ($etapa->getFinal()) {
-                    if ($inscricao->getIdSituacao() == 2
-                        or $inscricao->getIdSituacao() == 4
-                        or $inscricao->getIdSituacao() == 7
+                    if (2 == $inscricao->getIdSituacao()
+                        or 4 == $inscricao->getIdSituacao()
+                        or 7 == $inscricao->getIdSituacao()
                     ) {
                         $inscricao->setIdSituacaoAnterior($inscricao->getIdSituacao());
                         $inscricao->setIdSituacao(6);
@@ -332,30 +301,28 @@ class ResultadoController extends Controller
 
                 //Não mostrar não homologados, desclassificados...
                 if ($etapa->getDesconsiderarInscricao()) {
-                    if ($inscricao->getIdSituacao() == 2
-                        or $inscricao->getIdSituacao() == 4
-                        or $inscricao->getIdSituacao() == 6
-                        or $inscricao->getIdSituacao() == 7
+                    if (2 == $inscricao->getIdSituacao()
+                        or 4 == $inscricao->getIdSituacao()
+                        or 6 == $inscricao->getIdSituacao()
+                        or 7 == $inscricao->getIdSituacao()
                     ) {
-
                         $classificacao->setPosicao($pos);
-                        $pos++;
+                        ++$pos;
                         $em->persist($classificacao);
                         $em->flush();
                     } else {
                         continue;
                     }
-
                 } else {
                     //se não homologado, não avaliado, ou desclassificado então ultimas posicões
-                    if ($inscricao->getIdSituacao() == 0
-                        or $inscricao->getIdSituacao() == 1
-                        or $inscricao->getIdSituacao() == 3
-                        or $inscricao->getIdSituacao() == 5) {
+                    if (0 == $inscricao->getIdSituacao()
+                        or 1 == $inscricao->getIdSituacao()
+                        or 3 == $inscricao->getIdSituacao()
+                        or 5 == $inscricao->getIdSituacao()) {
                         $classificacao->setPosicao(999999);
                     } else {
                         $classificacao->setPosicao($pos);
-                        $pos++;
+                        ++$pos;
                     }
                     $em->persist($classificacao);
                     $em->flush();
@@ -363,37 +330,36 @@ class ResultadoController extends Controller
                 // Verifica se existe posição na lista de classificação
                 // A pontuação da posição anterior é comparada com a pontuação posição atual
                 // existindo condição de empate, ativa-se a flag da empate nas duas posições
-                if ($classificacao->getPosicao() != 999999) {
-                    if ($tmp and bccomp($tmp->getValor(), $classificacao->getValor(), 6) == 0) {
+                if (999999 != $classificacao->getPosicao()) {
+                    if ($tmp and 0 == \bccomp($tmp->getValor(), $classificacao->getValor(), 6)) {
                         $tmp->setEmpate(1);
                         $classificacao->setEmpate(1);
                         $em->persist($classificacao);
                         $em->persist($tmp);
                         $em->flush();
 
-                        if (array_key_exists((string)$classificacao->getValor(), $empates)) {
-                            if (!$empates[(string)$classificacao->getValor()]->contains($tmp)) {
-                                $empates[(string)$classificacao->getValor()]->add($tmp);
+                        if (\array_key_exists((string) $classificacao->getValor(), $empates)) {
+                            if (!$empates[(string) $classificacao->getValor()]->contains($tmp)) {
+                                $empates[(string) $classificacao->getValor()]->add($tmp);
                             }
-                            if (!$empates[(string)$classificacao->getValor()]->contains($classificacao)) {
-                                $empates[(string)$classificacao->getValor()]->add($classificacao);
+                            if (!$empates[(string) $classificacao->getValor()]->contains($classificacao)) {
+                                $empates[(string) $classificacao->getValor()]->add($classificacao);
                             }
                         } else {
-                            $empates[(string)$classificacao->getValor()] = new ArrayCollection();
-                            $empates[(string)$classificacao->getValor()]->add($tmp);
-                            $empates[(string)$classificacao->getValor()]->add($classificacao);
-                        };
+                            $empates[(string) $classificacao->getValor()] = new ArrayCollection();
+                            $empates[(string) $classificacao->getValor()]->add($tmp);
+                            $empates[(string) $classificacao->getValor()]->add($classificacao);
+                        }
                     }
                     $tmp = $classificacao;
                 }
             }
 
             //Aplica os critérios de desempate
-            if (count($empates)) {
-
+            if (\count($empates)) {
                 /**
                  * @var float $pontuacao
-                 * @var  ArrayCollection $classificacao
+                 * @var ArrayCollection $classificacao
                  */
                 foreach ($empates as $pontuacao => $classificacao) {
                     $criterio = $etapa->getIdEdital()->getDesempate();
@@ -402,29 +368,25 @@ class ResultadoController extends Controller
                     foreach ($c as $cc) {
                         $cc->setPosicaoAnterior($cc->getPosicao());
                     }
-                    uasort($c, function ($a, $b) use ($criterio) {
+                    \uasort($c, function($a, $b) use ($criterio) {
                         return $this->condicaoEmpate($criterio, $a, $b);
                     });
                     foreach ($c as $chave => $cc) {
                         $cc->setPosicao($pos);
                         $em->persist($cc);
                         $em->flush();
-                        $pos++;
+                        ++$pos;
                     }
                 }
-
             }
         }
-        $this->addFlash('success', "Classificação processada!");
+        $this->addFlash('success', 'Classificação processada!');
     }
 
     /**
-     * Verifica a condição de empate
+     * Verifica a condição de empate.
      *
-     * @param ArrayCollection $criterio
-     * @param FrigaClassificacao $a
-     * @param FrigaClassificacao $b
-     * @return  mixed
+     * @return mixed
      */
     public function condicaoEmpate(ArrayCollection $criterio, FrigaClassificacao $a, FrigaClassificacao $b)
     {
@@ -432,6 +394,7 @@ class ResultadoController extends Controller
         if ($criterio->isEmpty()) {
             $b->setEmpate(1);
             $a->setEmpate(1);
+
             return 0;
         }
 
@@ -441,58 +404,74 @@ class ResultadoController extends Controller
         $obs = $criterio->first()->getObj()->regra;
         $logico = 0;
         switch ($criterio->first()->getContexto()) {
+            // Critérios com base nas propriedades da entidade inscrição
             case FrigaInscricao::class:
-                $prop = "get" . ucfirst($criterio->first()->getPropriedade());
+                $prop = 'get' . \ucfirst($criterio->first()->getPropriedade());
                 $valorA = $a->getIdInscricao()->$prop();
                 $valorB = $b->getIdInscricao()->$prop();
 
                 $xA = $valorA;
                 $xB = $valorB;
+                $obs = '';
 
-                //Valor A
-                if (is_object($valorA)) {
-                    if (get_class($valorA) == 'DateTime') {
-                        $xA = $valorA->format('d/m/Y');
-                    } else {
-                        $xA = serialize($valorA);
-                    }
+                switch ($criterio->first()->getPropriedade()) {
+                    case 'dataNascimento':
+                        //Valor A
+                        if (\is_object($valorA)) {
+                            if ('DateTime' == \get_class($valorA)) {
+                                $xA = $valorA->format('d/m/Y');
+                            } else {
+                                $xA = \serialize($valorA);
+                            }
+                        }
+                        //Valor B
+                        if (\is_object($valorB)) {
+                            if ('DateTime' == \get_class($valorB)) {
+                                $xB = $valorB->format('d/m/Y');
+                            } else {
+                                $xB = \serialize($valorB);
+                            }
+                        }
+                        $obs .= ' (' . $a->getIdInscricao()->getNome() . ': ' . $xA;
+                        $obs .= '|';
+                        $obs .= $b->getIdInscricao()->getNome() . ': ' . $xB . ')';
+                        //$obs .= " (" . $xA . " " . $criterio->first()->getObj()->sentido . " " . $xB . ") ";
+                        $logico = ($valorB <=> $valorA);
+                        break;
+
+                    case 'nome':
+                        $logico = \strnatcmp(\strtolower($valorB), \strtolower($valorA));
+                        break;
+
+                    case 'matriculaIndiceDesempenho':
+                        $logico = \bccomp(\floatval($valorB), \floatval($valorA), 6);
+                        break;
+                    default:
+                        $logico = 0;
+                        break;
                 }
 
-                //Valor B
-                if (is_object($valorB)) {
-                    if (get_class($valorB) == 'DateTime') {
-                        $xB = $valorB->format('d/m/Y');
-                    } else {
-                        $xB = serialize($valorB);
-                    }
-                }
-
-                $obs .= " (" . $a->getIdInscricao()->getNome() . ": " . $xA;
-                $obs .= "|";
-                $obs .= $b->getIdInscricao()->getNome() . ": " . $xB . ")";
-                //$obs .= " (" . $xA . " " . $criterio->first()->getObj()->sentido . " " . $xB . ") ";
-                $logico = ($valorB <=> $valorA);
                 break;
             case FrigaEditalPontuacao::class:
                 $valorA = $a->getIdInscricao()->getPontuacaoAvaliacaoItemValor($criterio->first()->getContextoObjeto());
                 $valorB = $b->getIdInscricao()->getPontuacaoAvaliacaoItemValor($criterio->first()->getContextoObjeto());
-                $obs .= " (" . $a->getIdInscricao()->getNome() . ": " . $valorA;
-                $obs .= "|";
-                $obs .= $b->getIdInscricao()->getNome() . ": " . $valorB . ")";
-                $logico = bccomp($valorB, $valorA, 5);
+                $obs .= ' (' . $a->getIdInscricao()->getNome() . ': ' . $valorA;
+                $obs .= '|';
+                $obs .= $b->getIdInscricao()->getNome() . ': ' . $valorB . ')';
+                $logico = \bccomp($valorB, $valorA, 5);
                 break;
             case FrigaEditalPontuacaoCategoria::class:
                 $valorA = $a->getIdInscricao()->getPontuacaoSomaCategoria(true, $criterio->first()->getContextoObjeto());
                 $valorB = $b->getIdInscricao()->getPontuacaoSomaCategoria(true, $criterio->first()->getContextoObjeto());
 
-                $obs .= " (" . $a->getIdInscricao()->getNome() . ": " . $valorA;
-                $obs .= "|";
-                $obs .= $b->getIdInscricao()->getNome() . ": " . $valorB . ")";
-                $logico = bccomp($valorB, $valorA, 5);
+                $obs .= ' (' . $a->getIdInscricao()->getNome() . ': ' . $valorA;
+                $obs .= '|';
+                $obs .= $b->getIdInscricao()->getNome() . ': ' . $valorB . ')';
+                $logico = \bccomp($valorB, $valorA, 5);
                 break;
         }
 
-        if ($criterio->first()->getSentido() != $logico and $logico == 0) {
+        if ($criterio->first()->getSentido() != $logico and 0 == $logico) {
             $tmp = clone $criterio;
             $tmp->removeElement($criterio->first());
             if ($tmp->count()) {
@@ -500,25 +479,27 @@ class ResultadoController extends Controller
             }
             $b->setEmpate(1);
             $a->setEmpate(1);
+
             return 0;
-        } else if ($criterio->first()->getSentido() == $logico) {
+        } elseif ($criterio->first()->getSentido() == $logico) {
             $b->setObservacao($obs);
             $b->setEmpate(0);
             $a->setEmpate(0);
+
             return 1;
         } else {
             $a->setObservacao($obs);
             $b->setEmpate(0);
             $a->setEmpate(0);
+
             return -1;
         }
     }
 
     /**
-     * Altera a posição de duas inscrições
-     * @param integer $comparacao
-     * @param FrigaClassificacao $a
-     * @param FrigaClassificacao $b
+     * Altera a posição de duas inscrições.
+     *
+     * @param int $comparacao
      */
     public function condicaoEmpateComparacao($comparacao, $obs, FrigaClassificacao $a, FrigaClassificacao $b)
     {
@@ -535,105 +516,33 @@ class ResultadoController extends Controller
             $a->setPosicaoAnterior($a->getPosicao());
             $a->setPosicao($b->getPosicaoAnterior());
         }
-
     }
 
     /**
-     * @param FrigaEditalEtapa $etapa
-     * @return ArrayCollection
-     * @throws Exception
-     */
-    private function gerarObjetoClassificacao(FrigaEditalEtapa $etapa)
-    {
-
-        $edital = $etapa->getIdEdital();
-        $classificacao = new ArrayCollection();
-
-        $geral = $etapa->getClassificacao()->getIterator();
-
-        $geral->uasort(function (FrigaClassificacao $a, FrigaClassificacao $b) {
-            return $a->getPosicao() <=> $b->getPosicao();
-        });
-        $geral = new ArrayCollection($geral->getArrayCopy());
-
-        if ($edital->isResultado0() or $edital->isResultado1()) {
-            /** @var FrigaEditalCargo $cargo */
-            foreach ($edital->getCargo() as $cargo) {
-                if ($edital->isResultado0()) {
-                    if ($edital->getCota()->count()) {
-                        /** @var FrigaEditalCota $lista */
-                        foreach ($edital->getCota() as $lista) {
-                            $obj = new stdClass();
-                            $obj->nome = $cargo->getDescricao() . "/" . $lista->getDescricao();
-                            $obj->cargo = $cargo;
-                            $obj->lista = $lista;
-                            $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) use ($cargo, $lista) {
-                                return $c->getIdCargo()->getId() == $cargo->getId()
-                                    and $c->getIdCota()->getId() == $lista->getId();
-                            });
-                            $classificacao->add($obj);
-                        }
-                    }
-                }
-                if ($edital->isResultado1()) {
-                    $obj = new stdClass();
-                    $obj->nome = "Classificação Geral / " . $cargo->getDescricao();
-                    $obj->cargo = $cargo;
-                    $obj->lista = null;
-                    $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) use ($cargo) {
-                        return $c->getIdCargo()->getId() == $cargo->getId()
-                            and $c->getIdCota() == null;
-                    });
-                    $classificacao->add($obj);
-                }
-            }
-        }
-        if ($edital->isResultado2()) {
-            foreach ($edital->getCota() as $lista) {
-                $obj = new stdClass();
-                $obj->nome = "Classificação Geral/" . $lista->getDescricao();
-                $obj->cargo = null;
-                $obj->lista = $lista;
-                $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) use ($lista) {
-                    return $c->getIdCota()->getId() == $lista->getId()
-                        and $c->getIdCargo() == null;
-                });
-                $classificacao->add($obj);
-            }
-        }
-        if ($edital->isResultado3()) {
-            $obj = new stdClass();
-            $obj->nome = "Classificação Geral";
-            $obj->cargo = null;
-            $obj->lista = null;
-            $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) {
-                return $c->getIdCota() == null and $c->getIdCargo() == null;
-            });
-            $classificacao->add($obj);
-        }
-        return $classificacao;
-    }
-
-    /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
      * @return Response
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function indexEtapaAction(Request $request, FrigaEditalEtapa $etapa)
     {
+        if (
+            $this->isGranted('ROLE_ADMIN')
+            or $this->getUser()->getPermissaoEdital($etapa->getIdEdital())
+        ) {
+            $geral = $etapa->getClassificacaoCargo();
+        } else {
+            $geral = $etapa->getClassificacaoCargo($this->getUser());
+        }
+
         return $this->render('NteAplicacaoFrigaBundle:Resultado:index-etapa.html.twig', [
             'etapa' => $etapa,
             'edital' => $etapa->getIdEdital(),
-            'classificacao' => $this->gerarObjetoClassificacao($etapa)
+            'geral' => $geral,
+            'classificacao' => $this->gerarObjetoClassificacao($etapa),
         ]);
     }
 
-
     /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
-     * @param FrigaClassificacao $c
      * @return RedirectResponse
      */
     public function subirPosicaoAction(Request $request, FrigaEditalEtapa $etapa, FrigaClassificacao $c)
@@ -642,8 +551,6 @@ class ResultadoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($c->getEmpate() and $c->getPosicao() > 1) {
-
-
             $posAnterior = $em->getRepository(FrigaClassificacao::class)
                 ->createQueryBuilder('c')
                 ->where('c.empate = 1 and c.idEtapa = :etapa')
@@ -651,14 +558,14 @@ class ResultadoController extends Controller
                 ->setParameter('etapa', $etapa)
                 ->setParameter('posicao', $c->getPosicao() - 1);
 
-            if($etapa->getIdEdital()->isResultado3() and is_null($c->getIdCota())){
+            if ($etapa->getIdEdital()->isResultado3() and \is_null($c->getIdCota())) {
                 $posAnterior->andWhere('c.idCota is null');
-            }else{
+            } else {
                 $posAnterior->andWhere('c.idCota = :cota')->setParameter('cota', $c->getIdCota());
             }
-            if($etapa->getIdEdital()->isResultado3() and is_null($c->getIdCargo())){
+            if ($etapa->getIdEdital()->isResultado3() and \is_null($c->getIdCargo())) {
                 $posAnterior->andWhere('c.idCargo is null');
-            }else{
+            } else {
                 $posAnterior->andWhere('c.idCargo = :cargo')->setParameter('cargo', $c->getIdCargo());
             }
 
@@ -667,18 +574,16 @@ class ResultadoController extends Controller
             /** @var FrigaClassificacao $posAnterior */
             $posAnterior = $posAnterior->first();
 
-
-
             if ($posAnterior) {
                 //Troca a posiçãq anterior para  proxima
                 $posAnterior->setPosicao($c->getPosicao());
                 $c->setPosicao($c->getPosicao() - 1);
 
                 //Configura a posição anterior
-                if ($posAnterior->getPosicaoAnterior() == -1) {
+                if (-1 == $posAnterior->getPosicaoAnterior()) {
                     $posAnterior->setPosicaoAnterior($posAnterior->getPosicao());
                 }
-                if ($c->getPosicaoAnterior() == -1) {
+                if (-1 == $c->getPosicaoAnterior()) {
                     $c->setPosicaoAnterior($c->getPosicao());
                 }
                 $em->persist($c);
@@ -686,12 +591,11 @@ class ResultadoController extends Controller
                 $em->flush();
             }
         }
+
         return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
      * @return RedirectResponse
      */
     public function confirmarPosicaoAction(Request $request, FrigaEditalEtapa $etapa)
@@ -712,8 +616,6 @@ class ResultadoController extends Controller
     }
 
     /**
-     *
-     * @param Request $request
      * @return Response
      */
     public function formComprovanteAction(Request $request, FrigaEditalEtapa $etapa, FrigaArquivo $arquivo)
@@ -724,12 +626,12 @@ class ResultadoController extends Controller
         ]);
     }
 
-
     /**
      * Traaz todos os editais que usuário pode ter acesso;
      * Se administrador, traz todos os editais.
      *
      * @param int $situacao
+     *
      * @return array|ArrayCollection|object[]
      */
     public function editais($situacao = 1)
@@ -738,8 +640,7 @@ class ResultadoController extends Controller
         $editais = new ArrayCollection();
         if ($this->isGranted('ROLE_ADMIN')) {
             $editais = $em->getRepository(FrigaEdital::class)->findAll();
-        } else if ($this->isGranted('ROLE_AVALIADOR')) {
-
+        } elseif ($this->isGranted('ROLE_AVALIADOR')) {
             /** @var ArrayCollection $tmp */
             $tmp = $this->getUser()
                 ->getIdEditalUsuario();
@@ -752,20 +653,19 @@ class ResultadoController extends Controller
                     if (!$editais->contains($eu->getIdEdital())) {
                         $editais->add($eu->getIdEdital());
                     }
-                };
-                $editais = $editais->filter(function (FrigaEdital $edital) {
-                    return $edital->getEtapa()->filter(function (FrigaEditalEtapa $etapa) {
+                }
+                $editais = $editais->filter(function(FrigaEdital $edital) {
+                    return $edital->getEtapa()->filter(function(FrigaEditalEtapa $etapa) {
                         return true; // $etapa->getPeriodoHabilitado();
                     })->count();
                 });
             }
         }
+
         return $editais;
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
      * @return BinaryFileResponse
      */
     public function exportarCsvAction(Request $request, FrigaEditalEtapa $etapa)
@@ -780,13 +680,13 @@ class ResultadoController extends Controller
             ->setParameter('etapa', $etapa)
             ->getQuery()->getResult();
 
-        $arquivo = "/tmp/classificacao-" . $etapa->getId() . ".csv";
-        if (is_file($arquivo)) {
-            unlink($arquivo);
+        $arquivo = '/tmp/classificacao-' . $etapa->getId() . '.csv';
+        if (\is_file($arquivo)) {
+            \unlink($arquivo);
         }
-        $out = fopen($arquivo, 'w');
+        $out = \fopen($arquivo, 'w');
 
-        fputcsv($out, [
+        \fputcsv($out, [
             'Etapa',
             'Cargo',
             'Lista',
@@ -794,21 +694,21 @@ class ResultadoController extends Controller
             'Nome',
             'E-mail',
             'Situacao',
-            "Pontuacao",
-            "Classificacao",
-            "Observacao",
+            'Pontuacao',
+            'Classificacao',
+            'Observacao',
         ]);
         /** @var FrigaClassificacao $p */
         foreach ($convocacao as $p) {
-            if ($p->getPosicao() == 999999) {
-                $p->setPosicao("-");
+            if (999999 == $p->getPosicao()) {
+                $p->setPosicao('-');
             }
-            fputcsv($out, [
+            \fputcsv($out, [
                 $p->getIdEtapa()->getDescricao(),
-                $p->getIdCargo() ? $p->getIdCargo()->getDescricao() : "",
-                $p->getIdCota() ? $p->getIdCota()->getDescricao() : "",
+                $p->getIdCargo() ? $p->getIdCargo()->getDescricao() : '',
+                $p->getIdCota() ? $p->getIdCota()->getDescricao() : '',
                 $p->getIdInscricao()->getUuid(),
-                strtoupper($p->getIdInscricao()->getNome()),
+                \strtoupper($p->getIdInscricao()->getNome()),
                 $p->getIdInscricao()->getContatoEmail(),
                 $p->getObjsituacao()->descricao,
                 $p->getValor(),
@@ -816,15 +716,15 @@ class ResultadoController extends Controller
                 $p->getObservacao(),
             ]);
         }
-        fclose($out);
+        \fclose($out);
+
         return $this->file($arquivo);
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEditalEtapa $etapa
      * @return Response
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function impresaoAction(Request $request, FrigaEditalEtapa $etapa)
     {
@@ -836,5 +736,4 @@ class ResultadoController extends Controller
             'classificacao' => $this->gerarObjetoClassificacao($etapa),
         ]);
     }
-
 }

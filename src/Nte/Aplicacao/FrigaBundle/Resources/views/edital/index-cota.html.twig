@@ -1,16 +1,16 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %} Configuração de Edital {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Lista de classificação{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Listas {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <section class="panel-body">
                 {% if frigaedital.cota|length %}
                     <table class="table table-hover table-condesed ">
                         <thead>
                         <tr>
-                            <th>Situação </th>
+                            <th>Listas </th>
                             <th>Inscritos</th>
                             <th>
                                 <a href="{{ path('edital_cota_criar',{uuid: frigaedital.uuid}) }}"

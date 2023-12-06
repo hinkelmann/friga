@@ -668,6 +668,30 @@
                     </blockquote>
                 {% endfor %}
             </div>
+            <br>
+            <div class="panel-body">
+                <div class="text-center">
+                    <h3><i class="icon-clock"></i>&nbsp;&nbsp;ACESSO AOS DADOS DE INSCRIÇÃO</h3>
+                    <br><br>
+                </div>
+                <table class="table  table-responsive table-condesed">
+                    <tr>
+                        <td width="150"><b>Data/Hora</b></td>
+                        <td>Usuário</td>
+                        <td>Operação</td>
+                        <td>URI</td>
+                    </tr>
+                    {% for item in logs %}
+                        <tr>
+                            <td>{{ item.registroDataCriacao|date('d/m/Y H:i:s') }}</td>
+                            <td>{{ item.idUsuario is not null? item.idUsuario.nome:null }}</td>
+                            <td>{% if item.metodo == "POST" %}ESCRITA{% else %}LEITURA{% endif %}</td>
+                            <td>{{ item.uri }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <br>
         </div>
     </div>
 {% endblock %}

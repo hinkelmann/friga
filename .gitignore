@@ -17,4 +17,7 @@
 /web/bundles/
 .vagrant/
 composer.lock
-/app/Resources/node_modules/
+!/app/Resources/node_modules/
+/.php-cs-fixer.cache
+/symfony.lock
+/yarn.lock

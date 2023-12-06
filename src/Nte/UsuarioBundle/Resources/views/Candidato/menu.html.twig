@@ -8,6 +8,14 @@
                 {% set classeX = "" %}
             {% endif %}
             <li class="nav-item {{ classeX }}"><a class="nav-link" href="{{ path('nte_usuario_candidato_homepage') }}">Painel</a></li>
+            {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_convites_index' or
+                app.request.attributes.get('_route') == 'nte_usuario_candidato_convite_ver'
+            %}
+                {% set classeX = "active" %}
+            {% else %}
+                {% set classeX = "" %}
+            {% endif %}
+            <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_convites_index') }}">Convites</a></li>
             {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_index' or
                 app.request.attributes.get('_route') == 'nte_usuario_candidato_inscricao_visualizacao'
             %}
@@ -42,6 +50,7 @@
             {% endif %}
             <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_resultado_index') }}">Resultados</a></li>
 
+            {#
             {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index' or
                 app.request.attributes.get('_route') == 'nte_usuario_candidato_editais_index'
             %}
@@ -50,6 +59,7 @@
                 {% set classeX = "" %}
             {% endif %}
             <li class="nav-item {{ classeX }}"><a class="nav-link " href="{{ path('nte_usuario_candidato_editais_index') }}">Editais</a></li>
+           #}
             {% if app.request.attributes.get('_route') == 'nte_usuario_candidato_perfil' or
                 app.request.attributes.get('_route') == 'nte_usuario_candidato_editar'
             %}

@@ -1,63 +1,195 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Edital N° {{ frigaedital.titulo }}{% endblock %}
-{% block breadcumbsTitulo %}Avaliadores {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Avaliadores{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Avaliadores {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
-            <section class="panel-body">
-                {% if frigaedital.idEditalUsuario|length %}
+        <div class="col-md-9 col-lg-10">
+            {% if frigaedital.idEditalUsuario|length or frigaedital.idEditalUsuarioConvite|length %}
+                <section class="panel-body mb-lg">
                     <table class="table table-hover table-condesed ">
                         <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Banca</th>
-                            <th>
-                                <a href="{{ path('edital_avaliador_adicionar',{uuid: frigaedital.uuid}) }}"
-                                   class="btn btn-primary pull-right">
-                                    <i class="fa fa-plus-circle"></i> Adicionar
+                            <th style="vertical-align: middle !important;"
+                                colspan="2">Convite para compor banca
+                            </th>
+                            <th class="text-right">
+                                <a href="{{ path('edital_avaliador_convidar',{uuid: frigaedital.uuid}) }}"
+                                   title="Clique aqui para convidar os membros que irão compor a banca"
+                                   class="btn btn-primary">
+                                    <i class="fa fa-plus-circle"></i> Convidar
                                 </a>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for usuario in frigaedital.idEditalUsuario %}
+                        {% for convite in frigaedital.idEditalUsuarioConvite %}
                             <tr>
                                 <td>
-                                    {{ usuario.idUsuario.nome }}<br>
-                                    <small>
-                                        <a title="Clique aqui para ver o histórico de acessos." href="#">
-                                        <i class="fa fa-clock-o"></i>
-                                        {{ usuario.idUsuario.lastLogin|date('d/m/Y H:i:s') }}
-                                        </a>
-                                    </small>
-                                </td>
-                                <td>
-                                    {% if usuario.idEditalCargo|length %}
-                                        {% for c in usuario.idEditalCargo %}
-                                            {{ c.descricao }},
-                                        {% endfor %}
-                                    {% else %}
-                                        Sem Banca
+                                    {{ convite.cpf }} - {{ convite.nome|upper }}<br>
+                                    {% if convite.funcaoAdministracao %}
+                                        <span title="Convidado para administrar as configurações do edital">
+                                        <i class="fa fa-star text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if convite.funcaoAvaliacao %}
+                                        <span title="Convidado para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if convite.funcaoResultado %}
+                                        <span title="Convidado para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy text-primary"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if convite.funcaoConvocacao %}
+                                        <span title="Convidado para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o text-primary"></i>
+                                    </span>
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <div class="btn-group btn-group-sm pull-right">
-                                        <a class="btn btn-default"
-                                           href="{{ path('edital_avaliador_editar',{uuid: frigaedital.uuid, avaliador: usuario.id}) }}">
-                                            <i class="fa fa-edit"></i> Editar
+                                    {% if convite.idEditalCargo|length %}
+                                        {% for c in convite.idEditalCargo %}
+                                            <span title="{{ c.descricao }}">{% if c.descricao|length >143 %}
+                                                    {{ c.descricao|slice(0, 144) }}...
+                                                {% else %}
+                                                    {{ c.descricao }}
+                                                {% endif %}
+                                            </span><br>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td style="vertical-align: middle !important;" class="text-right">
+                                    {% if convite.aceite is null %}
+                                        {% if convite.envio == 0 %}
+                                            <a class="btn "
+                                               title="Clique aqui para enviar o convite por e-mail"
+                                               href="{{ path('edital_avaliador_convidar_enviar',{uuid: frigaedital.uuid, convite: convite.id}) }}">
+                                                <i class="fa fa-envelope"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn text-success"
+                                               title="Convite enviado em {{ convite.envioData|date('d/m/Y \\à\\s H:i:s')}} "
+                                               href="{{ path('edital_avaliador_convidar_enviar',{uuid: frigaedital.uuid, convite: convite.id}) }}">
+                                                <i class="fa fa-envelope-o"></i>
+                                            </a>
+                                        {% endif %}
+                                        <a class="btn "
+                                           title="Clique aqui para editar o convite"
+                                           href="{{ path('edital_avaliador_convidar_editar',{uuid: frigaedital.uuid, convite: convite.id}) }}">
+                                            <i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-default"
-                                           href="{{ path('edital_avaliador_remover',{uuid: frigaedital.uuid, avaliador: usuario.id}) }}">
-                                            <i class="fa fa-times-circle"></i> Remover
+                                        <a class="btn "
+                                           title="Clique aqui para remover o convite"
+                                           href="{{ path('edital_avaliador_convidar_remover',{uuid: frigaedital.uuid, convite: convite.id}) }}">
+                                            <i class="fa fa-trash text-danger"></i>
                                         </a>
-                                    </div>
+                                    {% elseif  convite.aceite == 1 %}
+                                        <div class="alert alert-success text-center">
+                                            <strong>ACEITO</strong><br>
+                                        </div>
+                                    {% elseif  convite.aceite == 0 %}
+                                        <div class="alert alert-danger text-center">
+                                            <strong>RECUSADO</strong><br>
+                                        </div>
+                                    {% endif %}
+
                                 </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                {% else %}
+                </section>
+                <section class="panel-body mt-lg">
+                    <table class="table table-hover table-condesed ">
+                        <thead>
+                        <tr>
+                            <th colspan="2">Membros da banca</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for usuario in frigaedital.idEditalUsuarioOrdem %}
+                            <tr>
+                                <td>
+                                    {{ usuario.idUsuario.nome|upper }}<br>
+                                    {% if usuario.administrador %}
+                                        <span title="Habilitado para administrar as configurações do edital">
+                                        <i class="fa fa-star text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO administrar as configurações do edital">
+                                        <i class="fa fa-star"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if usuario.avaliador %}
+                                        <span title="Habilitado para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO para realizar avaliações das inscrições do edital">
+                                        <i class="fa fa-calculator"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if usuario.resultado %}
+                                        <span title="Habilitado para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO para gerar resultados de classificação no edital">
+                                        <i class="fa fa-trophy"></i>
+                                    </span>
+                                    {% endif %}
+                                    &nbsp;
+                                    {% if usuario.convocacao %}
+                                        <span title="Habilitado para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o text-primary"></i>
+                                    </span>
+                                    {% else %}
+                                        <span title="DESABILITADO para realizar convocações no edital">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if usuario.idEditalCargo|length %}
+                                        {% for c in usuario.idEditalCargo %}
+                                            <span title="{{ c.descricao }}">{% if c.descricao|length >143 %}
+                                                    {{ c.descricao|slice(0, 144) }}...
+                                                {% else %}
+                                                    {{ c.descricao }}
+                                                {% endif %}
+                                            </span><br>
+                                        {% endfor %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td style="vertical-align: middle !important;" class="text-right">
+
+                                    <a class="btn"
+                                       title="Clique aqui para editar o membro da banca"
+                                       href="{{ path('edital_avaliador_editar',{uuid: frigaedital.uuid, avaliador: usuario.id}) }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="btn"
+                                       title="Clique aqui para remover o membro da banca"
+                                       href="{{ path('edital_avaliador_remover',{uuid: frigaedital.uuid, avaliador: usuario.id}) }}">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            {% else %}
+                <section class="panel-body">
                     <section class="body-error error-inside">
                         <div class="center-error">
                             <div class="row">
@@ -67,21 +199,24 @@
                                             <i class="fa fa-users text-primary"></i>
                                         </h2>
                                         <p class="error-explanation text-center text-primary">
-                                            <br><b>Nenhum avaliador disponível para este edital </b> até o momento.<br>
                                             <br>
-                                            <br>
-                                            <a href="{{ path('edital_avaliador_adicionar',{uuid: frigaedital.uuid}) }}"
-                                               class="btn btn-primary">
-                                                <i class="fa fa-plus-circle"></i> Adicionar Avaliadores
-                                            </a>
+                                            <b>Até o momento, não temos nenhum membro da banca disponível para este
+                                                edital.
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <a href="{{ path('edital_avaliador_convidar',{uuid: frigaedital.uuid}) }}"
+                                                   class="btn btn-primary">
+                                                    <i class="fa fa-plus-circle"></i> Convidar Membros
+                                                </a>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </section>
-                {% endif %}
-            </section>
+                </section>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

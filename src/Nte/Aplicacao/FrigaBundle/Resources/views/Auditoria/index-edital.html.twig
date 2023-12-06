@@ -1,0 +1,64 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Auditoria Edital {% endblock %}
+ {% block breadcumbsTitulo %} Auditoria Edital {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="#"> Auditoria </a></span></li>
+     <li><span>Edital</span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="panel-body">
+        <table class="table table-hover table-condensed table-striped">
+            <thead>
+            <tr>
+                <th>Publicação</th>
+                <th>Numeração</th>
+                <th>Título</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in editais|reverse %}
+                <tr>
+                    <td style="vertical-align: middle" width="100">
+                        {{ item.dataPublicacaoOficial|date('d/m/Y') }}
+                    </td>
+                    <td style="vertical-align: middle" width="250">
+                        {{ item.numero }}
+                    </td>
+                    <td style="vertical-align: middle" >
+                         {{ item.titulo }}
+                    </td>
+                    <td class="text-right" width="250">
+
+                            <a class="btn btn"
+                               title="Clique aqui para visualizar os logs do edital"
+                               href="{{ path('auditoria_edital_index_log', {'uuid': item.uuid}) }}">
+                                <i class="fa fa-history"></i>
+                            </a>
+                            <a class="btn btn"
+                               title="Clique aqui para visualizar os arquivos do edital"
+                               href="{{ path('auditoria_edital_index_arquivo', {'uuid': item.uuid}) }}">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </a>
+                            <a class="btn btn"
+                               title="Clique aqui para visualizar as inscrições do edital"
+                               href="{{ path('auditoria_edital_index_inscricao', {'uuid': item.uuid}) }}">
+                                <i class="fa fa-th-list"></i>
+                            </a>
+                            <a class="btn btn"
+                               title="Clique aqui para visualizar os recursos do edital"
+                               href="{{ path('auditoria_edital_index_recurso', {'uuid': item.uuid}) }}">
+                                <i class="fa fa-gavel"></i>
+                            </a>
+                            <a class="btn btn"
+                               title="Clique aqui para visualizar os usuários do edital"
+                               href="{{ path('auditoria_edital_index_usuario', {'uuid': item.uuid}) }}">
+                                <i class="fa fa-users"></i>
+                            </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

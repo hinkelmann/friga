@@ -1,0 +1,285 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Declaração/{{ edital.titulo }} {% endblock %}
+{% block breadcumbsTitulo %}Declaração de Impedimento e não Impedimento{% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="#">Declaração</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ form_start( form) }}
+        <div class="panel-body">
+            <!--
+            <p>
+                Abaixo está a listagem de candidatos com inscrição válida no edital, por favor, declare sua situação em relação à participação na comissão de avaliação:
+            </p>
+            <ul>
+                <li>
+                    Caso esteja impedido de participar do processo seletivo, gentilmente indique os motivos do impedimento para cada candidato.
+                </li>
+                <li>
+                    Se não estiver impedido, selecione a opção 'Não Impedido'.
+                </li>
+            </ul>
+            -->
+            <table class="table table-condensed ">
+                <!--
+                <tr>
+                    <th colspan="4" class="text-center">
+                        LISTAGEM DE CANDIDATOS COM INSCRIÇÃO REALIZADA NO EDITAL
+                    </th>
+                </tr>
+                -->
+                <tr>
+                    <th width="10">Inscrição</th>
+                    <th class="text-center" width="10">Data de Nascimento</th>
+                    <th class="">Nome</th>
+                    <th class="text-right">Declare sua situação em relação à participação na banca</th>
+                </tr>
+                {% for item in edital.getInscricaoValida() %}
+                    <tr>
+                        <td>{{ item.uuid }}</td>
+                        <td>{{ item.dataNascimento|date('d/m/Y') }}</td>
+                        <td>{{ item.nome|upper }}</td>
+                        <td>
+                            {{ form_widget(form.children["inscricao__"~item.uuid]) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th colspan="4" class="text-center"></th>
+                </tr>
+            </table>
+            <h4 class="text-center mb-lg">Declaração de IMPEDIMENTO ou NÃO IMPEDIMENTO</h4>
+            <p class="mt-lg mb-lg">Tendo ciência da lista de candidatos com inscrição realizada no edital
+                {{ edital.numero }} - {{ edital.titulo }} e nos termos da Lei N. 9.784, de 29 de janeiro de 1999, e, da
+                Lei N. 12.813, de 16
+                de maio de 2013, <b> DECLARO: </b>
+            </p>
+            {{ form_widget(form.termoCompromisso) }}
+            <div class="form-group " id="termo">
+                <div class="row">
+                    <div class="col-md-4">
+                        <br>
+                        <div class="text-center hidden" id="declaracao1">
+                            <a href="{{ path('nte_usuario_declaracao_pdf', {'tipo': 1, 'uuid': edital.uuid}) }}"
+                               title="Clique aqui para efetuar o download do documento">
+                                <i class="fa fa-file-pdf-o fa-3x mb-lg"></i><br>
+                                <span>DECLARAÇÃO DE NÃO IMPEDIMENTO</span>
+                            </a>
+                        </div>
+                        <div class="text-center hidden" id="declaracao0">
+                            <a href="{{ path('nte_usuario_declaracao_pdf', {'tipo': 0, 'uuid': edital.uuid}) }}"
+                               title="Clique aqui para efetuar o download do documento">
+                                <i class="fa fa-file-pdf-o fa-3x mb-lg"></i><br>
+                                <span>DECLARAÇÃO DE IMPEDIMENTO</span>
+                            </a>
+                        </div>
+                        <br><br>
+                    </div>
+                    <div class="col-md-8 text-center">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div id="dz0" class="dropzone"></div>
+                                <input type="checkbox" class='hidden validar checkbox-anexo'
+                                       id="chk0" name="anexo1"
+                                       required="required"
+                                       value="1" aria-required="true"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+                <div class="alert alert-warning mt-lg" role="alert">
+                    <strong>Observação: </strong>
+                    A declaração deve ser assinada utilizando uma assinatura digital
+                    qualificada. Você tem a opção de usar um certificado do tipo A1 ou A3, ou então pode
+                    empregar o <a target="_blank" href="https://assinador.iti.br/">Assinador ITI</a> para
+                    efetuar a assinatura do documento.
+                </div>
+            </div>
+            <div class="text-center">
+                {{ form_rest( form) }}
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-send"> </i> Enviar declaração
+                    </button>
+                </div>
+                <br>
+
+            </div>
+
+        </div>
+        {{ form_end( form) }}
+    </div>
+
+{% endblock %}
+{% block javascripts2 %}
+    <script src="{{ asset('assets/vendor/pnotify/pnotify.custom.js') }}"></script>
+    <script src="{{ asset('assets/vendor/dropzone/dropzone.min.js') }}"></script>
+
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}"/>
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script>
+        let arquivosSubmetidos = []
+            , chkCampo = []
+            , dzAreaAtivo = []
+            , forms = $('form')
+            , btnSubmit = $('button')
+            , select = $('select')
+        ;
+        select.change(e => {
+            $.post('{{ path('nte_usuario_declaracao_impedimento') }}/' + e.target.dataset.id, {
+                justificativa: e.target.value
+            }).done(data => {
+            });
+        });
+
+        btnSubmit.on('click', function (ev) {
+            ev.preventDefault();
+            $("#chk0").removeClass('hidden');
+            let validated = forms.valid();
+            $("#chk0").addClass('hidden');
+            if (validated) {
+                arquivosSubmetidos.forEach(function (v) {
+                    forms.append('<input type="hidden" name="arquivos[]" value="' + v + '" /> ');
+                });
+                forms.submit();
+            } else {
+                notificar({msg: "Existem campos ou anexos obrigatórios não preenchidos!", tipo: "warning"});
+            }
+        });
+
+        forms.submit(function (e) {
+            arquivosSubmetidos.forEach(function (v) {
+                $('form').append('<input type="hidden" name="arquivos[]" value="' + v + '" /> ');
+            });
+        });
+
+
+        $.extend($.validator.messages, {
+            required: "Este campo é obrigatório",
+            email: "Por favor, preencha com o endereço de e-mail válido",
+        });
+
+
+
+        $("[type='radio']").change(event => {
+            areaUpload(parseInt(event.target.value));
+        });
+
+        let areaOpcoes = evento =>{
+            let marca = false;
+            document.getElementById("friga_usuario_termoCompromisso_0").disabled = false;
+            Array.from(document.querySelectorAll('select')).forEach(e=>{
+                if(e.value != "0" ){
+                    document.getElementById("friga_usuario_termoCompromisso_0").disabled = true;
+                    document.getElementById("friga_usuario_termoCompromisso_0").checked = false;
+                    marca = true;
+                }
+            });
+            if(marca){
+                document.getElementById("friga_usuario_termoCompromisso_1").checked = true;
+                areaUpload(0);
+            }
+        }
+
+        let areaUpload = (valor) => {
+            if(valor == null){
+                $('#declaracao0').addClass('hidden');
+                $('#declaracao1').addClass('hidden');
+            }else {
+                if (valor) {
+                    $('#declaracao1').removeClass('hidden');
+                    $('#declaracao0').addClass('hidden');
+                } else {
+                    $('#declaracao0').removeClass('hidden');
+                    $('#declaracao1').addClass('hidden');
+                }
+            }
+
+        }
+
+        $("select").change(areaOpcoes);
+
+        /**
+         * Cria uma nova instância do DropZone
+         *
+         * @param id
+         * @param observacao
+         * @param contexto
+         * @param idContexto
+         * @returns {Dropzone};
+         */
+        function mkDropZone(id, observacao, contexto, idContexto) {
+            return new Dropzone("#dz" + id, {
+                url: "{{ oneup_uploader_endpoint('frigadata') }}",
+                headers: {
+                    "x-contexto": contexto,
+                    'x-id': idContexto
+                },
+                dictDefaultMessage: "<i class='fa fa-2x fa-upload'></i><br>" + observacao,
+                acceptedFiles: "image/*,application/pdf",
+                maxFilesize: 10,
+                addRemoveLinks: true,
+                dictRemoveFile: "Remover Arquivo",
+                dictFileTooBig: "O arquivo escolhido excede o tamanho máximo permitido (10Mb). Reduza o arquivo e tente novamente",
+                dictInvalidFileType: "O arquivo escolhido não é do tipo  imagem ou PDF. Escolha outro arquivo e tente novamente."
+
+            }).on('sending', (arquivo, requisicao, dataset) => {
+                requisicao.timeout = 99999999999999999;
+            }).on('removedfile', (arquivo) => {
+                let a = arquivo,
+                    xhr = JSON.parse(a.xhr.response);
+                if (typeof xhr.error == 'undefined') {
+                    $.post('{{ path('arquivo_remover') }}', {id: xhr.id})
+                        .complete(e => {
+                            notificar(e.responseJSON);
+                            arquivosSubmetidos.splice(arquivosSubmetidos.indexOf(xhr.id), 1);
+                            chkCampo.splice(chkCampo.indexOf(id));
+                        });
+                    if (chkCampo.indexOf(id) !== -1) {
+                        $("#chk" + id).prop("checked", false);
+                    }
+                }
+            }).on('success', (arquivo, xhr) => {
+                console.log(id);
+                $("#chk" + id).prop("checked", true);
+                notificar(xhr);
+                arquivosSubmetidos.push(xhr.id);
+                if (chkCampo.indexOf(id) === -1) {
+                    chkCampo.push(id);
+                }
+            }).on('error', function (arquivo, xhr, requisicao) {
+                if (requisicao.status === 500) {
+                    notificar({msg: "Erro ao enviar arquivo!", tipo: "error"});
+                }
+                this.removeFile(arquivo);
+            });
+        }
+
+        Dropzone.autoDiscover = false;
+
+        dzAreaAtivo[0] = mkDropZone(0, "Anexar declaração com assinatura digital", "EDITALUSUARIO", {{ editalUsuario.id }});
+
+        areaUpload({{ editalUsuario.termoCompromisso }});
+        areaOpcoes();
+
+
+        /**
+         *  Notificação
+         * @param x
+         * @returns {PNotify}
+         */
+        function notificar(x) {
+            return new PNotify({
+                text: x.msg,
+                type: x.tipo,
+                icon: 'fa fa-2x fa-exclamation-triangle'
+            });
+        }
+    </script>
+{% endblock %}

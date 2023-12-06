@@ -1,28 +1,47 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use DateTime;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Nte\UsuarioBundle\Entity\Usuario;
-use DateTime;
-use Exception;
 
 /**
- * FrigaInscricaoPontuacao
+ * FrigaInscricaoPontuacao.
  *
  * @ORM\Table(name="friga_inscricao_pontuacao_avaliacao")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaInscricaoPontuacaoAvaliacao
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -31,18 +50,21 @@ class FrigaInscricaoPontuacaoAvaliacao
      * @var FrigaInscricao
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_inscricao", referencedColumnName="id")
      * })
      */
     private $idInscricao;
 
-
     /**
      * @var FrigaInscricaoPontuacao
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricaoPontuacao", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_inscricao_pontuacao", referencedColumnName="id")
      * })
      */
@@ -52,7 +74,9 @@ class FrigaInscricaoPontuacaoAvaliacao
      * @var FrigaEditalPontuacao
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacao", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital_pontuacao", referencedColumnName="id")
      * })
      */
@@ -62,7 +86,9 @@ class FrigaInscricaoPontuacaoAvaliacao
      * @var FrigaEditalPontuacaoCategoria
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalPontuacaoCategoria")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital_pontuacao_categoria", referencedColumnName="id")
      * })
      */
@@ -72,7 +98,9 @@ class FrigaInscricaoPontuacaoAvaliacao
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_avaliador", referencedColumnName="id")
      * })
      */
@@ -82,15 +110,16 @@ class FrigaInscricaoPontuacaoAvaliacao
      * @var FrigaEditalEtapa
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa", inversedBy="avaliacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_etapa", referencedColumnName="id")
      * })
      */
     private $idEtapa;
 
-
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="considerado", type="boolean", nullable=true)
      */
@@ -105,10 +134,10 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @var string
+     *
      * @ORM\Column(name="valor_inscricao", type="decimal", precision=10, scale=5, nullable=true)
      */
     private $valorInscricao;
-
 
     /**
      * @var string
@@ -131,13 +160,11 @@ class FrigaInscricaoPontuacaoAvaliacao
      */
     private $registroDataCriacao;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -150,11 +177,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param int $id
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -168,11 +197,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param FrigaInscricao $idInscricao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setIdInscricao($idInscricao)
     {
         $this->idInscricao = $idInscricao;
+
         return $this;
     }
 
@@ -186,11 +217,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param FrigaInscricaoPontuacao $idInscricaoPontuacao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setIdInscricaoPontuacao($idInscricaoPontuacao)
     {
         $this->idInscricaoPontuacao = $idInscricaoPontuacao;
+
         return $this;
     }
 
@@ -204,11 +237,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param FrigaEditalPontuacao $idEditalPontuacao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setIdEditalPontuacao($idEditalPontuacao)
     {
         $this->idEditalPontuacao = $idEditalPontuacao;
+
         return $this;
     }
 
@@ -222,14 +257,15 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param FrigaEditalPontuacaoCategoria $idEditalPontuacaoCategoria
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setIdEditalPontuacaoCategoria($idEditalPontuacaoCategoria)
     {
         $this->idEditalPontuacaoCategoria = $idEditalPontuacaoCategoria;
+
         return $this;
     }
-
 
     /**
      * @return Usuario
@@ -241,11 +277,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param Usuario $idAvaliador
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setIdAvaliador($idAvaliador)
     {
         $this->idAvaliador = $idAvaliador;
+
         return $this;
     }
 
@@ -259,11 +297,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param bool $considerado
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setConsiderado($considerado)
     {
         $this->considerado = $considerado;
+
         return $this;
     }
 
@@ -277,11 +317,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param string $valorAvaliador
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setValorAvaliador($valorAvaliador)
     {
         $this->valorAvaliador = $valorAvaliador;
+
         return $this;
     }
 
@@ -295,11 +337,13 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param string $valorInscricao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setValorInscricao($valorInscricao)
     {
         $this->valorInscricao = $valorInscricao;
+
         return $this;
     }
 
@@ -313,14 +357,15 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param mixed $idEtapa
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setIdEtapa($idEtapa)
     {
         $this->idEtapa = $idEtapa;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -332,16 +377,18 @@ class FrigaInscricaoPontuacaoAvaliacao
 
     /**
      * @param string $observacao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
+
         return $this;
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getRegistroDataAtualizacao()
     {
@@ -349,17 +396,19 @@ class FrigaInscricaoPontuacaoAvaliacao
     }
 
     /**
-     * @param DateTime $registroDataAtualizacao
+     * @param \DateTime $registroDataAtualizacao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setRegistroDataAtualizacao($registroDataAtualizacao)
     {
         $this->registroDataAtualizacao = $registroDataAtualizacao;
+
         return $this;
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getRegistroDataCriacao()
     {
@@ -367,20 +416,20 @@ class FrigaInscricaoPontuacaoAvaliacao
     }
 
     /**
-     * @param DateTime $registroDataCriacao
+     * @param \DateTime $registroDataCriacao
+     *
      * @return FrigaInscricaoPontuacaoAvaliacao
      */
     public function setRegistroDataCriacao($registroDataCriacao)
     {
         $this->registroDataCriacao = $registroDataCriacao;
+
         return $this;
     }
-
 
     /**
      * @ORM\PreUpdate
      *
-     * @param PreUpdateEventArgs $args
      * @throws
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -388,16 +437,15 @@ class FrigaInscricaoPontuacaoAvaliacao
         if ($args->hasChangedField('registroDataCriacao')) {
             $this->setRegistroDataCriacao($args->getOldValue('registroDataCriacao'));
         }
-        $this->setRegistroDataAtualizacao(new DateTime());
+        $this->setRegistroDataAtualizacao(new \DateTime());
     }
-
 
     /**
      * @ORM\PrePersist
      */
     public function PrePersist()
     {
-        $this->setRegistroDataCriacao(new DateTime());
-        $this->setRegistroDataAtualizacao(new DateTime());
+        $this->setRegistroDataCriacao(new \DateTime());
+        $this->setRegistroDataAtualizacao(new \DateTime());
     }
 }

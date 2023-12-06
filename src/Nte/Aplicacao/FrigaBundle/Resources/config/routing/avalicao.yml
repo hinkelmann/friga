@@ -19,6 +19,12 @@ avaliacao_etapa:
   defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:indexCandidato" }
   methods:  GET
 
+avaliacao_etapa_exportar_csv:
+  path:     /etapa/{etapa}/exportar/csv
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:exportarCsv" }
+  methods:  GET
+
+
 avaliacao_etapa_candidato:
   path:     /etapa/{etapa}/inscricao/{uuid}
   defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:form" }
@@ -34,3 +40,7 @@ avaliacao_index_edital:
   path:     /{uuid}
   defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:index" }
   methods:  GET
+
+avaliacao_etapa_api_index:
+  path:     /etapa/{etapa}/api
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Avaliacao:apiIndex" }

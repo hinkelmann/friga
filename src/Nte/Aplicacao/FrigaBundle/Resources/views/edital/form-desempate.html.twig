@@ -1,10 +1,10 @@
 {% extends 'base.admin.html.twig' %}
-{% block titulo %} Configurar critério de desempate {% endblock %}
-{% block breadcumbsTitulo %} Configurar Critério {% endblock %}
+{% block titulo %} {{ frigaedital.uuid }}/Desempate/Edição{% endblock %}
+{% block breadcumbsTitulo %} {{ frigaedital.uuid }}/Desempate/Edição {% endblock %}
 {% block conteudo %}
     <div class="row">
         {{ include('@NteAplicacaoFriga/edital/menu.html.twig', {entidade: frigaedital}) }}
-        <div class="col-md-10">
+        <div class="col-md-9 col-lg-10">
             <div class="panel-body">
                 {{ form_start(form) }}
                 {{ form_rest(form) }}

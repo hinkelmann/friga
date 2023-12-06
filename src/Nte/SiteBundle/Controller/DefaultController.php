@@ -1,15 +1,27 @@
 <?php
-/**
- * Controlador padrão
+
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 namespace Nte\SiteBundle\Controller;
 
-use Curl\Curl;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\ORM\QueryBuilder;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaArquivo;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaClassificacao;
@@ -22,15 +34,8 @@ use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao;
 use Nte\UsuarioBundle\Entity\Usuario;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
-use stdClass;
-use DateTime;
-use Exception;
-
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -42,7 +47,6 @@ class DefaultController extends Controller
     public function indexAction()
     {
         return $this->render('NteSiteBundle:Default:index.html.twig', [
-
         ]);
     }
 
@@ -51,12 +55,11 @@ class DefaultController extends Controller
      */
     public function loginViaTokenAction(Request $request)
     {
-
         //Parametros
         $tokenid = $request->query->get('token');
         $app = $request->query->get('app');
 
-        if(is_null($tokenid) or is_null($app)){
+        if (\is_null($tokenid) or \is_null($app)) {
             return $this->redirectToRoute('site_homepage');
         }
 
@@ -66,23 +69,23 @@ class DefaultController extends Controller
         //Identificacao do usuario pelo token
         $usuario = $em->createQueryBuilder()
             ->select('u')
-            ->from(Usuario::class,'u')
+            ->from(Usuario::class, 'u')
             ->where('u.token = :tokenid')
             ->andWhere('u.tokenExpire > :dt0')
-            ->setParameter('tokenid',$tokenid)
-            ->setParameter('dt0', new DateTime())
+            ->setParameter('tokenid', $tokenid)
+            ->setParameter('dt0', new \DateTime())
             ->getQuery()->getSingleResult();
 
-        if(is_null($usuario)){
+        if (\is_null($usuario)) {
             return $this->redirectToRoute('site_homepage');
         }
 
         //Autenticação
         $token = new UsernamePasswordToken($usuario, null, 'main', $usuario->getRoles());
         $this->get('security.token_storage')->setToken($token);
-        $this->get('session')->set('_security_main', serialize($token));
-        $this->get("event_dispatcher")
-            ->dispatch("security.interactive_login", new InteractiveLoginEvent($request, $token));
+        $this->get('session')->set('_security_main', \serialize($token));
+        $this->get('event_dispatcher')
+            ->dispatch('security.interactive_login', new InteractiveLoginEvent($request, $token));
 
         //Reset do token
         $usuario->setToken(null)->setTokenExpire(null);
@@ -90,16 +93,15 @@ class DefaultController extends Controller
         $em->flush();
 
         //Redirecionamento
-        switch ($app){
-            case "XXXX":
+        switch ($app) {
+            case 'XXXX':
                 return $this->redirectToRoute('site_homepage_xxxx');
-            case "YYYY":
+            case 'YYYY':
                 return $this->redirectToRoute('site_homepage_yyy');
             default:
                 return $this->redirectToRoute('site_homepage');
         }
     }
-
 
     public function indexRedirectAction(Request $request)
     {
@@ -107,16 +109,14 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital
      * @return Response
      */
     public function editalAction(Request $request, FrigaEdital $edital)
     {
-        if (($edital->getPublico() == 1 && $edital->getPeriodoInscricao()->getAndamentoPrazo() > 0)
-            or ($edital->getPublico() == 2 && $edital->getPeriodoInscricao()->getAndamentoPrazo() < 100)
-            or ($edital->getPublico() == 3)
-            or ($this->isGranted('ROLE_ADMIN'))
+        if ((1 == $edital->getPublico() && $edital->getPeriodoInscricao()->getAndamentoPrazo() > 0)
+            or (2 == $edital->getPublico() && $edital->getPeriodoInscricao()->getAndamentoPrazo() < 100)
+            or (3 == $edital->getPublico())
+            or $this->isGranted('ROLE_ADMIN')
         ) {
             return $this->render('NteSiteBundle:Default:edital.html.twig', [
                 'edital' => $edital,
@@ -128,123 +128,74 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param FrigaEdital $edital
      * @return ArrayCollection
      */
     public function gerarInfo(FrigaEdital $edital)
     {
-        /**
-         *                     {% for etapa in edital.etapaCronologica|reverse  if etapa.periodoDivulgacao
-         * and ( etapa.tipo == 4 or etapa.tipo == 5  or etapa.tipo == 7 ) %}
-         * {% if etapa.tipo == 4 %}
-         * <li>
-         * <a href="{{ path('nte_site_edital_classificao', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-         * <h4><i class="fa fa-globe"></i></h4>
-         * <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-         * {{ etapa.descricao }}
-         * </a>
-         * </li>
-         * {% endif %}
-         * {% if etapa.tipo == 5 %}
-         * {% if etapa.final  == 1%}
-         * {% if etapa.convocacaoData.count %}
-         * {% for chave, valor in etapa.convocacaoData %}
-         * <li>
-         * <a href="{{ path('nte_site_edital_convocacao', {'etapa': etapa.id, 'uuid': edital.uuid, data: chave}) }}">
-         * <h4><i class="fa fa-calendar-check-o"></i></h4>
-         * {% if chave|date('Ymd')>  etapa.dataDivulgacao|date('Ymd') %}
-         * <strong> {{ chave|date('d/m/Y') }}</strong>
-         * {% else %}
-         * <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-         * {% endif %}
-         * {{ etapa.descricao }}
-         * </a>
-         * </li>
-         * {% endfor %}
-         * {% endif %}
-         * {% else %}
-         * <li>
-         * <a href="{{ path('nte_site_edital_convocacao', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-         * <h4><i class="fa fa-calendar-check-o"></i></h4>
-         * <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-         * {{ etapa.descricao }}
-         * </a>
-         * </li>
-         * {% endif %}
-         * {% endif %}
-         * {% if etapa.tipo == 7 and etapa.idEtapa and etapa.idEtapa.recurso.count %}
-         * <li>
-         * <a href="{{ path('nte_site_edital_recurso', {'etapa': etapa.id, 'uuid': edital.uuid}) }}">
-         * <h4><i class="fa fa-gavel"></i></h4>
-         * <strong> {{ etapa.dataDivulgacao|date('d/m/Y') }} </strong> -
-         * {{ etapa.descricao }}
-         * </a>
-         * </li>
-         *
-         * {% endif %}
-         * {% endfor %}
-         */
-        $etapas = $edital->getEtapa()->filter(function (FrigaEditalEtapa $etapa) {
-            if (in_array($etapa->getTipo(), [4, 5, 7])
+        $etapas = $edital->getEtapa()->filter(function(FrigaEditalEtapa $etapa) {
+            if (\in_array($etapa->getTipo(), [4, 5, 7])
                 and $etapa->getPeriodoDivulgacao()
-            ) return $etapa;
+            ) {
+                return $etapa;
+            }
         });
 
-        $arquivos = $edital->getIdArquivo()->filter(function (FrigaArquivo $arquivo) {
+        $arquivos = $edital->getIdArquivo()->filter(function(FrigaArquivo $arquivo) {
             return $arquivo->getPeriodoDivulgacao();
         });
 
         $tmp = [];
         /** @var FrigaEditalEtapa $etapa */
         foreach ($etapas as $etapa) {
-            if ($etapa->getTipo() == 7 and $etapa->getIdEtapa() and $etapa->getIdEtapa()->getRecursos()->count())
-                $obj = new stdClass();
+            if (7 == $etapa->getTipo() and $etapa->getIdEtapa() and $etapa->getIdEtapa()->getRecursos()->count()) {
+                $obj = new \stdClass();
+            }
             $obj->icone;
             $obj->titulo = $etapa->getDescricao();
         }
 
         /** @var FrigaArquivo $arquivo */
         foreach ($arquivos as $arquivo) {
-            $obj = new stdClass();
+            $obj = new \stdClass();
             $obj->titulo = $arquivo->getTitulo();
-            $obj->icone = "fa fa-file-pdf-o";
+            $obj->icone = 'fa fa-file-pdf-o';
             $obj->data = $arquivo->getDataPublicacao();
             $obj->url = $this->generateUrl('nte_site_arquivo_download', ['id' => $arquivo->getId()]);
             $tmp[] = $obj;
         }
 
         //Ordenada por data
-        uasort($tmp, function ($a, $b) {
+        \uasort($tmp, function($a, $b) {
             return $a->data <=> $b->data;
         });
-        return new ArrayCollection($tmp);
 
+        return new ArrayCollection($tmp);
     }
 
     public function recursoAction(Request $request, FrigaEdital $edital, FrigaEditalEtapa $etapa)
     {
         if (!$etapa->getPeriodoDivulgacao() or !$edital->getEtapa()->contains($etapa)) {
             return $this->redirectToRoute('nte_site_edital', [
-                'id' => $edital->getId(), 'url' => $edital->getTitulo()
+                'id' => $edital->getId(), 'url' => $edital->getTitulo(),
             ]);
         }
         $criteria = new Criteria();
         $criteria->orderBy(['idSituacao' => 'desc', 'registroDataCriacao' => 'asc']);
 
         $recursos = $etapa->getIdEtapa()->getRecurso()->matching($criteria);
+
         return $this->render('NteSiteBundle:Default:recurso.html.twig', [
             'etapa' => $etapa,
             'edital' => $edital,
-            'recurso' => $recursos
+            'recurso' => $recursos,
         ]);
     }
-
 
     public function convocacaoAction(Request $request, FrigaEdital $edital, FrigaEditalEtapa $etapa)
     {
         if (!$etapa->getPeriodoDivulgacao() or !$edital->getEtapa()->contains($etapa)) {
             return $this->redirectToRoute('nte_site_edital', [
-                'id' => $edital->getId(), 'url' => $edital->getTitulo()
+                'id' => $edital->getId(), 'url' => $edital->getTitulo(),
             ]);
         }
 
@@ -264,7 +215,7 @@ class DefaultController extends Controller
 
         $convocacao = new ArrayCollection($convocacao);
         if ($data) {
-            $convocacao = $convocacao->filter(function (FrigaConvocacao $c) use ($data) {
+            $convocacao = $convocacao->filter(function(FrigaConvocacao $c) use ($data) {
                 return $c->getRegistroDataCriacao()->format('Y-m-d') == $data;
             });
         }
@@ -274,6 +225,7 @@ class DefaultController extends Controller
         } else {
             $template = 'NteSiteBundle:Default:convocacao.html.twig';
         }
+
         return $this->render($template, [
             'etapa' => $etapa,
             'edital' => $edital,
@@ -283,11 +235,10 @@ class DefaultController extends Controller
 
     public function listaAction(Request $request, FrigaEdital $edital, FrigaEditalEtapa $etapa)
     {
-
         if (!$this->isGranted('ROLE_ADMIN')) {
             if (!$etapa->getPeriodoDivulgacao() or !$edital->getEtapa()->contains($etapa)) {
                 return $this->redirectToRoute('nte_site_edital', [
-                    'id' => $edital->getId(), 'url' => $edital->getUuid()
+                    'id' => $edital->getId(), 'url' => $edital->getUuid(),
                 ]);
             }
         }
@@ -297,7 +248,7 @@ class DefaultController extends Controller
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        if ($etapa->getTipo() == 8) {
+        if (8 == $etapa->getTipo()) {
             $dados = $em
                 ->createQueryBuilder()
                 ->select('i')
@@ -308,7 +259,7 @@ class DefaultController extends Controller
                 ->addOrderBy('i.nome', 'asc')
                 ->getQuery()->getResult();
         }
-        if ($etapa->getTipo() == 9) {
+        if (9 == $etapa->getTipo()) {
             $dados = $em
                 ->createQueryBuilder()
                 ->select('feu')
@@ -321,7 +272,6 @@ class DefaultController extends Controller
         }
         $tmp = new ArrayCollection($dados);
 
-
         return $this->render('NteSiteBundle:Default:lista.html.twig', [
             'etapa' => $etapa,
             'edital' => $edital,
@@ -330,24 +280,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param FrigaEdital $edital
-     * @param FrigaEditalEtapa $etapa
      * @return Response
+     *
      * @throws \Exception
      */
     public function resultadoAction(Request $request, FrigaEdital $edital, FrigaEditalEtapa $etapa)
     {
         if (!$etapa->getPeriodoDivulgacao() or !$edital->getEtapa()->contains($etapa)) {
             return $this->redirectToRoute('nte_site_edital', [
-                'id' => $edital->getId(), 'url' => $edital->getTitulo()
+                'id' => $edital->getId(), 'url' => $edital->getTitulo(),
             ]);
         }
 
         $classificacao = new ArrayCollection();
         $geral = $etapa->getClassificacao()->getIterator();
 
-        $geral->uasort(function (FrigaClassificacao $a, FrigaClassificacao $b) {
+        $geral->uasort(function(FrigaClassificacao $a, FrigaClassificacao $b) {
             return $a->getPosicao() <=> $b->getPosicao();
         });
         $geral = new ArrayCollection($geral->getArrayCopy());
@@ -359,11 +307,11 @@ class DefaultController extends Controller
                     if ($edital->getCota()->count()) {
                         /** @var FrigaEditalCota $lista */
                         foreach ($edital->getCota() as $lista) {
-                            $obj = new stdClass();
-                            $obj->nome = $cargo->getDescricao() . "/" . $lista->getDescricao();
+                            $obj = new \stdClass();
+                            $obj->nome = $cargo->getDescricao() . '/' . $lista->getDescricao();
                             $obj->cargo = $cargo;
                             $obj->lista = $lista;
-                            $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) use ($cargo, $lista) {
+                            $obj->classificacao = $geral->filter(function(FrigaClassificacao $c) use ($cargo, $lista) {
                                 return $c->getIdCargo()->getId() == $cargo->getId()
                                     and $c->getIdCota()->getId() == $lista->getId();
                             });
@@ -372,13 +320,13 @@ class DefaultController extends Controller
                     }
                 }
                 if ($edital->isResultado1()) {
-                    $obj = new stdClass();
-                    $obj->nome = "Classificação Geral / " . $cargo->getDescricao();
+                    $obj = new \stdClass();
+                    $obj->nome = 'Classificação Geral / ' . $cargo->getDescricao();
                     $obj->cargo = $cargo;
                     $obj->lista = null;
-                    $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) use ($cargo) {
+                    $obj->classificacao = $geral->filter(function(FrigaClassificacao $c) use ($cargo) {
                         return $c->getIdCargo()->getId() == $cargo->getId()
-                            and $c->getIdCota() == null;
+                            and null == $c->getIdCota();
                     });
                     $classificacao->add($obj);
                 }
@@ -386,39 +334,38 @@ class DefaultController extends Controller
         }
         if ($edital->isResultado2()) {
             foreach ($edital->getCota() as $lista) {
-                $obj = new stdClass();
-                $obj->nome = "Classificação Geral/" . $lista->getDescricao();
+                $obj = new \stdClass();
+                $obj->nome = 'Classificação Geral/' . $lista->getDescricao();
                 $obj->cargo = null;
                 $obj->lista = $lista;
-                $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) use ($lista) {
+                $obj->classificacao = $geral->filter(function(FrigaClassificacao $c) use ($lista) {
                     return $c->getIdCota()->getId() == $lista->getId()
-                        and $c->getIdCargo() == null;
+                        and null == $c->getIdCargo();
                 });
                 $classificacao->add($obj);
             }
         }
         if ($edital->isResultado3()) {
-            $obj = new stdClass();
-            $obj->nome = "Classificação Geral";
+            $obj = new \stdClass();
+            $obj->nome = 'Classificação Geral';
             $obj->cargo = null;
             $obj->lista = null;
-            $obj->classificacao = $geral->filter(function (FrigaClassificacao $c) {
-                return $c->getIdCota() == null and $c->getIdCargo() == null;
+            $obj->classificacao = $geral->filter(function(FrigaClassificacao $c) {
+                return null == $c->getIdCota() and null == $c->getIdCargo();
             });
             $classificacao->add($obj);
         }
+
         return $this->render('NteSiteBundle:Default:classificacao.html.twig', [
             'etapa' => $etapa,
             'edital' => $edital,
-            'classificacao' => $classificacao
+            'classificacao' => $classificacao,
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param $edital
-     * @param $inscricao
      * @return Response
+     *
      * @throws \Exception
      */
     public function resultadoIndividualAction(Request $request, $edital, $inscricao)
@@ -430,6 +377,7 @@ class DefaultController extends Controller
         if (!$inscricao or !$edital) {
             return $this->redirectToRoute('nte_site_homepage');
         }
+
         return $this->render('NteSiteBundle:Default:resultado-individual.html.twig', [
             'inscricao' => $inscricao,
             'edital' => $edital,
@@ -437,19 +385,17 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Response
      */
     public function parteRodapeAction(Request $request)
     {
         return $this->render('NteSiteBundle:Default:rodape.html.twig', [
-
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param integer $situacao
+     * @param int $situacao
+     *
      * @return Response
      */
     public function parteEditaisAction(Request $request, $situacao)
@@ -462,23 +408,22 @@ class DefaultController extends Controller
         $editaisComInscricao = new ArrayCollection();
         $editaisSemInscricao = new ArrayCollection();
 
-
         //Filtra os editais conforme a visibilidade
-        $editais = $editais->filter(function (FrigaEdital $edital) {
-            if (($edital->getPublico() == 1 && $edital->getPeriodoInscricao()->getAndamentoPrazo() > 0)
-                or ($edital->getPublico() == 2 && $edital->getPeriodoInscricao()->getAndamentoPrazo() < 100)
-                or ($edital->getPublico() == 3)
+        $editais = $editais->filter(function(FrigaEdital $edital) {
+            if ((1 == $edital->getPublico() && $edital->getPeriodoInscricao()->getAndamentoPrazo() > 0)
+                or (2 == $edital->getPublico() && $edital->getPeriodoInscricao()->getAndamentoPrazo() < 100)
+                or (3 == $edital->getPublico())
             ) {
                 return $edital;
             }
         });
 
         //Se edital aberto, então separar em editais com inscrição aberta e em andamento
-        if ($situacao == 1) {
-            $editaisComInscricao = $editais->filter(function (FrigaEdital $edital) {
+        if (1 == $situacao) {
+            $editaisComInscricao = $editais->filter(function(FrigaEdital $edital) {
                 return $edital->getPeriodoInscricaoHabilitado();
             });
-            $editaisSemInscricao = $editais->filter(function (FrigaEdital $edital) {
+            $editaisSemInscricao = $editais->filter(function(FrigaEdital $edital) {
                 return !$edital->getPeriodoInscricaoHabilitado();
             });
         }
@@ -487,15 +432,15 @@ class DefaultController extends Controller
             'editais' => $editais,
             'editaisComInscricao' => $editaisComInscricao,
             'editaisSemInscricao' => $editaisSemInscricao,
-            'situacao' => $situacao
+            'situacao' => $situacao,
         ]);
     }
 
     //Token HEADER
-    private $xhtk = "xx";
+    private $xhtk = 'xx';
 
     //Token BODY
-    private $xbtk = "yy";
+    private $xbtk = 'yy';
 
     /**
      * @return \stdClass
@@ -503,68 +448,19 @@ class DefaultController extends Controller
     public function getToken()
     {
         $csrftm = $this->container->get('security.csrf.token_manager');
-        $obj = new stdClass();
+        $obj = new \stdClass();
         $obj->xhtk = $csrftm->refreshToken($this->xhtk)->getValue();
         $obj->xbtk = $csrftm->refreshToken($this->xbtk)->getValue();
+
         return $obj;
     }
 
     /**
-     * @param Request $request
      * @return bool
      */
     public function checkToken(Request $request)
     {
-        return ($this->isCsrfTokenValid($this->xhtk, $request->headers->get('xhtk'))
-            and $this->isCsrfTokenValid($this->xbtk, $request->request->get('xbtk')));
-    }
-
-    public function testeAction(Request $request)
-    {
-        //$x = new Curl();
-        $ls = file('https://ead12.proj.ufsm.br/client/fila.html');
-        $arquivos = [];
-        foreach ($ls as $x => $linha) {
-            if ($x >= 1) {
-                $y = str_replace(['.done', '</pre>'], "", substr($linha, 57, -1));
-                $arquivos[] = $y;
-            }
-        }
-        $servidor = [
-            //'bbb001.nte.ufsm.br',
-            '192.168.36.58',
-            '192.168.36.59',
-            '192.168.36.60',
-            '192.168.36.61',
-            '192.168.36.62',
-            '192.168.36.63',
-            '192.168.36.64',
-        ];
-        $lista = array_chunk($arquivos, 7);
-        echo "#!/bin/bash\n";
-        foreach ($lista as $conferencias) {
-            foreach ($conferencias as $s => $conf) {
-                echo "scp -CrpP2223 /media/bigbluebutton/recording/raw/$conf {$servidor[$s]}:/var/bigbluebutton/recording/raw/\n";
-                echo "scp -CrpP2223 /media/bigbluebutton/recording/status/sanity/$conf.done {$servidor[$s]}:/var/bigbluebutton/recording/status/sanity/\n";
-                echo "mv /media/bigbluebutton/recording/status/sanity/$conf.done  /media/slave/$s/\n";
-                //dump($servidor[$s]."--".$conf);
-            }
-
-
-        }
-
-        exit();
-
-    }
-
-
-    public function teste2Action(Request $request, $token)
-    {
-
-        return new JsonResponse([
-            $this->isCsrfTokenValid('teste', $token),
-            $request->isMethod('get'),
-            $request->isMethod('post')
-        ]);
+        return $this->isCsrfTokenValid($this->xhtk, $request->headers->get('xhtk'))
+            and $this->isCsrfTokenValid($this->xbtk, $request->request->get('xbtk'));
     }
 }

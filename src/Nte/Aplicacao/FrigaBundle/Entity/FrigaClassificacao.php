@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -7,19 +24,23 @@ use Doctrine\ORM\Mapping as ORM;
 use Nte\UsuarioBundle\Entity\Usuario;
 
 /**
- * FrigaClassificacao
+ * FrigaClassificacao.
  *
  * @ORM\Table(name="friga_classificacao")
+ *
  * @ORM\Entity
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaClassificacao
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -32,21 +53,21 @@ class FrigaClassificacao
     private $valor;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="posicao", type="integer", nullable=true)
      */
     private $posicao;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="posicao_anterior", type="integer", nullable=true)
      */
     private $posicaoAnterior;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="empate", type="boolean", nullable=true)
      */
@@ -67,13 +88,11 @@ class FrigaClassificacao
     private $observacao;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id_situacao", type="integer", nullable=true)
      */
     private $idSituacao;
-
-
 
     /**
      * @var \DateTime
@@ -93,7 +112,9 @@ class FrigaClassificacao
      * @var FrigaEdital
      *
      * @ORM\ManyToOne(targetEntity="FrigaEdital")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      * })
      */
@@ -103,7 +124,9 @@ class FrigaClassificacao
      * @var FrigaEditalEtapa
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa", inversedBy="classificacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_etapa", referencedColumnName="id")
      * })
      */
@@ -113,7 +136,9 @@ class FrigaClassificacao
      * @var FrigaEditalCargo
      *
      * @ORM\ManyToOne(targetEntity="FrigaEditalCargo")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_cargo", referencedColumnName="id")
      * })
      */
@@ -123,7 +148,9 @@ class FrigaClassificacao
      * @var FrigaEditalCota
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCota")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_cota", referencedColumnName="id")
      * })
      */
@@ -133,7 +160,9 @@ class FrigaClassificacao
      * @var FrigaInscricao
      *
      * @ORM\ManyToOne(targetEntity="FrigaInscricao", inversedBy="classificacao")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_inscricao", referencedColumnName="id")
      * })
      */
@@ -143,17 +172,18 @@ class FrigaClassificacao
      * @var Usuario
      *
      * @ORM\ManyToOne(targetEntity="Nte\UsuarioBundle\Entity\Usuario")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
      * })
      */
     private $idUsuario;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -161,7 +191,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set valor
+     * Set valor.
      *
      * @param string $valor
      *
@@ -175,7 +205,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get valor
+     * Get valor.
      *
      * @return string
      */
@@ -185,9 +215,9 @@ class FrigaClassificacao
     }
 
     /**
-     * Set posicao
+     * Set posicao.
      *
-     * @param integer $posicao
+     * @param int $posicao
      *
      * @return FrigaClassificacao
      */
@@ -199,9 +229,9 @@ class FrigaClassificacao
     }
 
     /**
-     * Get posicao
+     * Get posicao.
      *
-     * @return integer
+     * @return int
      */
     public function getPosicao()
     {
@@ -209,9 +239,9 @@ class FrigaClassificacao
     }
 
     /**
-     * Set empate
+     * Set empate.
      *
-     * @param boolean $empate
+     * @param bool $empate
      *
      * @return FrigaClassificacao
      */
@@ -223,9 +253,9 @@ class FrigaClassificacao
     }
 
     /**
-     * Get empate
+     * Get empate.
      *
-     * @return boolean
+     * @return bool
      */
     public function getEmpate()
     {
@@ -233,7 +263,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set uuid
+     * Set uuid.
      *
      * @param string $uuid
      *
@@ -247,7 +277,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get uuid
+     * Get uuid.
      *
      * @return string
      */
@@ -257,7 +287,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set registroDataCriacao
+     * Set registroDataCriacao.
      *
      * @param \DateTime $registroDataCriacao
      *
@@ -271,7 +301,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get registroDataCriacao
+     * Get registroDataCriacao.
      *
      * @return \DateTime
      */
@@ -281,7 +311,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set registroDataAtualizacao
+     * Set registroDataAtualizacao.
      *
      * @param \DateTime $registroDataAtualizacao
      *
@@ -295,7 +325,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get registroDataAtualizacao
+     * Get registroDataAtualizacao.
      *
      * @return \DateTime
      */
@@ -305,9 +335,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set idEdital
-     *
-     * @param FrigaEdital $idEdital
+     * Set idEdital.
      *
      * @return FrigaClassificacao
      */
@@ -319,7 +347,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get idEdital
+     * Get idEdital.
      *
      * @return FrigaEdital
      */
@@ -329,9 +357,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set idCargo
-     *
-     * @param FrigaEditalCargo $idCargo
+     * Set idCargo.
      *
      * @return FrigaClassificacao
      */
@@ -343,7 +369,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get idCargo
+     * Get idCargo.
      *
      * @return FrigaEditalCargo
      */
@@ -353,9 +379,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Set idInscricao
-     *
-     * @param FrigaInscricao $idInscricao
+     * Set idInscricao.
      *
      * @return FrigaClassificacao
      */
@@ -367,7 +391,7 @@ class FrigaClassificacao
     }
 
     /**
-     * Get idInscricao
+     * Get idInscricao.
      *
      * @return FrigaInscricao
      */
@@ -386,11 +410,13 @@ class FrigaClassificacao
 
     /**
      * @param int $posicaoAnterior
+     *
      * @return FrigaClassificacao
      */
     public function setPosicaoAnterior($posicaoAnterior)
     {
         $this->posicaoAnterior = $posicaoAnterior;
+
         return $this;
     }
 
@@ -404,11 +430,13 @@ class FrigaClassificacao
 
     /**
      * @param FrigaEditalEtapa $idEtapa
+     *
      * @return FrigaClassificacao
      */
     public function setIdEtapa($idEtapa)
     {
         $this->idEtapa = $idEtapa;
+
         return $this;
     }
 
@@ -422,11 +450,13 @@ class FrigaClassificacao
 
     /**
      * @param FrigaEditalCota $idCota
+     *
      * @return FrigaClassificacao
      */
     public function setIdCota($idCota)
     {
         $this->idCota = $idCota;
+
         return $this;
     }
 
@@ -440,11 +470,13 @@ class FrigaClassificacao
 
     /**
      * @param string $observacao
+     *
      * @return FrigaClassificacao
      */
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
+
         return $this;
     }
 
@@ -458,11 +490,13 @@ class FrigaClassificacao
 
     /**
      * @param Usuario $idUsuario
+     *
      * @return FrigaClassificacao
      */
     public function setIdUsuario($idUsuario)
     {
         $this->idUsuario = $idUsuario;
+
         return $this;
     }
 
@@ -476,11 +510,13 @@ class FrigaClassificacao
 
     /**
      * @param int $idSituacao
+     *
      * @return FrigaClassificacao
      */
     public function setIdSituacao($idSituacao)
     {
         $this->idSituacao = $idSituacao;
+
         return $this;
     }
 
@@ -491,73 +527,73 @@ class FrigaClassificacao
     {
         $obj = new \stdClass();
         $obj->id = $this->idSituacao;
-        $obj->descricao = "";
-        $obj->icone = "";
-        $obj->css = "label label-info";
-        $obj->cssAlert = "alert alert-info";
+        $obj->descricao = '';
+        $obj->icone = '';
+        $obj->css = 'label label-info';
+        $obj->cssAlert = 'alert alert-info';
         switch ($this->idSituacao) {
             case -999:
-                $obj->descricao = "Inscrição Cancelada";
-                $obj->css = "label label-dark";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-dark";
+                $obj->descricao = 'Inscrição Cancelada';
+                $obj->css = 'label label-dark';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-dark';
                 break;
             case 0:
-                $obj->descricao = "Inscrição Realizada";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Inscrição Realizada';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
             case 1:
-                $obj->descricao = "Inscrição Não Homologada";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-times";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Inscrição Não Homologada';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-times';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 2:
-                $obj->descricao = "Inscrição Homologada";
-                $obj->css = "label label-info";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Inscrição Homologada';
+                $obj->css = 'label label-info';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
             case 3:
-                $obj->descricao = "Desclassificado";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Desclassificado';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 4:
-                $obj->descricao = "Em avaliação";
-                $obj->css = "label label-danger";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-danger";
+                $obj->descricao = 'Em avaliação';
+                $obj->css = 'label label-danger';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-danger';
                 break;
             case 5:
-                $obj->descricao = "Aguardando Recurso";
-                $obj->css = "label label-inverse";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-inverse";
+                $obj->descricao = 'Aguardando Recurso';
+                $obj->css = 'label label-inverse';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-inverse';
                 break;
             case 6:
-                $obj->descricao = "Classificado";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Classificado';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
             case 7:
-                $obj->descricao = "Convocado";
-                $obj->css = "label label-success";
-                $obj->icone = "fa fa-clock-o";
-                $obj->cssAlert = "alert alert-success";
+                $obj->descricao = 'Convocado';
+                $obj->css = 'label label-success';
+                $obj->icone = 'fa fa-clock-o';
+                $obj->cssAlert = 'alert alert-success';
                 break;
         }
+
         return $obj;
     }
 
     /**
      * @ORM\PreUpdate
      *
-     * @param PreUpdateEventArgs $args
      * @throws \Exception
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -573,7 +609,7 @@ class FrigaClassificacao
      */
     public function PrePersist()
     {
-        $this->uuid = uniqid();
+        $this->uuid = \uniqid();
         $this->setRegistroDataCriacao(new \DateTime());
         $this->setRegistroDataAtualizacao(new \DateTime());
     }

@@ -1,0 +1,114 @@
+{% extends 'base.admin.html.twig' %}
+ {% block titulo %} Auditoria Edital Log {% endblock %}
+ {% block breadcumbsTitulo %} Auditoria Edital Log {% endblock %}
+ {% block breadcumbsItens %}
+     <li><span><a href="#"> Auditoria </a></span></li>
+     <li><span>Edital</span></li>
+     <li><span>Inscrições</span></li>
+ {% endblock %}
+{% block conteudo %}
+    <div class="row">
+        {{ include('@NteAplicacaoFriga/Auditoria/menu-edital.html.twig', {entidade: edital}) }}
+        <div class="col-md-9 col-lg-10">
+            <section class="panel">
+                <div class="panel-body">
+                    {% if edital.inscricaoValida|length > 0 %}
+                        <table class="table table-hovered">
+                            <thead>
+                            <tr>
+                                <th>Inscrição</th>
+                                <th>Nome</th>
+                                <th>Vaga</th>
+                                <th class="text-center" title="Situação atual do candidato no processo seletivo">Situação
+                                </th>
+                                <th class="text-center" title="Data e hora que o candidato se inscreveu">Data</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for inscricao in edital.inscricaoValida %}
+                                <tr>
+                                    <td width="10">
+                                        <a class="abrir-arquivo"
+                                           data-titulo="{{ inscricao.uuid }}"
+                                           href="{{ path('auditoria_pessoal_resumo_inscricao',{inscricao: inscricao.id, contexto:"AUDITORIA"}) }}">
+                                            {{ inscricao.uuid }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <b class="text-uppercase">{{ inscricao.nome }}</b>
+                                    </td>
+                                    <td class="">
+                                        {{ inscricao.idCargo.descricao }}
+                                    </td>
+                                    <td class="">
+                                        {{ inscricao.objSituacao.descricao }}
+                                    </td>
+
+                                    <td width="170" class="text-center">
+                                        {{ inscricao.registroDataCriacao|date('d/m/Y H:i:s') }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <section class="body-error error-inside">
+                            <div class="center-error">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="main-error mb-xlg">
+                                            <h2 class="error-code text-dark text-center text-weight-semibold m-none">0 <i
+                                                        class="fa fa-users text-primary"></i></h2>
+                                            <p class="error-explanation text-center text-primary">
+                                                <br><b>Nenhum candidato </b> disponível.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts2 %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
+    <style>
+        .swal-height {
+            height: 90vh;
+        }
+
+        .swal2-close:focus {
+            outline: none !important;
+        }
+
+        .swal2-close {
+            color: #f27474;
+        }
+    </style>
+    <script src="{{ asset('assets/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $('.abrir-arquivo').click(function (e) {
+            e.preventDefault();
+            let arquivo = this.dataset.titulo,
+                iframe = document.createElement('iframe');
+            iframe.src = this.href;
+            iframe.height = "90vh";
+            iframe.width = "100%";
+            iframe.style = "overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:90vh;width:100%;";
+            Swal.fire({
+                title: "friga://" + arquivo,
+                html: iframe.outerHTML,
+                width: "90%",
+                height: "90vh",
+                focusCancel: false,
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
+        });
+    </script>
+{% endblock %}

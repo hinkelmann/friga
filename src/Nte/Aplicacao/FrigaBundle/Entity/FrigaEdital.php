@@ -1,33 +1,51 @@
 <?php
 
+/*
+ * This file is part of  Friga - https://nte.ufsm.br/friga.
+ * (c) Friga
+ * Friga is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Friga is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Friga.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 namespace Nte\Aplicacao\FrigaBundle\Entity;
 
-
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Query\Expr;
 use Nte\UsuarioBundle\Entity\Usuario;
-use DateTime;
-use Exception;
 
 /**
- * FrigaEdital
+ * FrigaEdital.
  *
  * @ORM\Table(name="friga_edital")
+ *
  * @ORM\Entity(repositoryClass="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalRepository")
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaEdital
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
+     *
      * @ORM\Id
+     *
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -46,7 +64,6 @@ class FrigaEdital
      */
     private $subtitulo;
 
-
     /**
      * @var \DateTime
      *
@@ -57,218 +74,231 @@ class FrigaEdital
     /**
      * @var string
      *
+     * @ORM\Column(name="numero", type="string", length=255, nullable=true)
+     */
+    private $numero;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="url_processo", type="string", length=255, nullable=true)
+     */
+    private $urlProcesso;
+
+    /**
      * @var FrigaEditalCategoria
      *
      * @ORM\ManyToOne(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCategoria", inversedBy="edital")
+     *
      * @ORM\JoinColumns({
+     *
      *   @ORM\JoinColumn(name="id_categoria", referencedColumnName="id", nullable=true)
      * })
      */
     private $idCategoria;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="anexo0", type="integer", nullable=true)
      */
     private $anexo0;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="anexo1", type="integer", nullable=true)
      */
     private $anexo1;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="anexo2", type="integer", nullable=true)
      */
     private $anexo2;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="anexo3", type="integer", nullable=true)
      */
     private $anexo3;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="anexo4", type="integer", nullable=true)
      */
     private $anexo4;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="anexo5", type="integer", nullable=true)
      */
     private $anexo5;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc0", type="integer", nullable=true)
      */
     private $doc0;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc1", type="integer", nullable=true)
      */
     private $doc1;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc2", type="integer", nullable=true)
      */
     private $doc2;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc3", type="integer", nullable=true)
      */
     private $doc3;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc4", type="integer", nullable=true)
      */
     private $doc4;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc5", type="integer", nullable=true)
      */
     private $doc5;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc6", type="integer", nullable=true)
      */
     private $doc6;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc7", type="integer", nullable=true)
      */
     private $doc7;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc8", type="integer", nullable=true)
      */
     private $doc8;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc9", type="integer", nullable=true)
      */
     private $doc9;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc10", type="integer", nullable=true)
      */
     private $doc10;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc11", type="integer", nullable=true)
      */
     private $doc11;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc12", type="integer", nullable=true)
      */
     private $doc12;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc13", type="integer", nullable=true)
      */
     private $doc13;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc14", type="integer", nullable=true)
      */
     private $doc14;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc15", type="integer", nullable=true)
      */
     private $doc15;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="tipo_inscricao", type="integer", nullable=true)
      */
     private $tipoInscricao;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="modelo_inscricao", type="integer", nullable=true)
      */
     private $modeloInscricao;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="projeto_participante_min", type="integer", nullable=true)
      */
     private $projetoParticipanteMin;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="projeto_participante_max", type="integer", nullable=true)
      */
     private $projetoParticipanteMax;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="tipo_inscricao_limite", type="integer", nullable=true)
      */
     private $tipoInscricaoLimite;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="permitir_estrangeiro", type="integer", nullable=true)
      */
     private $permitirEstrangeiro;
-
 
     /**
      * @var string
@@ -319,14 +349,12 @@ class FrigaEdital
      */
     private $info6;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="info7", type="text", length=65535, nullable=true)
      */
     private $info7;
-
 
     /**
      * @var string
@@ -385,34 +413,32 @@ class FrigaEdital
     private $termoCompromissoSituacao;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="resultado0", type="boolean", nullable=true)
      */
     private $resultado0;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="resultado1", type="boolean", nullable=true)
      */
     private $resultado1;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="resultado2", type="boolean", nullable=true)
      */
     private $resultado2;
 
-
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="resultado3", type="boolean", nullable=true)
      */
     private $resultado3;
-
 
     /**
      * @var string
@@ -422,14 +448,14 @@ class FrigaEdital
     private $uuid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="publico", type="integer", nullable=true)
      */
     private $publico;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="situacao", type="integer", nullable=true)
      */
@@ -450,19 +476,18 @@ class FrigaEdital
     private $campoListaTitulo;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="registro_data_criacao", type="datetime", nullable=true)
      */
     private $registroDataCriacao;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="registro_data_atualizacao", type="datetime", nullable=true)
      */
     private $registroDataAtualizacao;
-
 
     /**
      * @var ArrayCollection
@@ -474,9 +499,18 @@ class FrigaEdital
     /**
      * @var ArrayCollection
      *
+     * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuarioConvite", mappedBy="idEdital")
+     */
+    private $idEditalUsuarioConvite;
+
+    /**
+     * @var ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="FrigaArquivo", inversedBy="idEdital")
+     *
      * @ORM\JoinTable(name="friga_edital_tem_arquivo",
      *   joinColumns={
+     *
      *     @ORM\JoinColumn(name="id_edital", referencedColumnName="id")
      *   },
      *   inverseJoinColumns={
@@ -486,20 +520,20 @@ class FrigaEdital
      */
     private $idArquivo;
 
-
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCargo", mappedBy="idEdital")
+     *
      * @ORM\OrderBy({"descricao" = "ASC"})
      */
     private $cargo;
-
 
     /**
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalCota", mappedBy="idEdital")
+     *
      * @ORM\OrderBy({"descricao" = "ASC"})
      */
     private $cota;
@@ -510,6 +544,13 @@ class FrigaEdital
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa", mappedBy="idEdital")
      */
     private $etapa;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaCategoria", mappedBy="idEdital")
+     */
+    private $idEtapaCategoria;
 
     /**
      * @var ArrayCollection
@@ -536,38 +577,55 @@ class FrigaEdital
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao", mappedBy="idEdital")
+     *
+     * @ORM\OrderBy({"nome" = "ASC", "idSituacao" = "DESC"})
      */
     private $inscricao;
 
     /**
-     * Constructor
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Nte\UsuarioBundle\Entity\ImpedimentoDeclaracao", mappedBy="idEdital")
+     */
+    private $idImpedimentoDeclaracao;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
-        $this->idUsuario = new ArrayCollection();
+        $this->idEditalUsuario = new ArrayCollection();
+        $this->idEditalUsuarioConvite = new ArrayCollection();
         $this->idArquivo = new ArrayCollection();
         $this->etapa = new ArrayCollection();
+        $this->idEtapaCategoria = new ArrayCollection();
         $this->cargo = new ArrayCollection();
         $this->cota = new ArrayCollection();
         $this->desempate = new ArrayCollection();
-    }
+        $this->idImpedimentoDeclaracao = new ArrayCollection();
 
+        $this->resultado0 = true;
+        $this->resultado1 = false;
+        $this->resultado2 = false;
+        $this->resultado3 = false;
+    }
 
     public function __clone()
     {
-        $this->idUsuario = new ArrayCollection();
+        $this->idEditalUsuario = new ArrayCollection();
         $this->idArquivo = new ArrayCollection();
         $this->etapa = new ArrayCollection();
+        $this->idEtapaCategoria = new ArrayCollection();
         $this->cargo = new ArrayCollection();
         $this->cota = new ArrayCollection();
-        $this->desempate = new ArrayCollection(); ;
+        $this->desempate = new ArrayCollection();
+        $this->idImpedimentoDeclaracao = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -575,7 +633,7 @@ class FrigaEdital
     }
 
     /**
-     * Set titulo
+     * Set titulo.
      *
      * @param string $titulo
      *
@@ -589,7 +647,7 @@ class FrigaEdital
     }
 
     /**
-     * Get titulo
+     * Get titulo.
      *
      * @return string
      */
@@ -608,17 +666,18 @@ class FrigaEdital
 
     /**
      * @param string $subtitulo
+     *
      * @return FrigaEdital
      */
     public function setSubtitulo($subtitulo)
     {
         $this->subtitulo = $subtitulo;
+
         return $this;
     }
 
-
     /**
-     * Set dataPublicacaoOficial
+     * Set dataPublicacaoOficial.
      *
      * @param \DateTime $dataPublicacaoOficial
      *
@@ -632,7 +691,7 @@ class FrigaEdital
     }
 
     /**
-     * Get dataPublicacaoOficial
+     * Get dataPublicacaoOficial.
      *
      * @return \DateTime
      */
@@ -651,17 +710,58 @@ class FrigaEdital
 
     /**
      * @param int $situacao
+     *
      * @return FrigaEdital
      */
     public function setSituacao($situacao)
     {
         $this->situacao = $situacao;
+
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
 
     /**
-     * Set url
+     * @param string $numero
+     *
+     * @return FrigaEdital
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlProcesso()
+    {
+        return $this->urlProcesso;
+    }
+
+    /**
+     * @param string $urlProcesso
+     *
+     * @return FrigaEdital
+     */
+    public function setUrlProcesso($urlProcesso)
+    {
+        $this->urlProcesso = $urlProcesso;
+
+        return $this;
+    }
+
+    /**
+     * Set url.
      *
      * @param string $url
      *
@@ -675,7 +775,7 @@ class FrigaEdital
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -694,19 +794,20 @@ class FrigaEdital
 
     /**
      * @param FrigaEditalCategoria $idCategoria
+     *
      * @return FrigaEdital
      */
     public function setIdCategoria($idCategoria)
     {
         $this->idCategoria = $idCategoria;
+
         return $this;
     }
 
-
     /**
-     * Set anexo0
+     * Set anexo0.
      *
-     * @param integer $anexo0
+     * @param int $anexo0
      *
      * @return FrigaEdital
      */
@@ -718,9 +819,9 @@ class FrigaEdital
     }
 
     /**
-     * Get anexo0
+     * Get anexo0.
      *
-     * @return integer
+     * @return int
      */
     public function getAnexo0()
     {
@@ -735,11 +836,10 @@ class FrigaEdital
         return $this->cota;
     }
 
-
     /**
-     * Set anexo1
+     * Set anexo1.
      *
-     * @param integer $anexo1
+     * @param int $anexo1
      *
      * @return FrigaEdital
      */
@@ -751,9 +851,9 @@ class FrigaEdital
     }
 
     /**
-     * Get anexo1
+     * Get anexo1.
      *
-     * @return integer
+     * @return int
      */
     public function getAnexo1()
     {
@@ -761,9 +861,9 @@ class FrigaEdital
     }
 
     /**
-     * Set tipoInscricao
+     * Set tipoInscricao.
      *
-     * @param integer $tipoInscricao
+     * @param int $tipoInscricao
      *
      * @return FrigaEdital
      */
@@ -784,11 +884,13 @@ class FrigaEdital
 
     /**
      * @param int $tipoInscricaoLimite
+     *
      * @return FrigaEdital
      */
     public function setTipoInscricaoLimite($tipoInscricaoLimite)
     {
         $this->tipoInscricaoLimite = $tipoInscricaoLimite;
+
         return $this;
     }
 
@@ -802,11 +904,13 @@ class FrigaEdital
 
     /**
      * @param int $modeloInscricao
+     *
      * @return FrigaEdital
      */
     public function setModeloInscricao($modeloInscricao)
     {
         $this->modeloInscricao = $modeloInscricao;
+
         return $this;
     }
 
@@ -820,11 +924,13 @@ class FrigaEdital
 
     /**
      * @param int $projetoParticipanteMin
+     *
      * @return FrigaEdital
      */
     public function setProjetoParticipanteMin($projetoParticipanteMin)
     {
         $this->projetoParticipanteMin = $projetoParticipanteMin;
+
         return $this;
     }
 
@@ -838,19 +944,20 @@ class FrigaEdital
 
     /**
      * @param int $projetoParticipanteMax
+     *
      * @return FrigaEdital
      */
     public function setProjetoParticipanteMax($projetoParticipanteMax)
     {
         $this->projetoParticipanteMax = $projetoParticipanteMax;
+
         return $this;
     }
 
-
     /**
-     * Get tipoInscricao
+     * Get tipoInscricao.
      *
-     * @return integer
+     * @return int
      */
     public function getTipoInscricao()
     {
@@ -867,17 +974,18 @@ class FrigaEdital
 
     /**
      * @param int $permitirEstrangeiro
+     *
      * @return FrigaEdital
      */
     public function setPermitirEstrangeiro($permitirEstrangeiro)
     {
         $this->permitirEstrangeiro = $permitirEstrangeiro;
+
         return $this;
     }
 
-
     /**
-     * Set sobre
+     * Set sobre.
      *
      * @param string $sobre
      *
@@ -891,7 +999,7 @@ class FrigaEdital
     }
 
     /**
-     * Get sobre
+     * Get sobre.
      *
      * @return string
      */
@@ -901,7 +1009,7 @@ class FrigaEdital
     }
 
     /**
-     * Set info1
+     * Set info1.
      *
      * @param string $info1
      *
@@ -915,7 +1023,7 @@ class FrigaEdital
     }
 
     /**
-     * Get info1
+     * Get info1.
      *
      * @return string
      */
@@ -925,7 +1033,7 @@ class FrigaEdital
     }
 
     /**
-     * Set info2
+     * Set info2.
      *
      * @param string $info2
      *
@@ -939,7 +1047,7 @@ class FrigaEdital
     }
 
     /**
-     * Get info2
+     * Get info2.
      *
      * @return string
      */
@@ -949,7 +1057,7 @@ class FrigaEdital
     }
 
     /**
-     * Set info3
+     * Set info3.
      *
      * @param string $info3
      *
@@ -963,7 +1071,7 @@ class FrigaEdital
     }
 
     /**
-     * Get info3
+     * Get info3.
      *
      * @return string
      */
@@ -982,11 +1090,13 @@ class FrigaEdital
 
     /**
      * @param string $info4
+     *
      * @return FrigaEdital
      */
     public function setInfo4($info4)
     {
         $this->info4 = $info4;
+
         return $this;
     }
 
@@ -1000,11 +1110,13 @@ class FrigaEdital
 
     /**
      * @param string $info5
+     *
      * @return FrigaEdital
      */
     public function setInfo5($info5)
     {
         $this->info5 = $info5;
+
         return $this;
     }
 
@@ -1018,11 +1130,13 @@ class FrigaEdital
 
     /**
      * @param string $info6
+     *
      * @return FrigaEdital
      */
     public function setInfo6($info6)
     {
         $this->info6 = $info6;
+
         return $this;
     }
 
@@ -1036,11 +1150,13 @@ class FrigaEdital
 
     /**
      * @param string $info7
+     *
      * @return FrigaEdital
      */
     public function setInfo7($info7)
     {
         $this->info7 = $info7;
+
         return $this;
     }
 
@@ -1054,11 +1170,13 @@ class FrigaEdital
 
     /**
      * @param string $info8
+     *
      * @return FrigaEdital
      */
     public function setInfo8($info8)
     {
         $this->info8 = $info8;
+
         return $this;
     }
 
@@ -1072,11 +1190,13 @@ class FrigaEdital
 
     /**
      * @param string $info9
+     *
      * @return FrigaEdital
      */
     public function setInfo9($info9)
     {
         $this->info9 = $info9;
+
         return $this;
     }
 
@@ -1090,11 +1210,13 @@ class FrigaEdital
 
     /**
      * @param string $info10
+     *
      * @return FrigaEdital
      */
     public function setInfo10($info10)
     {
         $this->info10 = $info10;
+
         return $this;
     }
 
@@ -1108,11 +1230,13 @@ class FrigaEdital
 
     /**
      * @param string $termoCompromisso
+     *
      * @return FrigaEdital
      */
     public function setTermoCompromisso($termoCompromisso)
     {
         $this->termoCompromisso = $termoCompromisso;
+
         return $this;
     }
 
@@ -1126,18 +1250,18 @@ class FrigaEdital
 
     /**
      * @param string $termoCompromissoSituacao
+     *
      * @return FrigaEdital
      */
     public function setTermoCompromissoSituacao($termoCompromissoSituacao)
     {
         $this->termoCompromissoSituacao = $termoCompromissoSituacao;
+
         return $this;
     }
 
-
-
     /**
-     * Set uuid
+     * Set uuid.
      *
      * @param string $uuid
      *
@@ -1145,14 +1269,13 @@ class FrigaEdital
      */
     public function setUuid($uuid)
     {
-
         $this->uuid = $uuid;
 
         return $this;
     }
 
     /**
-     * Get uuid
+     * Get uuid.
      *
      * @return string
      */
@@ -1181,11 +1304,10 @@ class FrigaEdital
         return $this;
     }
 
-
     /**
-     * Set registroDataCriacao
+     * Set registroDataCriacao.
      *
-     * @param DateTime $registroDataCriacao
+     * @param \DateTime $registroDataCriacao
      *
      * @return FrigaEdital
      */
@@ -1197,7 +1319,7 @@ class FrigaEdital
     }
 
     /**
-     * Get registroDataCriacao
+     * Get registroDataCriacao.
      *
      * @return \DateTime
      */
@@ -1207,9 +1329,9 @@ class FrigaEdital
     }
 
     /**
-     * Set registroDataAtualizacao
+     * Set registroDataAtualizacao.
      *
-     * @param DateTime $registroDataAtualizacao
+     * @param \DateTime $registroDataAtualizacao
      *
      * @return FrigaEdital
      */
@@ -1221,9 +1343,9 @@ class FrigaEdital
     }
 
     /**
-     * Get registroDataAtualizacao
+     * Get registroDataAtualizacao.
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getRegistroDataAtualizacao()
     {
@@ -1231,45 +1353,7 @@ class FrigaEdital
     }
 
     /**
-     * Add idUsuario
-     *
-     * @param Usuario $idUsuario
-     *
-     * @return FrigaEdital
-     */
-    public function addIdUsuario(Usuario $idUsuario)
-    {
-        $this->idUsuario[] = $idUsuario;
-        $idUsuario->addIdEdital($this);
-        return $this;
-    }
-
-    /**
-     * Remove idUsuario
-     *
-     * @param Usuario $idUsuario
-     */
-    public function removeIdUsuario(Usuario $idUsuario)
-    {
-        $this->idUsuario->removeElement($idUsuario);
-        $idUsuario->removeIdEdital($this);
-    }
-
-
-    /**
-     * Get idUsuario
-     *
-     * @return ArrayCollection
-     */
-    public function getIdUsuario()
-    {
-        return $this->idUsuario;
-    }
-
-    /**
-     * Add idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Add idArquivo.
      *
      * @return FrigaEdital
      */
@@ -1281,9 +1365,7 @@ class FrigaEdital
     }
 
     /**
-     * Remove idArquivo
-     *
-     * @param FrigaArquivo $idArquivo
+     * Remove idArquivo.
      */
     public function removeIdArquivo(FrigaArquivo $idArquivo)
     {
@@ -1291,7 +1373,7 @@ class FrigaEdital
     }
 
     /**
-     * Get idArquivo
+     * Get idArquivo.
      *
      * @return ArrayCollection
      */
@@ -1310,11 +1392,13 @@ class FrigaEdital
 
     /**
      * @param int $anexo2
+     *
      * @return FrigaEdital
      */
     public function setAnexo2($anexo2)
     {
         $this->anexo2 = $anexo2;
+
         return $this;
     }
 
@@ -1328,11 +1412,13 @@ class FrigaEdital
 
     /**
      * @param int $anexo3
+     *
      * @return FrigaEdital
      */
     public function setAnexo3($anexo3)
     {
         $this->anexo3 = $anexo3;
+
         return $this;
     }
 
@@ -1346,11 +1432,13 @@ class FrigaEdital
 
     /**
      * @param int $anexo4
+     *
      * @return FrigaEdital
      */
     public function setAnexo4($anexo4)
     {
         $this->anexo4 = $anexo4;
+
         return $this;
     }
 
@@ -1364,11 +1452,13 @@ class FrigaEdital
 
     /**
      * @param int $anexo5
+     *
      * @return FrigaEdital
      */
     public function setAnexo5($anexo5)
     {
         $this->anexo5 = $anexo5;
+
         return $this;
     }
 
@@ -1382,11 +1472,13 @@ class FrigaEdital
 
     /**
      * @param int $doc0
+     *
      * @return FrigaEdital
      */
     public function setDoc0($doc0)
     {
         $this->doc0 = $doc0;
+
         return $this;
     }
 
@@ -1400,11 +1492,13 @@ class FrigaEdital
 
     /**
      * @param int $doc1
+     *
      * @return FrigaEdital
      */
     public function setDoc1($doc1)
     {
         $this->doc1 = $doc1;
+
         return $this;
     }
 
@@ -1418,11 +1512,13 @@ class FrigaEdital
 
     /**
      * @param int $doc2
+     *
      * @return FrigaEdital
      */
     public function setDoc2($doc2)
     {
         $this->doc2 = $doc2;
+
         return $this;
     }
 
@@ -1436,11 +1532,13 @@ class FrigaEdital
 
     /**
      * @param int $doc3
+     *
      * @return FrigaEdital
      */
     public function setDoc3($doc3)
     {
         $this->doc3 = $doc3;
+
         return $this;
     }
 
@@ -1454,11 +1552,13 @@ class FrigaEdital
 
     /**
      * @param int $doc4
+     *
      * @return FrigaEdital
      */
     public function setDoc4($doc4)
     {
         $this->doc4 = $doc4;
+
         return $this;
     }
 
@@ -1472,11 +1572,13 @@ class FrigaEdital
 
     /**
      * @param int $doc5
+     *
      * @return FrigaEdital
      */
     public function setDoc5($doc5)
     {
         $this->doc5 = $doc5;
+
         return $this;
     }
 
@@ -1490,11 +1592,13 @@ class FrigaEdital
 
     /**
      * @param int $doc6
+     *
      * @return FrigaEdital
      */
     public function setDoc6($doc6)
     {
         $this->doc6 = $doc6;
+
         return $this;
     }
 
@@ -1508,11 +1612,13 @@ class FrigaEdital
 
     /**
      * @param int $doc7
+     *
      * @return FrigaEdital
      */
     public function setDoc7($doc7)
     {
         $this->doc7 = $doc7;
+
         return $this;
     }
 
@@ -1526,11 +1632,13 @@ class FrigaEdital
 
     /**
      * @param int $doc8
+     *
      * @return FrigaEdital
      */
     public function setDoc8($doc8)
     {
         $this->doc8 = $doc8;
+
         return $this;
     }
 
@@ -1544,11 +1652,13 @@ class FrigaEdital
 
     /**
      * @param int $doc9
+     *
      * @return FrigaEdital
      */
     public function setDoc9($doc9)
     {
         $this->doc9 = $doc9;
+
         return $this;
     }
 
@@ -1562,11 +1672,13 @@ class FrigaEdital
 
     /**
      * @param int $doc10
+     *
      * @return FrigaEdital
      */
     public function setDoc10($doc10)
     {
         $this->doc10 = $doc10;
+
         return $this;
     }
 
@@ -1580,11 +1692,13 @@ class FrigaEdital
 
     /**
      * @param int $doc11
+     *
      * @return FrigaEdital
      */
     public function setDoc11($doc11)
     {
         $this->doc11 = $doc11;
+
         return $this;
     }
 
@@ -1598,11 +1712,13 @@ class FrigaEdital
 
     /**
      * @param int $doc12
+     *
      * @return FrigaEdital
      */
     public function setDoc12($doc12)
     {
         $this->doc12 = $doc12;
+
         return $this;
     }
 
@@ -1616,11 +1732,13 @@ class FrigaEdital
 
     /**
      * @param int $doc13
+     *
      * @return FrigaEdital
      */
     public function setDoc13($doc13)
     {
         $this->doc13 = $doc13;
+
         return $this;
     }
 
@@ -1634,11 +1752,13 @@ class FrigaEdital
 
     /**
      * @param int $doc14
+     *
      * @return FrigaEdital
      */
     public function setDoc14($doc14)
     {
         $this->doc14 = $doc14;
+
         return $this;
     }
 
@@ -1652,14 +1772,15 @@ class FrigaEdital
 
     /**
      * @param int $doc15
+     *
      * @return FrigaEdital
      */
     public function setDoc15($doc15)
     {
         $this->doc15 = $doc15;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -1671,11 +1792,13 @@ class FrigaEdital
 
     /**
      * @param string $info11
+     *
      * @return FrigaEdital
      */
     public function setInfo11($info11)
     {
         $this->info11 = $info11;
+
         return $this;
     }
 
@@ -1689,11 +1812,13 @@ class FrigaEdital
 
     /**
      * @param string $info12
+     *
      * @return FrigaEdital
      */
     public function setInfo12($info12)
     {
         $this->info12 = $info12;
+
         return $this;
     }
 
@@ -1707,14 +1832,15 @@ class FrigaEdital
 
     /**
      * @param string $info13
+     *
      * @return FrigaEdital
      */
     public function setInfo13($info13)
     {
         $this->info13 = $info13;
+
         return $this;
     }
-
 
     /**
      * @return bool
@@ -1726,11 +1852,13 @@ class FrigaEdital
 
     /**
      * @param bool $resultado0
+     *
      * @return FrigaEdital
      */
     public function setResultado0($resultado0)
     {
         $this->resultado0 = $resultado0;
+
         return $this;
     }
 
@@ -1744,11 +1872,13 @@ class FrigaEdital
 
     /**
      * @param bool $resultado1
+     *
      * @return FrigaEdital
      */
     public function setResultado1($resultado1)
     {
         $this->resultado1 = $resultado1;
+
         return $this;
     }
 
@@ -1762,11 +1892,13 @@ class FrigaEdital
 
     /**
      * @param bool $resultado2
+     *
      * @return FrigaEdital
      */
     public function setResultado2($resultado2)
     {
         $this->resultado2 = $resultado2;
+
         return $this;
     }
 
@@ -1780,14 +1912,15 @@ class FrigaEdital
 
     /**
      * @param bool $resultado3
+     *
      * @return FrigaEdital
      */
     public function setResultado3($resultado3)
     {
         $this->resultado3 = $resultado3;
+
         return $this;
     }
-
 
     /**
      * @return string
@@ -1799,11 +1932,13 @@ class FrigaEdital
 
     /**
      * @param string $campoCargoTitulo
+     *
      * @return FrigaEdital
      */
     public function setCampoCargoTitulo($campoCargoTitulo)
     {
         $this->campoCargoTitulo = $campoCargoTitulo;
+
         return $this;
     }
 
@@ -1817,14 +1952,15 @@ class FrigaEdital
 
     /**
      * @param string $campoListaTitulo
+     *
      * @return FrigaEdital
      */
     public function setCampoListaTitulo($campoListaTitulo)
     {
         $this->campoListaTitulo = $campoListaTitulo;
+
         return $this;
     }
-
 
     /**
      * @return ArrayCollection
@@ -1840,6 +1976,86 @@ class FrigaEdital
     public function getEtapa()
     {
         return $this->etapa;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEtapaCategoria()
+    {
+        $criteria = Criteria::create();
+        $criteria->orderBy(['ordem' => Criteria::ASC]);
+
+        return $this->idEtapaCategoria->matching($criteria);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioConvite()
+    {
+        return $this->idEditalUsuarioConvite;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioConviteArquivo()
+    {
+        $tmp = new ArrayCollection();
+
+        /** @var FrigaEditalUsuarioConvite $item */
+        foreach ($this->idEditalUsuarioConvite as $item) {
+            foreach ($item->getIdArquivo() as $subitem) {
+                if (!$tmp->contains($subitem)) {
+                    $tmp->add($subitem);
+                }
+            }
+        }
+
+        return $tmp;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioArquivo()
+    {
+        $tmp = new ArrayCollection();
+        /** @var FrigaEditalUsuario $item */
+        foreach ($this->idEditalUsuario as $item) {
+            foreach ($item->getIdArquivo() as $subitem) {
+                if (!$tmp->contains($subitem)) {
+                    $tmp->add($subitem);
+                }
+            }
+        }
+
+        return $tmp;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioConviteSituacao($sit = [null, 0, 1])
+    {
+        $criteria = Criteria::create();
+        $criteria->where($criteria::expr()->in('aceite', $sit));
+        foreach ($sit as $item) {
+        }
+
+        return $this->idEditalUsuarioConvite->matching($criteria);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioConvitePendente($situacao = null)
+    {
+        $criteria = Criteria::create();
+        $criteria->where($criteria::expr()->eq('aceite', $situacao));
+
+        return $this->idEditalUsuarioConvite->matching($criteria);
     }
 
     /**
@@ -1863,11 +2079,10 @@ class FrigaEdital
      */
     public function getPontuacaoCategoriaPeso()
     {
-        return $this->pontuacaoCategoria->filter(function (FrigaEditalPontuacaoCategoria $c) {
-            return $c->getIdCategoria() == null;
+        return $this->pontuacaoCategoria->filter(function(FrigaEditalPontuacaoCategoria $c) {
+            return null == $c->getIdCategoria();
         });
     }
-
 
     /**
      * @return ArrayCollection
@@ -1876,7 +2091,22 @@ class FrigaEdital
     {
         $c = new Criteria();
         $c->orderBy(['posicao' => 'asc']);
+
         return $this->desempate->matching($c);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdImpedimentoDeclaracao(Usuario $usuario = null)
+    {
+        if (!\is_null($usuario)) {
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('idUsuario', $usuario));
+
+            return $this->idImpedimentoDeclaracao->matching($criteria);
+        }
+
+        return $this->idImpedimentoDeclaracao;
     }
 
     /**
@@ -1894,11 +2124,23 @@ class FrigaEdital
         $expr = new Comparison('idUsuario', Comparison::EQ, $usuario);
         $criteria->where($expr);
         $usuario = $this->idEditalUsuario->matching($criteria)->first();
-        if (!is_null($usuario)) {
+        if (!\is_null($usuario) and \is_object($usuario)) {
             foreach ($usuario->getIdEditalCargo() as $cargo) {
                 $tmp[] = $cargo->getId();
             }
         }
+
+        return $tmp;
+    }
+
+    public function getArrayIdEditalCargo()
+    {
+        $tmp = [];
+        /** @var FrigaEditalCargo $item */
+        foreach ($this->getCargo() as $item) {
+            $tmp[] = $item->getId();
+        }
+
         return $tmp;
     }
 
@@ -1906,48 +2148,55 @@ class FrigaEdital
     {
         //Filtra todos que não são anulados
         return $this->getInscricao()->filter(
-            function (FrigaInscricao $inscricao) {
-                return $inscricao->getIdSituacao() === -999;
+            function(FrigaInscricao $inscricao) {
+                return -999 === $inscricao->getIdSituacao();
             });
     }
 
     /**
      * @return ArrayCollection
-     * @throws Exception
+     *
+     * @throws \Exception
      */
-    public function getInscricaoValida($usuario = false)
+    public function getInscricaoValida($usuario = false, FrigaEditalEtapaCategoria $cat = null)
     {
-        //Filtra todos que não são anulados
-        $tmp = $this->getInscricao()->filter(
-            function (FrigaInscricao $inscricao) {
-                return $inscricao->getIdSituacao() !== -999;
-            });
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->neq('idSituacao', -999));
+        if (!\is_null($cat) and !\is_null($cat->getPeriodoInscricao())) {
+            $criteria->andWhere(Criteria::expr()->eq('idEtapa', $cat->getPeriodoInscricao()));
+        }
 
-        if ($usuario !== false) {
+        $tmp = $this->getInscricao()->matching($criteria);
+        if (false !== $usuario) {
             $cargo = $this->getUsuarioEditalCargos($usuario);
             $tmp = $tmp->filter(
-                function (FrigaInscricao $inscricao) use ($cargo) {
-                    return in_array($inscricao->getIdCargo()->getId(), $cargo);
+                function(FrigaInscricao $inscricao) use ($cargo) {
+                    return !\is_null($inscricao->getIdCargo()) and \in_array($inscricao->getIdCargo()->getId(), $cargo);
                 });
         }
         //Separa os inscrições em sentido positivo
-        $tmp1 = $tmp->filter(function (FrigaInscricao $inscricao) {
-            return $inscricao->getIdSituacao() == 0
-                or $inscricao->getIdSituacao() == 2
+        $tmp1 = $tmp->filter(function(FrigaInscricao $inscricao) {
+            return 0 == $inscricao->getIdSituacao()
+                or 2 == $inscricao->getIdSituacao()
                 or $inscricao->getIdSituacao() >= 4;
         })->getIterator();
 
         //Ordena as inscrições positivas
-        $tmp1->uasort(function (FrigaInscricao $a, FrigaInscricao $b) {
-            return $a->getIdSituacao() <=> $b->getIdSituacao();
-        });
+        /* $tmp1->uasort(function (FrigaInscricao $a, FrigaInscricao $b) {
+             if($a->getIdSituacao() != $b->getIdSituacao()){
+                 return $a->getIdSituacao() <=> $b->getIdSituacao();
+             }elseif (strnatcmp($a->getNome(),$b->getNome())){
+                 return strnatcmp($a->getNome(),$b->getNome());
+             }
+         });*/
 
         //Separa as inscrições negativas
-        $tmp2 = $tmp->filter(function (FrigaInscricao $inscricao) {
-            return $inscricao->getIdSituacao() == 1
-                or $inscricao->getIdSituacao() == 3;
+        $tmp2 = $tmp->filter(function(FrigaInscricao $inscricao) {
+            return 1 == $inscricao->getIdSituacao()
+                or 3 == $inscricao->getIdSituacao();
         });
-        return new ArrayCollection(array_merge($tmp1->getArrayCopy(), $tmp2->toArray()));
+
+        return new ArrayCollection(\array_merge($tmp1->getArrayCopy(), $tmp2->toArray()));
     }
 
     /**
@@ -1956,26 +2205,26 @@ class FrigaEdital
     public function getInscricaoAvalicao()
     {
         return $this->getInscricao()->filter(
-            function (FrigaInscricao $inscricao) {
-                return $inscricao->getIdSituacao() !== -999 and
+            function(FrigaInscricao $inscricao) {
+                return -999 !== $inscricao->getIdSituacao()
                     // $inscricao->getIdSituacao() !== 1 and
-                    $inscricao->getIdSituacao() !== 3;
+                    and 3 !== $inscricao->getIdSituacao();
             });
     }
-
 
     /**
      * @param int $situacao
      * @param null $cargo
+     *
      * @return ArrayCollection
      */
     public function getInscricaoSituacao($situacao = 0, $cargo = null)
     {
         return $this->getInscricao()->filter(
-            function (FrigaInscricao $inscricao) use ($situacao, $cargo) {
+            function(FrigaInscricao $inscricao) use ($situacao, $cargo) {
                 if ($cargo) {
-                    return $inscricao->getIdSituacao() === $situacao and
-                        $cargo->getId() === $inscricao->getIdCargo()->getId();
+                    return $inscricao->getIdSituacao() === $situacao
+                        and $cargo->getId() === $inscricao->getIdCargo()->getId();
                 } else {
                     return $inscricao->getIdSituacao() === $situacao;
                 }
@@ -1984,22 +2233,36 @@ class FrigaEdital
 
     /**
      * @param null $etapa
+     *
      * @return ArrayCollection
      */
     public function getInscricaoRecurso($etapa = null)
     {
         return $this->getInscricao()->filter(
-            function (FrigaInscricao $inscricao) use ($etapa) {
+            function(FrigaInscricao $inscricao) use ($etapa) {
                 if ($etapa) {
                     if ($inscricao->getRecursosEtapa($etapa)->count()) {
                         return $inscricao;
-                    };
+                    }
                 } else {
                     return $inscricao->getRecursos()->count();
                 }
             });
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdEditalUsuarioOrdem()
+    {
+        $tmp = $this->idEditalUsuario->getIterator();
+        $tmp->uasort(function(FrigaEditalUsuario $a, FrigaEditalUsuario $b) {
+            return \strcmp(\strtoupper($a->getIdUsuario()->getNome()), \strtoupper($b->getIdUsuario()->getNome()));
+        });
+
+        // dump(new ArrayCollection($tmp->getArrayCopy()));
+        return $tmp;
+    }
 
     /**
      * @return ArrayCollection
@@ -2014,22 +2277,26 @@ class FrigaEdital
      */
     public function getIdEditalUsuarioBanca()
     {
-        return $this->idEditalUsuario->filter(function (FrigaEditalUsuario $feu) {
-            return !$feu->isAdministrador();
+        return $this->idEditalUsuario->filter(function(FrigaEditalUsuario $feu) {
+            return $feu->isAvaliador() and $feu->isTermoCompromisso();
         });
     }
 
     /**
      * @return ArrayCollection
-     * @throws Exception
+     *
+     * @throws \Exception
      */
-    public function getEtapaCronologica()
+    public function getEtapaCronologica($categoria = false)
     {
-        $etapa = $this->etapa->getIterator();
-        $etapa->uasort(function (FrigaEditalEtapa $a, FrigaEditalEtapa $b) {
-            return $a->getDataInicial() <=> $b->getDataInicial();
-        });
-        return new ArrayCollection($etapa->getArrayCopy());
+        $etapas = $this->etapa;
+        $criteria = Criteria::create();
+        if (false !== $categoria) {
+            $criteria->andWhere(Criteria::expr()->eq('idEtapaCategoria', $categoria));
+        }
+        $criteria->orderBy(['dataInicial' => Criteria::ASC]);
+
+        return $etapas->matching($criteria);
     }
 
     /**
@@ -2037,27 +2304,28 @@ class FrigaEdital
      */
     public function getEtapaAvaliacao($habilitacao = null)
     {
-        return $this->etapa->filter(function (FrigaEditalEtapa $etapa) use ($habilitacao) {
-            if ($habilitacao != null) {
-                return $etapa->getPeriodoHabilitado() == $habilitacao and
-                    ($etapa->getTipo() == 3 or $etapa->getTipo() == 7);
+        return $this->etapa->filter(function(FrigaEditalEtapa $etapa) use ($habilitacao) {
+            if (null != $habilitacao) {
+                return $etapa->getPeriodoHabilitado() == $habilitacao
+                    and (3 == $etapa->getTipo() or 7 == $etapa->getTipo());
             }
-            return $etapa->getTipo() == 3 or $etapa->getTipo() == 7;
+
+            return 3 == $etapa->getTipo() or 7 == $etapa->getTipo();
         });
     }
-
 
     /**
      * @return ArrayCollection
      */
     public function getEtapaConvocacao($habilitacao = null)
     {
-        return $this->etapa->filter(function (FrigaEditalEtapa $etapa) use ($habilitacao) {
-            if ($habilitacao != null) {
+        return $this->etapa->filter(function(FrigaEditalEtapa $etapa) use ($habilitacao) {
+            if (null != $habilitacao) {
                 return $etapa->getPeriodoHabilitado() == $habilitacao
-                    and $etapa->getTipo() == 5;
+                    and 5 == $etapa->getTipo();
             }
-            return $etapa->getTipo() == 5;
+
+            return 5 == $etapa->getTipo();
         });
     }
 
@@ -2066,12 +2334,13 @@ class FrigaEdital
      */
     public function getEtapaClassificacao($habilitacao = null)
     {
-        return $this->etapa->filter(function (FrigaEditalEtapa $etapa) use ($habilitacao) {
-            if ($habilitacao != null) {
+        return $this->etapa->filter(function(FrigaEditalEtapa $etapa) use ($habilitacao) {
+            if (null != $habilitacao) {
                 return $etapa->getPeriodoHabilitado() == $habilitacao
-                    and $etapa->getTipo() == 4;
+                    and 4 == $etapa->getTipo();
             }
-            return $etapa->getTipo() == 4;
+
+            return 4 == $etapa->getTipo();
         });
     }
 
@@ -2080,12 +2349,12 @@ class FrigaEdital
      */
     public function getEtapaAvaliacaoClassificacao()
     {
-        return $this->etapa->filter(function (FrigaEditalEtapa $etapa) {
+        return $this->etapa->filter(function(FrigaEditalEtapa $etapa) {
             return @$etapa->getAndamentoPrazo() >= 0
                 and @$etapa->getAndamentoPrazo() < 100
-                and ($etapa->getTipo() == 3
-                    or $etapa->getTipo() == 4
-                    or $etapa->getTipo() == 7);
+                and (3 == $etapa->getTipo()
+                    or 4 == $etapa->getTipo()
+                    or 7 == $etapa->getTipo());
         });
     }
 
@@ -2096,76 +2365,72 @@ class FrigaEdital
         foreach ($this->getPontuacao() as $pontuacao) {
             /** @var FrigaEditalEtapa $etapa */
             foreach ($pontuacao->getIdEtapa() as $etapa) {
-                if ($etapa->getTipo() == 1) {
-                    if (!$pt->contains($pontuacao))
+                if (1 == $etapa->getTipo()) {
+                    if (!$pt->contains($pontuacao)) {
                         $pt->add($pontuacao);
+                    }
                 }
             }
         }
+
         return $pt;
     }
 
     public function getPontuacaoCategoriaInscricao()
     {
-
-
         $pt = new ArrayCollection();
 
         /** @var FrigaEditalPontuacaoCategoria $categoria */
         foreach ($this->getPontuacaoCategoria() as $categoria) {
-
             /** @var FrigaEditalPontuacao $pontuacao */
             foreach ($categoria->getPontuacao() as $pontuacao) {
-
                 /** @var FrigaEditalEtapa $etapa */
                 foreach ($pontuacao->getIdEtapa() as $etapa) {
-
-                    if ($etapa->getTipo() != 1) {
-                        if ($pt->contains($pontuacao))
+                    if (1 != $etapa->getTipo()) {
+                        if ($pt->contains($pontuacao)) {
                             $pt->removeElement($pontuacao);
+                        }
                     }
                 }
             }
         }
+
         return $pt;
     }
 
     /**
      * @ORM\PreUpdate
      *
-     * @param PreUpdateEventArgs $args
-     * @throws Exception
+     * @throws \Exception
      */
     public function preUpdate(PreUpdateEventArgs $args)
     {
         if ($args->hasChangedField('registroDataCriacao')) {
             $this->setRegistroDataCriacao($args->getOldValue('registroDataCriacao'));
-            $this->setRegistroDataAtualizacao(new DateTime());
+            $this->setRegistroDataAtualizacao(new \DateTime());
         }
     }
 
     /**
      * @ORM\PrePersist
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function PrePersist()
     {
-        $this->setRegistroDataCriacao(new DateTime());
-        $this->setRegistroDataAtualizacao(new DateTime());
+        $this->setRegistroDataCriacao(new \DateTime());
+        $this->setRegistroDataAtualizacao(new \DateTime());
     }
 
     /**
      * @ORM\PreRemove
      *
-     * @param LifecycleEventArgs $args
-     * @throws Exception
+     * @throws \Exception
      */
     public function preRemove(LifecycleEventArgs $args)
     {
-
-        if ($this->getEtapa()->count()) {
-            foreach ($this->getEtapa() as $item) {
+        if ($this->getPontuacao()->count()) {
+            foreach ($this->getPontuacao() as $item) {
                 $args->getEntityManager()->remove($item);
             }
         }
@@ -2175,10 +2440,13 @@ class FrigaEdital
                 $args->getEntityManager()->remove($item);
             }
         }
-
         $args->getEntityManager()->flush();
-        if ($this->getPontuacao()->count()) {
-            foreach ($this->getPontuacao() as $item) {
+        if ($this->getEtapa()->count()) {
+            /** @var FrigaEditalEtapa $item */
+            foreach ($this->getEtapa() as $item) {
+                foreach ($item->getFilhos() as $subitem) {
+                    $args->getEntityManager()->remove($subitem);
+                }
                 $args->getEntityManager()->remove($item);
             }
         }
@@ -2208,13 +2476,13 @@ class FrigaEdital
     {
         /** @var FrigaEditalEtapa $etapa */
         foreach ($this->etapa as $etapa) {
-            if ($etapa->getTipo() == 1) {
+            if (1 == $etapa->getTipo()) {
                 return $etapa;
             }
         }
+
         return false;
     }
-
 
     /**
      * @return mixed|FrigaEditalEtapa
@@ -2224,8 +2492,8 @@ class FrigaEdital
         $tmp = false;
         /** @var FrigaEditalEtapa $etapa */
         foreach ($this->etapa as $etapa) {
-            if ($etapa->getTipo() == 4) {
-                if ($tmp === false) {
+            if (4 == $etapa->getTipo()) {
+                if (false === $tmp) {
                     $tmp = $etapa;
                 } else {
                     if ($etapa->getDataDivulgacao() > $tmp->getDataDivulgacao()) {
@@ -2234,6 +2502,7 @@ class FrigaEdital
                 }
             }
         }
+
         return $tmp;
     }
 
@@ -2245,22 +2514,23 @@ class FrigaEdital
         $tmp = new ArrayCollection();
         /** @var FrigaEditalEtapa $item */
         foreach ($this->etapa as $item) {
-            $tmp = new ArrayCollection(array_merge($tmp->toArray(), $item->getRecurso()->toArray()));
+            $tmp = new ArrayCollection(\array_merge($tmp->toArray(), $item->getRecurso()->toArray()));
         }
+
         return $tmp;
     }
 
     /**
      * @param int $situacao
+     *
      * @return ArrayCollection
      */
     public function getRecursosSituacao($situacao = 0)
     {
-        return $this->getRecursos()->filter(function (FrigaInscricaoRecurso $r) use ($situacao) {
+        return $this->getRecursos()->filter(function(FrigaInscricaoRecurso $r) use ($situacao) {
             return $r->getIdSituacao() === $situacao;
         });
     }
-
 
     public function getAndamentoPrazo()
     {
@@ -2275,33 +2545,56 @@ class FrigaEdital
 
         $contagemDias = $this->getPeriodoInscricao()
             ->getDataInicial()
-            ->diff(new DateTime())
+            ->diff(new \DateTime())
             ->days;
 
-        if ($contagemDias == 0) {
+        if (0 == $contagemDias) {
             return 0;
         }
         $porcentagem = ($contagemDias * 100) / $total;
-        $dt0 = new DateTime();
+        $dt0 = new \DateTime();
         if ($dt0 < $this->getPeriodoInscricao()->getDataInicial()) {
             return 0;
         }
 
-        return $porcentagem > 100 ? 100 : round($porcentagem, 2);
+        return $porcentagem > 100 ? 100 : \round($porcentagem, 2);
     }
 
     /**
      * @return bool
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function getPeriodoInscricaoHabilitado()
     {
         if ($this->getPeriodoInscricao()) {
-            $dt = new DateTime();
+            $dt = new \DateTime();
+
             return $dt > $this->getPeriodoInscricao()->getDataInicial()
                 and $dt < $this->getPeriodoInscricao()->getDataFinal();
         }
+
         return false;
+    }
+
+    /**
+     * @return null|FrigaEditalEtapa
+     */
+    public function getPeriodoInscricaoAtual()
+    {
+        $dt = new \DateTime();
+
+        /** @var FrigaEditalEtapa $etapa */
+        foreach ($this->etapa as $etapa) {
+            if (1 == $etapa->getTipo()
+                and $dt > $etapa->getDataInicial()
+                and $dt < $etapa->getDataFinal()
+            ) {
+                return $etapa;
+            }
+        }
+
+        return null;
     }
 
     public function getBanca()
@@ -2316,8 +2609,113 @@ class FrigaEdital
                 }
             }
         }
+
         return $tmp;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getIdArquivoPublico()
+    {
+        $dt = new \DateTime();
+
+        return $this->idArquivo->filter(function(FrigaArquivo $a) use ($dt) {
+            return $a->getDataPublicacao()->getTimestamp() <= $dt->getTimestamp();
+        });
+    }
+
+    public function getIdEtapaAvaliacao()
+    {
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->in('tipo', [3, 4, 5, 7]));
+        $criteria->andWhere(Criteria::expr()->lte('dataDivulgacao', new \DateTime()));
+        $criteria->orderBy(['dataDivulgacao' => Criteria::DESC]);
+
+        return $this->etapa->matching($criteria);
+    }
+
+    /**
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function getInformacaoPublico()
+    {
+        $tmp = [];
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->in('tipo', [4, 5, 7, 8, 9]));
+        $criteria->andWhere(Criteria::expr()->lte('dataDivulgacao', new \DateTime()));
+        $criteria->orderBy(['dataDivulgacao' => Criteria::DESC]);
+        $etapas = $this->etapa->matching($criteria);
+
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->lte('dataPublicacao', (new \DateTime())->format('Y-m-d H:i:s')));
+        $criteria->orderBy(['dataPublicacao' => Criteria::DESC]);
+        $arquivo = $this->idArquivo->matching($criteria);
+
+        /** @var FrigaEditalEtapa $item */
+        foreach ($etapas as $item) {
+            if (
+                (4 == $item->getTipo() and $item->getClassificacao()->isEmpty())
+                or (5 == $item->getTipo() and $item->getConvocacao()->isEmpty())
+                or (7 == $item->getTipo() and \is_null($item->getIdEtapa()))
+                or (7 == $item->getTipo() and !\is_null($item->getIdEtapa()) and $item->getIdEtapa()->getRecurso()->isEmpty())
+                or (8 == $item->getTipo() and $this->getInscricaoValida()->isEmpty())
+                or (9 == $item->getTipo() and $this->getIdEditalUsuarioBanca()->isEmpty())
+            ) {
+                continue;
+            }
+            if (5 != $item->getTipo() or (5 == $item->getTipo() and 1 != $item->getFinal())) {
+                $obj = new \stdClass();
+                $obj->etapa = true;
+                $obj->arquivo = false;
+                $obj->final = false;
+                $obj->id = $item->getId();
+                $obj->tipo = $item->getTipo();
+                $obj->titulo = $item->getDescricao();
+                $obj->data = $item->getDataDivulgacao();
+                $obj->timestamp = $item->getDataDivulgacao()->getTimestamp();
+
+                $tmp[] = $obj;
+            } elseif (5 == $item->getTipo() and 1 == $item->getFinal()) {
+                /** @var FrigaConvocacao $subitem */
+                foreach ($item->getConvocacao() as $subitem) {
+                    $obj = new \stdClass();
+                    $obj->etapa = true;
+                    $obj->arquivo = false;
+                    $obj->final = true;
+                    $obj->id = $item->getId();
+                    $obj->tipo = $item->getTipo();
+                    $obj->titulo = $item->getDescricao();
+                    $obj->data = $subitem->getRegistroDataCriacao();
+                    $obj->timestamp = $subitem->getRegistroDataCriacao()->getTimestamp();
+                    $tmp[$subitem->getRegistroDataCriacao()->format('Ymd')] = $obj;
+                }
+            }
+        }
+
+        /** @var FrigaArquivo $item */
+        foreach ($arquivo as $item) {
+            $obj = new \stdClass();
+            $obj->etapa = false;
+            $obj->arquivo = true;
+            $obj->final = false;
+            $obj->id = $item->getId();
+            $obj->tipo = 0;
+            $obj->titulo = $item->getTitulo();
+            $obj->data = $item->getDataPublicacao();
+            $obj->timestamp = $item->getDataPublicacao()->getTimestamp();
+            $tmp[] = $obj;
+        }
+
+        \uasort($tmp, function($a, $b) {
+            return $b->timestamp <=> $a->timestamp;
+        });
+
+        return $tmp;
+    }
+    /*
+     * etapa.tipo == 4 or etapa.tipo == 5  or etapa.tipo == 7 or etapa.tipo == 8  or etapa.tipo == 9
+     */
 }
-
-
