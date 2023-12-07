@@ -1,5 +1,5 @@
-Friga
-=============
+![Friga](web/assets/img/logo_friga.svg#center "Friga").
+
 
 Friga is an open-source platform dedicated to the management of academic selection processes, providing control over the entire selection cycle, from the registration phase to the homologation of the final classification. The platform was launched in 2018 when it was first applied in the unified selection of Capes scholarship recipients to serve as teaching assistants at the Universidade Aberta do Brasil (UAB) in hub cities in the state of Rio Grande do Sul.
 
