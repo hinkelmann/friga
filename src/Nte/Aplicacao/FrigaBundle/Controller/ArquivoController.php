@@ -198,45 +198,6 @@ class ArquivoController extends Controller
     }
 
     /**
-     * Teste PDF.
-     *
-     * @return BinaryFileResponse
-     */
-    public function pdfTesteAction(Request $request)
-    {
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('SCDP NTE');
-        $pdf->SetTitle('TEste de Geração de documento autoassinado');
-        $pdf->SetSubject('Teste de geração de documento autoassinado');
-        $pdf->SetKeywords('PDF assinado, openssl, opensource, gpl');
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-        // $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        // $pdf->setLanguageArray($l);
-        $certificate = 'file:///var/www/friga/certificado.crt';
-        $info = [
-            'Name' => 'SCDP',
-            'Location' => 'Sala 124',
-            'Reason' => 'SCDP/NTE/UFSM',
-            'ContactInfo' => 'https://scdp.nte.ufsm.br',
-        ];
-        $pdf->setSignature($certificate, $certificate, '', '', 2, $info);
-        $pdf->SetFont('helvetica', '', 12);
-        $pdf->AddPage();
-        $text = 'Este é um exemplo de <b color="#FF0000">Teste </b>';
-        $pdf->writeHTML($text, true, 0, true, 0);
-        // $pdf->Image('../images/tcpdf_signature.png', 180, 60, 15, 15, 'PNG');
-        $pdf->setSignatureAppearance(180, 60, 15, 15);
-        $pdf->addEmptySignatureAppearance(180, 80, 15, 15);
-        $pdf->Output('/tmp/test.pdf', 'I');
-
-        return $this->file('/tmp/test.pdf');
-    }
-
-    /**
      * @return BinaryFileResponse|Response|null
      */
     public function assinaturaDigitalAction(Request $request)

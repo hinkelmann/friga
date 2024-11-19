@@ -545,7 +545,7 @@
                             ,andamentoPrazo: {{ etapa.andamentoPrazo|number_format(2,".") }}
                             ,icone: "{{ etapa.objTipo.icone }}"
                             ,classificacao: {{ etapa.classificacao.count }}
-                            ,urledicao:{% if is_granted('ROLE_ADMIN_EDITAL') %} "{{ path('edital_etapa_editar', {'etapa': etapa.id, 'uuid': etapa.idEdital.uuid}) }}"{% else %} null{% endif %}
+                            ,urledicao:{% if is_granted('ROLE_ADMIN') or app.user.permissaoEdital(etapa.idEdital) %} "{{ path('edital_etapa_editar', {'etapa': etapa.id, 'uuid': etapa.idEdital.uuid}) }}"{% else %} null{% endif %}
                             ,dataInicio: "{{ etapa.dataInicial|date('d/m/Y') }}"
                             ,dataFim: "{{ etapa.dataFinal|date('d/m/Y') }}"
                             ,dataDivulgacao: "{{ etapa.dataDivulgacao|date('d/m/Y') }}"

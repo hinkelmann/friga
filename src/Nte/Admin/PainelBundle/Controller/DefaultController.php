@@ -64,14 +64,12 @@ class DefaultController extends Controller
             ->createQueryBuilder('e');
         if ($this->isGranted('ROLE_ADMIN')) {
             //            $editais->where('e.situacao in (0,1)');
-        } elseif ($this->isGranted('ROLE_GERENCIAL') or $this->isGranted('ROLE_ADMIN_EDITAL')) {
+        } else {
             $editais
                 ->innerJoin('e.idEditalUsuario', 'u')
-  //              ->where('e.situacao in (1,2)')
+                ->where('u.administrador = 1')
                 ->andWhere('u.idUsuario = :id')
                 ->setParameter('id', $this->getUser()->getId());
-        } else {
-            $editais->where('e.situacao in (999999)');
         }
         if ($situacao) {
             $editais->andWhere('e.situacao != 0');
@@ -89,24 +87,58 @@ class DefaultController extends Controller
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        $etapas = $em->createQueryBuilder()
+        $qb = $em->createQueryBuilder();
+        $etapas = $qb
             ->select('e')
             ->from(FrigaEditalEtapa::class, 'e')
             ->innerJoin('e.idEdital', 'ed')
-            ->where('e.tipo in (3,4,5,7)')
-            ->andWhere('ed.situacao >0')
+            ->where('ed.situacao >0')
             ->orderBy('e.dataFinal', 'ASC')
-         //   ->andWhere(':dt0 > e.dataInicial and :dt0 < e.dataFinal')
-        //    ->setParameter('dt0', new \DateTime())
+            //   ->andWhere(':dt0 > e.dataInicial and :dt0 < e.dataFinal')
+            //    ->setParameter('dt0', new \DateTime())
         ;
-        if ($this->isGranted('ROLE_ADMIN')) {
-        } elseif (!$this->isGranted('ROLE_ADMIN')
-            and ($this->isGranted('ROLE_AVALIADOR')
-                and $this->isGranted('ROLE_AVALIADOR'))
-        ) {
+        if (!$this->isGranted('ROLE_ADMIN')) {
             $etapas->innerJoin('ed.idEditalUsuario', 'u')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->andX(
+                            $qb->expr()->orX(
+                                $qb->expr()->eq('e.tipo', '3'),
+                                $qb->expr()->eq('e.tipo', '7')
+                            ),
+                            $qb->expr()->orX(
+                                $qb->expr()->eq('u.avaliador', '1'),
+                                $qb->expr()->eq('u.administrador', '1')
+                            )
+                        ),
+                        $qb->expr()->andX(
+                            $qb->expr()->orX(
+                                $qb->expr()->eq('e.tipo', '4'),
+                                $qb->expr()->andX(
+                                    $qb->expr()->eq('e.tipo', '5'),
+                                    $qb->expr()->eq('e.final', '0')
+                                )
+                            ),
+                            $qb->expr()->orX(
+                                $qb->expr()->eq('u.resultado', '1'),
+                                $qb->expr()->eq('u.administrador', '1')
+                            )
+                        ),
+                        $qb->expr()->andX(
+                            $qb->expr()->andX(
+                                $qb->expr()->eq('e.tipo', '5'),
+                                $qb->expr()->eq('e.final', '1')
+                            ),
+                            $qb->expr()->orX(
+                                $qb->expr()->eq('u.convocacao', '1'),
+                                $qb->expr()->eq('u.administrador', '1')
+                            )
+                        )
+                    ))
                 ->andWhere('u.idUsuario = :usuario')
                 ->setParameter('usuario', $this->getUser()->getId());
+        } else {
+            $etapas->andWhere('e.tipo in (3,4,5,7)');
         }
 
         $etapas = $etapas->getQuery()->getResult();

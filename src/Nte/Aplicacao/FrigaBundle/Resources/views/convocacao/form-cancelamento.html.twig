@@ -1,0 +1,110 @@
+{% extends 'base.admin.html.twig' %}
+{% block titulo %} Agenda de entrevistas {% endblock %}
+{% block breadcumbsTitulo %}Convocação do Candidato {% endblock %}
+{% block breadcumbsItens %}
+    <li><span><a href="#"> Convocação</a></span></li>
+    <li><span><a href="#">{{ etapa.idEdital.uuid }}</a></span></li>
+    <li><span><a href="#"> Convocação</a></span></li>
+{% endblock %}
+{% block conteudo %}
+    {{ form_start(form) }}
+    <div class="panel">
+        <div class="panel-heading">
+            <h2 class="panel-title"><i class="fa fa-rss"></i>Cancelamento de Convocação do candidato (a) {{ inscricao.nome }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label><b>Justificativa para cancelar a convocação</b></label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_widget(form.observacao) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="panel">
+        <div class="panel-body">
+            <div class="col-md-6">
+                <h4>
+                    <i class="fa fa-rss"></i> <span id="dt1"></span>
+                </h4>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button class="btn btn-danger pull-right hidden-xs">
+                        <i class="fa fa-calendar"></i>
+                        Cancelar convocação
+                    </button>
+                    <button class="btn btn-danger btn-block visible-xs">
+                        <i class="fa fa-calendar"></i>
+                        Cancelar convocação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet"
+          href="{{ asset('assets/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') }}">
+    <style>
+        .bootstrap-datetimepicker-widget .timepicker-picker table {
+            width: 32px;
+        }
+
+        .datepicker table tbody tr td.day.active {
+            background: #285e8e;
+            color: #FFF;
+        }
+
+        .bootstrap-datetimepicker-widget table td.disabled, .bootstrap-datetimepicker-widget table td.disabled:hover,
+        .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+            background: none;
+            color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .datepicker {
+            z-index: 0;
+        }
+    </style>
+{% endblock %}
+{% block javascripts2 %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap-datetimepicker/pt-br.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $dp = $('#friga_convocacao_data');
+            $dp.datetimepicker({
+                locale: 'pt-br',
+                {% if "now"|date('Y-m-d H:i') < convocacao.data|date('Y-m-d H:i') %}
+                minDate: '{{ "now"|date('Y-m-d H:i') }}',
+                defaultDate: '{{ convocacao.data|date('Y-m-d H:i') }}',
+                {% else %}
+                defaultDate: '{{ convocacao.data|date('Y-m-d H:i') }}',
+                {% endif %}
+                inline: true,
+                keepOpen: true,
+                sideBySide: true,
+                showTodayButton: true
+            }).on("dp.change", function (e) {
+                $('#dt1').text(e.date.format('LLLL'));
+            });
+            $('#dt1').text($dp.data("DateTimePicker").date().format('LLLL'));
+            $('form').submit(function (e) {
+                e.preventDefault();
+                $dp.val($dp.data("DateTimePicker").date().format('YYYY-MM-DD HH:mm:ss'));
+                $(this).unbind('submit').submit();
+            });
+
+        });
+    </script>
+{% endblock %}

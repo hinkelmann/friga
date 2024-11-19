@@ -89,7 +89,8 @@ class ResultadoController extends Controller
      */
     public function parcialAction(Request $request, FrigaEditalEtapa $etapa)
     {
-        if (!$this->isGranted('ROLE_ADMIN') and !$this->isGranted('ROLE_AVALIADOR')) {
+        if (!$this->isGranted('ROLE_ADMIN') or !$this->getUser()->getPermissaoEtapa($etapa)) {
+            $this->addFlash('danger', 'Você não tem permissão para visualizar os resultados!');
             return $this->redirectToRoute('nte_admin_painel_homepage');
         }
 
@@ -119,12 +120,14 @@ class ResultadoController extends Controller
     public function gerarResultadoAction(Request $request, FrigaEditalEtapa $etapa)
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
-            if ($etapa->getPeriodoHabilitado() and !$this->isGranted('ROLE_AVALIADOR')) {
-                return $this->redirectToRoute('resultado_etapa', ['etapa' => $etapa->getId()]);
+            if ($etapa->getPeriodoHabilitado() and !$this->getUser()->getPermissaoEtapa($etapa)) {
+                $this->addFlash('danger', 'Você não tem permissão para gerar resultados!');
+
+                return $this->redirectToRoute('nte_admin_painel_homepage');
             }
         }
 
-        if ($this->isGranted('ROLE_ADMIN')) {
+        if ($this->isGranted('ROLE_ADMIN') or $this->getUser()->getPermissaoEdital($etapa->getIdEdital())) {
             $geral = $etapa->getClassificacaoCargo();
         } else {
             $geral = $etapa->getClassificacaoCargo($this->getUser());

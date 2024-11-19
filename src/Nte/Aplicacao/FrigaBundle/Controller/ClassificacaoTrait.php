@@ -38,7 +38,7 @@ trait ClassificacaoTrait
         $edital = $etapa->getIdEdital();
         $classificacao = new ArrayCollection();
 
-        if ($this->isGranted('ROLE_ADMIN')) {
+        if ($this->isGranted('ROLE_ADMIN') or $this->getUser()->getPermissoesEdital($etapa->getIdEdital())->administrador) {
             $geral = $etapa->getClassificacaoCargo()->getIterator();
             $editalCargoUsuario = $edital->getArrayIdEditalCargo();
         } else {
@@ -124,7 +124,7 @@ trait ClassificacaoTrait
 
         $edital = $etapa->getIdEdital();
 
-        if ($this->isGranted('ROLE_ADMIN')) {
+        if ($this->isGranted('ROLE_ADMIN') or $this->getUser()->getPermissoesEdital($etapa->getIdEdital())->administrador) {
             $geral = $edital->getInscricaoValida(false, $etapa->getIdEtapaCategoria())->getIterator();
             $editalCargoUsuario = $edital->getArrayIdEditalCargo();
         } else {

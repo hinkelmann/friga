@@ -80,13 +80,11 @@ class FrigaEditalCota
      */
     public function __construct()
     {
-        $this->idEditalUsuario = new ArrayCollection();
         $this->idEditalUsuarioInscrito = new ArrayCollection();
     }
 
     public function __clone()
     {
-        $this->idEditalUsuario = new ArrayCollection();
         $this->idEditalUsuarioInscrito = new ArrayCollection();
     }
 
@@ -164,59 +162,6 @@ class FrigaEditalCota
     public function getIdEdital()
     {
         return $this->idEdital;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAtivo()
-    {
-        return $this->ativo;
-    }
-
-    /**
-     * @param string $ativo
-     *
-     * @return FrigaEditalCargo
-     */
-    public function setAtivo($ativo)
-    {
-        $this->ativo = $ativo;
-
-        return $this;
-    }
-
-    /**
-     * Add idEditalUsuario.
-     *
-     * @return FrigaEditalCargo
-     */
-    public function addIdEditalUsuario(FrigaEditalUsuario $idEditalUsuario)
-    {
-        if (!$this->idEditalUsuario->contains($idEditalUsuario)) {
-            $this->idEditalUsuario->add($idEditalUsuario->addIdEditalCargo($this));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove idEditalUsuario.
-     */
-    public function removeIdEditalUsuario(FrigaEditalUsuario $idEditalUsuario)
-    {
-        $this->idEditalUsuario->removeElement($idEditalUsuario);
-        $idEditalUsuario->removeIdEditalCargo($this);
-    }
-
-    /**
-     * Get idEditalUsuario.
-     *
-     * @return ArrayCollection
-     */
-    public function getIdEditalUsuario()
-    {
-        return $this->idEditalUsuario;
     }
 
     /**

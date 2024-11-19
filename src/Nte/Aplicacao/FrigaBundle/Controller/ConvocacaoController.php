@@ -30,7 +30,9 @@ use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapa;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalEtapaUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalUsuario;
 use Nte\Aplicacao\FrigaBundle\Entity\FrigaInscricao;
+use Nte\Aplicacao\FrigaBundle\Entity\Log;
 use Nte\Aplicacao\FrigaBundle\Form\ExportarMoodleType;
+use Nte\Aplicacao\FrigaBundle\Form\FrigaEditalConvocacaoCancelamentoType;
 use Nte\Aplicacao\FrigaBundle\Form\FrigaEditalConvocacaoType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -321,15 +323,17 @@ class ConvocacaoController extends Controller
     public function indexCandidatoAction(Request $request, FrigaEditalEtapa $etapa)
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
-            if (!$this->getUser()->getPermissaoEtapa($etapa)) {
-                $this->addFlash('danger', 'Você não tem permissão para realizar a convocação!');
+            if (!$this->getUser()->getPermissoesEdital($etapa->getIdEdital())->administrador) {
+                if (!$this->getUser()->getPermissaoEtapa($etapa)) {
+                    $this->addFlash('danger', 'Você não tem permissão para realizar a convocação!');
 
-                return $this->redirectToRoute('nte_admin_painel_homepage');
-            }
-            if (!$etapa->getPeriodoHabilitado()) {
-                $this->addFlash('danger', 'Convocação fora do período.');
+                    return $this->redirectToRoute('nte_admin_painel_homepage');
+                }
+                if (!$etapa->getPeriodoHabilitado()) {
+                    $this->addFlash('danger', 'Convocação fora do período.');
 
-                return $this->redirectToRoute('nte_admin_painel_homepage');
+                    return $this->redirectToRoute('nte_admin_painel_homepage');
+                }
             }
         }
 
@@ -429,6 +433,66 @@ class ConvocacaoController extends Controller
             'etapa' => $etapa,
             'convocacao' => $convocacao,
             'inscricao' => $inscricao,
+        ]);
+    }
+
+    /**
+     * @return RedirectResponse|Response
+     */
+    public function formCancelarAction(Request $request, FrigaEditalEtapa $etapa, FrigaConvocacao $convocacao)
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if (!$this->isGranted('ROLE_AVALIADOR')) {
+                return $this->redirectToRoute('convocacao_etapa', ['etapa' => $etapa->getId()]);
+            }
+            if (!$etapa->getPeriodoHabilitado()) {
+                return $this->redirectToRoute('convocacao_etapa', ['etapa' => $etapa->getId()]);
+            }
+        }
+        if (!$convocacao->habilitado()) {
+            return $this->redirectToRoute('convocacao_etapa', ['etapa' => $etapa->getId()]);
+        }
+        $c = $convocacao;
+        $convocacao->setObservacao(null);
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(FrigaEditalConvocacaoCancelamentoType::class, $convocacao);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $motivo = $convocacao->getObservacao();
+            try {
+                $error = false;
+                $em->remove($convocacao);
+                $em->flush();
+                $this->addFlash('success', 'Cancelamento realizado com sucesso!');
+            } catch (\Exception $e) {
+                $error = true;
+                $this->addFlash('danger', 'Cancelamento não realizado!');
+            }
+
+            if (!$error) {
+                $uri = \str_replace('/app.php/', '', $request->server->get('REQUEST_URI'));
+                $log = new Log();
+                $log->setMetodo($request->getMethod())
+                    ->setId($convocacao->getIdInscricao()->getId())
+                    ->setContexto(FrigaInscricao::class)
+                    ->setMsg('CANCELAMENTO DE CONVOCAÇÃO:' . $convocacao->getIdInscricao()->getUuid() . ':JUTIFICATIVA: ' . $motivo)
+                    ->setDominio($request->server->get('HTTP_HOST'))
+                    ->setUri($uri)
+                    ->setIdUsuario($this->getUser())
+                    ->setInterface(1);
+                $em->persist($log);
+                $em->flush();
+            }
+
+            return $this->redirectToRoute('convocacao_etapa', ['etapa' => $etapa->getId()]);
+        }
+
+        return $this->render('NteAplicacaoFrigaBundle:convocacao:form-cancelamento.html.twig', [
+            'form' => $form->createView(),
+            'etapa' => $etapa,
+            'inscricao' => $c->getIdInscricao(),
+            'convocacao' => $c,
         ]);
     }
 }

@@ -35,6 +35,8 @@ use Nte\UsuarioBundle\Entity\Usuario;
  *
  * @ORM\Entity(repositoryClass="Nte\Aplicacao\FrigaBundle\Entity\FrigaEditalRepository")
  *
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="write_rare")
+ *
  * @ORM\HasLifecycleCallbacks()
  */
 class FrigaEdital
@@ -1203,8 +1205,12 @@ class FrigaEdital
     /**
      * @return string
      */
-    public function getInfo10()
+    public function getInfo10($html = false)
     {
+        if ($html) {
+            return \str_replace("\n", '<br>', $this->info10);
+        }
+
         return $this->info10;
     }
 
@@ -1805,8 +1811,12 @@ class FrigaEdital
     /**
      * @return string
      */
-    public function getInfo12()
+    public function getInfo12($html = false)
     {
+        if ($html) {
+            return \str_replace("\n", '<br>', $this->info12);
+        }
+
         return $this->info12;
     }
 

@@ -49,6 +49,11 @@ convocacao_etapa_candidato:
   defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:form" }
   methods:  [GET|POST]
 
+convocacao_etapa_candidato_cancelar:
+  path:     /etapa/{etapa}/inscricao-cancelar/{id}
+  defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:formCancelar" }
+  methods:  [GET|POST]
+
 convocacao_comprovante:
   path:     /etapa/{etapa}/comprovante/{arquivo}
   defaults: { _controller: "NteAplicacaoFrigaBundle:Convocacao:formComprovante" }

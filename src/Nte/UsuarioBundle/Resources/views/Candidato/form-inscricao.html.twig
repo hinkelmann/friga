@@ -1121,10 +1121,10 @@
             dzAreaAtivo[2] = mkDropZone(2, "Anexar memorial descritivo", "DOCUMENTO", 2);
             {% endif %}
             {% if edital.anexo3 %}
-            dzAreaAtivo[3] = mkDropZone(3, "{{ edital.info10 }}", "DOCUMENTO", 3);
+            dzAreaAtivo[3] = mkDropZone(3, '{{ edital.info10(1)|humanize|raw}}', "DOCUMENTO", 3);
             {% endif %}
             {% if edital.anexo4 %}
-            dzAreaAtivo[4] = mkDropZone(4, "{{ edital.info12 }}", "DOCUMENTO", 4);
+            dzAreaAtivo[4] = mkDropZone(4, '{{ edital.info12(1)|humanize|raw }}', "DOCUMENTO", 4);
             {% endif %}
 
             {% if edital.doc1 %}

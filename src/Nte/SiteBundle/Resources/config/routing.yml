@@ -54,3 +54,8 @@ nte_site_politica-de-dados:
     path:     /politica-de-dados
     defaults: { _controller: NteSiteBundle:Default:Default:legal, modelo: 2 }
     methods:  [GET]
+
+nte_site_api_v1:
+    prefix: /api/v1
+    type: rest
+    resource: Nte\SiteBundle\Controller\ApiController

@@ -304,10 +304,7 @@ class FrigaConvocacao
      */
     public function preUpdate(PreUpdateEventArgs $args)
     {
-        if ($args->hasChangedField('registroDataCriacao')) {
-            $this->setRegistroDataCriacao($args->getOldValue('registroDataCriacao'));
-            $this->setRegistroDataAtualizacao(new \DateTime());
-        }
+        $this->setRegistroDataAtualizacao(new \DateTime());
     }
 
     /**
@@ -318,5 +315,13 @@ class FrigaConvocacao
         $this->uuid = \uniqid();
         $this->setRegistroDataCriacao(new \DateTime());
         $this->setRegistroDataAtualizacao(new \DateTime());
+    }
+
+    /**
+     * @return bool
+     */
+    public function habilitado()
+    {
+        return $this->registroDataCriacao->diff(new \DateTime())->days <= 2;
     }
 }

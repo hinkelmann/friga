@@ -66,6 +66,7 @@
                         {% endif %}
                         <th width="10" class="text-center hidden-xs">Data</th>
                         <th width="10" class="text-center"></th>
+                        <th width="10" class="text-center"></th>
 
                     </tr>
                     </thead>
@@ -104,15 +105,29 @@
                             {% endif %}
                             <td class="hidden-xs">
                                 {% if cc.idInscricao.convocacaoEtapa(etapa).count %}
-                                    <div class="badge {% if etapa.final %}label-success {% else %} label-primary {% endif%} ">
+                                    <div class="badge {% if etapa.final %}label-success {% else %} label-primary {% endif %} ">
                                         {{ cc.idInscricao.convocacaoEtapa(etapa).first.registroDataCriacao|date('d/m/Y \\à\\s H:i:s') }}
                                     </div>
                                 {% endif %}
                             </td>
+
+                            <td>
+                                {% if cc.idInscricao.convocacaoEtapa(etapa).count and cc.idInscricao.convocacaoEtapa(etapa).first.habilitado %}
+                                    <a class="btn btn-danger"
+                                       href="{{ path('convocacao_etapa_candidato_cancelar', {'etapa': etapa.id, 'id': cc.idInscricao.convocacaoEtapa(etapa).first.id}) }}">
+                                        <i class="icon icon-trash"></i> Cancelar
+                                    </a>
+                                {% endif %}
+                            </td>
+
                             <td>
                                 <a href="{{ path('convocacao_etapa_candidato', {'etapa': etapa.id, 'uuid': cc.idInscricao.uuid}) }}"
-                                   class="btn btn-default"><i class="icon icon-calendar"></i>  {{ cc.posicao }}°
-                                    Agendar
+                                   class="btn btn-default"><i class="icon icon-calendar"></i> {{ cc.posicao }}°
+                                    {% if cc.idInscricao.convocacaoEtapa(etapa).count %}
+                                        Editar
+                                    {% else %}
+                                        Agendar
+                                    {% endif %}
                                 </a>
                             </td>
                         </tr>
@@ -217,9 +232,10 @@
         {% endfor %}
     </div>
     <style>
-        tr >td{
+        tr > td {
             vertical-align: middle !important;
         }
+
         .table > thead > tr > .b {
             border-top: 1px solid #c7d5de !important;
             border-bottom: 0 !important;

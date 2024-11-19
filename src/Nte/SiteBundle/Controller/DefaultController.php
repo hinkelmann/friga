@@ -266,6 +266,7 @@ class DefaultController extends Controller
                 ->from(FrigaEditalUsuario::class, 'feu')
                 ->innerJoin('feu.idUsuario', 'u')
                 ->where('feu.idEdital = :edital')
+                ->andWhere('feu.avaliador = 1')
                 ->setParameter('edital', $edital->getId())
                 ->addOrderBy('u.nome', 'asc')
                 ->getQuery()->getResult();

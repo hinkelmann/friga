@@ -311,15 +311,3 @@ edital_exportar_csv_logs:
   path:     /{uuid}/exportar/csv/logs
   defaults: { _controller: "NteAplicacaoFrigaBundle:FrigaEdital:logsExportarCsv" }
   methods:  [GET, POST]
-
-
-#teste
-teste_api_arquivo:
-  path:     /teste/api/arquivo
-  defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:apiTesteArquivo" }
-  methods:  [DELETE]
-
-#teste
-teste_api_2este:
-  path:     /teste/pdf
-  defaults: { _controller: "NteAplicacaoFrigaBundle:Arquivo:pdfTeste" }

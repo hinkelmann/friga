@@ -1213,7 +1213,15 @@ class Usuario extends BaseUser
     public function getEtapaEditalUsuario(FrigaEdital $edital)
     {
         $criteria = Criteria::create();
-        $criteria->andWhere(Criteria::expr()->eq('idEdital', $edital));
+        $criteria->where(Criteria::expr()->eq('idEdital.id', $edital->getId()));
+
+        foreach ($this->idEditalUsuario as $item) {
+        }
+
+        //   dump($this->idEditalUsuario->matching($criteria)->count());
+        foreach ($this->idEditalUsuario->matching($criteria) as $item) {
+            //       dump($item);
+        }
 
         return $this->idEditalUsuario->matching($criteria);
     }
@@ -1258,6 +1266,36 @@ class Usuario extends BaseUser
         }
 
         return false;
+    }
+
+    /**
+     * @return \stdClass
+     */
+    public function getPermissoesEdital(FrigaEdital $edital)
+    {
+        $obj = new \stdClass();
+        $obj->administrador = false;
+        $obj->avaliador = false;
+        $obj->resultado = false;
+        $obj->convocacao = false;
+
+        /** @var FrigaEditalUsuario $item */
+        foreach ($this->getEtapaEditalUsuario($edital) as $item) {
+            if ($item->isAdministrador()) {
+                $obj->administrador = true;
+            }
+            if ($item->isAvaliador()) {
+                $obj->avaliador = true;
+            }
+            if ($item->isResultado()) {
+                $obj->resultado = true;
+            }
+            if ($item->isConvocacao()) {
+                $obj->convocacao = true;
+            }
+        }
+
+        return $obj;
     }
 
     /**

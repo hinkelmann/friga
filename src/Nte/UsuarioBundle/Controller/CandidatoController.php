@@ -278,7 +278,7 @@ class CandidatoController extends Controller
                 $frigaEditalUsuario = new FrigaEditalUsuario();
                 $frigaEditalUsuario->setIdUsuario($u)
                     //->setTermoCompromisso(0)
-                    ->setTermoCompromissoData(new \DateTime())
+                    //->setTermoCompromissoData(new \DateTime())
                     ->setIdEdital($convite->getIdEdital())
                     ->setAdministrador($convite->isFuncaoAdministracao())
                     ->setAvaliador($convite->isFuncaoAvaliacao())
@@ -499,6 +499,14 @@ class CandidatoController extends Controller
         ]);
     }
 
+    public function invalidarInscriaoQuery($param)
+    {
+    }
+
+    public function invalidarInscriao($param)
+    {
+    }
+
     /**
      * @return RedirectResponse|Response
      *
@@ -591,23 +599,42 @@ class CandidatoController extends Controller
                         break;
 
                     case 4: //Inscrição múltipla/Cargo limitado
-                        $inscricaoAnterior = new ArrayCollection($em->createQueryBuilder()
+                    case 5: //Inscrição múltipla/Lista limitado
+                        $iaAnterior = clone $inscricaoAnterior;
+                        if (4 == $edital->getTipoInscricao()) {
+                            $iaAnterior->andWhere('i.idCargo = :cargo')
+                                ->setParameter('cargo', $inscricao->getIdCargo())
+                                ->getQuery()
+                                ->execute();
+                        }
+                        if (5 == $edital->getTipoInscricao()) {
+                            $iaAnterior->andWhere('i.idCota = :cota')
+                                ->setParameter('cota', $inscricao->getIdCota())
+                                ->getQuery()
+                                ->execute();
+                        }
+                        $ias = new ArrayCollection($em->createQueryBuilder()
                             ->select('i')
                             ->from(FrigaInscricao::class, 'i')
                             ->where('i.idEdital = :edital and i.idUsuario  = :usuario ')
-                            ->andWhere('i.idCargo = :cargo')
-                            ->setParameter('cargo', $inscricao->getIdCargo())
+                            ->andWhere('i.idSituacao > -999')
                             ->setParameter('edital', $edital)
                             ->setParameter('usuario', $this->getUser())
                             ->orderBy('i.id', 'ASC')
                             ->getQuery()
                             ->getResult());
-                        if ($inscricaoAnterior->count() > ($edital->getTipoInscricaoLimite() - 1)) {
-                        }
-                        break;
 
-                    case 5: //Inscrição múltipla/Lista limitado
-                        //não faz nada;
+                        /** @var FrigaEdital $item */
+                        foreach ($ias as $item) {
+                            if ($ias->count() < $edital->getTipoInscricaoLimite()) {
+                                break;
+                            }
+                            $inscricaoAnterior->andWhere('i.id = :inscricao')
+                                ->setParameter('inscricao', $item->getId())
+                                ->getQuery()
+                                ->execute();
+                            $ias->removeElement($item);
+                        }
                         break;
                 }
                 $em->persist($inscricao);
